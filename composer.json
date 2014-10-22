@@ -1,0 +1,37 @@
+{
+    "name" : "hostnet/accessor-generator-plugin-lib",
+    "description" : "Generate get, set, add, remove methods on the fly.",
+    "license" : "MIT",
+    "type" : "composer-plugin",
+    "require" : {
+        "php" : ">=5.5",
+        "doctrine/annotations" : "*",
+        "doctrine/inflector" : "*",
+        "doctrine/orm" : "*",
+        "twig/twig" : "1.*",
+        "composer-plugin-api" : "1.*"
+    },
+    "require-dev": {
+        "composer/composer" : "*@dev",
+        "phpunit/phpunit" : "4.*"
+    },
+    "minimum-stability" : "stable",
+    "repositories" : [{
+            "type" : "composer",
+            "url" : "http://packagist.hostnetbv.nl"
+        }
+    ],
+    "authors" : [{
+            "name" : "Hidde Boomsma",
+            "email" : "hboomsma@hostnet.nl"
+        }
+    ],
+    "autoload" : {
+        "psr-4" : {
+            "Hostnet\\Component\\AccessorGenerator\\" : "src/"
+        }
+    },
+    "extra" : {
+        "class" : "Hostnet\\Component\\AccessorGenerator\\Plugin"
+    }
+}
