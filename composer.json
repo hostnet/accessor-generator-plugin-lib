@@ -13,7 +13,7 @@
     },
     "require-dev": {
         "composer/composer" : "*@dev",
-        "hostnet/phpcs-tool" : "1.*",
+        "hostnet/phpcs-tool" : "2.*",
         "phpunit/phpunit" : "4.*"
     },
     "minimum-stability" : "stable",
@@ -30,6 +30,11 @@
     "autoload" : {
         "psr-4" : {
             "Hostnet\\Component\\AccessorGenerator\\" : "src/"
+        }
+    },
+    "autoload-dev" : {
+        "psr-4" : {
+            "Hostnet\\Component\\AccessorGenerator\\" : "test/"
         }
     },
     "extra" : {
