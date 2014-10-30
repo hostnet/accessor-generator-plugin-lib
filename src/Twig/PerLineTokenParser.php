@@ -23,7 +23,6 @@ class PerLineTokenParser extends \Twig_TokenParser
         return 'perline';
     }
 
-
     /**
      * Parses perline token and returns PerLineNode.
      *
@@ -31,7 +30,7 @@ class PerLineTokenParser extends \Twig_TokenParser
      * and then restructure the contents into some
      * thing nice to build a PerLineNode out of.
      *
-     * @param Twig_Token $token
+     * @param  Twig_Token         $token
      * @return Twig_NodeInterface
      */
     public function parse(\Twig_Token $token)
