@@ -40,6 +40,7 @@ interface PropertyInformationInterface
      *   'string',
      *   'array',
      *   'resource'
+     * or a class name starting with \
      *
      * @return string
      */
@@ -88,7 +89,7 @@ interface PropertyInformationInterface
 
     /**
      * Get the amount of digets after
-     * the decimal point. Use in comibnation
+     * the decimal point. Use in combination
      * with getPrecision.
      *
      * Only valid when isFixedPointNumber
