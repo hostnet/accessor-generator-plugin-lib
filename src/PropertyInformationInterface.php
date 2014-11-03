@@ -110,20 +110,6 @@ interface PropertyInformationInterface
     public function getDocumentation();
 
     /**
-     * If the number stored is unsigned.
-     * PHP itself has no knowledge of
-     * signing so on a 32 bit system
-     * you might run in to troube for
-     * a MAX_INT (32 bit) when getting
-     * it out of the database and into
-     * PHP, in that case it will be turned
-     * into a float and lose precision.
-     *
-     * @return bool
-     */
-    public function isUnsigned();
-
-    /**
      * If a value in this collection may
      * only appear once. Thus only valid
      * if isCollection returns true.
