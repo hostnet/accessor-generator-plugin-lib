@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping\OneToOne;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
 
 /**
+ * @covers Hostnet\Component\AccessorGenerator\DoctrineAnnotationProcessor
  * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase

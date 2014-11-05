@@ -1,6 +1,10 @@
 <?php
 namespace Hostnet\Component\AccessorGenerator\Reflection;
 
+/**
+ * @covers Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass
+ * @author Hidde Boomsma <hboomsma@hostnet.nl>
+ */
 class ReflectionClassTest extends \PHPUnit_Framework_TestCase
 {
 

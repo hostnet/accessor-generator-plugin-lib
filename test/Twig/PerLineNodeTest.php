@@ -8,6 +8,10 @@ use Twig_Node_Print as PrintNode;
 use Twig_Node_Text as TextNode;
 use Twig_Token as Token;
 
+/**
+* @covers Hostnet\Component\AccessorGenerator\Twig\PerLineNode
+* @author Hidde Boomsma <hboomsma@hostnet.nl>
+*/
 class PerLineNodeTest extends \PHPUnit_Framework_TestCase
 {
     public function parseProvider()

@@ -4,6 +4,10 @@ namespace Hostnet\Component\AccessorGenerator\Twig;
 use Doctrine\Tests\Common\Inflector\InflectorTest;
 use Twig_Token as Token;
 
+/**
+ * @covers Hostnet\Component\AccessorGenerator\Twig\PerLineTokenParser
+ * @author Hidde Boomsma <hboomsma@hostnet.nl>
+ */
 class PerLineTokenParserTest extends \PHPUnit_Framework_TestCase
 {
 

@@ -1,6 +1,10 @@
 <?php
 namespace Hostnet\Component\AccessorGenerator\Reflection;
 
+/**
+ * @covers Hostnet\Component\AccessorGenerator\Reflection\TokenStream
+ * @author Hidde Boomsma <hboomsma@hostnet.nl>
+ */
 class TokenStreamTest extends \PHPUnit_Framework_TestCase
 {
 

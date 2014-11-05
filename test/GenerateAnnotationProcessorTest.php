@@ -4,6 +4,10 @@ namespace Hostnet\Component\AccessorGenerator;
 use Hostnet\Component\AccessorGenerator\Annotation\Generate;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
 
+/**
+ * @covers Hostnet\Component\AccessorGenerator\GenerateAnnotationProcessor
+ * @author Hidde Boomsma <hboomsma@hostnet.nl>
+ */
 class GenerateAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
 {
     // Some constatns for better reading of the
