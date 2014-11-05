@@ -23,6 +23,7 @@ class ReflectionProperty
     /**
      *
      * @param string          $name
+     * @param int             $modifiers
      * @param string          $default
      * @param string          $doc_comment
      * @param ReflectionClass $class
