@@ -1,6 +1,6 @@
 <?php
 
-namespace Hostnet\Component\AccessorGenerator;
+namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
 use Doctrine\Common\Annotations\Annotation;
 use Doctrine\Common\Annotations\DocParser;

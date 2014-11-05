@@ -1,5 +1,5 @@
 <?php
-namespace Hostnet\Component\AccessorGenerator;
+namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Mapping\Column;

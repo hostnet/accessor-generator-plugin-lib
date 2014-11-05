@@ -1,5 +1,5 @@
 <?php
-namespace Hostnet\Component\AccessorGenerator;
+namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\GeneratedValue;

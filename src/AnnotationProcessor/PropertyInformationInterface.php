@@ -1,5 +1,5 @@
 <?php
-namespace Hostnet\Component\AccessorGenerator;
+namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
 /**
  * Information about a property that is usefull
