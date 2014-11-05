@@ -421,11 +421,11 @@ class ReflectionClass
      * values and inline assignment.
      *
      * @param int $loc
-     * @return string
+     * @return string|null
      */
     private function parseHereNowDocConcat($loc)
     {
-        $type = $this->tokens->value($loc)[3];
+        $type = substr($this->tokens->value($loc), 3, 1);
         $loc  = $this->tokens->next($loc);
 
         if ($loc) {
@@ -436,5 +436,6 @@ class ReflectionClass
                 return '"' . str_replace("\n", '\n', $string) . '"';
             }
         }
+        return null;
     }
 }

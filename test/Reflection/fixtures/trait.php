@@ -57,3 +57,5 @@ SQL
 	;
 	abstract function groei();
 }
+
+private $denneboom = <<<'TEST'

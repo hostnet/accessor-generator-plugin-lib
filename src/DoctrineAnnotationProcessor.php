@@ -57,6 +57,8 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
                 // be extracted and used as the column type.
                 $information->setType($this->classType($annotation->targetEntity));
                 break;
+            default:
+                // Do nothing for other types
         }
     }
 

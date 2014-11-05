@@ -63,7 +63,8 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
                     'private $en_weer_een_naald = 0.12;',
                     'private $meer_naalden = "	HOI";',
                     'private $nog_steeds_meer_naalden = "	HOI";',
-                    'private $nog_steeds_veel_meer_naalden = \'	HOI\' . "\n" . \'	$hoi\';'
+                    'private $nog_steeds_veel_meer_naalden = \'	HOI\' . "\n" . \'	$hoi\';',
+                    'private $denneboom;',
                 ]
             ],
             [
