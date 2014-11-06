@@ -5,7 +5,7 @@ use Hostnet\Component\AccessorGenerator\Annotation\Generate;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
 
 /**
- * @covers Hostnet\Component\AccessorGenerator\GenerateAnnotationProcessor
+ * @covers Hostnet\Component\AccessorGenerator\AnnotationProcessor\GenerateAnnotationProcessor
  * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 class GenerateAnnotationProcessorTest extends \PHPUnit_Framework_TestCase

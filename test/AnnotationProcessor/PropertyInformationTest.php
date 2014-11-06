@@ -4,7 +4,7 @@ namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
 
 /**
- * @covers Hostnet\Component\AccessorGenerator\PropertyInformation
+ * @covers Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformation
  * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 class PropertyInformationTest extends \PHPUnit_Framework_TestCase
