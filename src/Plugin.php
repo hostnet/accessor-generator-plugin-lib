@@ -92,7 +92,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         $packages[]       = $this->composer->getPackage();
         foreach ($packages as $package) {
             /* @var $package PackageInterface */
-            if (key_exists(self::NAME, $package->getRequires())) {
+            if (array_key_exists(self::NAME, $package->getRequires())) {
                 $this->generateTraitsForPackage($package);
             }
         }
@@ -143,11 +143,11 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         $finder = new Finder();
 
         return $finder
-        ->ignoreVCS(true)
-        ->ignoreDotFiles(true)
-        ->exclude(['vendor', 'Generated'])
-        ->name('*.php')
-        ->in($path)
-        ->getIterator();
+            ->ignoreVCS(true)
+            ->ignoreDotFiles(true)
+            ->exclude(['vendor', 'Generated'])
+            ->name('*.php')
+            ->in($path)
+            ->getIterator();
     }
 }

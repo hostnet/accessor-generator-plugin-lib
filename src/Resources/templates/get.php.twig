@@ -1,0 +1,43 @@
+/**
+ {% if property.documentation -%}
+ {% perline %}
+ * {{ property.documentation }}
+ {% endperline %}
+ {% else -%}
+ * {{  property.type == 'boolean' ? 'Is' : 'Get' }} {{ property.name }}
+ {% endif -%}
+ *
+ {% if property.collection -%}
+ * @returns \Doctrine\Common\Collections\Collection | {{ property.type }}[]
+ {% else -%}
+ * @returns {{ property.type }}
+ {% endif -%}
+ * @throws \InvalidArgumentException
+ */
+public function {{  property.type == 'boolean' ? 'is' : 'get' }}{{ property.name | classify }}()
+{
+    if (func_num_args() > 0) {
+        throw new \BadMethodCallException(
+            sprintf(
+                'get{{ property.name | classify }}() has no arguments but %d given.',
+                func_num_args()
+            )
+        );
+    }
+
+    {% if property.type == 'integer' -%}
+    if (!is_int($this->{{ property.name }})
+        && (int)$this->{{ property.name }} !== 1 * $this->{{ property.name }}
+    ) {
+        throw new \DomainException(
+            '\'{{ property.name }}\' is too big for the interger domain ['
+            . PHP_INT_MIN
+            . ','
+            . PHP_INT_MAX
+            . ']'
+        );
+    }
+
+    {% endif -%}
+    return $this->{{ property.name }};
+}

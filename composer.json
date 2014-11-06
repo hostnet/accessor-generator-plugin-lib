@@ -5,16 +5,17 @@
     "type" : "composer-plugin",
     "require" : {
         "php" : ">=5.5",
-        "doctrine/annotations" : "*",
-        "doctrine/inflector" : "*",
-        "doctrine/orm" : "*",
-        "twig/twig" : "1.*",
-        "composer-plugin-api" : "1.*"
+        "doctrine/annotations" : "~1.2",
+        "doctrine/inflector" : "~1.0",
+        "doctrine/orm" : "~2.4",
+        "twig/twig" : "~1.16",
+        "composer-plugin-api" : "~1.0",
+        "symfony/filesystem": "~2.5"
     },
     "require-dev": {
         "composer/composer" : "*@dev",
-        "hostnet/phpcs-tool" : "2.*",
-        "phpunit/phpunit" : "4.*"
+        "hostnet/phpcs-tool" : "~2.0",
+        "phpunit/phpunit" : "~4.3"
     },
     "minimum-stability" : "stable",
     "repositories" : [{

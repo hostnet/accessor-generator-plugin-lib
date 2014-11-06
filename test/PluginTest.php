@@ -53,7 +53,6 @@ class PluginTest extends \PHPUnit_Framework_TestCase
 
     }
 
-
     /**
      * Build up a composer environment with:
      * - a RepositoryManager with

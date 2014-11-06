@@ -1,0 +1,27 @@
+/**
+ {% if property.documentation -%}
+ {% perline %}
+ * {{ property.documentation }}
+ {% endperline %}
+ {% else -%}
+ * Add {{ property.name | singularize }}
+ {% endif -%}
+ *
+ * @param {{ property.type }} ${{ property.name }}
+ * @return $this
+ * @throws \BadMethodCallException if the number of arguments is not correct
+ */
+public function remove{{ property.name | singularize | classify }}({{ property.type }} ${{ property.name | singularize }})
+{
+    if (func_num_args() != 1) {
+        throw new \BadMethodCallException(
+            sprintf(
+                'remove{{ property.name | classify }}() has one argument but %d given.',
+                func_num_args()
+            )
+        );
+    }
+
+    $this->{{ property.name}}->removeElement(${{ property.name | singularize }});
+    return $this;
+}

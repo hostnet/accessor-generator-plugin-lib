@@ -1,0 +1,15 @@
+<?php
+// Generated at {{ "now" | date("Y-m-d H:i:s") }} by {{ username }} on {{ hostname }}
+
+namespace {{ namespace }};
+
+{% for alias, use in uses %}
+use {{ use }}{% if alias and alias == 0 %} as {{ alias }}{% endif %};
+{% endfor %}
+
+trait {{ name }}
+{
+    {% perline %}
+    {{ methods | raw }}
+    {% endperline %}
+}
