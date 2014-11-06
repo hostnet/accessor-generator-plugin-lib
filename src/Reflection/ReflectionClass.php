@@ -210,6 +210,7 @@ class ReflectionClass
      * Only declared properties are returned. Properties created
      * at runtime are not taken into concideration.
      *
+     * @throws ClassDefinitionNotFoundException
      * @return ReflectionProperty[]
      */
     public function getProperties()
@@ -259,7 +260,7 @@ class ReflectionClass
      * Return the location of the class name token.
      *
      * @throws ClassDefinitionNotFoundException
-     * @return int                              location of the class name token (T_STRING)
+     * @return int location of the class name token (T_STRING)
      */
     private function getClassNameLocation()
     {
@@ -299,7 +300,7 @@ class ReflectionClass
      * Parse the namespace and return as string
      *
      * @param  int    $loc location of the first namespace token (T_STRING)
-     *                     and not the T_NAMESPACE, T_AS or T_USE.
+     *                and not the T_NAMESPACE, T_AS or T_USE.
      * @return string
      */
     private function parseNamespace($loc)
