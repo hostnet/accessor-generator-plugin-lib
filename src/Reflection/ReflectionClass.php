@@ -408,7 +408,7 @@ class ReflectionClass
             $type = $this->tokens->type($loc);
             if (in_array($type, [T_DNUMBER, T_LNUMBER, T_CONSTANT_ENCAPSED_STRING])) {
                 $default = $this->tokens->value($loc);
-            } elseif (in_array($type, [T_START_HEREDOC, T_START_NOWDOC])) {
+            } elseif (in_array($type, [T_START_HEREDOC])) {
                 $default = $this->parseHereNowDocConcat($loc);
             }
         }
