@@ -45,14 +45,14 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
                 // a setter could be implemented by hand.
                 $information->setGenerateSet(false);
                 break;
+            case $annotation instanceof OneToMany:
             case $annotation instanceof ManyToMany:
-            case $annotation instanceof ManyToOne:
                 // We are one the owning side (db-wise) of a collection,
                 // so we should generate add en remove methods.
                 $information->setCollection(true);
                 // Intentional fall-through
-            case $annotation instanceof OneToMany:
             case $annotation instanceof OneToOne:
+            case $annotation instanceof ManyToOne:
                 // All relationships have a target type that can
                 // be extracted and used as the column type.
                 $information->setType($this->classType($annotation->targetEntity));

@@ -158,7 +158,7 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         $this->processor->processAnnotation($annotation, $this->information);
 
         // These annotation should lead to isCollection is is true
-        if ($annotation instanceof ManyToMany || $annotation instanceof ManyToOne) {
+        if ($annotation instanceof ManyToMany || $annotation instanceof OneToMany) {
             $this->assertTrue($this->information->isCollection());
         } else {
             $this->assertFalse($this->information->isCollection());
