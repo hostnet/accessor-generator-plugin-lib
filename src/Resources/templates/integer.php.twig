@@ -1,0 +1,43 @@
+{% if property.integerSize >= PHP_INT_SIZE * 8 %}
+if (is_float({{ var | raw }})
+    && ({{ var | raw }} >= {{ 2 ** (PHP_INT_SIZE == 8 ? 53 : 24) -}}
+    || {{ var | raw }} <= -{{ 2 ** (PHP_INT_SIZE == 8 ? 53 : 24) }})
+) {
+    throw new \DomainException(
+        sprintf(
+            'Parameter {{ property.name }}(%17f) is a float that could have resulted from an integer ' .
+            'overflowing the integer domain [%d,%d]',
+            {{ var | raw }},
+            {{ property.integerSize | twos_complement_min }},
+            {{ property.integerSize | twos_complement_max }}
+        )
+    );
+}
+{% if not skip_check_type %}
+if (!is_int({{ var | raw }})) {
+    throw new \InvalidArgumentException(
+        'Parameter {{ property.name }} must be integer.'
+    );
+}
+{% endif %}
+{% else %}
+{% if not skip_check_type %}
+if (!is_int({{ var | raw }})) {
+    throw new \InvalidArgumentException(
+        'Parameter {{ property.name }} must be integer.'
+    );
+}
+{% endif %}
+if ({{ var | raw }} < {{ property.integerSize | twos_complement_min -}}
+    || {{ var | raw }} > {{ property.integerSize | twos_complement_max -}}
+) {
+    throw new \DomainException(
+        sprintf(
+            'Parameter {{ property.name }}(%s) is too big for the integer domain [%d,%d]',
+            {{ var | raw }},
+            {{ property.integerSize | twos_complement_min }},
+            {{ property.integerSize | twos_complement_max }}
+        )
+    );
+}
+{%- endif %}

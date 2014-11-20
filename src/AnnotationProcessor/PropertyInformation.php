@@ -17,79 +17,91 @@ use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
 class PropertyInformation implements PropertyInformationInterface
 {
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::getType()
+     * @see PropertyInformationInterface::getType()
      * @var string
      */
     private $type = 'string';
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::getIntegerSize()
+     * @see PropertyInformationInterface::getIntegerSize()
      * @var int
      */
     private $integer_size = 32; // Be on the save side for database interaction.
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::getLength()
+     * @see PropertyInformationInterface::getLength()
      * @var int
      */
     private $length = 0;
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::getPrecision()
+     * @see PropertyInformationInterface::getPrecision()
      * @var int
      */
     private $precision = 0;
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::getScale()
+     * @see PropertyInformationInterface::getScale()
      * @var int
      */
     private $scale = 0;
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::isNullable()
+     * @see PropertyInformationInterface::isNullable()
      * @var bool
      */
     private $nullable = false;
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::isUnique()
+     * @see PropertyInformationInterface::isUnique()
      * @var bool
      */
     private $unique = false;
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::isFixedPointNumber()
+     * @see PropertyInformationInterface::isFixedPointNumber()
      * @var bool
      */
     private $is_fixed_point_number = false;
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::isCollection()
+     * @see PropertyInformationInterface::getReferencedProperty()
+     * @var string
+     */
+    private $referenced_property = '';
+
+    /**
+     * @see PropertyInformationInterface::isCollection()
      * @var bool
      */
     private $is_collection = false;
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::willGenerateGet()
+     * @see PropertyInformationInterface::isReferencingCollection()
+     * @var bool
+     */
+    private $is_referencing_collection = false;
+
+    /**
+     * @see PropertyInformationInterface::willGenerateGet()
      * @var bool
      */
     private $generate_get = false;
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::willGenerateSet()
+     * @see PropertyInformationInterface::willGenerateSet()
      * @var bool
      */
     private $generate_set = false;
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::willGenerateAdd()
+     * @see PropertyInformationInterface::willGenerateAdd()
      * @var bool
      */
     private $generate_add = false;
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::willGenerateRemove()
+     * @see PropertyInformationInterface::willGenerateRemove()
      * @var bool
      */
     private $generate_remove = false;
@@ -163,7 +175,7 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::getDocumentation()
+     * @see PropertyInformationInterface::getDocumentation()
      * @return string
      */
     public function getDocumentation()
@@ -179,7 +191,7 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::getName()
+     * @see PropertyInformationInterface::getName()
      * @return string
      */
     public function getName()
@@ -187,9 +199,26 @@ class PropertyInformation implements PropertyInformationInterface
         return $this->property->getName();
     }
 
+    /**
+     * @see PropertyInformationInterface::getClass()
+     * @return string
+     */
+    public function getClass()
+    {
+        return $this->property->getClass()->getName();
+    }
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::getDefault()
+     * @see PropertyInformationInterface::getNamespace()
+     * @return string
+     */
+    public function getNamespace()
+    {
+        return $this->property->getClass()->getNamespace();
+    }
+
+    /**
+     * @see PropertyInformationInterface::getDefault()
      * @return string
      */
     public function getDefault()
@@ -198,7 +227,7 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::getType()
+     * @see PropertyInformationInterface::getType()
      * @return string
      */
     public function getType()
@@ -214,23 +243,29 @@ class PropertyInformation implements PropertyInformationInterface
      * @see http://php.net/manual/en/language.types.php
      * @param  string $type
      * @throws \DomainException
-     * @return \Hostnet\Component\AccessorGenerator\PropertyInformation
+     * @return PropertyInformation
      */
     public function setType($type)
     {
-        if (in_array($type, $this->getValidTypes())) {
+        if (! is_string($type)) {
+            throw new \InvalidArgumentException(sprintf('$type is not of type string but of %s', gettype($type)));
+        } elseif (empty($type)) {
+            throw new \DomainException(sprintf('A type name may not be empty'));
+        } elseif (is_numeric($type)) {
+            throw new \DomainException(sprintf('A type name may not start with a number. Found %s', $type));
+        } elseif (in_array($type, $this->getValidTypes())) {
             $this->type = $type;
-        } elseif (is_string($type) && substr($type, 0, 1) === '\\') {
+        } elseif (ctype_upper($type[0]) || $type[0] === '\\') {
             $this->type = $type;
         } else {
-            throw new \DomainException(sprintf('The type %s is not supported for code generation', $type ?: 'empty'));
+            throw new \DomainException(sprintf('The type %s is not supported for code generation', $type));
         }
 
         return $this;
     }
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::getLength()
+     * @see PropertyInformationInterface::getLength()
      * @return int
      */
     public function getLength()
@@ -248,7 +283,7 @@ class PropertyInformation implements PropertyInformationInterface
      *
      * @throws \InvalidArgumentException
      * @throws \RangeException
-     * @return \Hostnet\Component\AccessorGenerator\PropertyInformation
+     * @return PropertyInformation
      */
     public function setLength($length)
     {
@@ -267,7 +302,7 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::getIntegerSize()
+     * @see PropertyInformationInterface::getIntegerSize()
      * @return int
      */
     public function getIntegerSize()
@@ -286,7 +321,7 @@ class PropertyInformation implements PropertyInformationInterface
     {
         // Check type.
         if (!is_int($integer_size)) {
-            throw new \InvalidArgumentException(sprintf('Size "%s" is not an integer.', $integer_size ?: 'empty'));
+            throw new \InvalidArgumentException(sprintf('Size is not an integer but "%s".', gettype($integer_size)));
         }
 
         // Check Range.
@@ -303,7 +338,39 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::isCollection()
+    * @see PropertyInformationInterface::getReferencedProperty()
+    * return string
+    */
+    public function getReferencedProperty()
+    {
+        return $this->referenced_property;
+    }
+
+    /**
+     * @see PropertyInformationInterface::getReferencedProperty()
+     * return string
+     */
+    public function setReferencedProperty($referenced_property)
+    {
+        // Check string.
+        if (! is_string($referenced_property)) {
+            throw new \InvalidArgumentException(
+                sprintf('$referenced_property is not of excpect type string but of %s)', gettype($referenced_property))
+            );
+        }
+        // Check valid property name
+        if ($referenced_property && !ctype_alpha(substr($referenced_property, 0, 1))) {
+            throw new \DomainException(
+                sprintf('$referenced_property (%s) does not start with a alpha character)', $referenced_property)
+            );
+        }
+
+        $this->referenced_property = $referenced_property;
+        return $this;
+    }
+
+    /**
+     * @see PropertyInformationInterface::isCollection()
      * @return bool
      */
     public function isCollection()
@@ -312,12 +379,30 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
+     * @see PropertyInformationInterface::isReferencingCollection()
+     * @return bool
+     */
+    public function isReferencingCollection()
+    {
+        return $this->is_referencing_collection;
+    }
+
+    /**
+     * @see PropertyInformationInterface::isComplexType()
+     * @return boolean
+     */
+    public function isComplexType()
+    {
+        return !in_array($this->type, self::getValidTypes());
+    }
+
+    /**
      * Set to true whenever this property
      * is a collecion type like an array or
      * DoctrineCollection.
      *
      * @param bool $is_collection
-     * @return \Hostnet\Component\AccessorGenerator\PropertyInformation
+     * @return PropertyInformation
      */
     public function setCollection($is_collection)
     {
@@ -326,7 +411,22 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::isFixedPointNumber()
+     * Set to true whenever this property
+     * is part of a bidirectional association
+     * where the referenced part is a collection
+     * (a many side of the relationship).
+     *
+     * @param bool $is_referencing_collection
+     * @return PropertyInformation
+     */
+    public function setReferencingCollection($is_referencing_collection)
+    {
+        $this->is_referencing_collection = $is_referencing_collection == true;
+        return $this;
+    }
+
+    /**
+     * @see PropertyInformationInterface::isFixedPointNumber()
      * @return bool
      */
     public function isFixedPointNumber()
@@ -335,7 +435,7 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::isFixedPointNumber()
+     * @see PropertyInformationInterface::isFixedPointNumber()
      * @param bool $is_fixed_point_number
      */
     public function setFixedPointNumber($is_fixed_point_number)
@@ -344,7 +444,7 @@ class PropertyInformation implements PropertyInformationInterface
         return $this;
     }
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::getPrecision()
+     * @see PropertyInformationInterface::getPrecision()
      * @return int
      */
     public function getPrecision()
@@ -355,26 +455,28 @@ class PropertyInformation implements PropertyInformationInterface
     /**
      * Set the number of significant digits for a
      * decimal number. Only applicable to fixed
-     * point storage. The type will be float in
+     * point storage. The type will be string in
      * that case (PHP has no fixed point numbers).
      *
+     * @see http://dev.mysql.com/doc/refman/5.7/en/precision-math-decimal-characteristics.html
      * @param int $precicion
      * @throws \InvalidArgumentException
-     * @return \Hostnet\Component\AccessorGenerator\PropertyInformation
+     * @throws \RangeException It has a range of 1 to 65.
+     * @return PropertyInformation
      */
     public function setPrecision($precision)
     {
         // Check type.
         if (!is_int($precision)) {
-            throw new \InvalidArgumentException(sprintf('Precision "%s" is not an integer.', $precision ?: 'empty'));
+            throw new \InvalidArgumentException(
+                sprintf('Precision is not an integer but of type %s.', gettype($precision))
+            );
         }
 
-        $max_precision = self::numberOfSignificantDecimalDigitsFloat();
-
         // Check range.
-        if ($precision < 0 || $precision > $max_precision) {
+        if ($precision < 0 || $precision > 65) {
             throw new \RangeException(
-                sprintf('Precision %d, should be in interval [0,%d]', $precision, $max_precision)
+                sprintf('Precision %d, should be in interval [1,65]', $precision)
             );
         }
         $this->precision = $precision;
@@ -382,7 +484,7 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::getScale()
+     * @see PropertyInformationInterface::getScale()
      * @return number
      */
     public function getScale()
@@ -396,21 +498,22 @@ class PropertyInformation implements PropertyInformationInterface
      * point storage. The type will be float in
      * that case (PHP has no fixed point numbers).
      *
+     * @see http://dev.mysql.com/doc/refman/5.7/en/precision-math-decimal-characteristics.html
      * @param int $scale
      * @throws \InvalidArgumentException
-     * @return \Hostnet\Component\AccessorGenerator\PropertyInformation
+     * @throws \RangeException
+     * @return PropertyInformation
      */
     public function setScale($scale)
     {
         // Check type.
         if (!is_int($scale)) {
-            throw new \InvalidArgumentException(sprintf('Scale "%s" is not an integer.', $scale ?: 'empty'));
+            throw new \InvalidArgumentException(sprintf('Scale is not an integer but of type "%s".', gettype($scale)));
         }
 
         // Check range.
-        $max_scale = self::numberOfSignificantDecimalDigitsFloat();
-        if ($scale < 0 || $scale > $max_scale) {
-            throw new \RangeException(sprintf('Scale %d, should be in interval [0,%d]', $scale, $max_scale));
+        if ($scale < 0 || $scale > 30) {
+            throw new \RangeException(sprintf('Scale "%d", should be in interval [0,30]', $scale));
         }
 
         $this->scale = $scale;
@@ -418,18 +521,18 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::isNullable()
+     * @see PropertyInformationInterface::isNullable()
      * @return boolean
      */
     public function isNullable()
     {
-        return $this->nullable;
+        return $this->nullable || strtolower($this->getDefault()) === 'null';
     }
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::isNullable()
+     * @see PropertyInformationInterface::isNullable()
      * @param bool $nullable
-     * @return \Hostnet\Component\AccessorGenerator\PropertyInformation
+     * @return PropertyInformation
      */
     public function setNullable($nullable)
     {
@@ -438,7 +541,7 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::isUnique()
+     * @see PropertyInformationInterface::isUnique()
      * @return boolean
      */
     public function isUnique()
@@ -447,9 +550,9 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::isUnique()
+     * @see PropertyInformationInterface::isUnique()
      * @param bool $unique
-     * @return \Hostnet\Component\AccessorGenerator\PropertyInformation
+     * @return PropertyInformation
      */
     public function setUnique($unique)
     {
@@ -458,7 +561,7 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::willGenerateGet()
+     * @see PropertyInformationInterface::willGenerateGet()
      * @return bool
      */
     public function willGenerateGet()
@@ -467,9 +570,9 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::willGenerateGet()
+     * @see PropertyInformationInterface::willGenerateGet()
      * @param bool $generate_get
-     * @return \Hostnet\Component\AccessorGenerator\PropertyInformation
+     * @return PropertyInformation
      */
     public function setGenerateGet($generate_get)
     {
@@ -478,7 +581,7 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::willGenerateSet()
+     * @see PropertyInformationInterface::willGenerateSet()
      * @return bool
      */
     public function willGenerateSet()
@@ -487,9 +590,9 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::willGenerateSet()
+     * @see PropertyInformationInterface::willGenerateSet()
      * @param bool $generate_set
-     * @return \Hostnet\Component\AccessorGenerator\PropertyInformation
+     * @return PropertyInformation
      */
     public function setGenerateSet($generate_set)
     {
@@ -498,7 +601,7 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::willGenerateAdd()
+     * @see PropertyInformationInterface::willGenerateAdd()
      * @return bool
      */
     public function willGenerateAdd()
@@ -507,9 +610,9 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::willGenerateAdd()
+     * @see PropertyInformationInterface::willGenerateAdd()
      * @param bool $generate_add
-     * @return \Hostnet\Component\AccessorGenerator\PropertyInformation
+     * @return PropertyInformation
      */
     public function setGenerateAdd($generate_add)
     {
@@ -518,7 +621,7 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::willGenerateRemove()
+     * @see PropertyInformationInterface::willGenerateRemove()
      * @return bool
      */
     public function willGenerateRemove()
@@ -527,9 +630,9 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\PropertyInformationInterface::willGenerateRemove()
+     * @see PropertyInformationInterface::willGenerateRemove()
      * @param bool $generate_remove
-     * @return \Hostnet\Component\AccessorGenerator\PropertyInformation
+     * @return PropertyInformation
      */
     public function setGenerateRemove($generate_remove)
     {
@@ -555,26 +658,5 @@ class PropertyInformation implements PropertyInformationInterface
             'resource',
             'object',
         ];
-    }
-
-    final public static function numberOfSignificantDecimalDigitsFloat()
-    {
-        // In PHP IEEE 754 floats are used.
-
-        // In a 64 bit system it has a mantissa
-        // of 52 explicitly stored bits with
-        // a significance of 53 bits.
-        //
-        // decimal_positions = 15 < ln(2^53)/ln(2) < 16.
-        // @see http://en.wikipedia.org/wiki/Single-precision_floating-point_format
-        //
-        //
-        // In a 32 bit system it has a mantissa
-        // of 23 explicitly stored bits with
-        // a significance of 24 bits.
-        //
-        // decimal_positions = 6 < ln(2^24)/ln(2) < 7.
-        // @see http://en.wikipedia.org/wiki/Double-precision_floating-point_format
-        return PHP_INT_SIZE === 8 ? 15 : 7;
     }
 }

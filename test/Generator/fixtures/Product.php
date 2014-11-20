@@ -1,11 +1,17 @@
 <?php
-namespace Hostnet\Product\Entity;
+namespace Hostnet\Component\AccessorGenerator\Generator\fixtures;
 
 use Doctrine\ORM\Mapping as ORM;
 use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Generator\fixtures\Attribute;
 
+/**
+ * @ORM\Entity
+ */
 class Product
 {
+    use Generated\ProductMethodsTrait;
+
     /**
      * Product Id not good etc
      *
@@ -17,7 +23,7 @@ class Product
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Hostnet\Product\Entity\Period")
+     * @ORM\ManyToOne(targetEntity="Hostnet\Component\AccessorGenerator\Generator\fixtures\Period")
      * @ORM\JoinColumn(name="looptijd_id")
      * @AG\Generate(set=false)
      * @var Period
@@ -35,7 +41,7 @@ class Product
      * @ORM\Column(name="omschrijving_factuur", type="string", length=50)
      * @AG\Generate(set=false)
      */
-    private $description;
+    private $description = 'empty';
 
     /**
      * @ORM\Column(name="begin_datum", type="datetime")
@@ -56,11 +62,11 @@ class Product
      * @ORM\Column(name="systeem_naam", type="string", length=50)
      * @AG\Generate
      */
-    private $system_name;
+    private $system_name = '';
 
     /**
      * @ORM\OneToMany(
-     *   targetEntity="Hostnet\Product\Entity\Attribute",
+     *   targetEntity="Attribute",
      *   mappedBy="product",
      *   cascade={"all"},
      *   orphanRemoval=true

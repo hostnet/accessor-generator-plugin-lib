@@ -23,6 +23,23 @@ interface PropertyInformationInterface
     public function getName();
 
     /**
+     * Get the name of the class implementing
+     * this property. Usefull for fluent interfaces
+     * that make use of method chaining.
+     *
+     * @return string
+     */
+    public function getClass();
+
+    /**
+     * Get the namespace of the class implementing
+     * this property.
+     *
+     * @return string
+     */
+    public function getNamespace();
+
+    /**
      * Get the default assigned value
      * for this property for usage in
      * setters.
@@ -41,10 +58,22 @@ interface PropertyInformationInterface
      *   'array',
      *   'resource'
      * or a class name starting with \
+     * or a capital letter
      *
      * @return string
      */
     public function getType();
+
+    /**
+     * Returns if the propery is a scalar
+     * type from the php language as boolean
+     * integer, array or that is is a complex
+     * class type like \DateTime or a user
+     * defined class.
+     *
+     * @return bool
+     */
+    public function isComplexType();
 
     /**
      * Get the maximum length for this property.
@@ -132,6 +161,24 @@ interface PropertyInformationInterface
      * @return bool
      */
     public function isCollection();
+
+    /**
+     * The property referened for this association
+     * on the other side of the association
+     * @return string
+     */
+    public function getReferencedProperty();
+
+    /**
+     * Set to true whenever this property
+     * is part of a bidirectional association
+     * where the referenced part is a collection
+     * (a many side of the relationship).
+
+     * @return string
+     */
+    public function isReferencingCollection();
+
 
     /**
      * If a get function should be generated.

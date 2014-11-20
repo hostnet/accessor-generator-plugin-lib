@@ -242,10 +242,10 @@ class ReflectionClass
                 // would not be parsed.
                 $var_loc = $this->tokens->next($vis_loc, [T_COMMENT, T_WHITESPACE, T_STATIC, T_FINAL]);
                 if ($this->tokens->type($var_loc) === T_VARIABLE) {
-                    $doc_comment = $this->parseDocComment($vis_loc);        // doc comment
-                    $modifiers   = $this->parsePropertyModifiers($vis_loc); // public, protected, private, static
+                    $doc_comment = $this->parseDocComment($vis_loc);           // doc comment
+                    $modifiers   = $this->parsePropertyModifiers($vis_loc);    // public, protected, private, static
                     $name        = substr($this->tokens->value($var_loc), 1);  // property name
-                    $default     = $this->parseDefaultValue($var_loc);      // default value
+                    $default     = $this->parseDefaultValue($var_loc);         // default value
                     $property    = new ReflectionProperty($name, $modifiers, $default, $doc_comment, $this);
 
                     $this->properties[] = $property;
@@ -392,8 +392,6 @@ class ReflectionClass
      * way we can keep those and this also enables us to
      * parse a default value of null.
      *
-     * Does not support HERE DOC;
-     *
      * @param  int         $loc location of the property name (T_STRING)
      * @return null|string will return null if there is no default
      *                     value, string if there is
@@ -406,9 +404,23 @@ class ReflectionClass
         if ($this->tokens->value($loc) == '=') {
             $loc  = $this->tokens->next($loc);
             $type = $this->tokens->type($loc);
+
             if (in_array($type, [T_DNUMBER, T_LNUMBER, T_CONSTANT_ENCAPSED_STRING])) {
+                // Easy numbers and strings.
                 $default = $this->tokens->value($loc);
-            } elseif (in_array($type, [T_START_HEREDOC])) {
+            } elseif ($type == T_STRING) {
+                // Constants, definitions and null
+                $default = $this->tokens->value($loc);
+                $loc     = $this->tokens->next($loc);
+                if ($this->tokens->type($loc) == T_PAAMAYIM_NEKUDOTAYIM) {
+                    $loc      = $this->tokens->next($loc);
+                    $default .= '::' . $this->tokens->value($loc);
+                }
+            } elseif (in_array($type, [T_ARRAY, '['])) {
+                // Array types, both old array() and shorthand [] notation.
+                $default = $this->parseArrayDefinition($loc);
+            } elseif ($type === T_START_HEREDOC) {
+                // Heredoc and Nowdoc
                 $default = $this->parseHereNowDocConcat($loc);
             }
         }
@@ -416,6 +428,76 @@ class ReflectionClass
         return $default;
     }
 
+    /**
+     * Parse an array definition, the definition can contain
+     * arrays itself. The whole content of the array definition
+     * is stripped from comments and excess whitespace.
+     *
+     * @param int $loc location of the token stream where the
+     *                 array starts. This should point to a
+     *                 T_ARRAY or [ token.
+     * @return string code reperesentation of the parsed array
+     *                without any comments or access whitespace.
+     */
+    private function parseArrayDefinition($loc)
+    {
+        $found = 0;
+        $brace = 0;
+        $code  = '';
+        do {
+            $type = $this->tokens->type($loc);
+            switch($type) {
+                case T_ARRAY:
+                    $loc = $this->tokens->scan($loc, ['(']);
+                    $brace++;
+                    // intentional fallthrough
+                case '[':
+                    $code .= '[';
+                    $found++;
+                    break;
+                case '(':
+                    $brace++;
+                    $code .= '(';
+                    break;
+                case ']':
+                    $found--;
+                    $code .= ']';
+                    break;
+                case ')':
+                    if (--$brace === 0) {
+                        $found--;
+                        $code .= ']';
+                    } else {
+                        $code .= ')';
+                    }
+                    break;
+                default:
+                    $code .= $this->arrayWhitespace($loc);
+            }
+        } while ($found > 0 && ($loc = $this->tokens->next($loc)));
+
+        return $code;
+    }
+
+    /**
+     * Give tokens found within an array definition PSR conforming
+     * whitespace to make the code more readable.
+     *
+     * @param int $loc location in the token stream
+     * @return string code with PSR spacing for array notation
+     */
+    private function arrayWhitespace($loc)
+    {
+        $type = $this->tokens->type($loc);
+        switch($type) {
+            case T_DOUBLE_ARROW:
+                return ' => ';
+            case ',':
+                return ', ';
+            default:
+                return $this->tokens->value($loc);
+        }
+    }
     /**
      * Parse heredoc and nowdoc into a concatenated
      * string representation to be usefull for default

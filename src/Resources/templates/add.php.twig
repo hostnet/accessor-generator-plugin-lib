@@ -8,10 +8,10 @@
  {% endif -%}
  *
  * @param {{ property.type }} ${{ property.name }}
- * @return $this
+ * @return {{ property.class }}
  * @throws \BadMethodCallException if the number of arguments is not correct
  */
-public function add{{ property.name | singularize | classify }}({{ property.type }} ${{ property.name | singularize }})
+{{ property.willGenerateSet ? 'public' : 'private' }} function add{{ property.name | singularize | classify }}({{ property.type }} ${{ property.name | singularize }})
 {
     if (func_num_args() != 1) {
         throw new \BadMethodCallException(
@@ -22,6 +22,20 @@ public function add{{ property.name | singularize | classify }}({{ property.type
         );
     }
 
+    if ($this->{{ property.name}} === null) {
+        $this->{{ property.name}} = new \Doctrine\Common\Collections\ArrayCollection();
+    } elseif ($this->{{ property.name}}->contains(${{ property.name | singularize }})) {
+        return $this;
+    }
+
     $this->{{ property.name}}->add(${{ property.name | singularize }});
+{% if property.referencedProperty %}
+    $method = new \ReflectionMethod(${{ property.name | singularize }}, '
+    {{- property.isReferencingCollection ? 'add' : 'set' }}
+    {{- property.referencedProperty | classify | singularize }}');
+    $method->setAccessible(true);
+    $method->invoke(${{ property.name | singularize }}, $this);
+    $method->setAccessible(false);
+{% endif %}
     return $this;
 }

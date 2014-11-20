@@ -8,13 +8,14 @@
         "doctrine/annotations" : "~1.2",
         "doctrine/inflector" : "~1.0",
         "doctrine/orm" : "~2.4",
+        "doctrine/common" : "~2.4",
         "twig/twig" : "~1.16",
         "composer-plugin-api" : "~1.0",
         "symfony/filesystem": "~2.5"
     },
     "require-dev": {
         "composer/composer" : "*@dev",
-        "hostnet/phpcs-tool" : "~2.0",
+        "hostnet/phpcs-tool" : "2.*,>=2.0.11",
         "phpunit/phpunit" : "~4.3"
     },
     "minimum-stability" : "stable",
@@ -35,10 +36,20 @@
     },
     "autoload-dev" : {
         "psr-4" : {
+            "Hostnet\\Component\\AccessorGenerator\\Generator\\fixtures\\Generated\\" : "test/Generator/fixtures/expected/",
             "Hostnet\\Component\\AccessorGenerator\\" : "test/"
         },
         "files" : [
             "test/annotation_loader.php"
+        ]
+    },
+    "archive" : {
+        "exclude" : [
+            "/test/",
+            "/.gitignore",
+            "/phpunit.xml.dist",
+            "/phpcs.xml.dist",
+            "/cli-config.php"
         ]
     },
     "extra" : {

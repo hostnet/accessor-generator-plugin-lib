@@ -2,7 +2,7 @@
 namespace Hostnet\Component\AccessorGenerator\Reflection\Exception;
 
 /**
- * There is no class defenition found but it
+ * There is no class definition found but it
  * was expected. This is not 'Class::name' but
  * 'class Name {'.
  *

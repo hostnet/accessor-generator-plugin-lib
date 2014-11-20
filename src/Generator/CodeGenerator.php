@@ -75,9 +75,12 @@ class CodeGenerator implements CodeGeneratorInterface
 
         try {
             $properties = $class->getProperties();
+            $imports    = $class->getUseStatements();
         } catch (ClassDefinitionNotFoundException $e) {
-            $properties = [];
+            return '';
         }
+
+        $imports[] = $class->getNamespace() . '\\' . $class->getName();
 
         foreach ($properties as $property) {
             $parser = new DocParser();
@@ -86,12 +89,29 @@ class CodeGenerator implements CodeGeneratorInterface
             $info->registerAnnotationProcessor(new DoctrineAnnotationProcessor());
             $info->processAnnotations();
             $code .= $this->generateAccessors($info);
+
+            // Complex Type within curent namespace. Since our trait is in a sub
+            // namespace we have to import those aswell (php does not no .. in namespace).
+            // In principle no harm could come from these imports unless the types
+            // are of a *methotdsTrait type. Which will break anyway.
+            if (! isset($imports[$info->getType()])) {
+                if (ctype_upper(substr($info->getType(), 0, 1))) {
+                    if (strpos($info->getType(), $class->getNamespace()) === false) {
+                        $imports[] = $class->getNamespace() .  '\\' . $info->getType();
+                    }
+                }
+            }
         }
+
+        // Make sure our use statemens are sorted alphabetically and unique.
+        asort($imports);
+        $imports = array_unique($imports);
+
         if ($code) {
             $code = $this->trait->render([
                 'namespace' => $class->getNamespace() . '\\' . $this->namespace,
                 'name'      => $class->getName() . $this->name_suffix,
-                'uses'      => $class->getUseStatements(),
+                'uses'      => $imports,
                 'methods'   => rtrim($code),
                 'username'  => get_current_user(),
                 'hostname'  => gethostname()
@@ -110,20 +130,34 @@ class CodeGenerator implements CodeGeneratorInterface
     {
         $code = '';
 
+        if ($info->willGenerateSet() == false) {
+            $default = 'null';
+        } else {
+            $default = $info->getDefault();
+        }
+
         if ($info->willGenerateGet()) {
-            $code .= $this->get->render(['property' => $info]) . PHP_EOL;
+            $code .= $this->get->render([
+                    'property' => $info,
+                    'default' => $default,
+                    'PHP_INT_SIZE' => PHP_INT_SIZE
+            ]) . PHP_EOL;
         }
 
         if ($info->isCollection()) {
-            if ($info->willGenerateAdd()) {
+            if ($info->willGenerateAdd() || $info->getReferencedProperty()) {
                 $code .= $this->add->render(['property' => $info]). PHP_EOL;
             }
-            if ($info->willGenerateRemove()) {
+            if ($info->willGenerateRemove() || $info->getReferencedProperty()) {
                 $code .= $this->remove->render(['property' => $info]). PHP_EOL;
             }
         } else {
-            if ($info->willGenerateSet()) {
-                $code .= $this->set->render(['property' => $info]). PHP_EOL;
+            if ($info->willGenerateSet() || $info->getReferencedProperty()) {
+                $code .= $this->set->render([
+                        'property' => $info,
+                        'default' => $default,
+                        'PHP_INT_SIZE' => PHP_INT_SIZE
+                ]). PHP_EOL;
             }
         }
 

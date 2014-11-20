@@ -55,10 +55,32 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
             case $annotation instanceof ManyToOne:
                 // All relationships have a target type that can
                 // be extracted and used as the column type.
-                $information->setType($this->classType($annotation->targetEntity));
+                $information->setType($annotation->targetEntity);
+                $this->processBidirectional($annotation, $information);
                 break;
             default:
                 // Do nothing for other types
+        }
+    }
+
+    /**
+     * Return referenced entity if we have a bidirectional
+     * doctrine association.
+     *
+     * @param object $annotation with annotation Annotation
+     */
+    private function processBidirectional($annotation, PropertyInformation $information)
+    {
+        // Parse the mappedBy and inversedBy columns, there is no nice interface
+        // on then so we have to check for existance of the property.
+        if (property_exists($annotation, 'inversedBy') && $annotation->inversedBy) {
+            $information->setReferencedProperty($annotation->inversedBy);
+        } elseif (property_exists($annotation, 'mappedBy') && $annotation->mappedBy) {
+            $information->setReferencedProperty($annotation->mappedBy);
+        }
+
+        if ($annotation instanceof ManyToOne || $annotation instanceof ManyToMany) {
+            $information->setReferencingCollection(true);
         }
     }
 
@@ -108,9 +130,9 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
             return 'boolean';
         } elseif ($type == Type::SMALLINT || $type == Type::BIGINT || $type == Type::INTEGER) {
             return 'integer';
-        } elseif ($type == Type::DECIMAL || $type == Type::FLOAT) {
+        } elseif ($type == Type::FLOAT) {
             return 'float';
-        } elseif ($type == Type::TEXT || $type == Type::GUID || $type == Type::STRING) {
+        } elseif ($type == Type::TEXT || $type == Type::GUID || $type == Type::STRING || $type == Type::DECIMAL) {
             return 'string';
         } elseif ($type == Type::BLOB /* binary will be added in doctrine 2.5 */) {
             return 'resource';
@@ -153,23 +175,6 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
             case 'integer':
             default:
                 return 32;
-        }
-    }
-
-    /**
-     * Add prefix slash to class type
-     * if it was not there already and
-     * return as new string.
-     *
-     * @param string $type
-     * @return string
-     */
-    private function classType($type)
-    {
-        if (isset($type[0]) && $type[0] != '\\') {
-            return "\\$type";
-        } else {
-            return $type;
         }
     }
 }

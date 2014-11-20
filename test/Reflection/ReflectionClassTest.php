@@ -81,7 +81,7 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
                 ]
             ],
             [
-            'modifiers.php',
+                'modifiers.php',
                 'Boom',
                 '',
                 [],
@@ -103,6 +103,42 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
                     'public $kruin;',
                     'public $nerf;',
                     'private $riet;',
+                ]
+            ],
+            [
+                'nullable.php',
+                'Nullable',
+                'Hostnet\Component\AccessorGenerator\Annotation',
+                [],
+                [
+                    'private $nullable = null;',
+                ]
+            ],
+            [
+                'array.php',
+                'DefaultArrays',
+                'Hostnet\Component\AccessorGenerator\Annotation',
+                [],
+                [
+                    'private $a = [\'string\'];',
+                    'private $b = [\'string\'];',
+                    'private $c = [0 => \'string\'];',
+                    'private $d = [0 => \'string\', 1 => 2];',
+                    'private $e = [0 => \'string\', 1 => 2, \'three\' => 3];',
+                    'private $f = [0 => \'string\', 1 => \'2\', \'three\' => 3];',
+                    'private $g = [0 => \'string\', [\'1\' => [\'2\']], \'three\' => 3];',
+                    'private $h = [0 => \'string\', [\'1\' => [(\'2\')]], \'three\' => 3];',
+                ]
+            ],
+            [
+                'const.php',
+                'Constant',
+                'Hostnet\Component\AccessorGenerator\Annotation',
+                [],
+                [
+                    'private $constant = self::class;',
+                    'private $color = COLOR;',
+                    'private $color = self::COLOR;',
                 ]
             ],
         ];

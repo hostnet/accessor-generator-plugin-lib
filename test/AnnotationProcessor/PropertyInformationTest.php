@@ -1,6 +1,7 @@
 <?php
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
+use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
 
 /**
@@ -16,15 +17,22 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $property   = new ReflectionProperty(
+        $class = $this->getMockBuilder(ReflectionClass::class)->disableOriginalConstructor()->getMock();
+        $class->expects($this->any())->method('getNamespace')->willReturn('');
+        $class->expects($this->any())->method('getUseStatements')->willReturn([]);
+        $class->expects($this->any())->method('getName')->willReturn('Test');
+
+        $property = new ReflectionProperty(
             'test',
             ReflectionProperty::IS_PRIVATE,
             null,
             '/**
               * Hidde
               * @Hostnet\Component\AccessorGenerator\Annotation\Generate(get=false)
-              */'
+              */',
+            $class
         );
+
         $this->info = new PropertyInformation($property);
     }
 
@@ -51,6 +59,8 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $this->info->getPrecision());
         $this->assertEquals(0, $this->info->getLength());
         $this->assertEquals(32, $this->info->getIntegerSize());
+        $this->assertEquals('Test', $this->info->getClass());
+        $this->assertEquals('', $this->info->getNameSpace());
 
         $this->assertEquals(false, $this->info->isCollection());
         $this->assertEquals(false, $this->info->isFixedPointNumber());
@@ -90,6 +100,39 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(true, $this->info->willGenerateSet());
     }
 
+    public function setReferencedPropertyProvider()
+    {
+        return [
+            [1,                      \InvalidArgumentException::class],
+            [0b100,                  \InvalidArgumentException::class],
+            [010,                    \InvalidArgumentException::class],
+            [0x8,                    \InvalidArgumentException::class],
+            [32,                     \InvalidArgumentException::class],
+            [[],                     \InvalidArgumentException::class],
+            [null,                   \InvalidArgumentException::class],
+            [false,                  \InvalidArgumentException::class],
+            [1.5,                    \InvalidArgumentException::class],
+            ['16',                   \DomainException::class         ],
+            ['\Object',              \DomainException::class         ],
+            ['',                     null                            ],
+            ['Object',               null                            ],
+            ['property',             null                            ],
+        ];
+    }
+
+    /**
+     * @dataProvider setReferencedPropertyProvider
+     * @param string $referenced_property
+     * @param string $exception
+     */
+    public function testSetReferencedPropery($referenced_property, $exception)
+    {
+        $this->setExpectedException($exception);
+        $this->assertSame($this->info, $this->info->setReferencedProperty($referenced_property));
+        $this->assertEquals($referenced_property, $this->info->getReferencedProperty());
+    }
+
+
     public function setIntegerSizeProvider()
     {
         return [
@@ -125,8 +168,8 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
 
     public function setScaleProvider()
     {
-        // Determine max precision for system arch.
-        $max = PropertyInformation::numberOfSignificantDecimalDigitsFloat();
+        //http://dev.mysql.com/doc/refman/5.0/en/precision-math-decimal-characteristics.html
+        $max = 30;
         return [
             [-1,       \RangeException::class          ],
             [0,        null                            ],
@@ -156,8 +199,8 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
 
     public function setPrecisionProvider()
     {
-        // Determine max precision for system arch.
-        $max = PropertyInformation::numberOfSignificantDecimalDigitsFloat();
+        //http://dev.mysql.com/doc/refman/5.0/en/precision-math-decimal-characteristics.html
+        $max = 65;
         return [
             [-1,       \RangeException::class          ],
             [0,        null                            ],
@@ -213,9 +256,14 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
     public function setTypeProvider()
     {
         return [
-            ['integer', null],
-            ['\\Test',  null],
-            ['enum',    \DomainException::class],
+            ['integer', null                            ],
+            ['\\Test',  null                            ],
+            ['Enum',    null                            ],
+            ['enum',    \DomainException::class         ],
+            ['10',      \DomainException::class         ],
+            ['',        \DomainException::class         ],
+            [['test'],  \InvalidArgumentException::class],
+            [10,        \InvalidArgumentException::class],
         ];
     }
 

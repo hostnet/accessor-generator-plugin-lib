@@ -5,12 +5,13 @@
     colors="true" bootstrap="vendor/autoload.php">
     <testsuites>
         <testsuite>
-            <directory>./test</directory>
+            <directory>test</directory>
         </testsuite>
     </testsuites>
     <filter>
         <whitelist>
             <directory>src</directory>
+            <directory>test/Generator/fixtures/expected/</directory>
         </whitelist>
     </filter>
 </phpunit>

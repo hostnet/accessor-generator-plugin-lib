@@ -164,27 +164,32 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
             $this->assertFalse($this->information->isCollection());
         }
 
-
         // Check type.
         if ($annotation instanceof ManyToMany
             || $annotation instanceof ManyToOne
             || $annotation instanceof OneToMany
             || $annotation instanceof ManyToMany
         ) {
-            // Add \ prefix to type if it was not there
-            // in the annotation since we expect our result
-            // to always include it.
             $type = $annotation->targetEntity;
-            if (isset($type[0]) && $type[0] != '\\') {
-                $type = '\\' . $type;
-            }
             $this->assertEquals($type, $this->information->getType());
         }
 
         // Check Generated value disables
         // set method generation.
         if ($annotation instanceof GeneratedValue) {
-            $this->assertFalse($this->information->willGenerateSet());
+            $this->assertFalse($this->information->willGenerateSet(), 'generate');
+        }
+
+        // Check for a bidirectional association
+        if (property_exists($annotation, 'mappedBy') && $annotation->mappedBy) {
+            // Bidirectional, inverse side.
+            $this->assertEquals($annotation->mappedBy, $this->information->getReferencedProperty());
+        } elseif (property_exists($annotation, 'inversedBy') && $annotation->inversedBy) {
+            // Bidirectional, owning side.
+            $this->assertEquals($annotation->inversedBy, $this->information->getReferencedProperty());
+        } else {
+            // Unidirectional.
+            $this->assertEmpty($this->information->getReferencedProperty());
         }
     }
 
@@ -197,7 +202,8 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         return [
             ['smallint',   'integer'],
             ['integer',    'integer'],
-            ['decimal',    'float'],
+            ['bigint',   'integer'],
+            ['decimal',    'string'],
             ['float',      'float'],
             ['string',     'string'],
             ['text',       'string'],
@@ -211,15 +217,15 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
             ['array',      'array'],
             ['json_array', 'array'],
             ['object',     'object'],
-
-            ['double',     'dobule',   \DomainException::class],
-            ['bool',       'bool',     \DomainException::class],
-            ['binary',     'resource', \DomainException::class],
-            ['int',        'integer',  \DomainException::class],
-            ['',           '',         \DomainException::class],
-            [null,         null,       \DomainException::class],
-            [false,        false,      \DomainException::class],
-            [[],           [],         \DomainException::class],
+            ['double',     null,  \DomainException::class],
+            ['bool',       null,  \DomainException::class],
+            ['binary',     null,  \DomainException::class],
+            ['int',        null,  \DomainException::class],
+            ['',           null,  \DomainException::class],
+            [null,         null,  \InvalidArgumentException::class],
+            [false,        false, \InvalidArgumentException::class],
+            [[],           [],    \InvalidArgumentException::class],
+            [['test'],     [],    \InvalidArgumentException::class],
         ];
     }
 
@@ -234,7 +240,10 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException($exception);
 
         // Check if we have an assosciation or a scalar db type.
-        if (is_string($doctrine_type) && substr($doctrine_type, 0, 1) == '\\') {
+        if (is_string($doctrine_type)
+            && $doctrine_type
+            && (ctype_upper($doctrine_type[0]) || $doctrine_type[0] === '\\')
+        ) {
             $annotation               = new ManyToOne();
             $annotation->targetEntity = $doctrine_type;
         } else {

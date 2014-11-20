@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <ruleset name="accessor-generator">
   <description>Hostnet Coding Standard</description>
-  <exclude-pattern>*/fixtures/*</exclude-pattern>
+  <exclude-pattern>./Reflection/fixtures/*</exclude-pattern>
   <rule ref="Hostnet"/>
 </ruleset>

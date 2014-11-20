@@ -2,6 +2,7 @@
 namespace Hostnet\Component\AccessorGenerator\Twig;
 
 use Doctrine\Common\Inflector\Inflector;
+use Doctrine\Common\Proxy\Exception\InvalidArgumentException;
 
 /**
  * Twig extension to have some filters and tags
@@ -37,6 +38,64 @@ class CodeGenerationExtension extends \Twig_Extension
         return [new PerLineTokenParser()];
     }
 
+    private static function twosComplementMin($bits)
+    {
+        $bits     = intval($bits);
+        $max_bits = PHP_INT_SIZE << 3;
+
+        if ($bits < 1) {
+            throw new \DomainException('Bitsize sould be bigger than 0');
+        } elseif ($bits > $max_bits) {
+            $bits = $max_bits;
+        }
+        return (-1 << ($bits - 1));
+    }
+
+    private static function twosComplementMax($bits)
+    {
+        $bits     = intval($bits);
+        $max_bits = PHP_INT_SIZE << 3;
+
+        if ($bits < 1) {
+            throw new \DomainException('Bitsize sould be bigger than 0');
+        } elseif ($bits > $max_bits) {
+            $bits = $max_bits;
+        }
+        return (1 << ($bits - 2)) -1 + (1 << ($bits - 2));
+    }
+
+    private static function decimalRightShift($input, $amount = 0)
+    {
+        // Check input, to see if it is a valid numeric string with a decimal dot and not a
+        // decimal comma or any other unwanted chars.
+        if (!preg_match('/[0-9]*\.?[0-9]+/', $input)) {
+            throw new \InvalidArgumentException('Input is not a number or numeric string');
+        }
+
+        // Check amount to see if it is of integer type.
+        if (!is_int($amount)) {
+            throw new \InvalidArgumentException('Amount should be a integer value');
+        }
+
+        if ($amount > 0) {
+            if (($loc = strpos($input, '.')) === false) {
+                $loc = strlen($input);
+            } else {
+                $input = str_replace('.', '', $input);
+            }
+
+            $loc -= $amount;
+            if ($loc > 0) {
+                return substr($input, 0, $loc) . '.' . substr($input, $loc);
+            } else {
+                return '0.' . str_repeat('0', abs($loc)) . $input;
+            }
+
+        } else {
+            return $input;
+        }
+    }
+
     /**
      * @override
      */
@@ -49,6 +108,27 @@ class CodeGenerationExtension extends \Twig_Extension
                 }),
                 new \Twig_SimpleFilter('singularize', function ($string) {
                     return Inflector::singularize($string);
+                }),
+                new \Twig_SimpleFilter('twos_complement_min', function ($int) {
+                    try {
+                        return self::twosComplementMin($int);
+                    } catch (\DomainException $e) {
+                        throw new \Twig_Error_Runtime($e->getMessage(), null, null, $e);
+                    }
+                }),
+                new \Twig_SimpleFilter('twos_complement_max', function ($int) {
+                    try {
+                        return self::twosComplementMax($int);
+                    } catch (\DomainException $e) {
+                        throw new \Twig_Error_Runtime($e->getMessage(), null, null, $e);
+                    }
+                }),
+                new \Twig_SimpleFilter('decimal_right_shift', function ($input, $amount) {
+                    try {
+                        return self::decimalRightShift($input, $amount);
+                    } catch (\InvalidArgumentException $e) {
+                        throw new \Twig_Error_Runtime($e->getMessage(), null, null, $e);
+                    }
                 })
             ];
     }

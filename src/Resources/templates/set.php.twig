@@ -8,9 +8,12 @@
  {% endif -%}
  *
  * @param {{ property.type }} ${{ property.name }}
- * @return $this
+ {% if property.isFixedPointNumber -%}
+ * @param bool %round round the number fit in the precision and scale (round away from zero)
+ {% endif -%}
+ * @return {{ property.class }}
  * @throws \BadMethodCallException if the number of arguments is not correct
- {% if not property.type starts with '\\' -%}
+ {% if not property.isComplexType -%}
  * @throws \InvalidArgumentException if value is not of the right type
  {% endif -%}
  {% if property.type == 'integer' -%}
@@ -19,10 +22,21 @@
  {% if property.length -%}
  * @throws \LengthException if the length of the value is to long
  {% endif -%}
+ {% if not property.willGenerateSet -%}
+ * @throws \LogicException if the association constraints are violated
+ * @access friends with {{ property.type }}
+ {% endif -%}
  */
-public function set{{ property.name | classify }}({{ property.type starts with '\\' ?  property.type ~ ' '}}${{ property.name }})
+{{ property.willGenerateSet ? 'public' : 'private' }} function set{{ property.name | classify }}(
+    {{- property.isComplexType ? property.type ~ ' '-}}
+    ${{ property.name -}}
+    {%- if  default %} = {{ default | raw }}{% endif %}
+    {%- if property.isFixedPointNumber -%}
+    , $round = false
+    {%- endif -%}
+)
 {
-    if (func_num_args() != 1) {
+    if (func_num_args() {{ property.isFixedPointNumber ? '> 2' : '!= 1' }}) {
         throw new \BadMethodCallException(
             sprintf(
                 'set{{ property.name | classify }}() has one argument but %d given.',
@@ -30,28 +44,49 @@ public function set{{ property.name | classify }}({{ property.type starts with '
             )
         );
     }
+{# scalar or build-in type (integer, float, string, array, object, resource) #}
+{%- if not property.isComplexType %}
+{% if property.isNullable %}
 
-    {# scalar or build-in type (integer, float, string, array, object, resource) -#}
-    {% if not property.type starts with '\\' %}
-    {% if property.type == 'integer' %}
-    if (!is_int(${{ property.name }}) {
-        if ((int)${{ property.name }} !== 1 * ${{ property.name }}) {
-            if (is_float(1 * ${{ property.name }})) {
-                throw new \DomainException('Parameter \'${{ name }}\' is too big for the interger domain [' . PHP_INT_MIN . ',' PHP_INT_MAX ']');
-            } else {
-                throw new \InvalidArgumentException('Parameter \'${{ name }}\' must be compatible with \'integer\'.');
-            }
-        }
+    if (${{ property.name }} === null) {
+        $this->{{ property.name }} = ${{ property.name }};
+        return $this;
     }
-    {% elseif property.type == 'float' %}
-    {% endif %}
-    {% endif %}
-    {% if property.length %}
+{% endif %}
+{% if property.type == 'integer' %}
 
-    if (strlen(${{ property.name }} > {{ property.length }})) {
+    {% perline %}
+    {% include 'integer.php.twig' with {'skip_check_type' : false, 'var' : '$' ~ property.name }%}
+    {% endperline %}
+{% elseif property.isFixedPointNumber %}
+
+    {% perline %}
+    {% include 'decimal.php.twig' %}
+    {% endperline %}
+{% else %}
+
+    if (!is_{{ property.type == 'boolean' ? 'bool' : property.type }}(${{ property.name }})) {
+        throw new \InvalidArgumentException(
+            'Parameter {{ property.name }} must be {{ property.type }}.'
+        );
+    }
+{% endif %}
+{% endif %}
+{%- if property.length %}
+
+    if (strlen(${{ property.name }}) > {{ property.length }}) {
         throw new \LengthException('Parameter \'${{ property.name }}\' should not be longer than {{ property.length }} characters.');
     }
-    {% endif %}
+{% endif %}
+{%- if not property.willGenerateSet %}
 
+    if (${{ property.name }} && ! ${{ property.name }}->get{{ property.referencedProperty | classify}}()->contains($this)) {
+        throw new \LogicException('Please use {{ property.name | classify}}::add{{ property.referencedProperty | singularize | classify }}().');
+    } elseif (${{ property.name }} && $this->{{ property.name }}) {
+        throw new \LogicException('{{ property.class }} objects can not be added to more than one {{ property.type }}.');
+    }
+{% endif %}
+
+    $this->{{ property.name }} = ${{ property.name }};
     return $this;
 }

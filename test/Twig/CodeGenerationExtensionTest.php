@@ -26,10 +26,14 @@ class CodeGenerationExtensionTest extends \PHPUnit_Framework_TestCase
 
         // Create some very simple templates to test the filters
         $loader = new \Twig_Loader_Array([
-            'classify'       => '{{ data | classify }}',
-            'singularize'    => '{{ data | singularize }}',
-            'perline_stars'  => " {% perline %}\n * {{data}} *\n{% endperline %}",
-            'perline_indent' => "    {% perline %}\n    {{data}}\n    {% endperline %}",
+            'classify'            => '{{ data | classify }}',
+            'singularize'         => '{{ data | singularize }}',
+            'twos_complement_min' => '{{ data | twos_complement_min }}',
+            'twos_complement_max' => '{{ data | twos_complement_max }}',
+            'singularize'         => '{{ data | singularize }}',
+            'perline_stars'       => " {% perline %}\n * {{data}} *\n{% endperline %}",
+            'perline_indent'      => "    {% perline %}\n    {{data}}\n    {% endperline %}",
+            'decimal_right_shift' => '{{ data | decimal_right_shift(amount) }}',
         ]);
 
         $this->twig = new \Twig_Environment($loader);
@@ -71,7 +75,6 @@ class CodeGenerationExtensionTest extends \PHPUnit_Framework_TestCase
             ['TEST', 'TEST'],
             ['TEST_STRING', 'TESTSTRING'],
             ['tEST_STRING', 'TESTSTRING'],
-
         ];
     }
 
@@ -81,6 +84,46 @@ class CodeGenerationExtensionTest extends \PHPUnit_Framework_TestCase
     public function testClassify($input, $output)
     {
         $this->assertEquals($output, $this->twig->render('classify', ['data' => $input]));
+    }
+
+    public function twosComplementMaxProvider()
+    {
+        return [
+            [                -10, null           , \Twig_Error_Runtime::class],
+            [                  0, null           , \Twig_Error_Runtime::class],
+            [                 16, 32767                                      ],
+            [  PHP_INT_SIZE << 3, PHP_INT_MAX                                ],
+            [  PHP_INT_SIZE << 4, PHP_INT_MAX                                ],
+        ];
+    }
+
+    /**
+     * @dataProvider twosComplementMinProvider
+     */
+    public function testTwosComplementMin($input, $output, $exception = null)
+    {
+        $this->setExpectedException($exception);
+        $this->assertEquals($output, $this->twig->render('twos_complement_min', ['data' => $input]));
+    }
+
+    public function twosComplementMinProvider()
+    {
+        return [
+            [                -10, null           , \Twig_Error_Runtime::class],
+            [                  0, null           , \Twig_Error_Runtime::class],
+            [                 16, -32768                                     ],
+            [  PHP_INT_SIZE << 3, -PHP_INT_MAX -1                            ],
+            [  PHP_INT_SIZE << 4, -PHP_INT_MAX -1                            ],
+        ];
+    }
+
+    /**
+     * @dataProvider twosComplementMaxProvider
+     */
+    public function testTwosComplementMax($input, $output, $exception = null)
+    {
+        $this->setExpectedException($exception);
+        $this->assertEquals($output, $this->twig->render('twos_complement_max', ['data' => $input]));
     }
 
     /**
@@ -158,5 +201,32 @@ class CodeGenerationExtensionTest extends \PHPUnit_Framework_TestCase
     public function testPerLine($template, $input, $output)
     {
         $this->assertEquals($output, $this->twig->render($template, ['data' => $input]));
+    }
+
+    public function decimalRightShiftProvider()
+    {
+        return [
+            [  10,  0, 10           ],
+            [  10,  1,  1.0         ],
+            [   1,  0,  1           ],
+            [   1, 10,   .0000000001],
+            [1000,  4,   .1         ],
+            ['1.0', 2, '0.010'      ],
+            [ 'a', null, null, \Twig_Error_Runtime::class],
+            [ [],  null, null, \Twig_Error_Runtime::class],
+            [ 1,   [],   null, \Twig_Error_Runtime::class],
+        ];
+    }
+
+    /**
+     * @dataProvider decimalRightShiftProvider
+     */
+    public function testDecimalRightShift($input, $amount, $output, $exception = null)
+    {
+        $this->setExpectedException($exception);
+        $this->assertEquals(
+            $output,
+            $this->twig->render('decimal_right_shift', ['data' => $input, 'amount' => $amount])
+        );
     }
 }

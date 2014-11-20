@@ -8,9 +8,9 @@
  {% endif -%}
  *
  {% if property.collection -%}
- * @returns \Doctrine\Common\Collections\Collection | {{ property.type }}[]
+ * @return \Doctrine\Common\Collections\Collection | {{ property.type }}[]
  {% else -%}
- * @returns {{ property.type }}
+ * @return {{ property.type }}
  {% endif -%}
  * @throws \InvalidArgumentException
  */
@@ -24,20 +24,42 @@ public function {{  property.type == 'boolean' ? 'is' : 'get' }}{{ property.name
             )
         );
     }
+{% if not property.isNullable and (not property.isComplexType  or property.type == '\\DateTime') %}
+    if ($this->{{ property.name }} === null) {
+        throw new \LogicException(sprintf(
+            'Property {{ property.name }} is null, but the column is not nullable, '.
+            'make sure your object is initialized in such a way the properties are in '.
+            'a valid state, for example by using a proper constructor. If you want to ' .
+            'test if an object is new for the database please consult the UnitOfWork.' .
+            'It could also be that your column in code is set tot not nullable and in' .
+            'and contains null values in the database'
+        ));
+    }
+{% endif %}
+{% if property.type == 'integer' %}
 
-    {% if property.type == 'integer' -%}
-    if (!is_int($this->{{ property.name }})
-        && (int)$this->{{ property.name }} !== 1 * $this->{{ property.name }}
-    ) {
-        throw new \DomainException(
-            '\'{{ property.name }}\' is too big for the interger domain ['
-            . PHP_INT_MIN
-            . ','
-            . PHP_INT_MAX
-            . ']'
+    {% perline %}
+    {% include 'integer.php.twig' with {'skip_check_type' : true, 'var' : '$this->' ~ property.name }%}
+    {% endperline %}
+{% endif -%}
+{% if property.collection %}
+
+    if ($this->{{ property.name }} === null) {
+        $this->{{ property.name }} = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+{% elseif property.isComplexType and not property.isNullable and property.type != '\\DateTime' %}
+
+    if ($this->{{ property.name }} === null) {
+        throw new \Doctrine\ORM\EntityNotFoundException(
+            'Property {{ property.type | classify }} references an other entity ' .
+            'but is not found and also is not nullable for parameter {{ property.name }}.'
         );
     }
+{% endif %}
 
-    {% endif -%}
+{% if property.type == 'integer' %}
+    return (int) $this->{{ property.name }};
+{% else %}
     return $this->{{ property.name }};
+{% endif %}
 }
