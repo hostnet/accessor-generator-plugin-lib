@@ -68,7 +68,7 @@ class CodeGenerationExtension extends \Twig_Extension
     {
         // Check input, to see if it is a valid numeric string with a decimal dot and not a
         // decimal comma or any other unwanted chars.
-        if (!preg_match('/[0-9]*\.?[0-9]+/', $input)) {
+        if (!is_numeric($input) || !preg_match('/[0-9]*\.?[0-9]+/', $input)) {
             throw new \InvalidArgumentException('Input is not a number or numeric string');
         }
 
