@@ -54,5 +54,8 @@
     },
     "extra" : {
         "class" : "Hostnet\\Component\\AccessorGenerator\\Plugin"
+    },
+    "archive": {
+        "exclude": [ "/test" ]
     }
 }
