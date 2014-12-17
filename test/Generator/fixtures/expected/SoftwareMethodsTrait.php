@@ -1,5 +1,5 @@
 <?php
-// Generated at 2014-12-17 13:01:30 by hboomsma on se18-03-73-3f-9f-e0
+// HEADER
 
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 

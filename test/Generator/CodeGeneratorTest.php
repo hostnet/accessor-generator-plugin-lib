@@ -58,10 +58,8 @@ class CodeGeneratorTest extends \PHPUnit_Framework_TestCase
         $actual_contents   = file_exists($actual)   ? file_get_contents($actual)   : '';
 
         // Remove system, time and user dependend header
-        $pattern = '#^// Generated at 20[0-9]{2}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} by .*$#m';
-
-        $expected_contents = preg_replace($pattern, 'HEADER', $expected_contents, 1);
-        $actual_contents   = preg_replace($pattern, 'HEADER', $actual_contents, 1);
+        $pattern         = '#^// Generated at 20[0-9]{2}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} by .*$#m';
+        $actual_contents = preg_replace($pattern, '// HEADER', $actual_contents, 1);
 
         // Test if contents is the expected contents.
         $this->assertEquals($expected_contents, $actual_contents);
