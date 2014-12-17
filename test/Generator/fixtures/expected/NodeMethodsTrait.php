@@ -12,7 +12,8 @@ trait NodeMethodsTrait
     /**
      * Get out
      *
-     * @return \Doctrine\Common\Collections\Collection | Node[]
+     * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Node[]
+     * @return \Doctrine\Common\Collections\Collection
      * @throws \InvalidArgumentException
      */
     public function getOut()

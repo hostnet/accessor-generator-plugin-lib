@@ -3,6 +3,7 @@ namespace Hostnet\Component\AccessorGenerator\Generator\fixtures;
 
 use Doctrine\ORM\Mapping as ORM;
 use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Generator\fixtures\Customer as Client;
 
 /**
  * 6.3. One-To-One, Bidirectional (Inversed)
@@ -36,7 +37,7 @@ class Cart
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="Customer", mappedBy="cart")
+     * @ORM\OneToOne(targetEntity="Client", mappedBy="cart")
      * @AG\Generate
      */
     private $customer;

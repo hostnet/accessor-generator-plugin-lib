@@ -13,7 +13,8 @@ trait ActorMethodsTrait
     /**
      * Get movies
      *
-     * @return \Doctrine\Common\Collections\Collection | Movie[]
+     * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie[]
+     * @return \Doctrine\Common\Collections\Collection
      * @throws \InvalidArgumentException
      */
     public function getMovies()

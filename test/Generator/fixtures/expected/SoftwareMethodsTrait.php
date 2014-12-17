@@ -13,7 +13,8 @@ trait SoftwareMethodsTrait
     /**
      * Get features
      *
-     * @return \Doctrine\Common\Collections\Collection | FeatureInterface[]
+     * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\FeatureInterface[]
+     * @return \Doctrine\Common\Collections\Collection
      * @throws \InvalidArgumentException
      */
     public function getFeatures()

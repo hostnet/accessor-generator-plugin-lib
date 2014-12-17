@@ -1,5 +1,4 @@
 <?php
-
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Doctrine\Common\Annotations\DocParser;
@@ -88,7 +87,6 @@ class CodeGenerator implements CodeGeneratorInterface
             $info->registerAnnotationProcessor(new GenerateAnnotationProcessor());
             $info->registerAnnotationProcessor(new DoctrineAnnotationProcessor());
             $info->processAnnotations();
-            $code .= $this->generateAccessors($info);
 
             // Complex Type within curent namespace. Since our trait is in a sub
             // namespace we have to import those aswell (php does not no .. in namespace).
@@ -101,6 +99,9 @@ class CodeGenerator implements CodeGeneratorInterface
                     }
                 }
             }
+
+            $info->setFullyQualifiedType($this->fqcn($info->getType(), $imports));
+            $code .= $this->generateAccessors($info);
         }
 
         // Make sure our use statemens are sorted alphabetically and unique.
@@ -163,4 +164,35 @@ class CodeGenerator implements CodeGeneratorInterface
 
         return $code;
     }
+
+    private function fqcn($name, array $imports)
+    {
+        // Already FQCN
+        if (substr($name, 0, 1) === '\\') {
+            return $name;
+        }
+
+        // No complex type
+        if (ctype_lower(substr($name, 0, 1))) {
+            return '';
+        }
+
+        // Aliased
+        if (isset($imports[$name])) {
+            return '\\' . $imports[$name];
+        }
+
+        // Check other imports
+        foreach ($imports as $alias => $import) {
+            if (is_numeric($alias)) {
+                if (substr($import, -1 - strlen($name)) == '\\' . $name) {
+                    return '\\' . $import;
+                }
+            }
+        }
+
+        // Should be a fully qualified namespace without the starting \
+        return '\\' . $name;
+    }
+
 }

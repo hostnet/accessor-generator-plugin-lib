@@ -13,7 +13,8 @@ trait SongMethodsTrait
     /**
      * Get genres
      *
-     * @return \Doctrine\Common\Collections\Collection | Genre[]
+     * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Genre[]
+     * @return \Doctrine\Common\Collections\Collection
      * @throws \InvalidArgumentException
      */
     public function getGenres()

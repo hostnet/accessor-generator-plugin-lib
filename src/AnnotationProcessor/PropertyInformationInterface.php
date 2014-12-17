@@ -65,6 +65,18 @@ interface PropertyInformationInterface
     public function getType();
 
     /**
+     * Get the fully qualified name of the
+     * type, including the complete namespace
+     * and starting with a \.
+     *
+     * Will return nothing if isComplexType
+     * returns false.
+     *
+     * @return string
+     */
+    public function getFullyQualifiedType();
+
+    /**
      * Returns if the propery is a scalar
      * type from the php language as boolean
      * integer, array or that is is a complex

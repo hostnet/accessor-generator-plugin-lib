@@ -12,7 +12,8 @@ trait CategoryMethodsTrait
     /**
      * Get children
      *
-     * @return \Doctrine\Common\Collections\Collection | Category[]
+     * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Category[]
+     * @return \Doctrine\Common\Collections\Collection
      * @throws \InvalidArgumentException
      */
     public function getChildren()

@@ -23,6 +23,12 @@ class PropertyInformation implements PropertyInformationInterface
     private $type = 'string';
 
     /**
+     * @see PropertyInformationInterface::getFullyQualifiedType()
+     * @var string
+     */
+    private $fully_qualified_type = '';
+
+    /**
      * @see PropertyInformationInterface::getIntegerSize()
      * @var int
      */
@@ -236,6 +242,15 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
+     * @see PropertyInformationInterface::getFullyQualifiedType()
+     * @return string
+     */
+    public function getFullyQualifiedType()
+    {
+        return $this->fully_qualified_type;
+    }
+
+    /**
      * Set the type for this property.
      * The type must be one of the set returned
      * by getValidTypes.
@@ -251,7 +266,7 @@ class PropertyInformation implements PropertyInformationInterface
             throw new \InvalidArgumentException(sprintf('$type is not of type string but of %s', gettype($type)));
         } elseif (empty($type)) {
             throw new \DomainException(sprintf('A type name may not be empty'));
-        } elseif (is_numeric($type)) {
+        } elseif ((int)($type)) {
             throw new \DomainException(sprintf('A type name may not start with a number. Found %s', $type));
         } elseif (in_array($type, $this->getValidTypes())) {
             $this->type = $type;
@@ -259,6 +274,32 @@ class PropertyInformation implements PropertyInformationInterface
             $this->type = $type;
         } else {
             throw new \DomainException(sprintf('The type %s is not supported for code generation', $type));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the fully qualified type for this property.
+     * The type must be a valid class name starting from
+     * the root namespace, so it should start with a \
+     *
+     * @param  string $type
+     * @throws \DomainException
+     * @return PropertyInformation
+     */
+    public function setFullyQualifiedType($type)
+    {
+        if (! is_string($type)) {
+            throw new \InvalidArgumentException(sprintf('$type is not of type string but of %s', gettype($type)));
+        } elseif (empty($type)) {
+            $this->fully_qualified_type = '';
+        } elseif ((int)($type)) {
+            throw new \DomainException(sprintf('A type name may not start with a number. Found %s', $type));
+        } elseif ($type[0] === '\\') {
+            $this->fully_qualified_type = $type;
+        } else {
+            throw new \DomainException(sprintf('The type %s is not a valid fully qualified class name', $type));
         }
 
         return $this;

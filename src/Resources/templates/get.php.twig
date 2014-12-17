@@ -8,7 +8,8 @@
  {% endif -%}
  *
  {% if property.collection -%}
- * @return \Doctrine\Common\Collections\Collection | {{ property.type }}[]
+ * @return {{ property.fullyQualifiedType }}[]
+ * @return \Doctrine\Common\Collections\Collection
  {% else -%}
  * @return {{ property.type }}
  {% endif -%}

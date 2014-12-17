@@ -55,6 +55,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('test', $this->info->getName());
         $this->assertEquals(null, $this->info->getDefault());
         $this->assertEquals('string', $this->info->getType());
+        $this->assertEquals('', $this->info->getFullyQualifiedType());
         $this->assertEquals(0, $this->info->getScale());
         $this->assertEquals(0, $this->info->getPrecision());
         $this->assertEquals(0, $this->info->getLength());
@@ -261,6 +262,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
             ['Enum',    null                            ],
             ['enum',    \DomainException::class         ],
             ['10',      \DomainException::class         ],
+            ['1A',      \DomainException::class         ],
             ['',        \DomainException::class         ],
             [['test'],  \InvalidArgumentException::class],
             [10,        \InvalidArgumentException::class],
@@ -277,5 +279,32 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException($exception);
         $this->assertSame($this->info, $this->info->setType($type));
         $this->assertEquals($type, $this->info->getType());
+    }
+
+    public function setFullyQualifiedTypeProvider()
+    {
+        return [
+            ['integer', \DomainException::class         ],
+            ['\\Test',  null                            ],
+            ['Enum',    \DomainException::class         ],
+            ['enum',    \DomainException::class         ],
+            ['10',      \DomainException::class         ],
+            ['1A',      \DomainException::class         ],
+            ['',        null                            ],
+            [['test'],  \InvalidArgumentException::class],
+            [10,        \InvalidArgumentException::class],
+        ];
+    }
+
+    /**
+     * @dataProvider setFullyQualifiedTypeProvider
+     * @param string $type
+     * @param string $exception
+     */
+    public function testSetFullyQualifiedType($type, $exception)
+    {
+        $this->setExpectedException($exception);
+        $this->assertSame($this->info, $this->info->setFullyQualifiedType($type));
+        $this->assertEquals($type, $this->info->getFullyQualifiedType());
     }
 }

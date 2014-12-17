@@ -202,7 +202,8 @@ trait ProductMethodsTrait
     /**
      * Get attributes
      *
-     * @return \Doctrine\Common\Collections\Collection | Attribute[]
+     * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Attribute[]
+     * @return \Doctrine\Common\Collections\Collection
      * @throws \InvalidArgumentException
      */
     public function getAttributes()
