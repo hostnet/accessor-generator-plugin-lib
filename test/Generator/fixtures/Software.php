@@ -46,7 +46,7 @@ class Software
 
     /**
      * @ORM\OneToMany(targetEntity="Feature", mappedBy="software")
-     * @AG\Generate
+     * @AG\Generate(type="FeatureInterface")
      */
     private $features;
 }

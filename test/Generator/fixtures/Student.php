@@ -23,7 +23,7 @@ use Hostnet\Component\AccessorGenerator\Annotation as AG;
  *
  * @ORM\Entity
  */
-class Student
+class Student implements StudentInterface
 {
     use Generated\StudentMethodsTrait;
 
@@ -35,7 +35,7 @@ class Student
 
     /**
      * @ORM\OneToOne(targetEntity="Student")
-     * @AG\Generate
+     * @AG\Generate(type="StudentInterface")
      */
     private $student;
 }

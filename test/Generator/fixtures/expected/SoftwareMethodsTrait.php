@@ -5,7 +5,7 @@ namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
 use Doctrine\ORM\Mapping as ORM;
 use Hostnet\Component\AccessorGenerator\Annotation as AG;
-use Hostnet\Component\AccessorGenerator\Generator\fixtures\Feature;
+use Hostnet\Component\AccessorGenerator\Generator\fixtures\FeatureInterface;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Software;
 
 trait SoftwareMethodsTrait
@@ -13,7 +13,7 @@ trait SoftwareMethodsTrait
     /**
      * Get features
      *
-     * @return \Doctrine\Common\Collections\Collection | Feature[]
+     * @return \Doctrine\Common\Collections\Collection | FeatureInterface[]
      * @throws \InvalidArgumentException
      */
     public function getFeatures()
@@ -37,11 +37,11 @@ trait SoftwareMethodsTrait
     /**
      * Add feature
      *
-     * @param Feature $features
+     * @param FeatureInterface $features
      * @return Software
      * @throws \BadMethodCallException if the number of arguments is not correct
      */
-    public function addFeature(Feature $feature)
+    public function addFeature(FeatureInterface $feature)
     {
         if (func_num_args() != 1) {
             throw new \BadMethodCallException(
@@ -69,11 +69,11 @@ trait SoftwareMethodsTrait
     /**
      * Remove feature
      *
-     * @param Feature $features
+     * @param FeatureInterface $features
      * @return Software
      * @throws \BadMethodCallException if the number of arguments is not correct
      */
-    public function removeFeature(Feature $feature)
+    public function removeFeature(FeatureInterface $feature)
     {
         if (func_num_args() != 1) {
             throw new \BadMethodCallException(

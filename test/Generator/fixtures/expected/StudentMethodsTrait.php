@@ -6,13 +6,14 @@ namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 use Doctrine\ORM\Mapping as ORM;
 use Hostnet\Component\AccessorGenerator\Annotation as AG;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Student;
+use Hostnet\Component\AccessorGenerator\Generator\fixtures\StudentInterface;
 
 trait StudentMethodsTrait
 {
     /**
      * Get student
      *
-     * @return Student
+     * @return StudentInterface
      * @throws \InvalidArgumentException
      */
     public function getStudent()
@@ -28,7 +29,7 @@ trait StudentMethodsTrait
 
         if ($this->student === null) {
             throw new \Doctrine\ORM\EntityNotFoundException(
-                'Property Student references an other entity ' .
+                'Property StudentInterface references an other entity ' .
                 'but is not found and also is not nullable for parameter student.'
             );
         }
@@ -39,11 +40,11 @@ trait StudentMethodsTrait
     /**
      * Set student
      *
-     * @param Student $student
+     * @param StudentInterface $student
      * @return Student
      * @throws \BadMethodCallException if the number of arguments is not correct
      */
-    public function setStudent(Student $student)
+    public function setStudent(StudentInterface $student)
     {
         if (func_num_args() != 1) {
             throw new \BadMethodCallException(

@@ -22,4 +22,5 @@ class Generate
     public $add    = true;
     public $remove = true;
     public $is     = true;
+    public $type   = null;
 }

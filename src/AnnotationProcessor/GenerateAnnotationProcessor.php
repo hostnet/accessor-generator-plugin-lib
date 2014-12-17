@@ -25,6 +25,7 @@ class GenerateAnnotationProcessor implements AnnotationProcessorInterface
             $information->setGenerateSet($annotation->set);
             $information->setGenerateAdd($annotation->add && $annotation->set);
             $information->setGenerateRemove($annotation->remove && $annotation->set);
+            $annotation->type && $information->setType($annotation->type);
         }
     }
 }

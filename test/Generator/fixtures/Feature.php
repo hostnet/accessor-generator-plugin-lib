@@ -38,7 +38,7 @@ use Hostnet\Component\AccessorGenerator\Annotation as AG;
  *
  * @ORM\Entity
  */
-class Feature
+class Feature implements FeatureInterface
 {
     use Generated\FeatureMethodsTrait;
 

@@ -37,6 +37,7 @@ class GenerateAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         $no_remove     = new Generate();
         $no_collection = new Generate();
         $nothing       = new Generate();
+        $type          = new Generate();
 
         $no_is->is         = false;
         $no_get->get       = false;
@@ -53,15 +54,23 @@ class GenerateAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         $nothing->add    = false;
         $nothing->remove = false;
 
+        $type->get    = false;
+        $type->is     = false;
+        $type->set    = false;
+        $type->add    = false;
+        $type->remove = false;
+        $type->type   = \ArrayObject::class;
+
         return [
-            [$all,           self::GET   , self::SET,    self::ADD,    self::REMOVE   ],
-            [$no_get,        self::NO_GET, self::SET,    self::ADD,    self::REMOVE   ],
-            [$no_is,         self::NO_GET, self::SET,    self::ADD,    self::REMOVE   ],
-            [$no_set,        self::GET,    self::NO_SET, self::NO_ADD, self::NO_REMOVE],
-            [$no_add,        self::GET,    self::SET,    self::NO_ADD, self::REMOVE   ],
-            [$no_remove,     self::GET,    self::SET,    self::ADD,    self::NO_REMOVE],
-            [$no_collection, self::GET,    self::SET,    self::NO_ADD, self::NO_REMOVE],
-            [$nothing,       self::NO_GET, self::NO_SET, self::NO_ADD, self::NO_REMOVE],
+            [$all,           self::GET   , self::SET,    self::ADD,    self::REMOVE,    'string'           ],
+            [$no_get,        self::NO_GET, self::SET,    self::ADD,    self::REMOVE,    'string'           ],
+            [$no_is,         self::NO_GET, self::SET,    self::ADD,    self::REMOVE,    'string'           ],
+            [$no_set,        self::GET,    self::NO_SET, self::NO_ADD, self::NO_REMOVE, 'string'           ],
+            [$no_add,        self::GET,    self::SET,    self::NO_ADD, self::REMOVE,    'string'           ],
+            [$no_remove,     self::GET,    self::SET,    self::ADD,    self::NO_REMOVE, 'string'           ],
+            [$no_collection, self::GET,    self::SET,    self::NO_ADD, self::NO_REMOVE, 'string'           ],
+            [$nothing,       self::NO_GET, self::NO_SET, self::NO_ADD, self::NO_REMOVE, 'string'           ],
+            [$type,          self::NO_GET, self::NO_SET, self::NO_ADD, self::NO_REMOVE, \ArrayObject::class],
         ];
     }
 
@@ -73,7 +82,7 @@ class GenerateAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
      * @param bool $add
      * @param bool $remove
      */
-    public function testProcessAnnotation($annotation, $get, $set, $add, $remove)
+    public function testProcessAnnotation($annotation, $get, $set, $add, $remove, $type)
     {
         // Set up dependencies.
         $property    = new ReflectionProperty('test');
@@ -82,10 +91,11 @@ class GenerateAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         $processor->processAnnotation($annotation, $information);
 
         // Check if right information was processed.
-        $this->assertEquals($get, $information->willGenerateGet());
-        $this->assertEquals($set, $information->willGenerateSet());
-        $this->assertEquals($add, $information->willGenerateAdd());
-        $this->assertEquals($remove, $information->willGenerateRemove());
+        $this->assertSame($get, $information->willGenerateGet());
+        $this->assertSame($set, $information->willGenerateSet());
+        $this->assertSame($add, $information->willGenerateAdd());
+        $this->assertSame($remove, $information->willGenerateRemove());
+        $this->assertSame($type, $information->getType());
 
         // If $set, is false we wil not generate a add method and remove method.
         if ($set == false) {
