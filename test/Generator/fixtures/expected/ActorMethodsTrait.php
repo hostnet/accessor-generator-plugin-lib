@@ -1,5 +1,5 @@
 <?php
-// Generated at 2014-12-10 17:27:16 by hboomsma on se18-03-73-3f-9f-e0
+// Generated at 2014-12-17 13:02:03 by hboomsma on se18-03-73-3f-9f-e0
 
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
@@ -37,7 +37,7 @@ trait ActorMethodsTrait
     /**
      * Add movie
      *
-     * @param Movie $movies
+     * @param Movie $movie
      * @return Actor
      * @throws \BadMethodCallException if the number of arguments is not correct
      */
@@ -69,7 +69,7 @@ trait ActorMethodsTrait
     /**
      * Remove movie
      *
-     * @param Movie $movies
+     * @param Movie $movie
      * @return Actor
      * @throws \BadMethodCallException if the number of arguments is not correct
      */

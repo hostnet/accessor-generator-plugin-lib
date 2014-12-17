@@ -1,5 +1,5 @@
 <?php
-// Generated at 2014-12-17 12:57:22 by hboomsma on se18-03-73-3f-9f-e0
+// Generated at 2014-12-17 13:01:54 by hboomsma on se18-03-73-3f-9f-e0
 
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
@@ -229,7 +229,7 @@ trait ProductMethodsTrait
     /**
      * Add attribute
      *
-     * @param Attribute $attributes
+     * @param Attribute $attribute
      * @return Product
      * @throws \BadMethodCallException if the number of arguments is not correct
      */
@@ -261,7 +261,7 @@ trait ProductMethodsTrait
     /**
      * Remove attribute
      *
-     * @param Attribute $attributes
+     * @param Attribute $attribute
      * @return Product
      * @throws \BadMethodCallException if the number of arguments is not correct
      */

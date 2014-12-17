@@ -7,7 +7,7 @@
  * Add {{ property.name | singularize }}
  {% endif -%}
  *
- * @param {{ property.type }} ${{ property.name }}
+ * @param {{ property.type }} ${{ property.name | singularize }}
  * @return {{ property.class }}
  * @throws \BadMethodCallException if the number of arguments is not correct
  */

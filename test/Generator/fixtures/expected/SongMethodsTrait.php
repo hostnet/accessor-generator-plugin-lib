@@ -1,5 +1,5 @@
 <?php
-// Generated at 2014-12-10 17:27:16 by hboomsma on se18-03-73-3f-9f-e0
+// Generated at 2014-12-17 13:01:01 by hboomsma on se18-03-73-3f-9f-e0
 
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
@@ -37,7 +37,7 @@ trait SongMethodsTrait
     /**
      * Add genre
      *
-     * @param Genre $genres
+     * @param Genre $genre
      * @return Song
      * @throws \BadMethodCallException if the number of arguments is not correct
      */
@@ -65,7 +65,7 @@ trait SongMethodsTrait
     /**
      * Remove genre
      *
-     * @param Genre $genres
+     * @param Genre $genre
      * @return Song
      * @throws \BadMethodCallException if the number of arguments is not correct
      */
