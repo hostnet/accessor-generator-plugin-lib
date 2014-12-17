@@ -50,10 +50,7 @@ public function {{  property.type == 'boolean' ? 'is' : 'get' }}{{ property.name
 {% elseif property.isComplexType and not property.isNullable and property.type != '\\DateTime' %}
 
     if ($this->{{ property.name }} === null) {
-        throw new \Doctrine\ORM\EntityNotFoundException(
-            'Property "{{ property.name }}" references an other entity ' .
-            'but is not found and also is not nullable for parameter {{ property.name }}.'
-        );
+        throw new \Doctrine\ORM\EntityNotFoundException('Missing required property "{{ property.name }}".');
     }
 {% endif %}
 

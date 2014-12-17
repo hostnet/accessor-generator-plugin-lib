@@ -1,5 +1,5 @@
 <?php
-// Generated at 2014-12-17 12:42:31 by hboomsma on se18-03-73-3f-9f-e0
+// Generated at 2014-12-17 13:25:46 by hboomsma on se18-03-73-3f-9f-e0
 
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
@@ -28,10 +28,7 @@ trait CustomerMethodsTrait
         }
 
         if ($this->cart === null) {
-            throw new \Doctrine\ORM\EntityNotFoundException(
-                'Property "cart" references an other entity ' .
-                'but is not found and also is not nullable for parameter cart.'
-            );
+            throw new \Doctrine\ORM\EntityNotFoundException('Missing required property "cart".');
         }
 
         return $this->cart;

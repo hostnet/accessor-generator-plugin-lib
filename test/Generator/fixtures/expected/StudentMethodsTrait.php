@@ -1,5 +1,5 @@
 <?php
-// Generated at 2014-12-10 17:27:16 by hboomsma on se18-03-73-3f-9f-e0
+// Generated at 2014-12-17 13:25:27 by hboomsma on se18-03-73-3f-9f-e0
 
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
@@ -28,10 +28,7 @@ trait StudentMethodsTrait
         }
 
         if ($this->student === null) {
-            throw new \Doctrine\ORM\EntityNotFoundException(
-                'Property "student" references an other entity ' .
-                'but is not found and also is not nullable for parameter student.'
-            );
+            throw new \Doctrine\ORM\EntityNotFoundException('Missing required property "student".');
         }
 
         return $this->student;
