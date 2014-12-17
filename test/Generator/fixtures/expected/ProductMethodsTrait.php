@@ -1,5 +1,5 @@
 <?php
-// Generated at 2014-12-10 17:27:16 by hboomsma on se18-03-73-3f-9f-e0
+// Generated at 2014-12-17 12:57:22 by hboomsma on se18-03-73-3f-9f-e0
 
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
@@ -70,7 +70,7 @@ trait ProductMethodsTrait
 
         if ($this->duration === null) {
             throw new \Doctrine\ORM\EntityNotFoundException(
-                'Property Hostnet\Component\AccessorGenerator\Generator\fixtures\Period references an other entity ' .
+                'Property "duration" references an other entity ' .
                 'but is not found and also is not nullable for parameter duration.'
             );
         }

@@ -1,5 +1,5 @@
 <?php
-// Generated at 2014-12-10 17:27:16 by hboomsma on se18-03-73-3f-9f-e0
+// Generated at 2014-12-17 12:44:12 by hboomsma on se18-03-73-3f-9f-e0
 
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
@@ -29,7 +29,7 @@ trait ItemMethodsTrait
 
         if ($this->shipping === null) {
             throw new \Doctrine\ORM\EntityNotFoundException(
-                'Property Shipping references an other entity ' .
+                'Property "shipping" references an other entity ' .
                 'but is not found and also is not nullable for parameter shipping.'
             );
         }

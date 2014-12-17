@@ -29,7 +29,7 @@ trait StudentMethodsTrait
 
         if ($this->student === null) {
             throw new \Doctrine\ORM\EntityNotFoundException(
-                'Property StudentInterface references an other entity ' .
+                'Property "student" references an other entity ' .
                 'but is not found and also is not nullable for parameter student.'
             );
         }
