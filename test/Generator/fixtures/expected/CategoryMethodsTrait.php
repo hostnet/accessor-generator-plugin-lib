@@ -5,6 +5,7 @@ namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
 use Doctrine\ORM\Mapping as ORM;
 use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Collection\ImmutableCollection;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Category;
 
 trait CategoryMethodsTrait
@@ -13,7 +14,7 @@ trait CategoryMethodsTrait
      * Get children
      *
      * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Category[]
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Hostnet\Component\AccessorGenerator\Collection\ConstCollectionInterface
      * @throws \InvalidArgumentException
      */
     public function getChildren()
@@ -31,7 +32,7 @@ trait CategoryMethodsTrait
             $this->children = new \Doctrine\Common\Collections\ArrayCollection();
         }
 
-        return $this->children;
+        return new ImmutableCollection($this->children);
     }
 
     /**

@@ -71,6 +71,7 @@ class CodeGenerator implements CodeGeneratorInterface
     public function generateTraitForClass(ReflectionClass $class)
     {
         $code = '';
+        $add_collection_import = false;
 
         try {
             $properties = $class->getProperties();
@@ -100,8 +101,21 @@ class CodeGenerator implements CodeGeneratorInterface
                 }
             }
 
+            // Parse and add fully qualified type information to the info object for use
+            // in docblocks to make eclipse understand the types.
             $info->setFullyQualifiedType($this->fqcn($info->getType(), $imports));
             $code .= $this->generateAccessors($info);
+
+            // Detected that the ImmutableCollection is used and should be imported.
+            if ($info->willGenerateGet() && $info->isCollection()) {
+                $add_collection_import = true;
+            }
+        }
+
+        // Add import for ImmutableCollection if we generate any funtions that make use of this
+        // collection wrapper.
+        if ($add_collection_import) {
+            $imports[] = "Hostnet\Component\AccessorGenerator\Collection\ImmutableCollection";
         }
 
         // Make sure our use statemens are sorted alphabetically and unique.
@@ -194,5 +208,4 @@ class CodeGenerator implements CodeGeneratorInterface
         // Should be a fully qualified namespace without the starting \
         return '\\' . $name;
     }
-
 }

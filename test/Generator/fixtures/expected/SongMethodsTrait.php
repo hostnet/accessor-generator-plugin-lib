@@ -5,6 +5,7 @@ namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
 use Doctrine\ORM\Mapping as ORM;
 use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Collection\ImmutableCollection;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Genre;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Song;
 
@@ -14,7 +15,7 @@ trait SongMethodsTrait
      * Get genres
      *
      * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Genre[]
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Hostnet\Component\AccessorGenerator\Collection\ConstCollectionInterface
      * @throws \InvalidArgumentException
      */
     public function getGenres()
@@ -32,7 +33,7 @@ trait SongMethodsTrait
             $this->genres = new \Doctrine\Common\Collections\ArrayCollection();
         }
 
-        return $this->genres;
+        return new ImmutableCollection($this->genres);
     }
 
     /**

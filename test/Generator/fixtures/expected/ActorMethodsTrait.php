@@ -5,6 +5,7 @@ namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
 use Doctrine\ORM\Mapping as ORM;
 use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Collection\ImmutableCollection;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Actor;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie;
 
@@ -14,7 +15,7 @@ trait ActorMethodsTrait
      * Get movies
      *
      * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie[]
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Hostnet\Component\AccessorGenerator\Collection\ConstCollectionInterface
      * @throws \InvalidArgumentException
      */
     public function getMovies()
@@ -32,7 +33,7 @@ trait ActorMethodsTrait
             $this->movies = new \Doctrine\Common\Collections\ArrayCollection();
         }
 
-        return $this->movies;
+        return new ImmutableCollection($this->movies);
     }
 
     /**

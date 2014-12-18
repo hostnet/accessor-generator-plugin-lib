@@ -5,6 +5,7 @@ namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
 use Doctrine\ORM\Mapping as ORM;
 use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Collection\ImmutableCollection;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Node;
 
 trait NodeMethodsTrait
@@ -13,7 +14,7 @@ trait NodeMethodsTrait
      * Get out
      *
      * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Node[]
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Hostnet\Component\AccessorGenerator\Collection\ConstCollectionInterface
      * @throws \InvalidArgumentException
      */
     public function getOut()
@@ -31,7 +32,7 @@ trait NodeMethodsTrait
             $this->out = new \Doctrine\Common\Collections\ArrayCollection();
         }
 
-        return $this->out;
+        return new ImmutableCollection($this->out);
     }
 
     /**
