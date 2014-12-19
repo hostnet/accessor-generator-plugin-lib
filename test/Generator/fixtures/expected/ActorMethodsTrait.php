@@ -7,7 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Hostnet\Component\AccessorGenerator\Annotation as AG;
 use Hostnet\Component\AccessorGenerator\Collection\ImmutableCollection;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Actor;
-use Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie;
 use Symfony\Component\Console as Stupid;
 
 trait ActorMethodsTrait
@@ -40,11 +39,11 @@ trait ActorMethodsTrait
     /**
      * Add movie
      *
-     * @param Movie $movie
+     * @param \Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie $movie
      * @return Actor
      * @throws \BadMethodCallException if the number of arguments is not correct
      */
-    public function addMovie(Movie $movie)
+    public function addMovie(\Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie $movie)
     {
         if (func_num_args() != 1) {
             throw new \BadMethodCallException(
@@ -72,11 +71,11 @@ trait ActorMethodsTrait
     /**
      * Remove movie
      *
-     * @param Movie $movie
+     * @param \Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie $movie
      * @return Actor
      * @throws \BadMethodCallException if the number of arguments is not correct
      */
-    public function removeMovie(Movie $movie)
+    public function removeMovie(\Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie $movie)
     {
         if (func_num_args() != 1) {
             throw new \BadMethodCallException(

@@ -50,7 +50,7 @@ class Actor
     private $id;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Movie", inversedBy="actors")
+     * @ORM\ManyToMany(targetEntity="Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie", inversedBy="actors")
      * @ORM\JoinTable(name="actors_movies")
      * @AG\Generate
      * @Stupid\Realy

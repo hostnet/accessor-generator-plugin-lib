@@ -5,21 +5,21 @@ namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
 use Doctrine\ORM\Mapping as ORM;
 use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Generator\fixtures as This;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Attribute;
-use Hostnet\Component\AccessorGenerator\Generator\fixtures\Product;
 
 trait AttributeMethodsTrait
 {
     /**
      * Set product
      *
-     * @param Product $product
+     * @param This\Product $product
      * @return Attribute
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \LogicException if the association constraints are violated
-     * @access friends with Product
+     * @access friends with This\Product
      */
-    private function setProduct(Product $product = null)
+    private function setProduct(This\Product $product = null)
     {
         if (func_num_args() != 1) {
             throw new \BadMethodCallException(
@@ -33,7 +33,7 @@ trait AttributeMethodsTrait
         if ($product && ! $product->getAttributes()->contains($this)) {
             throw new \LogicException('Please use Product::addAttribute().');
         } elseif ($product && $this->product) {
-            throw new \LogicException('Attribute objects can not be added to more than one Product.');
+            throw new \LogicException('Attribute objects can not be added to more than one This\Product.');
         }
 
         $this->product = $product;

@@ -55,7 +55,7 @@ trait ProductMethodsTrait
     /**
      * Get duration
      *
-     * @return Hostnet\Component\AccessorGenerator\Generator\fixtures\Period
+     * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Period
      * @throws \InvalidArgumentException
      */
     public function getDuration()

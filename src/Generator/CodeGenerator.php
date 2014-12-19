@@ -96,7 +96,11 @@ class CodeGenerator implements CodeGeneratorInterface
             if (! isset($imports[$info->getType()])) {
                 if (ctype_upper(substr($info->getType(), 0, 1))) {
                     if (strpos($info->getType(), $class->getNamespace()) === false) {
-                        $imports[] = $class->getNamespace() .  '\\' . $info->getType();
+                        if (!$this->isAliased($info->getType(), $imports)) {
+                            $imports[] = $class->getNamespace() .  '\\' . $info->getType();
+                        }
+                    } else {
+                        $info->setType('\\' . $info->getType());
                     }
                 }
             }
@@ -179,6 +183,14 @@ class CodeGenerator implements CodeGeneratorInterface
         return $code;
     }
 
+    /**
+     * Return the fully qualified class name based on the
+     * use statments in the current file.
+     *
+     * @param $name class name
+     * @param array $imports
+     * @return string
+     */
     private function fqcn($name, array $imports)
     {
         // Already FQCN
@@ -205,7 +217,25 @@ class CodeGenerator implements CodeGeneratorInterface
             }
         }
 
-        // Should be a fully qualified namespace without the starting \
         return '\\' . $name;
+    }
+
+    /**
+     * Returns if this class is in an
+     * aliassed namespace.
+     *
+     * @param class name $name
+     * @param array $imports
+     * @return boolean
+     */
+    private function isAliased($name, array $imports)
+    {
+        $aliasses = array_keys($imports);
+        foreach ($aliasses as $alias) {
+            if (strpos($name, $alias) === 0) {
+                return true;
+            }
+        }
+        return false;
     }
 }
