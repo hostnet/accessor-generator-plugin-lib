@@ -22,4 +22,15 @@ interface AnnotationProcessorInterface
      * @return void
      */
     public function processAnnotation($annotation, PropertyInformation $information);
+
+    /**
+     * Get the namespace of the annotations that will be
+     * parsed by this annotation parser.
+     *
+     * This list can be used to feed it into a doc parser to
+     * only parse the annotations that will actually be used.
+     *
+     * @return string[]
+     */
+    public function getProcessableAnnotationNamespace();
 }

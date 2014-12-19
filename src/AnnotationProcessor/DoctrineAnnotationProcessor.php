@@ -64,6 +64,14 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
     }
 
     /**
+     * @see AnnotationProcessorInterface::getProcessableAnnotations()
+     */
+    public function getProcessableAnnotationNamespace()
+    {
+        return 'Doctrine\ORM\Mapping';
+    }
+
+    /**
      * Return referenced entity if we have a bidirectional
      * doctrine association.
      *

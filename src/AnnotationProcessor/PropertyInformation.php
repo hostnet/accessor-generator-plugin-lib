@@ -128,6 +128,15 @@ class PropertyInformation implements PropertyInformationInterface
     private $parser;
 
     /**
+     * List of registerd annotation processors
+     * that will be used in the parsing of the
+     * docblocks.
+     *
+     * @var AnnotationProcessorInterface[]
+     */
+    private $annotation_processors;
+
+    /**
      * Create new PropertyInformation object based
      * on a Reflected property from PHP source.
      *
@@ -168,7 +177,25 @@ class PropertyInformation implements PropertyInformationInterface
         $imports  = $class ? array_change_key_case($class->getUseStatements()) : [];
         $filename = $class ? $class->getFileName() : 'memory';
 
-        $this->parser->setImports($imports);
+        // Get all the namespaces in which parsable annotations reside.
+        $namespaces = [];
+        foreach ($this->annotation_processors as $processor) {
+            $namespaces[] = $processor->getProcessableAnnotationNamespace();
+        }
+
+        // Filter all imports that could lead to non loaded annotations,
+        // this would let the DocParser explode with an Exception, while
+        // the goal is to ignore other annotations besides the one explicitly
+        // loaded.
+        $without_foreign_annotations = array_filter($imports, function ($import) use ($namespaces) {
+            foreach ($namespaces as $namespace) {
+                if (stripos($namespace, $import) === 0) {
+                    return true;
+                }
+            }
+        });
+
+        $this->parser->setImports($without_foreign_annotations);
         $this->parser->setIgnoreNotImportedAnnotations(true);
 
         $annotations = $this->parser->parse($this->property->getDocComment(), $filename);

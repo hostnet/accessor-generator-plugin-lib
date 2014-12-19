@@ -3,6 +3,7 @@ namespace Hostnet\Component\AccessorGenerator\Generator\fixtures;
 
 use Doctrine\ORM\Mapping as ORM;
 use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Symfony\Component\Console as Stupid;
 
 /**
  * 6.9. Many-To-Many, Bidirectional (Owning)
@@ -52,6 +53,7 @@ class Actor
      * @ORM\ManyToMany(targetEntity="Movie", inversedBy="actors")
      * @ORM\JoinTable(name="actors_movies")
      * @AG\Generate
+     * @Stupid\Realy
      */
     private $movies;
 }

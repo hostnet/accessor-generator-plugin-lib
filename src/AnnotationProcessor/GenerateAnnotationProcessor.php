@@ -28,4 +28,12 @@ class GenerateAnnotationProcessor implements AnnotationProcessorInterface
             $annotation->type && $information->setType($annotation->type);
         }
     }
+
+    /**
+     * @see AnnotationProcessorInterface::getProcessableAnnotations()
+     */
+    public function getProcessableAnnotationNamespace()
+    {
+        return 'Hostnet\Component\AccessorGenerator\Annotation';
+    }
 }

@@ -79,7 +79,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     }
 
     /**
-     * Gets called on the POST_AUTOLOAD_DUMP event
+     * Gets called on the PRE_AUTOLOAD_DUMP event
      *
      * Generate Traits for every package that requires
      * this plugin and has php files with the @Generate
