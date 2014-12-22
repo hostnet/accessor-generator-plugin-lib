@@ -15,12 +15,12 @@
  {% endif -%}
  * @throws \InvalidArgumentException
  */
-public function {{  property.type == 'boolean' ? 'is' : 'get' }}{{ property.name | classify }}()
+public function {{ getter }}()
 {
     if (func_num_args() > 0) {
         throw new \BadMethodCallException(
             sprintf(
-                'get{{ property.name | classify }}() has no arguments but %d given.',
+                '{{ getter }}() has no arguments but %d given.',
                 func_num_args()
             )
         );
