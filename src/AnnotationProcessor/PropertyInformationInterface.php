@@ -191,6 +191,14 @@ interface PropertyInformationInterface
      */
     public function isReferencingCollection();
 
+    /**
+     * If set to true getters will throw logic
+     * exceptions if the object is not in a valid
+     * state according to the nullable columns.
+     *
+     * @return bool
+     */
+    public function willGenerateStrict();
 
     /**
      * If a get function should be generated.

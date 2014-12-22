@@ -18,7 +18,7 @@ class Product
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
-     * @AG\Generate
+     * @AG\Generate(strict=false)
      */
     private $id;
 

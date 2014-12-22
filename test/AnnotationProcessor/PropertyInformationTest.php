@@ -72,6 +72,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(false, $this->info->willGenerateRemove());
         $this->assertEquals(false, $this->info->willGenerateSet());
         $this->assertEquals(false, $this->info->willGenerateGet());
+        $this->assertEquals(true, $this->info->willGenerateStrict());
     }
 
     public function testBasicSetMethods()
@@ -99,6 +100,12 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($this->info, $this->info->setGenerateSet('garbage'));
         $this->assertEquals(true, $this->info->willGenerateSet());
+
+        $this->assertSame($this->info, $this->info->setGenerateStrict(false));
+        $this->assertEquals(false, $this->info->willGenerateStrict());
+
+        $this->assertSame($this->info, $this->info->setGenerateStrict('garbage'));
+        $this->assertEquals(true, $this->info->willGenerateStrict());
     }
 
     public function setReferencedPropertyProvider()

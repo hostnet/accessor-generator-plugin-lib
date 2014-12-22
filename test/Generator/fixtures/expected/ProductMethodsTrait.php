@@ -14,7 +14,7 @@ trait ProductMethodsTrait
     /**
      * Product Id not good etc
      *
-     * @return integer
+     * @return integer|null
      * @throws \InvalidArgumentException
      */
     public function getId()
@@ -26,16 +26,6 @@ trait ProductMethodsTrait
                     func_num_args()
                 )
             );
-        }
-        if ($this->id === null) {
-            throw new \LogicException(sprintf(
-                'Property id is null, but the column is not nullable, '.
-                'make sure your object is initialized in such a way the properties are in '.
-                'a valid state, for example by using a proper constructor. If you want to ' .
-                'test if an object is new for the database please consult the UnitOfWork.' .
-                'It could also be that your column in code is set tot not nullable and in' .
-                'and contains null values in the database'
-            ));
         }
 
         if ($this->id < -2147483648|| $this->id > 2147483647) {

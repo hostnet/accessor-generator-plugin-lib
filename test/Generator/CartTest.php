@@ -19,13 +19,10 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($customer, $cart->getCustomer());
     }
 
-    /**
-     * @expectedException \Doctrine\ORM\EntityNotFoundException
-     */
     public function testGetCustomerEmpty()
     {
         $cart = new Cart();
-        $cart->getCustomer();
+        $this->assertNull($cart->getCustomer());
     }
 
     /**

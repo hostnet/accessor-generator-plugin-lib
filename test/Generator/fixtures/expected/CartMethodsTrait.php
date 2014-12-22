@@ -13,7 +13,7 @@ trait CartMethodsTrait
     /**
      * Get customer
      *
-     * @return Client
+     * @return Client|null
      * @throws \InvalidArgumentException
      */
     public function getCustomer()
@@ -25,10 +25,6 @@ trait CartMethodsTrait
                     func_num_args()
                 )
             );
-        }
-
-        if ($this->customer === null) {
-            throw new \Doctrine\ORM\EntityNotFoundException('Missing required property "customer".');
         }
 
         return $this->customer;

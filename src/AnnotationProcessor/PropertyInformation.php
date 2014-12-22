@@ -89,6 +89,12 @@ class PropertyInformation implements PropertyInformationInterface
     private $is_referencing_collection = false;
 
     /**
+     * @see PropertyInformationInterface::willGenerateStrict()
+     * @var bool
+     */
+    private $generate_strict = true;
+
+    /**
      * @see PropertyInformationInterface::willGenerateGet()
      * @var bool
      */
@@ -625,6 +631,26 @@ class PropertyInformation implements PropertyInformationInterface
     public function setUnique($unique)
     {
         $this->unique = $unique == true;
+        return $this;
+    }
+
+    /**
+     * @see PropertyInformationInterface::willGenerateStrict()
+     * @return bool
+     */
+    public function willGenerateStrict()
+    {
+        return $this->generate_strict;
+    }
+
+    /**
+     * @see PropertyInformationInterface::willGenerateStrict()
+     * @param bool $generate_strict
+     * @return PropertyInformation
+     */
+    public function setGenerateStrict($generate_strict)
+    {
+        $this->generate_strict = $generate_strict == true;
         return $this;
     }
 
