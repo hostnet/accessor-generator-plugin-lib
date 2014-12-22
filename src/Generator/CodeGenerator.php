@@ -2,6 +2,7 @@
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Doctrine\Common\Annotations\DocParser;
+use Doctrine\Common\Inflector\Inflector;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\DoctrineAnnotationProcessor;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\GenerateAnnotationProcessor;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformation;
@@ -88,26 +89,24 @@ class CodeGenerator implements CodeGeneratorInterface
             $info->registerAnnotationProcessor(new GenerateAnnotationProcessor());
             $info->registerAnnotationProcessor(new DoctrineAnnotationProcessor());
             $info->processAnnotations();
+            $type = $info->getType();
 
             // Complex Type within curent namespace. Since our trait is in a sub
             // namespace we have to import those aswell (php does not no .. in namespace).
             // In principle no harm could come from these imports unless the types
-            // are of a *methotdsTrait type. Which will break anyway.
-            if (! isset($imports[$info->getType()])) {
-                if (ctype_upper(substr($info->getType(), 0, 1))) {
-                    if (strpos($info->getType(), $class->getNamespace()) === false) {
-                        if (!$this->isAliased($info->getType(), $imports)) {
-                            $imports[] = $class->getNamespace() .  '\\' . $info->getType();
-                        }
-                    } else {
-                        $info->setType('\\' . $info->getType());
-                    }
+            // are of a *methodsTrait type. Which will break anyway.
+            if ($type[0] != '\\' && $info->isComplexType() && ! $this->isAliased($type, $imports)) {
+                if (strpos($info->getType(), '\\') === false) {
+                    $imports[] = $class->getNamespace() .  '\\' . $type;
+                } else {
+                    $info->setType('\\' . $type);
                 }
             }
 
             // Parse and add fully qualified type information to the info object for use
             // in docblocks to make eclipse understand the types.
-            $info->setFullyQualifiedType($this->fqcn($info->getType(), $imports));
+            $info->setFullyQualifiedType($this->fqcn($type, $imports));
+
             $code .= $this->generateAccessors($info);
 
             // Detected that the ImmutableCollection is used and should be imported.
@@ -156,9 +155,19 @@ class CodeGenerator implements CodeGeneratorInterface
         }
 
         if ($info->willGenerateGet()) {
+            if ($info->getType() == 'boolean') {
+                if (preg_match('/^is[_A-Z0-9]/', $info->getName())) {
+                    $getter = Inflector::camelize($info->getName());
+                } else {
+                    $getter = 'is' . Inflector::classify($info->getName());
+                }
+            } else {
+                $getter = 'get' . Inflector::classify($info->getName());
+            }
             $code .= $this->get->render([
                     'property' => $info,
                     'default' => $default,
+                    'getter' => $getter,
                     'PHP_INT_SIZE' => PHP_INT_SIZE
             ]) . PHP_EOL;
         }
