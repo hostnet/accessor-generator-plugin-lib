@@ -706,7 +706,7 @@ trait TypesMethodsTrait
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
-                    'getBoolean() has no arguments but %d given.',
+                    'isBoolean() has no arguments but %d given.',
                     func_num_args()
                 )
             );
@@ -751,6 +751,65 @@ trait TypesMethodsTrait
         }
 
         $this->boolean = $boolean;
+        return $this;
+    }
+
+    /**
+     * Is is_this_boolean
+     *
+     * @return boolean
+     * @throws \InvalidArgumentException
+     */
+    public function isThisBoolean()
+    {
+        if (func_num_args() > 0) {
+            throw new \BadMethodCallException(
+                sprintf(
+                    'isThisBoolean() has no arguments but %d given.',
+                    func_num_args()
+                )
+            );
+        }
+        if ($this->is_this_boolean === null) {
+            throw new \LogicException(sprintf(
+                'Property is_this_boolean is null, but the column is not nullable, '.
+                'make sure your object is initialized in such a way the properties are in '.
+                'a valid state, for example by using a proper constructor. If you want to ' .
+                'test if an object is new for the database please consult the UnitOfWork.' .
+                'It could also be that your column in code is set tot not nullable and in' .
+                'and contains null values in the database'
+            ));
+        }
+
+        return $this->is_this_boolean;
+    }
+
+    /**
+     * Set is_this_boolean
+     *
+     * @param boolean $is_this_boolean
+     * @return Types
+     * @throws \BadMethodCallException if the number of arguments is not correct
+     * @throws \InvalidArgumentException if value is not of the right type
+     */
+    public function setIsThisBoolean($is_this_boolean)
+    {
+        if (func_num_args() != 1) {
+            throw new \BadMethodCallException(
+                sprintf(
+                    'setIsThisBoolean() has one argument but %d given.',
+                    func_num_args()
+                )
+            );
+        }
+
+        if (!is_bool($is_this_boolean)) {
+            throw new \InvalidArgumentException(
+                'Parameter is_this_boolean must be boolean.'
+            );
+        }
+
+        $this->is_this_boolean = $is_this_boolean;
         return $this;
     }
 

@@ -36,6 +36,7 @@ class TypesTest extends \PHPUnit_Framework_TestCase
             ['guid',              'guid'                          ],
             ['blob',           $resource                          ],
             ['boolean',             true                          ],
+            ['is_this_boolean',     true                          ],
             ['date',               $date                          ],
             ['datetime',           $date                          ],
             ['array',             $array                          ],
@@ -81,7 +82,9 @@ class TypesTest extends \PHPUnit_Framework_TestCase
         $property->setValue($types, $value);
 
         if ($type === 'boolean') {
-            $getter = 'is' . Inflector::classify($type);
+            $getter = 'isBoolean';
+        } elseif ($type === 'is_this_boolean') {
+            $getter = 'isThisBoolean';
         } else {
             $getter = 'get' . Inflector::classify($type);
         }
@@ -164,7 +167,9 @@ class TypesTest extends \PHPUnit_Framework_TestCase
         $types = new Types();
 
         if ($type === 'boolean') {
-            $getter = 'is' . Inflector::classify($type);
+            $getter = 'isBoolean';
+        } elseif ($type === 'is_this_boolean') {
+            $getter = 'isThisBoolean';
         } else {
             $getter = 'get' . Inflector::classify($type);
         }

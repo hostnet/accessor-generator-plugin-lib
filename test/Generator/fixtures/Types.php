@@ -81,6 +81,12 @@ class Types
     private $boolean;
 
     /**
+     * @ORM\Column(type="boolean")
+     * @AG\Generate
+     */
+    private $is_this_boolean;
+
+    /**
      * @ORM\Column(type="date")
      * @AG\Generate
      */
