@@ -96,10 +96,18 @@ class CodeGenerator implements CodeGeneratorInterface
             // In principle no harm could come from these imports unless the types
             // are of a *methodsTrait type. Which will break anyway.
             if ($type[0] != '\\' && $info->isComplexType() && ! $this->isAliased($type, $imports)) {
-                if (strpos($info->getType(), '\\') === false) {
+                if (strpos($type, '\\') === false) {
                     $imports[] = $class->getNamespace() .  '\\' . $type;
                 } else {
                     $info->setType('\\' . $type);
+                }
+            }
+
+            // If the default type is a constant from a class in the default namespace,
+            // import the type aswell. Do not forget to skip self, because importing self
+            if (($default = strstr($info->getDefault(), '::', true))) {
+                if ($default != 'self' && strpos($default, '\\') === false) {
+                    $imports[] = $class->getNamespace() .  '\\' . $default;
                 }
             }
 
