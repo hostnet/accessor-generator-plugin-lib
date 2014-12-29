@@ -83,11 +83,14 @@ class CodeGenerator implements CodeGeneratorInterface
 
         $imports[] = $class->getNamespace() . '\\' . $class->getName();
 
+        $generate_processor = new GenerateAnnotationProcessor();
+        $doctrine_processor = new DoctrineAnnotationProcessor();
+
         foreach ($properties as $property) {
             $parser = new DocParser();
             $info   = new PropertyInformation($property, $parser);
-            $info->registerAnnotationProcessor(new GenerateAnnotationProcessor());
-            $info->registerAnnotationProcessor(new DoctrineAnnotationProcessor());
+            $info->registerAnnotationProcessor($generate_processor);
+            $info->registerAnnotationProcessor($doctrine_processor);
             $info->processAnnotations();
             $type = $info->getType();
 
@@ -142,13 +145,22 @@ class CodeGenerator implements CodeGeneratorInterface
     {
         $code = '';
 
-        if ($info->willGenerateSet() == false) {
+        // infer the default value, we generate a default null value
+        // for private methods so we can unset objects. For nullable
+        // columns only made nullable for doctrine but with no default
+        // value not provided in PHP we also add null, but generate
+        // extra comments in the twig set template.
+        if ($info->willGenerateSet() == false
+            || ($info->isComplexType() && $info->isNullable())) {
             $default = 'null';
         } else {
             $default = $info->getDefault();
         }
 
+        // Generate a get method.
         if ($info->willGenerateGet()) {
+            // Compute the name of the get method. For boolean values
+            // an is method is generated instead of a get method.
             if ($info->getType() == 'boolean') {
                 if (preg_match('/^is[_A-Z0-9]/', $info->getName())) {
                     $getter = Inflector::camelize($info->getName());
@@ -158,6 +170,8 @@ class CodeGenerator implements CodeGeneratorInterface
             } else {
                 $getter = 'get' . Inflector::classify($info->getName());
             }
+
+            // Render the get/is method.
             $code .= $this->get->render([
                     'property' => $info,
                     'default' => $default,
@@ -166,14 +180,19 @@ class CodeGenerator implements CodeGeneratorInterface
             ]) . PHP_EOL;
         }
 
+        // Render add/remove methods for collections and set methods for
+        // non collection values.
         if ($info->isCollection()) {
+            // Generate an add method.
             if ($info->willGenerateAdd() || $info->getReferencedProperty()) {
                 $code .= $this->add->render(['property' => $info]). PHP_EOL;
             }
+            // Generate a remove method.
             if ($info->willGenerateRemove() || $info->getReferencedProperty()) {
                 $code .= $this->remove->render(['property' => $info]). PHP_EOL;
             }
         } else {
+            // No collection thus, generate a set method.
             if ($info->willGenerateSet() || $info->getReferencedProperty()) {
                 $code .= $this->set->render([
                         'property' => $info,

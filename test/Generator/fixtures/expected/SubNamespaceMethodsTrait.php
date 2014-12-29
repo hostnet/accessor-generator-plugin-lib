@@ -51,10 +51,10 @@ trait SubNamespaceMethodsTrait
      */
     public function setAsterix($asterix = Comic\Asterix::class)
     {
-        if (func_num_args() != 1) {
+        if (func_num_args() > 1) {
             throw new \BadMethodCallException(
                 sprintf(
-                    'setAsterix() has one argument but %d given.',
+                    'setAsterix() has one optional argument but %d given.',
                     func_num_args()
                 )
             );

@@ -46,7 +46,6 @@ class FeatureTest extends \PHPUnit_Framework_TestCase
      * We are testing a private function here because
      * it is part of the api used by the programmer.
      *
-     * @expectedException \BadMethodCallException
      */
     public function testSetParentNoArguments()
     {

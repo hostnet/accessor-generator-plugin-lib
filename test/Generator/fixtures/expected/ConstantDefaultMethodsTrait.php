@@ -62,10 +62,10 @@ trait ConstantDefaultMethodsTrait
      */
     public function setWeather($weather = Weather::SUN)
     {
-        if (func_num_args() != 1) {
+        if (func_num_args() > 1) {
             throw new \BadMethodCallException(
                 sprintf(
-                    'setWeather() has one argument but %d given.',
+                    'setWeather() has one optional argument but %d given.',
                     func_num_args()
                 )
             );

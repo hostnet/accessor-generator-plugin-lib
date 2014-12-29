@@ -334,7 +334,7 @@ trait TypesMethodsTrait
         if (func_num_args() > 2) {
             throw new \BadMethodCallException(
                 sprintf(
-                    'setDecimal() has one argument but %d given.',
+                    'setDecimal() has one obligatory and one optional argument but %d given.',
                     func_num_args()
                 )
             );

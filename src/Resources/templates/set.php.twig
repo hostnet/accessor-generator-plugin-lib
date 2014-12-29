@@ -7,6 +7,13 @@
  * Set {{ property.name }}
  {% endif -%}
  *
+ {% if default != property.default -%}
+ * Generated a default null value because the doctrine column is nullable.
+ * Still require an explicit argument to set the column. If you want to get
+ * rid of this message, please specify a default value or specify
+ * @JoinColumn(nullable=false).
+ *
+ {% endif -%}
  * @param {{ property.type }} ${{ property.name }}
  {% if property.isFixedPointNumber -%}
  * @param bool %round round the number fit in the precision and scale (round away from zero)
@@ -30,13 +37,41 @@
 {{ property.willGenerateSet ? 'public' : 'private' }} function set{{ property.name | classify }}(
     {{- property.isComplexType ? property.type ~ ' '-}}
     ${{ property.name -}}
-    {%- if  default %} = {{ default | raw }}{% endif %}
+    {%- if default %} = {{ default | raw }}{% endif %}
     {%- if property.isFixedPointNumber -%}
     , $round = false
     {%- endif -%}
 )
 {
-    if (func_num_args() {{ property.isFixedPointNumber ? '> 2' : '!= 1' }}) {
+{% if default and property.isFixedPointNumber %}
+    if (func_num_args() > 2) {
+        throw new \BadMethodCallException(
+            sprintf(
+                'set{{ property.name | classify }}() has two optional arguments but %d given.',
+                func_num_args()
+            )
+        );
+    }
+{% elseif default %}
+    if (func_num_args() > 1) {
+        throw new \BadMethodCallException(
+            sprintf(
+                'set{{ property.name | classify }}() has one optional argument but %d given.',
+                func_num_args()
+            )
+        );
+    }
+{% elseif property.isFixedPointNumber %}
+    if (func_num_args() > 2) {
+        throw new \BadMethodCallException(
+            sprintf(
+                'set{{ property.name | classify }}() has one obligatory and one optional argument but %d given.',
+                func_num_args()
+            )
+        );
+    }
+{% else %}
+    if (func_num_args() != 1) {
         throw new \BadMethodCallException(
             sprintf(
                 'set{{ property.name | classify }}() has one argument but %d given.',
@@ -44,6 +79,7 @@
             )
         );
     }
+{% endif %}
 {# scalar or build-in type (integer, float, string, array, object, resource) #}
 {%- if not property.isComplexType %}
 {% if property.isNullable %}

@@ -17,16 +17,24 @@ class GenerateAnnotationProcessor implements AnnotationProcessorInterface
      * @param object $annotation
      * @param PropertyInformation $information
      */
-    public function processAnnotation($annotation, PropertyInformation $information)
+    public function processAnnotation($annotation, PropertyInformation $info)
     {
         // Only process Generata annotations.
         if ($annotation instanceof Generate) {
-            $information->setGenerateGet($annotation->get && $annotation->is);
-            $information->setGenerateSet($annotation->set);
-            $information->setGenerateAdd($annotation->add && $annotation->set);
-            $information->setGenerateRemove($annotation->remove && $annotation->set);
-            $information->setGenerateStrict($annotation->strict);
-            $annotation->type && $information->setType($annotation->type);
+            // Only set when not set yet.
+            //
+            // If the Generate Annotations are processed
+            // after the, for example, GeneratedValue
+            // annotation, which will disable setter generator
+            // do not enable it again.
+            $info->willGenerateGet() === null && $info->setGenerateGet($annotation->get && $annotation->is);
+            $info->willGenerateSet() === null &&$info->setGenerateSet($annotation->set);
+            $info->willGenerateAdd() === null &&$info->setGenerateAdd($annotation->add && $annotation->set);
+            $info->willGenerateRemove() === null &&$info->setGenerateRemove($annotation->remove && $annotation->set);
+
+            // Enforce always
+            $info->setGenerateStrict($annotation->strict);
+            $annotation->type && $info->setType($annotation->type);
         }
     }
 

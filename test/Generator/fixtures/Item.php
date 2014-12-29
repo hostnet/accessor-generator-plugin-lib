@@ -25,8 +25,9 @@ class Item
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="Shipping")
      * @AG\Generate
+     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToOne(targetEntity="Shipping")
      **/
     private $shipping;
 }

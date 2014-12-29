@@ -24,7 +24,7 @@ class Product
 
     /**
      * @ORM\ManyToOne(targetEntity="Hostnet\Component\AccessorGenerator\Generator\fixtures\Period")
-     * @ORM\JoinColumn(name="looptijd_id")
+     * @ORM\JoinColumn(name="looptijd_id", nullable=false)
      * @AG\Generate(set=false)
      * @var Period
      */

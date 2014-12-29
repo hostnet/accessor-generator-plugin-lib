@@ -46,6 +46,7 @@ class Category
 
     /**
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="children")
+     * @ORM\JoinColumn(nullable=false)
      * @AG\Generate(set=false, get=false)
      */
     private $parent;

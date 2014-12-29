@@ -38,6 +38,7 @@ class Cart
 
     /**
      * @ORM\OneToOne(targetEntity="Customer", mappedBy="cart")
+     * @ORM\JoinColumn(nullable=false)
      * @AG\Generate(strict=false, type="Client")
      */
     private $customer;

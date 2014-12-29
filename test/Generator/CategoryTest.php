@@ -146,18 +146,4 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
         $method->invoke($category, $category, 2);
     }
-
-    /**
-     * We are testing a private function here because
-     * it is part of the api used by the programmer.
-     *
-     * @expectedException \BadMethodCallException
-     */
-    public function testSetParentNoArguments()
-    {
-        $category = new Category();
-        $method   = new \ReflectionMethod($category, 'setParent');
-        $method->setAccessible(true);
-        $method->invoke($category);
-    }
 }

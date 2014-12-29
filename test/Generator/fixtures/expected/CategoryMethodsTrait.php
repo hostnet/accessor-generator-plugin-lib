@@ -103,6 +103,11 @@ trait CategoryMethodsTrait
     /**
      * Set parent
      *
+     * Generated a default null value because the doctrine column is nullable.
+     * Still require an explicit argument to set the column. If you want to get
+     * rid of this message, please specify a default value or specify
+     * @JoinColumn(nullable=false).
+     *
      * @param Category $parent
      * @return Category
      * @throws \BadMethodCallException if the number of arguments is not correct
@@ -111,10 +116,10 @@ trait CategoryMethodsTrait
      */
     private function setParent(Category $parent = null)
     {
-        if (func_num_args() != 1) {
+        if (func_num_args() > 1) {
             throw new \BadMethodCallException(
                 sprintf(
-                    'setParent() has one argument but %d given.',
+                    'setParent() has one optional argument but %d given.',
                     func_num_args()
                 )
             );

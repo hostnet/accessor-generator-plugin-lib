@@ -36,6 +36,7 @@ class Customer
     private $id;
 
     /**
+     * @ORM\JoinColumn(nullable=false)
      * @ORM\OneToOne(targetEntity="Cart", inversedBy="customer")
      * @AG\Generate
      */

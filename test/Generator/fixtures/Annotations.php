@@ -10,7 +10,7 @@ class Annotations
 
     /**
      * @AG\Generate(type="\DateTime")
-     * @Stupid\Realy
+     * @Stupid\Really
      */
     public $stupid;
 }

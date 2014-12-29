@@ -4,6 +4,7 @@ namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
@@ -37,6 +38,10 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
             case $annotation instanceof Column:
                 // Process scalar value (db-wise) columns.
                 $this->processColumn($annotation, $information);
+                break;
+            case $annotation instanceof JoinColumn:
+                // Process scalar value (db-wise) columns.
+                $this->processJoinColumn($annotation, $information);
                 break;
             case $annotation instanceof GeneratedValue:
                 // Generated value columns such as auto_increment
@@ -93,6 +98,11 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
         if ($annotation instanceof ManyToOne || $annotation instanceof ManyToMany) {
             $information->setReferencingCollection(true);
         }
+
+        // Set default value for nullable
+        if ($information->isNullable() === null) {
+            $information->setNullable((new JoinColumn())->nullable);
+        }
     }
 
     /**
@@ -102,7 +112,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * may be null and if it should be a unique value.
      *
      * @param Column $column
-     * @param PropertyInformationInterface $information
+     * @param PropertyInformation $information
      */
     protected function processColumn(Column $column, PropertyInformation $information)
     {
@@ -114,6 +124,18 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
         $information->setUnique($column->unique);
         $information->setNullable($column->nullable);
         $information->setIntegerSize($this->getIntegerSizeForType($column->type));
+    }
+
+    /**
+     * Process a JoinColumn Annotation, extraxt nullable.
+     *
+     * @param JoinColumn $join_column
+     * @param PropertyInformationInterface $information
+     */
+    private function processJoinColumn(JoinColumn $join_column, PropertyInformation $information)
+    {
+        $information->setNullable($join_column->nullable);
+        $information->setUnique($join_column->unique);
     }
 
     /**
@@ -162,7 +184,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * lified classname. When there is a \ inside
      * Doctrine assumes a fully qualified name. This
      * makes relative references to subnamespaces
-     * impossible. When thre is no \ in the class name
+     * impossible. When there is no \ in the class name
      * it is assumed to be relative to the current name-
      * space and left as-is.
      *

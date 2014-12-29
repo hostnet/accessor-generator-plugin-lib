@@ -155,7 +155,11 @@ interface PropertyInformationInterface
      * only appear once. Thus only valid
      * if isCollection returns true.
      *
-     * @return bool
+     * Returns null if not set explicitly,
+     * null can be interperted as false.
+     *
+     *
+     * @return bool|null
      */
     public function isUnique();
 
@@ -163,8 +167,10 @@ interface PropertyInformationInterface
      * Returns if this property may be set to
      * null.
      *
-     * @return bool
-    */
+     * Returns null if not set explicitly,
+     * null can be interperted as false.
+     * @return bool|null
+     */
     public function isNullable();
 
     /**
@@ -196,7 +202,10 @@ interface PropertyInformationInterface
      * exceptions if the object is not in a valid
      * state according to the nullable columns.
      *
-     * @return bool
+     * Returns null if not set explicitly,
+     * null can be interperted as false.
+     *
+     * @return bool|null
      */
     public function willGenerateStrict();
 
@@ -210,21 +219,33 @@ interface PropertyInformationInterface
     /**
      * If a set function should be generated.
      *
-     * @return bool
+     * Returns null if not set explicitly,
+     * null can be interperted as false.
+     *
+     * @return bool|null
+
      */
     public function willGenerateSet();
 
     /**
      * If a add function should be generated.
      *
-     * @return bool
+     * Returns null if not set explicitly,
+     * null can be interperted as false.
+     *
+     * @return bool|null
+
      */
     public function willGenerateAdd();
 
     /**
      * If a remove function should be generated.
      *
-     * @return bool
+     * Returns null if not set explicitly,
+     * null can be interperted as false.
+     *
+     * @return bool|null
+
      */
     public function willGenerateRemove();
 }

@@ -39,10 +39,10 @@ trait UserMethodsTrait
      */
     public function setAddress(Address $address = null)
     {
-        if (func_num_args() != 1) {
+        if (func_num_args() > 1) {
             throw new \BadMethodCallException(
                 sprintf(
-                    'setAddress() has one argument but %d given.',
+                    'setAddress() has one optional argument but %d given.',
                     func_num_args()
                 )
             );

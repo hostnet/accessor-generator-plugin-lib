@@ -167,10 +167,10 @@ trait ProductMethodsTrait
      */
     public function setSystemName($system_name = '')
     {
-        if (func_num_args() != 1) {
+        if (func_num_args() > 1) {
             throw new \BadMethodCallException(
                 sprintf(
-                    'setSystemName() has one argument but %d given.',
+                    'setSystemName() has one optional argument but %d given.',
                     func_num_args()
                 )
             );

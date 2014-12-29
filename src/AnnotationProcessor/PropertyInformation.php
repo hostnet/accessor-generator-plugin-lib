@@ -54,15 +54,15 @@ class PropertyInformation implements PropertyInformationInterface
 
     /**
      * @see PropertyInformationInterface::isNullable()
-     * @var bool
+     * @var bool|null
      */
-    private $nullable = false;
+    private $nullable = null;
 
     /**
      * @see PropertyInformationInterface::isUnique()
-     * @var bool
+     * @var bool|null
      */
-    private $unique = false;
+    private $unique = null;
 
     /**
      * @see PropertyInformationInterface::isFixedPointNumber()
@@ -96,27 +96,27 @@ class PropertyInformation implements PropertyInformationInterface
 
     /**
      * @see PropertyInformationInterface::willGenerateGet()
-     * @var bool
+     * @var bool|null
      */
-    private $generate_get = false;
+    private $generate_get = null;
 
     /**
      * @see PropertyInformationInterface::willGenerateSet()
-     * @var bool
+     * @var bool|null
      */
-    private $generate_set = false;
+    private $generate_set = null;
 
     /**
      * @see PropertyInformationInterface::willGenerateAdd()
-     * @var bool
+     * @var bool|null
      */
-    private $generate_add = false;
+    private $generate_add = null;
 
     /**
      * @see PropertyInformationInterface::willGenerateRemove()
-     * @var bool
+     * @var bool|null
      */
-    private $generate_remove = false;
+    private $generate_remove = null;
 
     /**
      * Information parsed from the PHP
@@ -596,11 +596,15 @@ class PropertyInformation implements PropertyInformationInterface
 
     /**
      * @see PropertyInformationInterface::isNullable()
-     * @return boolean
+     * @return boolean|null
      */
     public function isNullable()
     {
-        return $this->nullable || strtolower($this->getDefault()) === 'null';
+        if ($this->nullable === null) {
+            return null;
+        } else {
+            return $this->nullable || strtolower($this->getDefault()) === 'null';
+        }
     }
 
     /**

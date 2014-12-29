@@ -35,6 +35,7 @@ class Student implements StudentInterface
 
     /**
      * @ORM\OneToOne(targetEntity="Student")
+     * @ORM\JoinColumn(nullable=false)
      * @AG\Generate(type="StudentInterface")
      */
     private $student;

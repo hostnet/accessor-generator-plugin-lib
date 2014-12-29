@@ -23,7 +23,7 @@ trait DecimalMethodsTrait
         if (func_num_args() > 2) {
             throw new \BadMethodCallException(
                 sprintf(
-                    'setDecimal010() has one argument but %d given.',
+                    'setDecimal010() has one obligatory and one optional argument but %d given.',
                     func_num_args()
                 )
             );
@@ -98,7 +98,7 @@ trait DecimalMethodsTrait
         if (func_num_args() > 2) {
             throw new \BadMethodCallException(
                 sprintf(
-                    'setDecimal110() has one argument but %d given.',
+                    'setDecimal110() has one obligatory and one optional argument but %d given.',
                     func_num_args()
                 )
             );
@@ -173,7 +173,7 @@ trait DecimalMethodsTrait
         if (func_num_args() > 2) {
             throw new \BadMethodCallException(
                 sprintf(
-                    'setDecimal510() has one argument but %d given.',
+                    'setDecimal510() has one obligatory and one optional argument but %d given.',
                     func_num_args()
                 )
             );
@@ -248,7 +248,7 @@ trait DecimalMethodsTrait
         if (func_num_args() > 2) {
             throw new \BadMethodCallException(
                 sprintf(
-                    'setDecimal1010() has one argument but %d given.',
+                    'setDecimal1010() has one obligatory and one optional argument but %d given.',
                     func_num_args()
                 )
             );
@@ -323,7 +323,7 @@ trait DecimalMethodsTrait
         if (func_num_args() > 2) {
             throw new \BadMethodCallException(
                 sprintf(
-                    'setDecimal1820() has one argument but %d given.',
+                    'setDecimal1820() has one obligatory and one optional argument but %d given.',
                     func_num_args()
                 )
             );
@@ -398,7 +398,7 @@ trait DecimalMethodsTrait
         if (func_num_args() > 2) {
             throw new \BadMethodCallException(
                 sprintf(
-                    'setDecimal1920() has one argument but %d given.',
+                    'setDecimal1920() has two optional arguments but %d given.',
                     func_num_args()
                 )
             );
@@ -473,7 +473,7 @@ trait DecimalMethodsTrait
         if (func_num_args() > 2) {
             throw new \BadMethodCallException(
                 sprintf(
-                    'setDecimal3065() has one argument but %d given.',
+                    'setDecimal3065() has one obligatory and one optional argument but %d given.',
                     func_num_args()
                 )
             );
