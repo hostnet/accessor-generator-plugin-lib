@@ -18,7 +18,7 @@ class PropertyInformation implements PropertyInformationInterface
 {
     /**
      * @see PropertyInformationInterface::getType()
-     * @var string
+     * @var string|null
      */
     private $type = 'string';
 

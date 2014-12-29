@@ -7,7 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Hostnet\Component\AccessorGenerator\Annotation as AG;
 use Hostnet\Component\AccessorGenerator\Collection\ImmutableCollection;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Actor;
-use Symfony\Component\Console as Stupid;
 
 trait ActorMethodsTrait
 {

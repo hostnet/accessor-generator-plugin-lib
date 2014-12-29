@@ -3,7 +3,6 @@ namespace Hostnet\Component\AccessorGenerator\Generator\fixtures;
 
 use Doctrine\ORM\Mapping as ORM;
 use Hostnet\Component\AccessorGenerator\Annotation as AG;
-use Hostnet\Component\AccessorGenerator\Generator\fixtures as This;
 
 /**
   * @ORM\Entity
@@ -21,7 +20,7 @@ class Attribute
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="This\Product", inversedBy="attributes")
+     * @ORM\ManyToOne(targetEntity="Product", inversedBy="attributes")
      * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
      */
     private $product;

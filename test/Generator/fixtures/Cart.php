@@ -37,8 +37,8 @@ class Cart
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="Client", mappedBy="cart")
-     * @AG\Generate(strict=false)
+     * @ORM\OneToOne(targetEntity="Customer", mappedBy="cart")
+     * @AG\Generate(strict=false, type="Client")
      */
     private $customer;
 }

@@ -31,6 +31,7 @@ use Hostnet\Component\AccessorGenerator\Annotation as AG;
  * tion-field on the owning side.
  *
  * @ORM\Entity
+ * @ORM\Table(name="graph_node")
  */
 class Node
 {

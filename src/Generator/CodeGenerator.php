@@ -95,25 +95,11 @@ class CodeGenerator implements CodeGeneratorInterface
             // namespace we have to import those aswell (php does not no .. in namespace).
             // In principle no harm could come from these imports unless the types
             // are of a *methodsTrait type. Which will break anyway.
-            if ($type[0] != '\\' && $info->isComplexType() && ! $this->isAliased($type, $imports)) {
-                if (strpos($type, '\\') === false) {
-                    $imports[] = $class->getNamespace() .  '\\' . $type;
-                } else {
-                    $info->setType('\\' . $type);
-                }
-            }
-
-            // If the default type is a constant from a class in the default namespace,
-            // import the type aswell. Do not forget to skip self, because importing self
-            if (($default = strstr($info->getDefault(), '::', true))) {
-                if ($default != 'self' && strpos($default, '\\') === false) {
-                    $imports[] = $class->getNamespace() .  '\\' . $default;
-                }
-            }
+            self::addImportForProperty($info, $imports);
 
             // Parse and add fully qualified type information to the info object for use
             // in docblocks to make eclipse understand the types.
-            $info->setFullyQualifiedType($this->fqcn($type, $imports));
+            $info->setFullyQualifiedType(self::fqcn($type, $imports));
 
             $code .= $this->generateAccessors($info);
 
@@ -208,16 +194,11 @@ class CodeGenerator implements CodeGeneratorInterface
      * @param array $imports
      * @return string
      */
-    private function fqcn($name, array $imports)
+    private static function fqcn($name, array $imports)
     {
         // Already FQCN
         if (substr($name, 0, 1) === '\\') {
             return $name;
-        }
-
-        // No complex type
-        if (ctype_lower(substr($name, 0, 1))) {
-            return '';
         }
 
         // Aliased
@@ -226,15 +207,12 @@ class CodeGenerator implements CodeGeneratorInterface
         }
 
         // Check other imports
-        foreach ($imports as $alias => $import) {
-            if (is_numeric($alias)) {
-                if (substr($import, -1 - strlen($name)) == '\\' . $name) {
-                    return '\\' . $import;
-                }
-            }
+        if (($plain = self::getPlainImportIfExists($name, $imports))) {
+            return '\\' .  $plain;
         }
 
-        return '\\' . $name;
+        // Not a complex type, or otherwise unkown.
+        return '';
     }
 
     /**
@@ -245,7 +223,7 @@ class CodeGenerator implements CodeGeneratorInterface
      * @param array $imports
      * @return boolean
      */
-    private function isAliased($name, array $imports)
+    private static function isAliased($name, array $imports)
     {
         $aliasses = array_keys($imports);
         foreach ($aliasses as $alias) {
@@ -254,5 +232,65 @@ class CodeGenerator implements CodeGeneratorInterface
             }
         }
         return false;
+    }
+
+    /**
+     *
+     * @param string $type
+     * @param array $imports
+     * @return string|null
+     */
+    private static function getPlainImportIfExists($type, $imports)
+    {
+        foreach ($imports as $alias => $import) {
+            if (is_numeric($alias)) {
+                if (substr($import, -1 - strlen($type)) == '\\' . $type) {
+                    return $import;
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     * @param PropertyInformation $info
+     * @param array $imports
+     */
+    private static function addImportForProperty(PropertyInformation $info, array &$imports)
+    {
+        if ($info->isComplexType()) {
+            $type = $info->getType();
+            if (strpos($type, '\\') !== 0) {
+                self::addImportForType($type, $info->getNamespace(), $imports);
+            }
+        }
+
+        $default = strstr($info->getDefault(), '::', true);
+        if ($default) {
+            self::addImportForType($default, $info->getNamespace(), $imports);
+        }
+    }
+
+    /**
+     *
+     * @param string $type
+     * @param string $namespace
+     * @param array $imports
+     */
+    private static function addImportForType($type, $namespace, array &$imports)
+    {
+        if (!self::isAliased($type, $imports)) {
+            $first_part = strstr($type, '\\', true);
+            if ($first_part) {
+                // Subnamespace;
+                $imports[$first_part] = $namespace . '\\' . $first_part;
+            } else {
+                // Inside own namespace
+                if (! self::getPlainImportIfExists($type, $imports)) {
+                    // Not already imported
+                    $imports[] = $namespace . '\\' . $type;
+                }
+            }
+        }
     }
 }

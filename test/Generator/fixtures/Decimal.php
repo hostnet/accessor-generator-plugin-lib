@@ -13,6 +13,12 @@ class Decimal
     use Generated\DecimalMethodsTrait;
 
     /**
+     * @ORM\Id
+     * @ORM\Column
+     */
+    private $id;
+
+    /**
      * @ORM\Column(type="decimal", scale=0, precision=10)
      * @AG\Generate(get=false)
      */

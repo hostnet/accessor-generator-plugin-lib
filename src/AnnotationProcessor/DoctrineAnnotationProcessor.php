@@ -55,7 +55,10 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
             case $annotation instanceof ManyToOne:
                 // All relationships have a target type that can
                 // be extracted and used as the column type.
-                $information->getType() == 'string' && $information->setType($annotation->targetEntity);
+                if ($information->getType() === 'string') {
+                    $type = $this->transformComplexType($annotation->targetEntity);
+                    $information->setType($type);
+                }
                 $this->processBidirectional($annotation, $information);
                 break;
             default:
@@ -147,6 +150,29 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
             return 'array';
         } elseif ($type == Type::OBJECT) {
             return 'object';
+        } else {
+            return $type;
+        }
+    }
+
+    /**
+     * Transform a Doctrine complex type to a valid
+     * PHP type reference. Doctrine does not require
+     * your class to start with a \ for a fully qual-
+     * lified classname. When there is a \ inside
+     * Doctrine assumes a fully qualified name. This
+     * makes relative references to subnamespaces
+     * impossible. When thre is no \ in the class name
+     * it is assumed to be relative to the current name-
+     * space and left as-is.
+     *
+     * @param string $type
+     * @return string
+     */
+    private function transformComplexType($type)
+    {
+        if (strpos($type, '\\') > 0) {
+            return '\\' . $type;
         } else {
             return $type;
         }

@@ -408,10 +408,10 @@ class ReflectionClass
             if (in_array($type, [T_DNUMBER, T_LNUMBER, T_CONSTANT_ENCAPSED_STRING])) {
                 // Easy numbers and strings.
                 $default = $this->tokens->value($loc);
-            } elseif ($type == T_STRING) {
+            } elseif (in_array($type, [T_STRING, T_NS_SEPARATOR])) {
                 // Constants, definitions and null
-                $default = $this->tokens->value($loc);
-                $loc     = $this->tokens->next($loc);
+                $default = $this->parseNamespace($loc);
+                $loc     = $this->tokens->next($loc, [T_WHITESPACE, T_COMMENT, T_STRING, T_NS_SEPARATOR]);
                 if ($this->tokens->type($loc) == T_PAAMAYIM_NEKUDOTAYIM) {
                     $loc      = $this->tokens->next($loc);
                     $default .= '::' . $this->tokens->value($loc);

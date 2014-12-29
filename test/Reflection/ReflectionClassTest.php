@@ -139,6 +139,8 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
                     'private $constant = self::class;',
                     'private $color = COLOR;',
                     'private $color = self::COLOR;',
+                    'private $color = An\Other\Place::class;',
+                    'private $color = \An\Other\Place::class;',
                 ]
             ],
         ];

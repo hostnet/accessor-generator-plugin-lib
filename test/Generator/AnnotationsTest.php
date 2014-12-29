@@ -1,0 +1,46 @@
+<?php
+namespace Hostnet\Component\AccessorGenerator\Generator;
+
+use Doctrine\Common\Collections\Collection;
+use Hostnet\Component\AccessorGenerator\Generator\fixtures\Annotations;
+
+class AnnotationsTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+     * @expectedException \BadMethodCallException
+     */
+    public function testGetStupidTooManyArguments()
+    {
+        $annotations = new Annotations();
+        $annotations->getStupid(1);
+    }
+
+    /**
+     * @expectedException \LogicException
+     */
+    public function testGetStupidEmpty()
+    {
+        $annotations = new Annotations();
+        $property    = new \ReflectionProperty($annotations, 'stupid');
+        $property->setAccessible(true);
+        $property->setValue($annotations, null);
+        $annotations->getStupid();
+    }
+
+    /**
+     * @expectedException \BadMethodCallException
+     */
+    public function testSetStupidTooManyArguments()
+    {
+        $annotations = new Annotations();
+        $annotations->setStupid(new \DateTime(), 2);
+    }
+
+    public function testSetStupid()
+    {
+        $annotations = new Annotations();
+        $date        = new \DateTime();
+        $this->assertSame($annotations, $annotations->setStupid($date));
+        $this->assertSame($date, $annotations->getStupid());
+    }
+}
