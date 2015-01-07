@@ -244,7 +244,11 @@ class PropertyInformation implements PropertyInformationInterface
      */
     public function getClass()
     {
-        return $this->property->getClass()->getName();
+        if ($this->property->getClass() !== null) {
+            return $this->property->getClass()->getName();
+        } else {
+            return '';
+        }
     }
 
     /**

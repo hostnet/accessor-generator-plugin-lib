@@ -1,12 +1,14 @@
 <?php
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OneToOne;
+use Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception\InvalidColumnSettingsException;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
 
 /**
@@ -47,9 +49,11 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         $property = new ReflectionProperty('test');
         $implicit = new Column();
         $explicit = new Column();
+        $faulty   = new Column();
 
         $implicit_info = new PropertyInformation($property);
         $explicit_info = new PropertyInformation($property);
+        $faulty_info   = new PropertyInformation($property);
 
         $explicit->length = 100;
         $explicit_info->setLength(100);
@@ -63,24 +67,30 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         $explicit->scale = 9;
         $explicit_info->setScale(9);
 
-        $explicit->type = 'bigint';
+        $explicit->type = Type::BIGINT;
         $explicit_info->setType('integer');
         $explicit_info->setIntegerSize(64);
 
         $explicit->unique = true;
         $explicit_info->setUnique(true);
 
+        $faulty->type = Type::DECIMAL;
+
         return [
-            [$implicit, $implicit_info],
-            [$explicit, $explicit_info],
+            [$implicit, $implicit_info, null],
+            [$explicit, $explicit_info, null],
+            [$faulty,   $faulty_info,   InvalidColumnSettingsException::class],
         ];
     }
 
     /**
      * @dataProvider processColumnAnnotationProvider
      */
-    public function testProcessColumnAnnotation(Column $column, PropertyInformationInterface $output)
+    public function testProcessColumnAnnotation(Column $column, PropertyInformationInterface $output, $exception)
     {
+        // Set if an explosion is needed.
+        $this->setExpectedException($exception);
+
         // Set up dependencies.
         $this->processor->processAnnotation($column, $this->information);
 
@@ -247,8 +257,9 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
             $annotation               = new ManyToOne();
             $annotation->targetEntity = $doctrine_type;
         } else {
-            $annotation       = new Column();
-            $annotation->type = $doctrine_type;
+            $annotation        = new Column();
+            $annotation->type  = $doctrine_type;
+            $annotation->scale = 1;
         }
 
         $this->processor->processAnnotation($annotation, $this->information);

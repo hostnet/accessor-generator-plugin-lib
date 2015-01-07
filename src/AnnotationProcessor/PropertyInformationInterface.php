@@ -24,8 +24,12 @@ interface PropertyInformationInterface
 
     /**
      * Get the name of the class implementing
-     * this property. Usefull for fluent interfaces
-     * that make use of method chaining.
+     * this property. Usefull for creating
+     * fluent interfaces that make use of method
+     * chaining in code generation.
+     *
+     * Will return empty string when the class
+     * is not known.
      *
      * @return string
      */

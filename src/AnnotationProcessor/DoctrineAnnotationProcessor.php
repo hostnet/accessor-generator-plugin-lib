@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OneToOne;
+use Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception\InvalidColumnSettingsException;
 
 /**
  * Process Column, ManyToMany, OneToOne, ManyToOne,
@@ -124,6 +125,19 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
         $information->setUnique($column->unique);
         $information->setNullable($column->nullable);
         $information->setIntegerSize($this->getIntegerSizeForType($column->type));
+
+        if ($information->isFixedPointNumber()
+            && $information->getPrecision() === 0
+            && $information->getScale() === 0
+        ) {
+            throw new InvalidColumnSettingsException(
+                sprintf(
+                    'Decimal type of "%s::%s" has scale and precision set to 0 or not set at all',
+                    $information->getClass(),
+                    $information->getName()
+                )
+            );
+        }
     }
 
     /**

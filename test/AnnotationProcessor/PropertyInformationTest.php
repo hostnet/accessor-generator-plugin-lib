@@ -15,6 +15,12 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
      */
     private $info;
 
+    /**
+     * @var PropertyInformation
+     */
+    private $minimal_info;
+
+
     public function setUp()
     {
         $class = $this->getMockBuilder(ReflectionClass::class)->disableOriginalConstructor()->getMock();
@@ -33,7 +39,8 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
             $class
         );
 
-        $this->info = new PropertyInformation($property);
+        $this->info         = new PropertyInformation($property);
+        $this->minimal_info = new PropertyInformation(new ReflectionProperty('test'));
     }
 
     public function testProcessAnnotations()
@@ -61,6 +68,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $this->info->getLength());
         $this->assertEquals(32, $this->info->getIntegerSize());
         $this->assertEquals('Test', $this->info->getClass());
+        $this->assertEquals('', $this->minimal_info->getClass());
         $this->assertEquals('', $this->info->getNameSpace());
 
         $this->assertEquals(false, $this->info->isCollection());
