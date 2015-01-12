@@ -3,6 +3,7 @@ namespace Hostnet\Component\AccessorGenerator\Collection;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 
 class ImmutableCollectionTest extends \PHPUnit_Framework_TestCase
 {
@@ -179,6 +180,20 @@ class ImmutableCollectionTest extends \PHPUnit_Framework_TestCase
         // Check that the function is wrapped correctly.
         $col = $this->collection->partition($partition);
         $imm = $this->immutable_collection->partition($partition);
+        $this->assertEquals($col, $imm);
+
+        // Test that we got a copy and did not change the original collection.
+        $this->assertEquals($before, $this->immutable_collection->toArray());
+    }
+
+    public function testMatching()
+    {
+        $criteria = (new Criteria());
+        $before   = $this->immutable_collection->toArray();
+
+        // Check that the function is wrapped correctly.
+        $col = $this->collection->matching($criteria);
+        $imm = $this->immutable_collection->matching($criteria);
         $this->assertEquals($col, $imm);
 
         // Test that we got a copy and did not change the original collection.

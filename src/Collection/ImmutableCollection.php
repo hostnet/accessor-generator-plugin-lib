@@ -3,6 +3,8 @@ namespace Hostnet\Component\AccessorGenerator\Collection;
 
 use Closure;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Selectable;
 
 /**
  * Wrapper for Doctrine collections to make them immutable.
@@ -12,9 +14,12 @@ use Doctrine\Common\Collections\Collection;
  *
  * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
-class ImmutableCollection implements Collection, ConstCollectionInterface
+class ImmutableCollection implements Collection, ConstCollectionInterface, Selectable
 {
 
+    /**
+     * @var Collection|Selectable
+     */
     private $collection = null;
 
     /**
@@ -262,5 +267,13 @@ class ImmutableCollection implements Collection, ConstCollectionInterface
     public function offsetUnset($offset)
     {
         throw new \LogicException('This collection is immutable');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function matching(Criteria $criteria)
+    {
+        return $this->collection->matching($criteria);
     }
 }
