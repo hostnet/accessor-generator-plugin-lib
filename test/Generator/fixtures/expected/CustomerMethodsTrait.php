@@ -51,14 +51,13 @@ trait CustomerMethodsTrait
                 )
             );
         }
-        if ($cart !== null) {
-            $property = new \ReflectionProperty($cart, 'customer');
-            $property->setAccessible(true);
-            $property->setValue($cart, $this);
-            $property->setAccessible(false);
+        if ($cart !== null && $this->cart !== $cart) {
+            $this->cart = $cart;
+            $method = new \ReflectionMethod($cart, 'setCustomer');
+            $method->setAccessible(true);
+            $method->invoke($cart, $this);
+            $method->setAccessible(false);
         }
-
-        $this->cart = $cart;
         return $this;
     }
 }

@@ -123,15 +123,16 @@
     }
 {% endif %}
 {%- if property.referencedProperty and not property.isReferencingCollection %}
-    if (${{ property.name }} !== null) {
-        $property = new \ReflectionProperty(${{ property.name }}, '
-        {{- property.referencedProperty }}');
-        $property->setAccessible(true);
-        $property->setValue(${{ property.name }}, $this);
-        $property->setAccessible(false);
+    if (${{ property.name }} !== null && $this->{{ property.name }} !== ${{ property.name }}) {
+        $this->{{ property.name }} = ${{ property.name }};
+        $method = new \ReflectionMethod(${{ property.name }}, 'set{{ property.referencedProperty | classify}}');
+        $method->setAccessible(true);
+        $method->invoke(${{ property.name }}, $this);
+        $method->setAccessible(false);
     }
-{% endif %}
+{% else %}
 
     $this->{{ property.name }} = ${{ property.name }};
+{% endif %}
     return $this;
 }
