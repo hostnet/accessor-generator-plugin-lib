@@ -114,7 +114,7 @@
         throw new \LengthException('Parameter \'${{ property.name }}\' should not be longer than {{ property.length }} characters.');
     }
 {% endif %}
-{%- if not property.willGenerateSet %}
+{%- if not property.willGenerateSet and property.isReferencingCollection %}
 
     if (${{ property.name }} && ! ${{ property.name }}->get{{ property.referencedProperty | classify}}()->contains($this)) {
         throw new \LogicException('Please use {{ property.name | classify}}::add{{ property.referencedProperty | singularize | classify }}().');
@@ -125,6 +125,7 @@
 {%- if property.referencedProperty and not property.isReferencingCollection %}
     if (${{ property.name }} !== null && $this->{{ property.name }} !== ${{ property.name }}) {
         $this->{{ property.name }} = ${{ property.name }};
+
         $method = new \ReflectionMethod(${{ property.name }}, 'set{{ property.referencedProperty | classify}}');
         $method->setAccessible(true);
         $method->invoke(${{ property.name }}, $this);

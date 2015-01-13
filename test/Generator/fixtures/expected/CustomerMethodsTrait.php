@@ -53,6 +53,7 @@ trait CustomerMethodsTrait
         }
         if ($cart !== null && $this->cart !== $cart) {
             $this->cart = $cart;
+
             $method = new \ReflectionMethod($cart, 'setCustomer');
             $method->setAccessible(true);
             $method->invoke($cart, $this);
