@@ -123,12 +123,13 @@
     }
 {% endif %}
 {%- if property.referencedProperty and not property.isReferencingCollection %}
-
-    $property = new \ReflectionProperty(${{ property.name }}, '
-    {{- property.referencedProperty }}');
-    $property->setAccessible(true);
-    $property->setValue(${{ property.name }}, $this);
-    $property->setAccessible(false);
+    if (${{ property.name }} !== null) {
+        $property = new \ReflectionProperty(${{ property.name }}, '
+        {{- property.referencedProperty }}');
+        $property->setAccessible(true);
+        $property->setValue(${{ property.name }}, $this);
+        $property->setAccessible(false);
+    }
 {% endif %}
 
     $this->{{ property.name }} = ${{ property.name }};
