@@ -48,6 +48,11 @@ trait CartMethodsTrait
             );
         }
 
+        $property = new \ReflectionProperty($customer, 'cart');
+        $property->setAccessible(true);
+        $property->setValue($customer, $this);
+        $property->setAccessible(false);
+
         $this->customer = $customer;
         return $this;
     }

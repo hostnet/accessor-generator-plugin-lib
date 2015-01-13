@@ -52,6 +52,11 @@ trait CustomerMethodsTrait
             );
         }
 
+        $property = new \ReflectionProperty($cart, 'customer');
+        $property->setAccessible(true);
+        $property->setValue($cart, $this);
+        $property->setAccessible(false);
+
         $this->cart = $cart;
         return $this;
     }
