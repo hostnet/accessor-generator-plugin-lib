@@ -212,7 +212,7 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         return [
             ['smallint',   'integer'],
             ['integer',    'integer'],
-            ['bigint',   'integer'],
+            ['bigint',     'integer'],
             ['decimal',    'string'],
             ['float',      'float'],
             ['string',     'string'],
@@ -224,6 +224,7 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
             ['time',       '\\DateTime'],
             ['datetime',   '\\DateTime'],
             ['datetimetz', '\\DateTime'],
+            [DoctrineAnnotationProcessor::ZEROED_DATE_TIME, '\\DateTime'],
             ['array',      'array'],
             ['json_array', 'array'],
             ['object',     'object'],

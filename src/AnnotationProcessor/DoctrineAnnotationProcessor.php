@@ -20,6 +20,8 @@ use Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception\InvalidCol
  */
 class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
 {
+    const ZEROED_DATE_TIME = 'zeroeddatetime';
+
     /**
      * Process annotations of type:
      *  Column,
@@ -180,7 +182,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
             return 'string';
         } elseif ($type == Type::BLOB /* binary will be added in doctrine 2.5 */) {
             return 'resource';
-        } elseif ($type ==  Type::DATETIME || $type == Type::DATETIMETZ || $type == Type::DATE || $type == Type::TIME) {
+        } elseif (in_array($type, [Type::DATETIME, Type::DATETIMETZ, Type::DATE, Type::TIME, self::ZEROED_DATE_TIME])) {
             return '\\' . \DateTime::class;
         } elseif ($type == Type::SIMPLE_ARRAY || $type == Type::JSON_ARRAY || $type == Type::TARRAY) {
             return 'array';
