@@ -28,6 +28,10 @@ trait ProductMethodsTrait
             );
         }
 
+        if ($this->id === null) {
+            return null;
+        }
+
         if ($this->id < -2147483648|| $this->id > 2147483647) {
             throw new \DomainException(
                 sprintf(

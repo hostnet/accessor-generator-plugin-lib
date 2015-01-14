@@ -40,9 +40,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->product->getId();
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testGetIdNew()
     {
         $this->assertNull($this->product->getId());

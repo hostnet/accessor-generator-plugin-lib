@@ -25,7 +25,8 @@ public function {{ getter }}()
             )
         );
     }
-{% if property.willGenerateStrict and not property.isNullable and (not property.isComplexType  or property.type == '\\DateTime') %}
+{% if not property.isComplexType  or property.type == '\\DateTime' %}
+{% if property.willGenerateStrict and not property.isNullable %}
     if ($this->{{ property.name }} === null) {
         throw new \LogicException(sprintf(
             'Property {{ property.name }} is null, but the column is not nullable, '.
@@ -36,6 +37,13 @@ public function {{ getter }}()
             'and contains null values in the database'
         ));
     }
+{% endif %}
+{% if (not property.willGenerateStrict or property.isNullable) %}
+
+    if ($this->{{ property.name }} === null) {
+        return null;
+    }
+{% endif %}
 {% endif %}
 {% if property.type == 'integer' %}
 
