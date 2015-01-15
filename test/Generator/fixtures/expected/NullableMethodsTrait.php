@@ -37,7 +37,7 @@ trait NullableMethodsTrait
      *
      * Generated a default null value because the doctrine column is nullable.
      * Still require an explicit argument to set the column. If you do not like
-     * this message, specify a default value or use @JoinColumn(nullable=false).
+     * this message, specify a default value or use JoinColumn(nullable=false).
      *
      * @param \DateTime $datetime_nullable
      * @return Nullable
@@ -130,7 +130,7 @@ trait NullableMethodsTrait
      *
      * Generated a default null value because the doctrine column is nullable.
      * Still require an explicit argument to set the column. If you do not like
-     * this message, specify a default value or use @JoinColumn(nullable=false).
+     * this message, specify a default value or use JoinColumn(nullable=false).
      *
      * @param Feature $feature
      * @return Nullable
@@ -156,7 +156,7 @@ trait NullableMethodsTrait
      *
      * Generated a default null value because the doctrine column is nullable.
      * Still require an explicit argument to set the column. If you do not like
-     * this message, specify a default value or use @JoinColumn(nullable=false).
+     * this message, specify a default value or use JoinColumn(nullable=false).
      *
      * @param Feature $an_other_feature
      * @return Nullable
