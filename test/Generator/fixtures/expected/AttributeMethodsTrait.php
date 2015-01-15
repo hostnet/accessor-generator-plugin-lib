@@ -14,9 +14,8 @@ trait AttributeMethodsTrait
      * Set product
      *
      * Generated a default null value because the doctrine column is nullable.
-     * Still require an explicit argument to set the column. If you want to get
-     * rid of this message, please specify a default value or specify
-     * @JoinColumn(nullable=false).
+     * Still require an explicit argument to set the column. If you do not like
+     * this message, specify a default value or use @JoinColumn(nullable=false).
      *
      * @param Product $product
      * @return Attribute
