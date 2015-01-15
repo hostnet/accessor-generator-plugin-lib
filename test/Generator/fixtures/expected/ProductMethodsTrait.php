@@ -180,9 +180,14 @@ trait ProductMethodsTrait
             );
         }
 
-        if (!is_string($system_name)) {
+        if ($system_name === null
+            || is_scalar($system_name)
+            || is_callable([$system_name, '__toString'])
+        ) {
+            $system_name = (string)$system_name;
+        } else {
             throw new \InvalidArgumentException(
-                'Parameter system_name must be string.'
+                'Parameter system_name must be convertable to string.'
             );
         }
 

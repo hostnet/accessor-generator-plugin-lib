@@ -60,9 +60,14 @@ trait SubNamespaceMethodsTrait
             );
         }
 
-        if (!is_string($asterix)) {
+        if ($asterix === null
+            || is_scalar($asterix)
+            || is_callable([$asterix, '__toString'])
+        ) {
+            $asterix = (string)$asterix;
+        } else {
             throw new \InvalidArgumentException(
-                'Parameter asterix must be string.'
+                'Parameter asterix must be convertable to string.'
             );
         }
 

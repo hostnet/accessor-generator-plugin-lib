@@ -504,9 +504,14 @@ trait TypesMethodsTrait
             );
         }
 
-        if (!is_string($string)) {
+        if ($string === null
+            || is_scalar($string)
+            || is_callable([$string, '__toString'])
+        ) {
+            $string = (string)$string;
+        } else {
             throw new \InvalidArgumentException(
-                'Parameter string must be string.'
+                'Parameter string must be convertable to string.'
             );
         }
 
@@ -567,9 +572,14 @@ trait TypesMethodsTrait
             );
         }
 
-        if (!is_string($text)) {
+        if ($text === null
+            || is_scalar($text)
+            || is_callable([$text, '__toString'])
+        ) {
+            $text = (string)$text;
+        } else {
             throw new \InvalidArgumentException(
-                'Parameter text must be string.'
+                'Parameter text must be convertable to string.'
             );
         }
 
@@ -626,9 +636,14 @@ trait TypesMethodsTrait
             );
         }
 
-        if (!is_string($guid)) {
+        if ($guid === null
+            || is_scalar($guid)
+            || is_callable([$guid, '__toString'])
+        ) {
+            $guid = (string)$guid;
+        } else {
             throw new \InvalidArgumentException(
-                'Parameter guid must be string.'
+                'Parameter guid must be convertable to string.'
             );
         }
 

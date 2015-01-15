@@ -115,8 +115,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testSetSystemName()
     {
-        $this->assertSame($this->product, $this->product->setSystemName('100'));
-        $this->assertEquals('100', $this->product->getSystemName());
+        $this->assertSame($this->product, $this->product->setSystemName(100));
+        $this->assertSame('100', $this->product->getSystemName());
         $this->assertTrue(is_string($this->product->getSystemName()), 'of type string');
     }
 
@@ -133,7 +133,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetSystemNameWrongType()
     {
-        $this->product->setSystemName(0);
+        $this->product->setSystemName([]);
     }
 
     /**

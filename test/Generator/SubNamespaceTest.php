@@ -42,7 +42,7 @@ class SubNamespaceTest extends \PHPUnit_Framework_TestCase
     public function testSetAsterixInvalidArgument()
     {
         $subnamespace = new SubNamespace();
-        $subnamespace->setAsterix(1);
+        $subnamespace->setAsterix([]);
     }
 
     public function testSetAsterix()

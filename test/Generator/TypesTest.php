@@ -144,13 +144,14 @@ class TypesTest extends \PHPUnit_Framework_TestCase
             ['string',   str_repeat('a', 256),  \LengthException::class         ],
         ];
 
-        // Try an invalid type and try to set null
+        // Try an invalid type and wrong number of parameters
         $class = new \ReflectionClass(Types::class);
         foreach ($class->getProperties() as $property) {
             $setter = 'set' . Inflector::classify($property->getName());
             if (method_exists(Types::class, $setter)) {
-                $values[] = [$property->getName(), new \DateTime(), \BadMethodCallException::class, 1];
-                $values[] = [$property->getName(), null, \InvalidArgumentException::class];
+                $invalid_type = $property->getName() === 'object' ? null : new \stdClass();
+                $values[]     = [$property->getName(), new \DateTime(), \BadMethodCallException::class, 1];
+                $values[]     = [$property->getName(), $invalid_type, \InvalidArgumentException::class];
             }
         }
 
