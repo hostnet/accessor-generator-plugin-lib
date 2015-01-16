@@ -135,7 +135,10 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
             throw new InvalidColumnSettingsException(
                 sprintf(
                     'Decimal type of "%s::%s" has scale and precision set to 0 or not set at all.'
-                        . PHP_EOL . 'Usage: e.g. @ORM\Column(type="decimal", precision=2, scale=4)',
+                        . PHP_EOL . 'Usage: e.g. @ORM\Column(type="decimal", precision=2, scale=4).'
+                        . PHP_EOL . '"The precision represents the number of digits that are stored for values,'
+                        . PHP_EOL . ' and the scale represents the number of digits'
+                        . ' that can be stored following the decimal point".',
                     $information->getClass(),
                     $information->getName()
                 )
