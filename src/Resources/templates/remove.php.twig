@@ -11,7 +11,7 @@
  * @return {{ property.class }}
  * @throws \BadMethodCallException if the number of arguments is not correct
  */
-{{ property.willGenerateSet ? 'public' : 'private' }} function remove{{ property.name | singularize | classify }}({{ property.type }} ${{ property.name | singularize }})
+public function remove{{ property.name | singularize | classify }}({{ property.type }} ${{ property.name | singularize }})
 {
     if (func_num_args() != 1) {
         throw new \BadMethodCallException(
@@ -31,12 +31,17 @@
     $this->{{ property.name}}->removeElement(${{ property.name | singularize }});
 
 {% if property.referencedProperty %}
-    $method = new \ReflectionMethod(${{ property.name | singularize }}, '
-    {{- property.isReferencingCollection ? 'remove' : 'set' }}
-    {{- property.referencedProperty | classify | singularize }}');
-    $method->setAccessible(true);
-    $method->invoke(${{ property.name | singularize }}, {{ property.isReferencingCollection ? '$this' : 'null' }});
-    $method->setAccessible(false);
+    $property = new \ReflectionProperty(${{ property.name | singularize }}, '{{ property.referencedProperty }}');
+    $property->setAccessible(true);
+{% if property.isReferencingCollection %}
+    $collection = $property->getValue(${{ property.name | singularize }});
+    if ($collection) {
+        $collection->removeElement($this);
+    }
+{% else %}
+    $property->setValue(${{ property.name | singularize }}, null);
+{% endif %}
+    $property->setAccessible(false);
 {% endif %}
     return $this;
 }

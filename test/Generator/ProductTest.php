@@ -14,7 +14,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     private $product;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->product = new Product();
     }
@@ -264,5 +264,17 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $attribute = new Attribute();
         $this->product->removeAttribute($attribute, 2);
+    }
+
+    /**
+     * @expectedException \LogicException
+     */
+    public function testAddAttributeToMultipleProducts()
+    {
+        $attribute = new Attribute();
+        $product2  = new Product();
+
+        $this->product->addAttribute($attribute);
+        $product2->addAttribute($attribute);
     }
 }

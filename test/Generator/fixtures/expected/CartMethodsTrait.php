@@ -47,13 +47,13 @@ trait CartMethodsTrait
                 )
             );
         }
-        if ($customer !== null && $this->customer !== $customer) {
+        if ($this->customer !== $customer) {
             $this->customer = $customer;
 
-            $method = new \ReflectionMethod($customer, 'setCart');
-            $method->setAccessible(true);
-            $method->invoke($customer, $this);
-            $method->setAccessible(false);
+            $property = new \ReflectionProperty($customer, 'cart');
+            $property->setAccessible(true);
+            $property->setValue($customer, $this);
+            $property->setAccessible(false);
         }
         return $this;
     }

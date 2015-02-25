@@ -60,10 +60,14 @@ trait CategoryMethodsTrait
         }
 
         $this->children->add($child);
-        $method = new \ReflectionMethod($child, 'setParent');
-        $method->setAccessible(true);
-        $method->invoke($child, $this);
-        $method->setAccessible(false);
+        $property = new \ReflectionProperty($child, 'parent');
+        $property->setAccessible(true);
+        $value = $property->getValue($child);
+        if ($value) {
+            throw new \LogicException('Child can not be added to more than one Category.');
+        }
+        $property->setValue($child, $this);
+        $property->setAccessible(false);
         return $this;
     }
 
@@ -93,44 +97,10 @@ trait CategoryMethodsTrait
 
         $this->children->removeElement($child);
 
-        $method = new \ReflectionMethod($child, 'setParent');
-        $method->setAccessible(true);
-        $method->invoke($child, null);
-        $method->setAccessible(false);
-        return $this;
-    }
-
-    /**
-     * Set parent
-     *
-     * Generated a default null value because the doctrine column is nullable.
-     * Still require an explicit argument to set the column. If you do not like
-     * this message, specify a default value or use JoinColumn(nullable=false).
-     *
-     * @param Category $parent
-     * @return Category
-     * @throws \BadMethodCallException if the number of arguments is not correct
-     * @throws \LogicException if the association constraints are violated
-     * @access friends with Category
-     */
-    private function setParent(Category $parent = null)
-    {
-        if (func_num_args() > 1) {
-            throw new \BadMethodCallException(
-                sprintf(
-                    'setParent() has one optional argument but %d given.',
-                    func_num_args()
-                )
-            );
-        }
-
-        if ($parent && ! $parent->getChildren()->contains($this)) {
-            throw new \LogicException('Please use Parent::addChild().');
-        } elseif ($parent && $this->parent) {
-            throw new \LogicException('Category objects can not be added to more than one Category.');
-        }
-
-        $this->parent = $parent;
+        $property = new \ReflectionProperty($child, 'parent');
+        $property->setAccessible(true);
+        $property->setValue($child, null);
+        $property->setAccessible(false);
         return $this;
     }
 }

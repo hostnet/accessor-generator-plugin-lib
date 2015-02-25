@@ -11,7 +11,7 @@
  * @return {{ property.class }}
  * @throws \BadMethodCallException if the number of arguments is not correct
  */
-{{ property.willGenerateSet ? 'public' : 'private' }} function add{{ property.name | singularize | classify }}({{ property.type }} ${{ property.name | singularize }})
+public function add{{ property.name | singularize | classify }}({{ property.type }} ${{ property.name | singularize }})
 {
     if (func_num_args() != 1) {
         throw new \BadMethodCallException(
@@ -30,12 +30,23 @@
 
     $this->{{ property.name}}->add(${{ property.name | singularize }});
 {% if property.referencedProperty %}
-    $method = new \ReflectionMethod(${{ property.name | singularize }}, '
-    {{- property.isReferencingCollection ? 'add' : 'set' }}
-    {{- property.referencedProperty | classify | singularize }}');
-    $method->setAccessible(true);
-    $method->invoke(${{ property.name | singularize }}, $this);
-    $method->setAccessible(false);
+    $property = new \ReflectionProperty(${{ property.name | singularize }}, '{{ property.referencedProperty }}');
+    $property->setAccessible(true);
+{% if property.isReferencingCollection %}
+    $collection = $property->getValue(${{ property.name | singularize }});
+    if (!$collection) {
+        $collection = new \Doctrine\Common\Collections\ArrayCollection();
+        $property->setValue(${{ property.name | singularize }}, $collection);
+    }
+    $collection->add($this);
+{% else %}
+    $value = $property->getValue(${{ property.name | singularize }});
+    if ($value) {
+        throw new \LogicException('{{ property.name | singularize | classify }} can not be added to more than one {{ property.class }}.');
+    }
+    $property->setValue(${{ property.name | singularize }}, $this);
+{% endif %}
+    $property->setAccessible(false);
 {% endif %}
     return $this;
 }

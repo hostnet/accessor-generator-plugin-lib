@@ -40,8 +40,6 @@ use Hostnet\Component\AccessorGenerator\Annotation as AG;
  */
 class Feature implements FeatureInterface
 {
-    use Generated\FeatureMethodsTrait;
-
     /**
      * @ORM\Id
      * @ORM\Column

@@ -249,10 +249,14 @@ trait ProductMethodsTrait
         }
 
         $this->attributes->add($attribute);
-        $method = new \ReflectionMethod($attribute, 'setProduct');
-        $method->setAccessible(true);
-        $method->invoke($attribute, $this);
-        $method->setAccessible(false);
+        $property = new \ReflectionProperty($attribute, 'product');
+        $property->setAccessible(true);
+        $value = $property->getValue($attribute);
+        if ($value) {
+            throw new \LogicException('Attribute can not be added to more than one Product.');
+        }
+        $property->setValue($attribute, $this);
+        $property->setAccessible(false);
         return $this;
     }
 
@@ -282,10 +286,10 @@ trait ProductMethodsTrait
 
         $this->attributes->removeElement($attribute);
 
-        $method = new \ReflectionMethod($attribute, 'setProduct');
-        $method->setAccessible(true);
-        $method->invoke($attribute, null);
-        $method->setAccessible(false);
+        $property = new \ReflectionProperty($attribute, 'product');
+        $property->setAccessible(true);
+        $property->setValue($attribute, null);
+        $property->setAccessible(false);
         return $this;
     }
 }

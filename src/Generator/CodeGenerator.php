@@ -145,18 +145,6 @@ class CodeGenerator implements CodeGeneratorInterface
     {
         $code = '';
 
-        // infer the default value, we generate a default null value
-        // for private methods so we can unset objects. For nullable
-        // columns only made nullable for doctrine but with no default
-        // value not provided in PHP we also add null, but generate
-        // extra comments in the twig set template.
-        if ($info->willGenerateSet() == false
-            || ($info->isComplexType() && $info->isNullable())) {
-            $default = 'null';
-        } else {
-            $default = $info->getDefault();
-        }
-
         // Generate a get method.
         if ($info->willGenerateGet()) {
             // Compute the name of the get method. For boolean values
@@ -174,7 +162,6 @@ class CodeGenerator implements CodeGeneratorInterface
             // Render the get/is method.
             $code .= $this->get->render([
                     'property' => $info,
-                    'default' => $default,
                     'getter' => $getter,
                     'PHP_INT_SIZE' => PHP_INT_SIZE
             ]) . PHP_EOL;
@@ -184,19 +171,18 @@ class CodeGenerator implements CodeGeneratorInterface
         // non collection values.
         if ($info->isCollection()) {
             // Generate an add method.
-            if ($info->willGenerateAdd() || $info->getReferencedProperty()) {
+            if ($info->willGenerateAdd()) {
                 $code .= $this->add->render(['property' => $info]). PHP_EOL;
             }
             // Generate a remove method.
-            if ($info->willGenerateRemove() || $info->getReferencedProperty()) {
+            if ($info->willGenerateRemove()) {
                 $code .= $this->remove->render(['property' => $info]). PHP_EOL;
             }
         } else {
             // No collection thus, generate a set method.
-            if ($info->willGenerateSet() || $info->getReferencedProperty()) {
+            if ($info->willGenerateSet()) {
                 $code .= $this->set->render([
                         'property' => $info,
-                        'default' => $default,
                         'PHP_INT_SIZE' => PHP_INT_SIZE
                 ]). PHP_EOL;
             }

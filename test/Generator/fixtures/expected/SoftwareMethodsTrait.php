@@ -61,10 +61,14 @@ trait SoftwareMethodsTrait
         }
 
         $this->features->add($feature);
-        $method = new \ReflectionMethod($feature, 'setSoftware');
-        $method->setAccessible(true);
-        $method->invoke($feature, $this);
-        $method->setAccessible(false);
+        $property = new \ReflectionProperty($feature, 'software');
+        $property->setAccessible(true);
+        $value = $property->getValue($feature);
+        if ($value) {
+            throw new \LogicException('Feature can not be added to more than one Software.');
+        }
+        $property->setValue($feature, $this);
+        $property->setAccessible(false);
         return $this;
     }
 
@@ -94,10 +98,10 @@ trait SoftwareMethodsTrait
 
         $this->features->removeElement($feature);
 
-        $method = new \ReflectionMethod($feature, 'setSoftware');
-        $method->setAccessible(true);
-        $method->invoke($feature, null);
-        $method->setAccessible(false);
+        $property = new \ReflectionProperty($feature, 'software');
+        $property->setAccessible(true);
+        $property->setValue($feature, null);
+        $property->setAccessible(false);
         return $this;
     }
 }

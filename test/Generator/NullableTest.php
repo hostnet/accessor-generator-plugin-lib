@@ -106,7 +106,7 @@ class NullableTest extends \PHPUnit_Framework_TestCase
 
         $property = new \ReflectionProperty($this->nullable, 'an_other_feature');
         $property->setAccessible(true);
-        $this->assertSame(null, $property->getValue($this->nullable));
+        $this->assertNull($property->getValue($this->nullable));
     }
 
     /**

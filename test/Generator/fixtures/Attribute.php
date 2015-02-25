@@ -10,7 +10,6 @@ use Hostnet\Component\AccessorGenerator\Annotation as AG;
   */
 class Attribute
 {
-    use Generated\AttributeMethodsTrait;
 
     /**
      * @ORM\Id

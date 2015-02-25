@@ -25,7 +25,7 @@ class MovieTest extends \PHPUnit_Framework_TestCase
         $actor = new Actor();
         $movie = new Movie();
         $this->assertEmpty($movie->getActors());
-        $actor->removeMovie($movie);
+        $movie->removeActor($actor);
         $this->assertEmpty($movie->getActors());
     }
 
@@ -43,6 +43,8 @@ class MovieTest extends \PHPUnit_Framework_TestCase
     {
         $actor = new Actor();
         $movie = new Movie();
+        $movie->addActor($actor);
+        $this->assertSame($actor, $movie->getActors()->first());
         $movie->addActor($actor);
         $this->assertSame($actor, $movie->getActors()->first());
     }

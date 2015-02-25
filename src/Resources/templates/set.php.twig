@@ -7,7 +7,7 @@
  * Set {{ property.name }}
  {% endif -%}
  *
- {% if default != property.default -%}
+ {% if property.isNullable and not property.default -%}
  * Generated a default null value because the doctrine column is nullable.
  * Still require an explicit argument to set the column. If you do not like
  * this message, specify a default value or use JoinColumn(nullable=false).
@@ -33,16 +33,17 @@
  * @access friends with {{ property.type }}
  {% endif -%}
  */
-{{ property.willGenerateSet ? 'public' : 'private' }} function set{{ property.name | classify }}(
+public function set{{ property.name | classify }}(
     {{- property.isComplexType ? property.type ~ ' '-}}
     ${{ property.name -}}
-    {%- if default %} = {{ default | raw }}{% endif %}
+    {%- if property.default %} = {{ property.default | raw }}
+    {%- elseif property.isNullable %} = null{% endif %}
     {%- if property.isFixedPointNumber -%}
     , $round = false
     {%- endif -%}
 )
 {
-{% if default and property.isFixedPointNumber %}
+{% if property.default and property.isFixedPointNumber %}
     if (func_num_args() > 2) {
         throw new \BadMethodCallException(
             sprintf(
@@ -51,7 +52,7 @@
             )
         );
     }
-{% elseif default %}
+{% elseif property.default or property.isNullable %}
     if (func_num_args() > 1) {
         throw new \BadMethodCallException(
             sprintf(
@@ -134,13 +135,13 @@
     }
 {% endif %}
 {%- if property.referencedProperty and not property.isReferencingCollection %}
-    if (${{ property.name }} !== null && $this->{{ property.name }} !== ${{ property.name }}) {
+    if ($this->{{ property.name }} !== ${{ property.name }}) {
         $this->{{ property.name }} = ${{ property.name }};
 
-        $method = new \ReflectionMethod(${{ property.name }}, 'set{{ property.referencedProperty | classify}}');
-        $method->setAccessible(true);
-        $method->invoke(${{ property.name }}, $this);
-        $method->setAccessible(false);
+        $property = new \ReflectionProperty(${{ property.name }}, '{{ property.referencedProperty }}');
+        $property->setAccessible(true);
+        $property->setValue(${{ property.name }}, $this);
+        $property->setAccessible(false);
     }
 {% else %}
 

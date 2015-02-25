@@ -44,7 +44,24 @@ class ActorTest extends \PHPUnit_Framework_TestCase
         $actor = new Actor();
         $movie = new Movie();
         $actor->addMovie($movie);
+        $actor->addMovie($movie);
         $this->assertSame($movie, $actor->getMovies()->first());
+    }
+
+    public function testActorRemoveMovie()
+    {
+        $actor = new Actor();
+        $movie = new Movie();
+
+        $this->assertEmpty($actor->getMovies());
+        $actor->removeMovie($movie);
+        $this->assertEmpty($actor->getMovies());
+
+        $actor->addMovie($movie);
+        $this->assertSame($movie, $actor->getMovies()->first());
+
+        $actor->removeMovie($movie);
+        $this->assertEmpty($actor->getMovies());
     }
 
     /**

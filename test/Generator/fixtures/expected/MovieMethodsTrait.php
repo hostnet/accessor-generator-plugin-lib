@@ -61,10 +61,15 @@ trait MovieMethodsTrait
         }
 
         $this->actors->add($actor);
-        $method = new \ReflectionMethod($actor, 'addMovie');
-        $method->setAccessible(true);
-        $method->invoke($actor, $this);
-        $method->setAccessible(false);
+        $property = new \ReflectionProperty($actor, 'movies');
+        $property->setAccessible(true);
+        $collection = $property->getValue($actor);
+        if (!$collection) {
+            $collection = new \Doctrine\Common\Collections\ArrayCollection();
+            $property->setValue($actor, $collection);
+        }
+        $collection->add($this);
+        $property->setAccessible(false);
         return $this;
     }
 
@@ -94,10 +99,13 @@ trait MovieMethodsTrait
 
         $this->actors->removeElement($actor);
 
-        $method = new \ReflectionMethod($actor, 'removeMovie');
-        $method->setAccessible(true);
-        $method->invoke($actor, $this);
-        $method->setAccessible(false);
+        $property = new \ReflectionProperty($actor, 'movies');
+        $property->setAccessible(true);
+        $collection = $property->getValue($actor);
+        if ($collection) {
+            $collection->removeElement($this);
+        }
+        $property->setAccessible(false);
         return $this;
     }
 }

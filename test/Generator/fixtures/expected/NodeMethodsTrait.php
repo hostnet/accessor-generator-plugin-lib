@@ -60,10 +60,15 @@ trait NodeMethodsTrait
         }
 
         $this->out->add($out);
-        $method = new \ReflectionMethod($out, 'addIn');
-        $method->setAccessible(true);
-        $method->invoke($out, $this);
-        $method->setAccessible(false);
+        $property = new \ReflectionProperty($out, 'in');
+        $property->setAccessible(true);
+        $collection = $property->getValue($out);
+        if (!$collection) {
+            $collection = new \Doctrine\Common\Collections\ArrayCollection();
+            $property->setValue($out, $collection);
+        }
+        $collection->add($this);
+        $property->setAccessible(false);
         return $this;
     }
 
@@ -93,75 +98,13 @@ trait NodeMethodsTrait
 
         $this->out->removeElement($out);
 
-        $method = new \ReflectionMethod($out, 'removeIn');
-        $method->setAccessible(true);
-        $method->invoke($out, $this);
-        $method->setAccessible(false);
-        return $this;
-    }
-
-    /**
-     * Add in
-     *
-     * @param Node $in
-     * @return Node
-     * @throws \BadMethodCallException if the number of arguments is not correct
-     */
-    private function addIn(Node $in)
-    {
-        if (func_num_args() != 1) {
-            throw new \BadMethodCallException(
-                sprintf(
-                    'addIn() has one argument but %d given.',
-                    func_num_args()
-                )
-            );
+        $property = new \ReflectionProperty($out, 'in');
+        $property->setAccessible(true);
+        $collection = $property->getValue($out);
+        if ($collection) {
+            $collection->removeElement($this);
         }
-
-        if ($this->in === null) {
-            $this->in = new \Doctrine\Common\Collections\ArrayCollection();
-        } elseif ($this->in->contains($in)) {
-            return $this;
-        }
-
-        $this->in->add($in);
-        $method = new \ReflectionMethod($in, 'addOut');
-        $method->setAccessible(true);
-        $method->invoke($in, $this);
-        $method->setAccessible(false);
-        return $this;
-    }
-
-    /**
-     * Remove in
-     *
-     * @param Node $in
-     * @return Node
-     * @throws \BadMethodCallException if the number of arguments is not correct
-     */
-    private function removeIn(Node $in)
-    {
-        if (func_num_args() != 1) {
-            throw new \BadMethodCallException(
-                sprintf(
-                    'removeIn() has one argument but %d given.',
-                    func_num_args()
-                )
-            );
-        }
-
-        if (! $this->in instanceof \Doctrine\Common\Collections\Collection
-            || ! $this->in->contains($in)
-        ) {
-            return $this;
-        }
-
-        $this->in->removeElement($in);
-
-        $method = new \ReflectionMethod($in, 'removeOut');
-        $method->setAccessible(true);
-        $method->invoke($in, $this);
-        $method->setAccessible(false);
+        $property->setAccessible(false);
         return $this;
     }
 }

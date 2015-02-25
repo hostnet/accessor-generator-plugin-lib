@@ -116,34 +116,4 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $a->addChild($p);
         $b->addChild($p);
     }
-
-    /**
-     * We are testing a private function here because
-     * it is part of the api used by the programmer
-     * when (s)he uses the generated code. We want
-     * to be sure the association is kept in sync on
-     * both sided.
-     * @expectedException \LogicException
-     */
-    public function testSetParentNotSynced()
-    {
-        $category = new Category();
-        $method   = new \ReflectionMethod($category, 'setParent');
-        $method->setAccessible(true);
-        $method->invoke($category, new Category());
-    }
-
-    /**
-     * We are testing a private function here because
-     * it is part of the api used by the programmer.
-     *
-     * @expectedException \BadMethodCallException
-     */
-    public function testSetParentTooManyArguments()
-    {
-        $category = new Category();
-        $method   = new \ReflectionMethod($category, 'setParent');
-        $method->setAccessible(true);
-        $method->invoke($category, $category, 2);
-    }
 }
