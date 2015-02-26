@@ -173,8 +173,10 @@ class CodeGenerator implements CodeGeneratorInterface
         if ($info->getType() === null) {
             throw new TypeUnknownException(
                 sprintf(
-                    "Property %s in class %s has no type set, nor could it be infered",
+                    'Property %s in class %s\%s has no type set, nor could it be infered. ' .
+                    'Did you forget to import Doctrine\ORM\Mapping as ORM?',
                     $info->getName(),
+                    $info->getNamespace(),
                     $info->getClass()
                 )
             );

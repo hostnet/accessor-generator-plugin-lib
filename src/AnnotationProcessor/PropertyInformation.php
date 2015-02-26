@@ -263,7 +263,11 @@ class PropertyInformation implements PropertyInformationInterface
      */
     public function getNamespace()
     {
-        return $this->property->getClass()->getNamespace();
+        if ($this->property->getClass()) {
+            return $this->property->getClass()->getNamespace();
+        } else {
+            return '';
+        }
     }
 
     /**
