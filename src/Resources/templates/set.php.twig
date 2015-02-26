@@ -131,17 +131,19 @@ public function set{{ property.name | classify }}(
     }
 {% endif %}
 {%- if property.referencedProperty and not property.isReferencingCollection %}
-    if ($this->{{ property.name }} !== ${{ property.name }}) {
-        $this->{{ property.name }} = ${{ property.name }};
+    // Create reflection property.
+    $property = new \ReflectionProperty({{ property.type }}::class, '{{ property.referencedProperty }}');
+    $property->setAccessible(true);
 
-        $property = new \ReflectionProperty({{ property.type }}::class, '{{ property.referencedProperty }}');
-        $property->setAccessible(true);
-        $property->setValue(${{ property.name }}, $this);
-        $property->setAccessible(false);
-    }
-{% else %}
+    // Unset old value and set the new value
+    // keeping the inverse side up-to-date.
+    $this->{{ property.name }} && $property->setValue($this->{{ property.name }}, null);
+    ${{ property.name }} && $property->setValue(${{ property.name }}, $this);
+
+    // Disallow acces again.
+    $property->setAccessible(false);
+{% endif %}
 
     $this->{{ property.name }} = ${{ property.name }};
-{% endif %}
     return $this;
 }

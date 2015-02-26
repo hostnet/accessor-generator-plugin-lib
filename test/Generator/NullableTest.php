@@ -4,7 +4,9 @@ namespace Hostnet\Component\AccessorGenerator\Generator;
 use Doctrine\Common\Util\Inflector;
 use Doctrine\ORM\EntityNotFoundException;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Feature;
+use Hostnet\Component\AccessorGenerator\Generator\fixtures\Item;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Nullable;
+use Hostnet\Component\AccessorGenerator\Generator\fixtures\OneToOneNullable;
 
 class NullableTest extends \PHPUnit_Framework_TestCase
 {
@@ -152,5 +154,116 @@ class NullableTest extends \PHPUnit_Framework_TestCase
         // Set default.
         $this->assertSame($this->nullable, $this->nullable->setIntDifferent());
         $this->assertSame(2, $property->getValue($this->nullable));
+    }
+
+    /**
+     * @expectedException \BadMethodCallException
+     */
+    public function testGetStringTooManyArguments()
+    {
+        $this->nullable->getString(1);
+    }
+
+    /**
+     * @expectedException \BadMethodCallException
+     */
+    public function testSetStringTooManyArguments()
+    {
+        $this->nullable->setString(1, 2);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testSetStringWrongType()
+    {
+        $this->nullable->setString([]);
+    }
+
+    public function testSetString()
+    {
+        $this->assertSame($this->nullable, $this->nullable->setString(null));
+        $this->assertNull($this->nullable->getString());
+        $this->assertSame($this->nullable, $this->nullable->setString(''));
+        $this->assertSame('', $this->nullable->getString());
+    }
+
+    /**
+     * @expectedException \BadMethodCallException
+     */
+    public function testGetOnlyOneTooManyArguments()
+    {
+        $this->nullable->getOnlyOne(1);
+    }
+
+    /**
+     * @expectedException \BadMethodCallException
+     */
+    public function testSetOnlyOneTooManyArguments()
+    {
+        $this->nullable->setOnlyOne(new OneToOneNullable(), 2);
+    }
+
+    public function testSetOnlyOne()
+    {
+        $one_to_one_a = new OneToOneNullable();
+        $one_to_one_b = new OneToOneNullable();
+        $property     = new \ReflectionProperty(OneToOneNullable::class, 'one_only');
+        $property->setAccessible(true);
+
+        // Every thing should be null at start.
+        $this->assertNull($this->nullable->getOnlyOne());
+        $this->assertNull($property->getValue($one_to_one_a));
+        $this->assertNull($property->getValue($one_to_one_b));
+
+        // Set one_to_one a, check b is still null and that the roundtrip works.
+        $this->assertSame($this->nullable, $this->nullable->setOnlyOne($one_to_one_a));
+        $this->assertSame($one_to_one_a, $this->nullable->getOnlyOne());
+        $this->assertSame($this->nullable, $property->getValue($one_to_one_a));
+        $this->assertNull($property->getValue($one_to_one_b));
+
+        // Set one_to_one b, check a is null again and that the roundtrip works.
+        $this->assertSame($this->nullable, $this->nullable->setOnlyOne($one_to_one_b));
+        $this->assertSame($one_to_one_b, $this->nullable->getOnlyOne());
+        $this->assertNull($property->getValue($one_to_one_a));
+        $this->assertSame($this->nullable, $property->getValue($one_to_one_b));
+
+        // Unset everty thing and verify everything is set to null again.
+        $this->assertSame($this->nullable, $this->nullable->setOnlyOne(null));
+        $this->assertNull($this->nullable->getOnlyOne());
+        $this->assertNull($property->getValue($one_to_one_a));
+        $this->assertNull($property->getValue($one_to_one_b));
+    }
+
+    /**
+     * @expectedException \BadMethodCallException
+     */
+    public function testGetUnidirectionalOneToOneTooManyArguments()
+    {
+        $this->nullable->getUnidirectionalOneToOne(1);
+    }
+
+    /**
+     * @expectedException \BadMethodCallException
+     */
+    public function testSetUnidirectionalOneToOneTooManyArguments()
+    {
+        $this->nullable->setUnidirectionalOneToOne(new Item(), 2);
+    }
+
+    public function testUnidirectionalOneToOne()
+    {
+        $item = new Item();
+
+        // Default situation returns null.
+        $this->assertNull($this->nullable->getUnidirectionalOneToOne());
+
+        // Set a value and retrieve it again.
+        $this->assertSame($this->nullable, $this->nullable->setUnidirectionalOneToOne($item));
+        $this->assertSame($item, $this->nullable->getUnidirectionalOneToOne());
+
+        // Unset a value and verify it is gone.
+        $this->assertSame($this->nullable, $this->nullable->setUnidirectionalOneToOne(null));
+        $this->assertNull($this->nullable->getUnidirectionalOneToOne());
     }
 }

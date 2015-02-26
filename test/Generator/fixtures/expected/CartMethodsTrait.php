@@ -48,14 +48,19 @@ trait CartMethodsTrait
                 )
             );
         }
-        if ($this->customer !== $customer) {
-            $this->customer = $customer;
+        // Create reflection property.
+        $property = new \ReflectionProperty(Customer::class, 'cart');
+        $property->setAccessible(true);
 
-            $property = new \ReflectionProperty(Customer::class, 'cart');
-            $property->setAccessible(true);
-            $property->setValue($customer, $this);
-            $property->setAccessible(false);
-        }
+        // Unset old value and set the new value
+        // keeping the inverse side up-to-date.
+        $this->customer && $property->setValue($this->customer, null);
+        $customer && $property->setValue($customer, $this);
+
+        // Disallow acces again.
+        $property->setAccessible(false);
+
+        $this->customer = $customer;
         return $this;
     }
 }

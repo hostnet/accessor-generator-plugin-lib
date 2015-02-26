@@ -53,4 +53,22 @@ class Nullable
      * @AG\Generate(get=false)
      */
     private $an_other_feature;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @AG\Generate
+     */
+    private $string = null;
+
+    /**
+     * @ORM\OneToOne(targetEntity="OneToOneNullable", mappedBy="one_only")
+     * @AG\Generate
+     */
+    private $only_one = null;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Item")
+     * @AG\Generate
+     */
+    private $unidirectional_one_to_one = null;
 }

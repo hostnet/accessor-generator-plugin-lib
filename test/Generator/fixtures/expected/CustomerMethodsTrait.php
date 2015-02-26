@@ -51,14 +51,19 @@ trait CustomerMethodsTrait
                 )
             );
         }
-        if ($this->cart !== $cart) {
-            $this->cart = $cart;
+        // Create reflection property.
+        $property = new \ReflectionProperty(Cart::class, 'customer');
+        $property->setAccessible(true);
 
-            $property = new \ReflectionProperty(Cart::class, 'customer');
-            $property->setAccessible(true);
-            $property->setValue($cart, $this);
-            $property->setAccessible(false);
-        }
+        // Unset old value and set the new value
+        // keeping the inverse side up-to-date.
+        $this->cart && $property->setValue($this->cart, null);
+        $cart && $property->setValue($cart, $this);
+
+        // Disallow acces again.
+        $property->setAccessible(false);
+
+        $this->cart = $cart;
         return $this;
     }
 }

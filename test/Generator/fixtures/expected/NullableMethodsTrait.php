@@ -6,7 +6,9 @@ namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 use Doctrine\ORM\Mapping as ORM;
 use Hostnet\Component\AccessorGenerator\Annotation as AG;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Feature;
+use Hostnet\Component\AccessorGenerator\Generator\fixtures\Item;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Nullable;
+use Hostnet\Component\AccessorGenerator\Generator\fixtures\OneToOneNullable;
 
 trait NullableMethodsTrait
 {
@@ -174,6 +176,160 @@ trait NullableMethodsTrait
         }
 
         $this->an_other_feature = $an_other_feature;
+        return $this;
+    }
+
+    /**
+     * Get string
+     *
+     * @return string
+     * @throws \InvalidArgumentException
+     */
+    public function getString()
+    {
+        if (func_num_args() > 0) {
+            throw new \BadMethodCallException(
+                sprintf(
+                    'getString() has no arguments but %d given.',
+                    func_num_args()
+                )
+            );
+        }
+
+        return $this->string;
+    }
+
+    /**
+     * Set string
+     *
+     * @param string $string
+     * @return Nullable
+     * @throws \BadMethodCallException if the number of arguments is not correct
+     * @throws \InvalidArgumentException if value is not of the right type
+     */
+    public function setString($string = null)
+    {
+        if (func_num_args() > 1) {
+            throw new \BadMethodCallException(
+                sprintf(
+                    'setString() has one optional argument but %d given.',
+                    func_num_args()
+                )
+            );
+        }
+
+        if ($string === null) {
+            $this->string = $string;
+            return $this;
+        }
+
+        if ($string === null
+            || is_scalar($string)
+            || is_callable([$string, '__toString'])
+        ) {
+            $string = (string)$string;
+        } else {
+            throw new \InvalidArgumentException(
+                'Parameter string must be convertable to string.'
+            );
+        }
+
+        $this->string = $string;
+        return $this;
+    }
+
+    /**
+     * Get only_one
+     *
+     * @return OneToOneNullable
+     * @throws \InvalidArgumentException
+     */
+    public function getOnlyOne()
+    {
+        if (func_num_args() > 0) {
+            throw new \BadMethodCallException(
+                sprintf(
+                    'getOnlyOne() has no arguments but %d given.',
+                    func_num_args()
+                )
+            );
+        }
+
+        return $this->only_one;
+    }
+
+    /**
+     * Set only_one
+     *
+     * @param OneToOneNullable $only_one
+     * @return Nullable
+     * @throws \BadMethodCallException if the number of arguments is not correct
+     */
+    public function setOnlyOne(OneToOneNullable $only_one = null)
+    {
+        if (func_num_args() > 1) {
+            throw new \BadMethodCallException(
+                sprintf(
+                    'setOnlyOne() has one optional argument but %d given.',
+                    func_num_args()
+                )
+            );
+        }
+        // Create reflection property.
+        $property = new \ReflectionProperty(OneToOneNullable::class, 'one_only');
+        $property->setAccessible(true);
+
+        // Unset old value and set the new value
+        // keeping the inverse side up-to-date.
+        $this->only_one && $property->setValue($this->only_one, null);
+        $only_one && $property->setValue($only_one, $this);
+
+        // Disallow acces again.
+        $property->setAccessible(false);
+
+        $this->only_one = $only_one;
+        return $this;
+    }
+
+    /**
+     * Get unidirectional_one_to_one
+     *
+     * @return Item
+     * @throws \InvalidArgumentException
+     */
+    public function getUnidirectionalOneToOne()
+    {
+        if (func_num_args() > 0) {
+            throw new \BadMethodCallException(
+                sprintf(
+                    'getUnidirectionalOneToOne() has no arguments but %d given.',
+                    func_num_args()
+                )
+            );
+        }
+
+        return $this->unidirectional_one_to_one;
+    }
+
+    /**
+     * Set unidirectional_one_to_one
+     *
+     * @param Item $unidirectional_one_to_one
+     * @return Nullable
+     * @throws \BadMethodCallException if the number of arguments is not correct
+     */
+    public function setUnidirectionalOneToOne(Item $unidirectional_one_to_one = null)
+    {
+        if (func_num_args() > 1) {
+            throw new \BadMethodCallException(
+                sprintf(
+                    'setUnidirectionalOneToOne() has one optional argument but %d given.',
+                    func_num_args()
+                )
+            );
+        }
+
+        $this->unidirectional_one_to_one = $unidirectional_one_to_one;
         return $this;
     }
 }
