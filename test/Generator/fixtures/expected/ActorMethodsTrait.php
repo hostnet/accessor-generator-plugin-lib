@@ -60,7 +60,7 @@ trait ActorMethodsTrait
         }
 
         $this->movies->add($movie);
-        $property = new \ReflectionProperty($movie, 'actors');
+        $property = new \ReflectionProperty(\Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie::class, 'a');
         $property->setAccessible(true);
         $collection = $property->getValue($movie);
         if (!$collection) {
@@ -98,7 +98,7 @@ trait ActorMethodsTrait
 
         $this->movies->removeElement($movie);
 
-        $property = new \ReflectionProperty($movie, 'actors');
+        $property = new \ReflectionProperty(\Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie::class, 'a');
         $property->setAccessible(true);
         $collection = $property->getValue($movie);
         if ($collection) {

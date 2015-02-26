@@ -12,61 +12,61 @@ use Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie;
 trait MovieMethodsTrait
 {
     /**
-     * Get actors
+     * Get a
      *
      * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Actor[]
      * @return \Hostnet\Component\AccessorGenerator\Collection\ConstCollectionInterface
      * @throws \InvalidArgumentException
      */
-    public function getActors()
+    public function getA()
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
-                    'getActors() has no arguments but %d given.',
+                    'getA() has no arguments but %d given.',
                     func_num_args()
                 )
             );
         }
 
-        if ($this->actors === null) {
-            $this->actors = new \Doctrine\Common\Collections\ArrayCollection();
+        if ($this->a === null) {
+            $this->a = new \Doctrine\Common\Collections\ArrayCollection();
         }
 
-        return new ImmutableCollection($this->actors);
+        return new ImmutableCollection($this->a);
     }
 
     /**
-     * Add actor
+     * Add a
      *
-     * @param Actor $actor
+     * @param Actor $a
      * @return Movie
      * @throws \BadMethodCallException if the number of arguments is not correct
      */
-    public function addActor(Actor $actor)
+    public function addA(Actor $a)
     {
         if (func_num_args() != 1) {
             throw new \BadMethodCallException(
                 sprintf(
-                    'addActors() has one argument but %d given.',
+                    'addA() has one argument but %d given.',
                     func_num_args()
                 )
             );
         }
 
-        if ($this->actors === null) {
-            $this->actors = new \Doctrine\Common\Collections\ArrayCollection();
-        } elseif ($this->actors->contains($actor)) {
+        if ($this->a === null) {
+            $this->a = new \Doctrine\Common\Collections\ArrayCollection();
+        } elseif ($this->a->contains($a)) {
             return $this;
         }
 
-        $this->actors->add($actor);
-        $property = new \ReflectionProperty($actor, 'movies');
+        $this->a->add($a);
+        $property = new \ReflectionProperty(Actor::class, 'movies');
         $property->setAccessible(true);
-        $collection = $property->getValue($actor);
+        $collection = $property->getValue($a);
         if (!$collection) {
             $collection = new \Doctrine\Common\Collections\ArrayCollection();
-            $property->setValue($actor, $collection);
+            $property->setValue($a, $collection);
         }
         $collection->add($this);
         $property->setAccessible(false);
@@ -74,34 +74,34 @@ trait MovieMethodsTrait
     }
 
     /**
-     * Remove actor
+     * Remove a
      *
-     * @param Actor $actor
+     * @param Actor $a
      * @return Movie
      * @throws \BadMethodCallException if the number of arguments is not correct
      */
-    public function removeActor(Actor $actor)
+    public function removeA(Actor $a)
     {
         if (func_num_args() != 1) {
             throw new \BadMethodCallException(
                 sprintf(
-                    'removeActors() has one argument but %d given.',
+                    'removeA() has one argument but %d given.',
                     func_num_args()
                 )
             );
         }
 
-        if (! $this->actors instanceof \Doctrine\Common\Collections\Collection
-            || ! $this->actors->contains($actor)
+        if (! $this->a instanceof \Doctrine\Common\Collections\Collection
+            || ! $this->a->contains($a)
         ) {
             return $this;
         }
 
-        $this->actors->removeElement($actor);
+        $this->a->removeElement($a);
 
-        $property = new \ReflectionProperty($actor, 'movies');
+        $property = new \ReflectionProperty(Actor::class, 'movies');
         $property->setAccessible(true);
-        $collection = $property->getValue($actor);
+        $collection = $property->getValue($a);
         if ($collection) {
             $collection->removeElement($this);
         }

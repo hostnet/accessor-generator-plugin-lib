@@ -55,6 +55,10 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         $explicit_info = new PropertyInformation($property);
         $faulty_info   = new PropertyInformation($property);
 
+        $implicit_info->setType($implicit->type);
+        $explicit_info->setType($explicit->type);
+        $faulty_info->setType($faulty->type);
+
         $explicit->length = 100;
         $explicit_info->setLength(100);
 
@@ -133,7 +137,7 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             $output->getType(),
             $this->information->getType(),
-            'Value for tupe does not match'
+            'Value for type does not match'
         );
     }
 

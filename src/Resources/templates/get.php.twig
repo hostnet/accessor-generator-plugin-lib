@@ -11,7 +11,7 @@
  * @return {{ property.fullyQualifiedType }}[]
  * @return \Hostnet\Component\AccessorGenerator\Collection\ConstCollectionInterface
  {% else -%}
- * @return {{ property.type }}{{ not property.willGenerateStrict ? '|null' }}
+ * @return {{ property.isComplexType ? property.typeHint : property.type}}{{ not property.willGenerateStrict ? '|null' }}
  {% endif -%}
  * @throws \InvalidArgumentException
  */

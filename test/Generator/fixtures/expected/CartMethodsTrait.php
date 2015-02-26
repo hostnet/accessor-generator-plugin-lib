@@ -6,6 +6,7 @@ namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 use Doctrine\ORM\Mapping as ORM;
 use Hostnet\Component\AccessorGenerator\Annotation as AG;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Cart;
+use Hostnet\Component\AccessorGenerator\Generator\fixtures\Customer;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Customer as Client;
 
 trait CartMethodsTrait
@@ -50,7 +51,7 @@ trait CartMethodsTrait
         if ($this->customer !== $customer) {
             $this->customer = $customer;
 
-            $property = new \ReflectionProperty($customer, 'cart');
+            $property = new \ReflectionProperty(Customer::class, 'cart');
             $property->setAccessible(true);
             $property->setValue($customer, $this);
             $property->setAccessible(false);

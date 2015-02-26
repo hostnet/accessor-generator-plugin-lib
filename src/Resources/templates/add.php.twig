@@ -7,11 +7,11 @@
  * Add {{ property.name | singularize }}
  {% endif -%}
  *
- * @param {{ property.type }} ${{ property.name | singularize }}
+ * @param {{ property.isComplexType ? property.typeHint : property.type}} ${{ property.name | singularize }}
  * @return {{ property.class }}
  * @throws \BadMethodCallException if the number of arguments is not correct
  */
-public function add{{ property.name | singularize | classify }}({{ property.type }} ${{ property.name | singularize }})
+public function add{{ property.name | singularize | classify }}({{ property.typeHint }} ${{ property.name | singularize }})
 {
     if (func_num_args() != 1) {
         throw new \BadMethodCallException(
@@ -30,7 +30,7 @@ public function add{{ property.name | singularize | classify }}({{ property.type
 
     $this->{{ property.name}}->add(${{ property.name | singularize }});
 {% if property.referencedProperty %}
-    $property = new \ReflectionProperty(${{ property.name | singularize }}, '{{ property.referencedProperty }}');
+    $property = new \ReflectionProperty({{ property.type }}::class, '{{ property.referencedProperty }}');
     $property->setAccessible(true);
 {% if property.isReferencingCollection %}
     $collection = $property->getValue(${{ property.name | singularize }});

@@ -60,7 +60,7 @@ trait NodeMethodsTrait
         }
 
         $this->out->add($out);
-        $property = new \ReflectionProperty($out, 'in');
+        $property = new \ReflectionProperty(Node::class, 'in');
         $property->setAccessible(true);
         $collection = $property->getValue($out);
         if (!$collection) {
@@ -98,7 +98,7 @@ trait NodeMethodsTrait
 
         $this->out->removeElement($out);
 
-        $property = new \ReflectionProperty($out, 'in');
+        $property = new \ReflectionProperty(Node::class, 'in');
         $property->setAccessible(true);
         $collection = $property->getValue($out);
         if ($collection) {

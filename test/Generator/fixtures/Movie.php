@@ -40,7 +40,11 @@ use Hostnet\Component\AccessorGenerator\Annotation as AG;
  */
 class Movie
 {
-    use Generated\MovieMethodsTrait;
+    use Generated\MovieMethodsTrait {
+        getA as getActors;
+        addA as addActor;
+        removeA as removeActor;
+    }
 
     /**
      * @ORM\Id
@@ -53,5 +57,5 @@ class Movie
      * @ORM\JoinTable(name="actors_movies")
      * @AG\Generate
      */
-    private $actors;
+    private $a;
 }

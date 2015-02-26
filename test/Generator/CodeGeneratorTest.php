@@ -2,7 +2,9 @@
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformation;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
+use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
@@ -71,5 +73,13 @@ class CodeGeneratorTest extends \PHPUnit_Framework_TestCase
             $this->generator = new CodeGenerator();
         }
         return $this->generator;
+    }
+
+    /**
+     * @expectedException \Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException
+     */
+    public function testGenerateAccessorsTypeUnkown()
+    {
+        $this->getGenerator()->generateAccessors(new PropertyInformation(new ReflectionProperty('phpunit')));
     }
 }

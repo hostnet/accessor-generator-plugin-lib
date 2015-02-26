@@ -20,7 +20,13 @@ class PropertyInformation implements PropertyInformationInterface
      * @see PropertyInformationInterface::getType()
      * @var string|null
      */
-    private $type = 'string';
+    private $type = null;
+
+    /**
+     * @see PropertyInformationInterface::getTypeHint()
+     * @var string
+     */
+    private $type_hint = '';
 
     /**
      * @see PropertyInformationInterface::getFullyQualifiedType()
@@ -279,6 +285,15 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
+     * @see PropertyInformationInterface::getTypeHint()
+     * @return string
+     */
+    public function getTypeHint()
+    {
+        return $this->type_hint;
+    }
+
+    /**
      * @see PropertyInformationInterface::getFullyQualifiedType()
      * @return string
      */
@@ -295,6 +310,7 @@ class PropertyInformation implements PropertyInformationInterface
      * @see http://php.net/manual/en/language.types.php
      * @param  string $type
      * @throws \DomainException
+     * @throws \InvalidArgumentException
      * @return PropertyInformation
      */
     public function setType($type)
@@ -309,8 +325,40 @@ class PropertyInformation implements PropertyInformationInterface
             $this->type = $type;
         } elseif (ctype_upper($type[0]) || $type[0] === '\\') {
             $this->type = $type;
+            $this->type_hint || $this->setTypeHint($type);
         } else {
             throw new \DomainException(sprintf('The type %s is not supported for code generation', $type));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Manually set the type hint for this property
+     * The type hint must be a valid class name starting
+     * with \ or a capital letter.
+     *
+     * Only use this method if you are not pleased
+     * by the automatic type hint that was already
+     * set by the setType method.
+     *
+     * @param string $type_hint
+     * @throws \DomainException
+     * @throws \InvalidArgumentException
+     * @return PropertyInformation
+     */
+    public function setTypeHint($type_hint)
+    {
+        if (! is_string($type_hint)) {
+            throw new \InvalidArgumentException(sprintf('$type is not of type string but of %s', gettype($type_hint)));
+        } elseif (empty($type_hint)) {
+            throw new \DomainException(sprintf('A type name may not be empty'));
+        } elseif ((int)($type_hint)) {
+            throw new \DomainException(sprintf('A type name may not start with a number. Found %s', $type_hint));
+        } elseif (ctype_upper($type_hint[0]) || $type_hint[0] === '\\') {
+            $this->type_hint = $type_hint;
+        } else {
+            throw new \DomainException(sprintf('The type %s is not supported for code generation', $type_hint));
         }
 
         return $this;
@@ -471,7 +519,7 @@ class PropertyInformation implements PropertyInformationInterface
      */
     public function isComplexType()
     {
-        return !in_array($this->type, self::getValidTypes());
+        return $this->type && !in_array($this->type, self::getValidTypes());
     }
 
     /**

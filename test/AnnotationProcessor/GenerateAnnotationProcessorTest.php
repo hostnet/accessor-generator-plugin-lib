@@ -62,14 +62,14 @@ class GenerateAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         $type->type   = \ArrayObject::class;
 
         return [
-            [$all,           self::GET   , self::SET,    self::ADD,    self::REMOVE,    'string'           ],
-            [$no_get,        self::NO_GET, self::SET,    self::ADD,    self::REMOVE,    'string'           ],
-            [$no_is,         self::NO_GET, self::SET,    self::ADD,    self::REMOVE,    'string'           ],
-            [$no_set,        self::GET,    self::NO_SET, self::NO_ADD, self::NO_REMOVE, 'string'           ],
-            [$no_add,        self::GET,    self::SET,    self::NO_ADD, self::REMOVE,    'string'           ],
-            [$no_remove,     self::GET,    self::SET,    self::ADD,    self::NO_REMOVE, 'string'           ],
-            [$no_collection, self::GET,    self::SET,    self::NO_ADD, self::NO_REMOVE, 'string'           ],
-            [$nothing,       self::NO_GET, self::NO_SET, self::NO_ADD, self::NO_REMOVE, 'string'           ],
+            [$all,           self::GET   , self::SET,    self::ADD,    self::REMOVE,    null               ],
+            [$no_get,        self::NO_GET, self::SET,    self::ADD,    self::REMOVE,    null               ],
+            [$no_is,         self::NO_GET, self::SET,    self::ADD,    self::REMOVE,    null               ],
+            [$no_set,        self::GET,    self::NO_SET, self::NO_ADD, self::NO_REMOVE, null               ],
+            [$no_add,        self::GET,    self::SET,    self::NO_ADD, self::REMOVE,    null               ],
+            [$no_remove,     self::GET,    self::SET,    self::ADD,    self::NO_REMOVE, null               ],
+            [$no_collection, self::GET,    self::SET,    self::NO_ADD, self::NO_REMOVE, null               ],
+            [$nothing,       self::NO_GET, self::NO_SET, self::NO_ADD, self::NO_REMOVE, null               ],
             [$type,          self::NO_GET, self::NO_SET, self::NO_ADD, self::NO_REMOVE, \ArrayObject::class],
         ];
     }

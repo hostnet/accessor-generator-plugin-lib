@@ -28,13 +28,14 @@ class GenerateAnnotationProcessor implements AnnotationProcessorInterface
             // annotation, which will disable setter generator
             // do not enable it again.
             $info->willGenerateGet() === null && $info->setGenerateGet($annotation->get && $annotation->is);
-            $info->willGenerateSet() === null &&$info->setGenerateSet($annotation->set);
-            $info->willGenerateAdd() === null &&$info->setGenerateAdd($annotation->add && $annotation->set);
-            $info->willGenerateRemove() === null &&$info->setGenerateRemove($annotation->remove && $annotation->set);
+            $info->willGenerateSet() === null && $info->setGenerateSet($annotation->set);
+            $info->willGenerateAdd() === null && $info->setGenerateAdd($annotation->add && $annotation->set);
+            $info->willGenerateRemove() === null && $info->setGenerateRemove($annotation->remove && $annotation->set);
+            $info->getType() === null && $annotation->type && $info->setType($annotation->type);
 
             // Enforce always
             $info->setGenerateStrict($annotation->strict);
-            $annotation->type && $info->setType($annotation->type);
+            $annotation->type && $info->setTypeHint($annotation->type);
         }
     }
 

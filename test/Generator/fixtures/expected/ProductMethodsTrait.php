@@ -249,7 +249,7 @@ trait ProductMethodsTrait
         }
 
         $this->attributes->add($attribute);
-        $property = new \ReflectionProperty($attribute, 'product');
+        $property = new \ReflectionProperty(Attribute::class, 'product');
         $property->setAccessible(true);
         $value = $property->getValue($attribute);
         if ($value) {
@@ -286,7 +286,7 @@ trait ProductMethodsTrait
 
         $this->attributes->removeElement($attribute);
 
-        $property = new \ReflectionProperty($attribute, 'product');
+        $property = new \ReflectionProperty(Attribute::class, 'product');
         $property->setAccessible(true);
         $property->setValue($attribute, null);
         $property->setAccessible(false);

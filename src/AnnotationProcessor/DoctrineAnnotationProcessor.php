@@ -63,10 +63,8 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
             case $annotation instanceof ManyToOne:
                 // All relationships have a target type that can
                 // be extracted and used as the column type.
-                if ($information->getType() === 'string') {
-                    $type = $this->transformComplexType($annotation->targetEntity);
-                    $information->setType($type);
-                }
+                $type = $this->transformComplexType($annotation->targetEntity);
+                $information->setType($type);
                 $this->processBidirectional($annotation, $information);
                 break;
             default:
@@ -119,7 +117,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      */
     protected function processColumn(Column $column, PropertyInformation $information)
     {
-        $information->getType() == 'string' && $information->setType($this->transformType($column->type));
+        $information->setType($this->transformType($column->type));
         $information->setFixedPointNumber(strtolower($column->type) === Type::DECIMAL);
         $information->setLength($column->length ?: 0);
         $information->setPrecision($column->precision);

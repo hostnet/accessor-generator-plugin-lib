@@ -54,7 +54,7 @@ trait CustomerMethodsTrait
         if ($this->cart !== $cart) {
             $this->cart = $cart;
 
-            $property = new \ReflectionProperty($cart, 'customer');
+            $property = new \ReflectionProperty(Cart::class, 'customer');
             $property->setAccessible(true);
             $property->setValue($cart, $this);
             $property->setAccessible(false);

@@ -69,6 +69,22 @@ interface PropertyInformationInterface
     public function getType();
 
     /**
+     * Get the type hint for this property.
+     *
+     * Can be a class name starting with \
+     * or an imported / local type starting
+     * with a capital letter. The type hint
+     * is only set if getType also returns
+     * a class type.
+     *
+     * If not set, an empty string will be
+     * returned.
+     *
+     * @return string
+     */
+    public function getTypeHint();
+
+    /**
      * Get the fully qualified name of the
      * type, including the complete namespace
      * and starting with a \.

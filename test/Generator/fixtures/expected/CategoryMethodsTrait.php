@@ -60,7 +60,7 @@ trait CategoryMethodsTrait
         }
 
         $this->children->add($child);
-        $property = new \ReflectionProperty($child, 'parent');
+        $property = new \ReflectionProperty(Category::class, 'parent');
         $property->setAccessible(true);
         $value = $property->getValue($child);
         if ($value) {
@@ -97,7 +97,7 @@ trait CategoryMethodsTrait
 
         $this->children->removeElement($child);
 
-        $property = new \ReflectionProperty($child, 'parent');
+        $property = new \ReflectionProperty(Category::class, 'parent');
         $property->setAccessible(true);
         $property->setValue($child, null);
         $property->setAccessible(false);

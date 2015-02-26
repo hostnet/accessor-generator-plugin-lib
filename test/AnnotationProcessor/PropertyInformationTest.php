@@ -61,7 +61,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals('test', $this->info->getName());
         $this->assertEquals(null, $this->info->getDefault());
-        $this->assertEquals('string', $this->info->getType());
+        $this->assertEquals(null, $this->info->getType());
         $this->assertEquals('', $this->info->getFullyQualifiedType());
         $this->assertEquals(0, $this->info->getScale());
         $this->assertEquals(0, $this->info->getPrecision());
@@ -271,8 +271,12 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
 
     public function setTypeProvider()
     {
+        return array_merge([['integer', null]], $this->setTypeHintProvider());
+    }
+
+    public function setTypeHintProvider()
+    {
         return [
-            ['integer', null                            ],
             ['\\Test',  null                            ],
             ['Enum',    null                            ],
             ['enum',    \DomainException::class         ],
@@ -293,7 +297,25 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException($exception);
         $this->assertSame($this->info, $this->info->setType($type));
+        if ($this->info->isComplexType()) {
+            $this->assertEquals($type, $this->info->getTypeHint());
+        }
         $this->assertEquals($type, $this->info->getType());
+        $this->assertSame($this->info, $this->info->setType('string'));
+        $this->assertEquals('string', $this->info->getType());
+        $this->assertNotEquals('string', $this->info->getTypeHint());
+    }
+
+    /**
+     * @dataProvider setTypeHintProvider
+     * @param string $type
+     * @param string $exception
+     */
+    public function testSetTypeHint($type, $exception)
+    {
+        $this->setExpectedException($exception);
+        $this->assertSame($this->info, $this->info->setTypeHint($type));
+        $this->assertEquals($type, $this->info->getTypeHint());
     }
 
     public function setFullyQualifiedTypeProvider()

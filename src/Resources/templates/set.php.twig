@@ -13,7 +13,7 @@
  * this message, specify a default value or use JoinColumn(nullable=false).
  *
  {% endif -%}
- * @param {{ property.type }} ${{ property.name }}
+ * @param {{ property.isComplexType ? property.typeHint : property.type}} ${{ property.name }}
  {% if property.isFixedPointNumber -%}
  * @param bool %round round the number fit in the precision and scale (round away from zero)
  {% endif -%}
@@ -28,13 +28,9 @@
  {% if property.length -%}
  * @throws \LengthException if the length of the value is to long
  {% endif -%}
- {% if not property.willGenerateSet -%}
- * @throws \LogicException if the association constraints are violated
- * @access friends with {{ property.type }}
- {% endif -%}
  */
 public function set{{ property.name | classify }}(
-    {{- property.isComplexType ? property.type ~ ' '-}}
+    {{- property.isComplexType ? property.typeHint ~ ' '-}}
     ${{ property.name -}}
     {%- if property.default %} = {{ property.default | raw }}
     {%- elseif property.isNullable %} = null{% endif %}
@@ -138,7 +134,7 @@ public function set{{ property.name | classify }}(
     if ($this->{{ property.name }} !== ${{ property.name }}) {
         $this->{{ property.name }} = ${{ property.name }};
 
-        $property = new \ReflectionProperty(${{ property.name }}, '{{ property.referencedProperty }}');
+        $property = new \ReflectionProperty({{ property.type }}::class, '{{ property.referencedProperty }}');
         $property->setAccessible(true);
         $property->setValue(${{ property.name }}, $this);
         $property->setAccessible(false);

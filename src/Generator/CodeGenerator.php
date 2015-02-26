@@ -7,6 +7,7 @@ use Hostnet\Component\AccessorGenerator\AnnotationProcessor\DoctrineAnnotationPr
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\GenerateAnnotationProcessor;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformation;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformationInterface;
+use Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException;
 use Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
 use Hostnet\Component\AccessorGenerator\Twig\CodeGenerationExtension;
@@ -92,7 +93,16 @@ class CodeGenerator implements CodeGeneratorInterface
             $info->registerAnnotationProcessor($generate_processor);
             $info->registerAnnotationProcessor($doctrine_processor);
             $info->processAnnotations();
-            $type = $info->getType();
+
+            // Check if we will generate anything, so we will not do
+            // useless effort.
+            if (!$info->willGenerateAdd()
+                && !$info->willGenerateGet()
+                && !$info->willGenerateRemove()
+                && !$info->willGenerateSet()
+            ) {
+                continue;
+            }
 
             // Complex Type within curent namespace. Since our trait is in a sub
             // namespace we have to import those aswell (php does not no .. in namespace).
@@ -102,7 +112,7 @@ class CodeGenerator implements CodeGeneratorInterface
 
             // Parse and add fully qualified type information to the info object for use
             // in docblocks to make eclipse understand the types.
-            $info->setFullyQualifiedType(self::fqcn($type, $imports));
+            $info->setFullyQualifiedType(self::fqcn($info->getTypeHint(), $imports));
 
             $code .= $this->generateAccessors($info);
 
@@ -119,14 +129,28 @@ class CodeGenerator implements CodeGeneratorInterface
         }
 
         // Make sure our use statemens are sorted alphabetically and unique.
+        // The array_unique function can not be used because it does not take
+        // values with different array keys into account. This loop does exactly
+        // that. This is usefull when a specific class name is imported and aliased
+        // aswell.
         asort($imports);
-        $imports = array_unique($imports);
+        $unique_imports = [];
+        $next           =  null;
+        do {
+            $key   = key($imports);
+            $value = current($imports);
+            $next  = next($imports);
+            if ($value !==  $next || $key !== key($imports)) {
+                $key ? $unique_imports[$key] = $value : $unique_imports[] = $value;
+            }
+        } while ($next !== false);
+
 
         if ($code) {
             $code = $this->trait->render([
                 'namespace' => $class->getNamespace() . '\\' . $this->namespace,
                 'name'      => $class->getName() . $this->name_suffix,
-                'uses'      => $imports,
+                'uses'      => $unique_imports,
                 'methods'   => rtrim($code),
                 'username'  => get_current_user(),
                 'hostname'  => gethostname()
@@ -144,6 +168,17 @@ class CodeGenerator implements CodeGeneratorInterface
     public function generateAccessors(PropertyInformationInterface $info)
     {
         $code = '';
+
+        // Check if there is enough information to generate accessors.
+        if ($info->getType() === null) {
+            throw new TypeUnknownException(
+                sprintf(
+                    "Property %s in class %s has no type set, nor could it be infered",
+                    $info->getName(),
+                    $info->getClass()
+                )
+            );
+        }
 
         // Generate a get method.
         if ($info->willGenerateGet()) {
@@ -264,8 +299,12 @@ class CodeGenerator implements CodeGeneratorInterface
     private static function addImportForProperty(PropertyInformation $info, array &$imports)
     {
         if ($info->isComplexType()) {
-            $type = $info->getType();
-            if (strpos($type, '\\') !== 0) {
+            $type      = $info->getType();
+            $type_hint = $info->getTypeHint();
+            if (strpos($type_hint, '\\') !== 0) {
+                self::addImportForType($type_hint, $info->getNamespace(), $imports);
+            }
+            if ($type != $type_hint && strpos($type, '\\') !== 0) {
                 self::addImportForType($type, $info->getNamespace(), $imports);
             }
         }

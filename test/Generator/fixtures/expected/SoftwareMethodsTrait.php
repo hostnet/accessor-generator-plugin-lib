@@ -6,6 +6,7 @@ namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 use Doctrine\ORM\Mapping as ORM;
 use Hostnet\Component\AccessorGenerator\Annotation as AG;
 use Hostnet\Component\AccessorGenerator\Collection\ImmutableCollection;
+use Hostnet\Component\AccessorGenerator\Generator\fixtures\Feature;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\FeatureInterface;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Software;
 
@@ -61,7 +62,7 @@ trait SoftwareMethodsTrait
         }
 
         $this->features->add($feature);
-        $property = new \ReflectionProperty($feature, 'software');
+        $property = new \ReflectionProperty(Feature::class, 'software');
         $property->setAccessible(true);
         $value = $property->getValue($feature);
         if ($value) {
@@ -98,7 +99,7 @@ trait SoftwareMethodsTrait
 
         $this->features->removeElement($feature);
 
-        $property = new \ReflectionProperty($feature, 'software');
+        $property = new \ReflectionProperty(Feature::class, 'software');
         $property->setAccessible(true);
         $property->setValue($feature, null);
         $property->setAccessible(false);
