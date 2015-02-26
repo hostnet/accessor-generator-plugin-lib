@@ -303,6 +303,35 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
+     * Throw exceptions for invalid types or return
+     * the valid type.
+     *
+     * @see http://php.net/manual/en/language.types.php
+     * @param  string $type
+     * @throws \DomainException
+     * @throws \InvalidArgumentException
+     * @return PropertyInformation
+     */
+    private function validateType($type)
+    {
+        if (! is_string($type)) {
+            throw new \InvalidArgumentException(sprintf('$type is not of type string but of %s', gettype($type)));
+        } elseif (empty($type)) {
+            throw new \DomainException(sprintf('A type name may not be empty'));
+        } elseif ((int)($type)) {
+            throw new \DomainException(sprintf('A type name may not start with a number. Found %s', $type));
+        } elseif (in_array($type, $this->getValidTypes())) {
+            // Scalar.
+            return $type;
+        } elseif (ctype_upper($type[0]) || $type[0] === '\\') {
+            // Class.
+            return $type;
+        } else {
+            throw new \DomainException(sprintf('The type %s is not supported for code generation', $type));
+        }
+    }
+
+    /**
      * Set the type for this property.
      * The type must be one of the set returned
      * by getValidTypes.
@@ -315,33 +344,22 @@ class PropertyInformation implements PropertyInformationInterface
      */
     public function setType($type)
     {
-        if (! is_string($type)) {
-            throw new \InvalidArgumentException(sprintf('$type is not of type string but of %s', gettype($type)));
-        } elseif (empty($type)) {
-            throw new \DomainException(sprintf('A type name may not be empty'));
-        } elseif ((int)($type)) {
-            throw new \DomainException(sprintf('A type name may not start with a number. Found %s', $type));
-        } elseif (in_array($type, $this->getValidTypes())) {
-            $this->type = $type;
-        } elseif (ctype_upper($type[0]) || $type[0] === '\\') {
-            $this->type = $type;
-            $this->type_hint || $this->setTypeHint($type);
-        } else {
-            throw new \DomainException(sprintf('The type %s is not supported for code generation', $type));
-        }
-
+        $this->type = $this->validateType($type);
+        $this->type_hint || $this->type_hint = $this->type;
         return $this;
     }
 
     /**
      * Manually set the type hint for this property
      * The type hint must be a valid class name starting
-     * with \ or a capital letter.
+     * with \ or a capital letter or one of the set returned
+     * by getValidTypes.
      *
      * Only use this method if you are not pleased
      * by the automatic type hint that was already
      * set by the setType method.
      *
+     * @see http://php.net/manual/en/language.types.php
      * @param string $type_hint
      * @throws \DomainException
      * @throws \InvalidArgumentException
@@ -349,18 +367,7 @@ class PropertyInformation implements PropertyInformationInterface
      */
     public function setTypeHint($type_hint)
     {
-        if (! is_string($type_hint)) {
-            throw new \InvalidArgumentException(sprintf('$type is not of type string but of %s', gettype($type_hint)));
-        } elseif (empty($type_hint)) {
-            throw new \DomainException(sprintf('A type name may not be empty'));
-        } elseif ((int)($type_hint)) {
-            throw new \DomainException(sprintf('A type name may not start with a number. Found %s', $type_hint));
-        } elseif (ctype_upper($type_hint[0]) || $type_hint[0] === '\\') {
-            $this->type_hint = $type_hint;
-        } else {
-            throw new \DomainException(sprintf('The type %s is not supported for code generation', $type_hint));
-        }
-
+        $this->type_hint = $this->validateType($type_hint);
         return $this;
     }
 

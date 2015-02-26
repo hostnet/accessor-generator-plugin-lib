@@ -25,7 +25,7 @@ public function {{ getter }}()
             )
         );
     }
-{% if not property.isComplexType  or property.type == '\\DateTime' %}
+{% if not property.isComplexType  or property.typeHint == '\\DateTime' %}
 {% if property.willGenerateStrict and not property.isNullable %}
     if ($this->{{ property.name }} === null) {
         throw new \LogicException(sprintf(

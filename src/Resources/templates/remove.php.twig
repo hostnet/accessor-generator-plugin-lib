@@ -7,7 +7,7 @@
  * Remove {{ property.name | singularize }}
  {% endif -%}
  *
- * @param {{ property.isComplexType ? property.typeHint : property.type}} ${{ property.name | singularize }}
+ * @param {{ property.typeHint }} ${{ property.name | singularize }}
  * @return {{ property.class }}
  * @throws \BadMethodCallException if the number of arguments is not correct
  */

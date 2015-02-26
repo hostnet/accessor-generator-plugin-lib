@@ -13,7 +13,7 @@
  * this message, specify a default value or use JoinColumn(nullable=false).
  *
  {% endif -%}
- * @param {{ property.isComplexType ? property.typeHint : property.type}} ${{ property.name }}
+ * @param {{ property.typeHint }} ${{ property.name }}
  {% if property.isFixedPointNumber -%}
  * @param bool %round round the number fit in the precision and scale (round away from zero)
  {% endif -%}
