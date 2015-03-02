@@ -41,7 +41,7 @@ public function add{{ property.name | singularize | classify }}({{ property.type
     $collection->add($this);
 {% else %}
     $value = $property->getValue(${{ property.name | singularize }});
-    if ($value) {
+    if ($value && $value !== $this) {
         throw new \LogicException('{{ property.name | singularize | classify }} can not be added to more than one {{ property.class }}.');
     }
     $property->setValue(${{ property.name | singularize }}, $this);

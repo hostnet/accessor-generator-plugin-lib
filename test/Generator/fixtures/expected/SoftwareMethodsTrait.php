@@ -65,7 +65,7 @@ trait SoftwareMethodsTrait
         $property = new \ReflectionProperty(Feature::class, 'software');
         $property->setAccessible(true);
         $value = $property->getValue($feature);
-        if ($value) {
+        if ($value && $value !== $this) {
             throw new \LogicException('Feature can not be added to more than one Software.');
         }
         $property->setValue($feature, $this);

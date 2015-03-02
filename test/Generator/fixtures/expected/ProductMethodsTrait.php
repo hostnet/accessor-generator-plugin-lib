@@ -252,7 +252,7 @@ trait ProductMethodsTrait
         $property = new \ReflectionProperty(Attribute::class, 'product');
         $property->setAccessible(true);
         $value = $property->getValue($attribute);
-        if ($value) {
+        if ($value && $value !== $this) {
             throw new \LogicException('Attribute can not be added to more than one Product.');
         }
         $property->setValue($attribute, $this);

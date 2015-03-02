@@ -32,6 +32,11 @@ class Category
 {
     use Generated\CategoryMethodsTrait;
 
+    public function __construct(Category $parent = null)
+    {
+        $this->parent = $parent;
+    }
+
     /**
      * @ORM\Id
      * @ORM\Column
@@ -47,7 +52,7 @@ class Category
     /**
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="children")
      * @ORM\JoinColumn(nullable=false)
-     * @AG\Generate(set=false, get=false)
+     * @AG\Generate
      */
-    private $parent;
+    private $parent = null;
 }
