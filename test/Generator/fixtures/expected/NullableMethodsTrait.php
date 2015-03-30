@@ -83,6 +83,86 @@ trait NullableMethodsTrait
     }
 
     /**
+     * Get int
+     *
+     * @return integer
+     * @throws \InvalidArgumentException
+     */
+    public function getInt()
+    {
+        if (func_num_args() > 0) {
+            throw new \BadMethodCallException(
+                sprintf(
+                    'getInt() has no arguments but %d given.',
+                    func_num_args()
+                )
+            );
+        }
+
+        if ($this->int === null) {
+            return null;
+        }
+
+        if ($this->int < -2147483648|| $this->int > 2147483647) {
+            throw new \DomainException(
+                sprintf(
+                    'Parameter int(%s) is too big for the integer domain [%d,%d]',
+                    $this->int,
+                    -2147483648,
+                    2147483647
+                )
+            );
+        }
+
+        return (int) $this->int;
+    }
+
+    /**
+     * Set int
+     *
+     * @param integer $int
+     * @return Nullable
+     * @throws \BadMethodCallException if the number of arguments is not correct
+     * @throws \InvalidArgumentException if value is not of the right type
+     * @throws \DomainException if the intger value is outside of the domain on this machine
+     */
+    public function setInt($int = null)
+    {
+        if (func_num_args() > 1) {
+            throw new \BadMethodCallException(
+                sprintf(
+                    'setInt() has one optional argument but %d given.',
+                    func_num_args()
+                )
+            );
+        }
+
+        if ($int === null) {
+            $this->int = $int;
+            return $this;
+        }
+
+        if (!is_int($int)) {
+            throw new \InvalidArgumentException(
+                'Parameter int must be integer.'
+            );
+        }
+        if ($int < -2147483648|| $int > 2147483647) {
+            throw new \DomainException(
+                sprintf(
+                    'Parameter int(%s) is too big for the integer domain [%d,%d]',
+                    $int,
+                    -2147483648,
+                    2147483647
+                )
+            );
+        }
+
+        $this->int = $int;
+        return $this;
+    }
+
+    /**
      * Set int_different
      *
      * @param integer $int_different
@@ -194,6 +274,10 @@ trait NullableMethodsTrait
                     func_num_args()
                 )
             );
+        }
+
+        if ($this->string === null) {
+            return null;
         }
 
         return $this->string;

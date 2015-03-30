@@ -159,6 +159,62 @@ class NullableTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \BadMethodCallException
      */
+    public function testSetIntTooManyArguments()
+    {
+        $this->nullable->setInt(1, 2);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testSetIntInvalidArgument()
+    {
+        $this->nullable->setInt([]);
+    }
+
+    /**
+     * @expectedException \DomainException
+     */
+    public function testSetIntInvalidDomain()
+    {
+        if (PHP_INT_SIZE < 8) {
+            $this->markTestSkipped('Only valid on a 64bit system');
+        } else {
+            $this->nullable->setInt(PHP_INT_MAX);
+        }
+    }
+
+    public function testSetInt()
+    {
+        $this->assertSame($this->nullable, $this->nullable->setInt(5));
+        $this->assertEquals(5, $this->nullable->getInt());
+
+        $this->assertSame($this->nullable, $this->nullable->setInt(null));
+        $this->assertEquals(null, $this->nullable->getInt());
+    }
+
+    /**
+     * @expectedException \BadMethodCallException
+     */
+    public function testGetIntTooManyArguments()
+    {
+        $this->nullable->getInt([]);
+    }
+
+    /**
+     * @expectedException \DomainException
+     */
+    public function testGetIntInvalidDomain()
+    {
+        $property = new \ReflectionProperty($this->nullable, 'int');
+        $property->setAccessible(true);
+        $property->setValue($this->nullable, PHP_INT_MAX * 2);
+        $this->nullable->getInt();
+    }
+
+    /**
+     * @expectedException \BadMethodCallException
+     */
     public function testGetStringTooManyArguments()
     {
         $this->nullable->getString(1);

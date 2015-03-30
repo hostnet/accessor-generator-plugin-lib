@@ -37,6 +37,12 @@ class Nullable
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @AG\Generate()
+     */
+    private $int = null;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
      * @AG\Generate(get=false)
      */
     private $int_different = 2;

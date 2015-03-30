@@ -38,7 +38,7 @@ public function {{ getter }}()
         ));
     }
 {% endif %}
-{% if (not property.willGenerateStrict or property.isNullable and property.isComplexType) %}
+{% if (not property.willGenerateStrict or property.isNullable) %}
 
     if ($this->{{ property.name }} === null) {
         return null;
