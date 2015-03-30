@@ -87,7 +87,7 @@ trait TypesMethodsTrait
      * @return Types
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
-     * @throws \DomainException if the intger value is outside of the domain on this machine
+     * @throws \DomainException if the integer value is outside of the domain on this machine
      */
     public function setSmallint($smallint)
     {
@@ -168,7 +168,7 @@ trait TypesMethodsTrait
      * @return Types
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
-     * @throws \DomainException if the intger value is outside of the domain on this machine
+     * @throws \DomainException if the integer value is outside of the domain on this machine
      */
     public function setInteger($integer)
     {
@@ -253,7 +253,7 @@ trait TypesMethodsTrait
      * @return Types
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
-     * @throws \DomainException if the intger value is outside of the domain on this machine
+     * @throws \DomainException if the integer value is outside of the domain on this machine
      */
     public function setBigint($bigint)
     {
