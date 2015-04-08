@@ -43,20 +43,20 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
 
         if ($scale > 0) {
             //Scale within boundary, precision outside boundary.
-            $case = $property . ' scale within boundary, precision outside boundary';
+            $case  = $property . ' scale within boundary, precision outside boundary';
             $value = substr($on_value, 0, -1);
                   $values[$case . ' (string)'] = [$scale, $precision,  '4' . $value,         $exception];
             $f && $values[$case . ' (float)']  = [$scale, $precision, (float)('4' . $value), $exception];
 
             //Scale within boundary, precision on boundary.
-            $case = $property . ' scale within boundary, precision on boundary';
+            $case  = $property . ' scale within boundary, precision on boundary';
             $value = substr($on_value, 0, -1);
                   $values[$case . ' (string)'] = [$scale, $precision, $value       ];
             $f && $values[$case . ' (float)']  = [$scale, $precision, (float)$value];
 
             if ($before > 0) {
                 //Scale within boundary, precision within boundary.
-                $case = $property . ' scale within boundary, precision within boundary';
+                $case  = $property . ' scale within boundary, precision within boundary';
                 $value = substr($on_value, 1, -1);
                       $values[$case . ' (string)'] = [$scale, $precision, $value       ];
                 $f && $values[$case . ' (float)']  = [$scale, $precision, (float)$value];
@@ -65,12 +65,12 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
 
         if ($before > 0) {
             //Scale outside boundary, precision within boundary.
-            $case = $property . ' scale outside boundary, precision within boundary';
+            $case  = $property . ' scale outside boundary, precision within boundary';
             $value = substr($on_value, 1);
             $values[$case . ' (string)'] = [$scale, $precision, $value .'0', $exception];
 
             //Scale on boundary, precision within boundary.
-            $case = $property . ' scale on boundary, precision within boundary';
+            $case  = $property . ' scale on boundary, precision within boundary';
             $value = substr($on_value, 1);
                   $values[$case . ' (string)'] = [$scale, $precision, $value       ];
             $f && $values[$case . ' (float)']  = [$scale, $precision, (float)$value];

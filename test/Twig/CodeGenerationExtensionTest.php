@@ -175,7 +175,7 @@ class CodeGenerationExtensionTest extends \PHPUnit_Framework_TestCase
             ['foe', 'foes'],
             ['cookie', 'cookies'],
             ['', ''],
-        ];
+         ];
     }
 
     /**

@@ -15,7 +15,7 @@
     },
     "require-dev": {
         "composer/composer" : "*@dev",
-        "hostnet/phpcs-tool" : "2.*,>=2.0.11",
+        "hostnet/phpcs-tool" : "^3.0.0",
         "phpunit/phpunit" : "~4.3"
     },
     "conflict" : {
