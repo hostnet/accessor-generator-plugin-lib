@@ -115,7 +115,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         foreach ($this->getFilesForPackage($package) as $filename) {
             $class = new ReflectionClass($filename);
             if ($this->generator->writeTraitForClass($class) && $this->io->isVeryVerbose()) {
-                $this->io->write("  - generated acessors for <info>$filename</info>");
+                $this->io->write("  - generated accessors for <info>$filename</info>");
             }
         }
     }
