@@ -72,7 +72,7 @@ class CodeGenerator implements CodeGeneratorInterface
      */
     public function generateTraitForClass(ReflectionClass $class)
     {
-        $code = '';
+        $code                  = '';
         $add_collection_import = false;
 
         try {
@@ -128,11 +128,30 @@ class CodeGenerator implements CodeGeneratorInterface
             $imports[] = "Hostnet\Component\AccessorGenerator\Collection\ImmutableCollection";
         }
 
-        // Make sure our use statemens are sorted alphabetically and unique.
-        // The array_unique function can not be used because it does not take
-        // values with different array keys into account. This loop does exactly
-        // that. This is usefull when a specific class name is imported and aliased
-        // aswell.
+        if ($code) {
+            $code = $this->trait->render([
+                'namespace' => $class->getNamespace() . '\\' . $this->namespace,
+                'name'      => $class->getName() . $this->name_suffix,
+                'uses'      => $this->getUniqueImports($imports),
+                'methods'   => rtrim($code),
+                'username'  => get_current_user(),
+                'hostname'  => gethostname()
+            ]);
+        }
+
+        return $code;
+    }
+
+
+    /**
+     * Make sure our use statemens are sorted alphabetically and unique.
+     * The array_unique function can not be used because it does not take
+     * values with different array keys into account. This loop does exactly
+     * that. This is usefull when a specific class name is imported and aliased
+     * aswell.
+     */
+    private function getUniqueImports(array $imports)
+    {
         asort($imports);
         $unique_imports = [];
         $next           =  null;
@@ -141,23 +160,14 @@ class CodeGenerator implements CodeGeneratorInterface
             $value = current($imports);
             $next  = next($imports);
             if ($value !==  $next || $key !== key($imports)) {
-                $key ? $unique_imports[$key] = $value : $unique_imports[] = $value;
+                if ($key) {
+                    $unique_imports[$key] = $value;
+                } else {
+                    $unique_imports[] = $value;
+                }
             }
         } while ($next !== false);
-
-
-        if ($code) {
-            $code = $this->trait->render([
-                'namespace' => $class->getNamespace() . '\\' . $this->namespace,
-                'name'      => $class->getName() . $this->name_suffix,
-                'uses'      => $unique_imports,
-                'methods'   => rtrim($code),
-                'username'  => get_current_user(),
-                'hostname'  => gethostname()
-            ]);
-        }
-
-        return $code;
+        return $unique_imports;
     }
 
     /**
@@ -173,11 +183,11 @@ class CodeGenerator implements CodeGeneratorInterface
         if ($info->getType() === null) {
             throw new TypeUnknownException(
                 sprintf(
-                    'Property %s in class %s\%s has no type set, nor could it be infered. ' .
-                    'Did you forget to import Doctrine\ORM\Mapping as ORM?',
+                    'Property %s in class %s\%s has no type set, nor could it be infered. %s',
                     $info->getName(),
                     $info->getNamespace(),
-                    $info->getClass()
+                    $info->getClass(),
+                    'Did you forget to import Doctrine\ORM\Mapping as ORM?'
                 )
             );
         }

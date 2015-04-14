@@ -348,7 +348,7 @@ class PropertyInformation implements PropertyInformationInterface
      */
     public function setType($type)
     {
-        $this->type = $this->validateType($type);
+        $this->type                          = $this->validateType($type);
         $this->type_hint || $this->type_hint = $this->type;
         return $this;
     }
