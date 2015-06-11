@@ -4,11 +4,12 @@ namespace Hostnet\Component\AccessorGenerator\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Selectable;
 
 class ImmutableCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Collection
+     * @var Collection|Selectable
      */
     private $collection;
 
@@ -17,16 +18,23 @@ class ImmutableCollectionTest extends \PHPUnit_Framework_TestCase
      */
     private $immutable_collection;
 
+    /**
+     * @var ImmutableCollection
+     */
+    private $clone_immutable_collection;
+
     public function setUp()
     {
-        $this->collection           = new ArrayCollection([1, 'a' => 1, 2, 'c' => 3, 5, 8, 13]);
-        $this->immutable_collection = new ImmutableCollection($this->collection);
+        $this->collection                 = new ArrayCollection([1, 'a' => 1, 2, 'c' => 3, 5, 8, 13]);
+        $this->immutable_collection       = new ImmutableCollection($this->collection);
+        $this->clone_immutable_collection = clone $this->immutable_collection;
     }
 
-    public function testCompatabillity()
+    public function testCompatibility()
     {
         $col = $this->collection;
         $imm = $this->immutable_collection;
+        $cln = $this->clone_immutable_collection;
 
         $this->assertEquals($col[0], $imm[0]);
         $this->assertEquals(isset($col[0]), isset($imm[0]));
@@ -53,6 +61,9 @@ class ImmutableCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($col->slice(2, 2), $imm->slice(2, 2));
         $this->assertSame($col->next(), $imm->current());
         $this->assertSame($imm->next(), $col->current());
+        $this->assertSame($col->add('a'), $cln->add('a'));
+        $this->assertSame($col->remove(0), $cln->remove(0));
+        $this->assertSame($col->removeElement('a'), $cln->removeElement('a'));
     }
 
     /**
@@ -111,10 +122,60 @@ class ImmutableCollectionTest extends \PHPUnit_Framework_TestCase
         unset($this->immutable_collection[0]);
     }
 
+    public function testCloneAdd()
+    {
+        $this->clone_immutable_collection->add('an item');
+        $this->assertContains('an item', $this->clone_immutable_collection);
+    }
+
+    public function testCloneClear()
+    {
+        $this->clone_immutable_collection->clear();
+        $this->assertEmpty($this->clone_immutable_collection);
+    }
+
+    public function testCloneRemove()
+    {
+        $this->clone_immutable_collection->remove(0);
+        $this->assertArrayNotHasKey(0, $this->clone_immutable_collection);
+        $this->assertContains(1, $this->clone_immutable_collection);
+    }
+
+    public function testCloneRemoveElement()
+    {
+        // Remove fist element with value 1.
+        $this->clone_immutable_collection->removeElement(1);
+        // Make sure the second element with value 1 still exists.
+        $this->assertContains(1, $this->clone_immutable_collection);
+
+        // Remove second element with value 1.
+        $this->clone_immutable_collection->removeElement(1);
+        // Make sure all elements with value 1 are gone.
+        $this->assertNotContains(1, $this->clone_immutable_collection);
+    }
+
+    public function testCloneSet()
+    {
+        $this->clone_immutable_collection->set(0, 0);
+        $this->assertEquals(0, $this->clone_immutable_collection[0]);
+    }
+
+    public function testCloneOffsetSet()
+    {
+        $this->clone_immutable_collection[0] = 0;
+        $this->assertEquals(0, $this->clone_immutable_collection[0]);
+    }
+
+    public function testCloneOffsetUnset()
+    {
+        unset($this->clone_immutable_collection[0]);
+        $this->assertArrayNotHasKey(0, $this->clone_immutable_collection);
+    }
+
     public function testExists()
     {
         $exists = function ($key, $value) {
-            return is_string($key);
+            return is_string($key) && is_numeric($value);
         };
 
         // Check that the function is wrapped correctly.
@@ -122,7 +183,7 @@ class ImmutableCollectionTest extends \PHPUnit_Framework_TestCase
         $imm = $this->immutable_collection->exists($exists);
         $this->assertEquals($col, $imm);
 
-        // Check that the closure is actualy working.
+        // Check that the closure is actually working.
         $this->assertTrue($imm);
     }
 
@@ -137,14 +198,14 @@ class ImmutableCollectionTest extends \PHPUnit_Framework_TestCase
         $imm = $this->immutable_collection->filter($filter);
         $this->assertEquals($col, $imm);
 
-        // Check that the closure is actualy working.
+        // Check that the closure is actually working.
         $this->assertEquals(0, $imm->count());
     }
 
     public function testForAll()
     {
         $for_all = function ($key, $value) {
-            return is_numeric($value);
+            return is_numeric($value) && is_numeric($key);
         };
 
         // Check that the function is wrapped correctly.
@@ -152,16 +213,16 @@ class ImmutableCollectionTest extends \PHPUnit_Framework_TestCase
         $imm = $this->immutable_collection->forAll($for_all);
         $this->assertEquals($col, $imm);
 
-        // Check that the closure is actualy working.
-        $this->assertTrue($imm);
+        // Check that the closure is actually working.
+        $this->assertFalse($imm);
     }
 
     public function testMap()
     {
-        $map = function ($value) {
+        $before = $this->immutable_collection->toArray();
+        $map    = function ($value) {
             return $value << 1;
         };
-        $before = $this->immutable_collection->toArray();
 
         // Check that the function is wrapped correctly.
         $this->assertEquals($this->collection->map($map), $this->immutable_collection->map($map));
@@ -172,10 +233,10 @@ class ImmutableCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testPartition()
     {
+        $before    = $this->immutable_collection->toArray();
         $partition = function ($key, $value) {
-            return $value % 2;
+            return $value % 2 && is_string($key);
         };
-        $before = $this->immutable_collection->toArray();
 
         // Check that the function is wrapped correctly.
         $col = $this->collection->partition($partition);
