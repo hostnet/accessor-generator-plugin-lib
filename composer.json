@@ -10,7 +10,7 @@
         "doctrine/orm" : "~2.4",
         "doctrine/common" : "~2.4",
         "twig/twig" : "~1.16",
-        "composer-plugin-api" : "~1.0",
+        "composer-plugin-api" : "^1.0",
         "symfony/filesystem": "~2.5"
     },
     "require-dev": {
