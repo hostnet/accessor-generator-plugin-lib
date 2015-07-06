@@ -234,7 +234,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      */
     private function getIntegerSizeForType($type)
     {
-        switch($type){
+        switch ($type) {
             case 'bool':
             case 'boolean':
                 return 1;

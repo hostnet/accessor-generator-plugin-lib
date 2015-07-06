@@ -446,7 +446,7 @@ class ReflectionClass
         $code  = '';
         do {
             $type = $this->tokens->type($loc);
-            switch($type) {
+            switch ($type) {
                 case T_ARRAY:
                     $loc = $this->tokens->scan($loc, ['(']);
                     $brace++;
@@ -489,7 +489,7 @@ class ReflectionClass
     private function arrayWhitespace($loc)
     {
         $type = $this->tokens->type($loc);
-        switch($type) {
+        switch ($type) {
             case T_DOUBLE_ARROW:
                 return ' => ';
             case ',':
