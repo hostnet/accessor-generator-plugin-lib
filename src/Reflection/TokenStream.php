@@ -1,33 +1,32 @@
 <?php
-
 namespace Hostnet\Component\AccessorGenerator\Reflection;
 
 class TokenStream
 {
     /**
      * Location of type within the PHP Token
-     * @access private;
+     * @internal
      * @var int
      */
     const TYPE = 0;
 
     /**
      * Location of value within the PHP Token
-     * @access private;
+     * @internal
      * @var int
      */
     const VALUE = 1;
 
     /**
      * Search direction Left to Right
-     * @access private
+     * @internal
      * @var int
      */
     const LTR = 1;
 
     /**
      * Search direction Right to Left
-     * @access private
+     * @internal
      * @var int
      */
     const RTL = -1;
@@ -51,7 +50,7 @@ class TokenStream
      * to see if it is an array or a scalar type.
      *
      * @param  int                   $loc token location
-     * @return char|int              the char value of the token or a numeric
+     * @return string|int            the char value of the token or a numeric
      *                               value corresponding with the T_ constants.
      * @throws \OutOfBoundsException for invalid token location
      */
@@ -77,7 +76,7 @@ class TokenStream
     }
 
     /**
-     * Scan the token stack for occurence of the tokens
+     * Scan the token stack for occurrence of the tokens
      * in the given array. Return the location of the
      * first one found after $loc.
      *
@@ -92,7 +91,7 @@ class TokenStream
     {
         // Check validity of start position
         // -1 is allowed and trying scanning
-        // from the last position is also allowd
+        // from the last position is also allowed
         // because your pointer could end up on
         // this position and than this function
         // should return you with null and serve
@@ -123,13 +122,11 @@ class TokenStream
      *
      * Will return null if there are no tokens to skip.
      *
-     * @param  int  $loc             start location
+     * @param  int   $loc            start location
      * @param  array $tokens         list of tokens to skip over
      *                               defaults to whitespace and
      *                               comments
-     * @param  int $direction        LTR or RTL, defaults to LTR
-     * @throws \OutOfBoundsException for invalid token location
-     * @return int|null              location of the next token found
+     * @return int|null for invalid token location
      */
     public function next($loc, array $tokens = [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT])
     {
@@ -173,7 +170,7 @@ class TokenStream
         // The first and last position of the stream
         // are always considered inside of the domain
         // since you do not want to check against boundary
-        // conditions when itterating but use this function
+        // conditions when iterating but use this function
         // for that purpose.
         if (! isset($this->tokens[$loc + $direction]) && ! isset($this->tokens[$loc])) {
             throw new \OutOfBoundsException(sprintf('Invalid start location %d given', $loc));
@@ -201,10 +198,9 @@ class TokenStream
      * so we need to check every single token we inspect
      * to see if it is an array or a scalar type.
      *
-     * @param  int              $loc token location
-     * @return char|int|string  the value or type of the token
-     * @throws \OutOfBoundsException for invalid token location
-     *
+     * @param  int $loc token location
+     * @param  int $type self::TYPE or self::VALUE
+     * @return int|string the value or type of the token
      */
     private function token($loc, $type)
     {

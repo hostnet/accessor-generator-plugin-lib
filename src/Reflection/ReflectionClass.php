@@ -7,11 +7,11 @@ use Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException;
 /**
  * Parse PHP files containing classes that are
  * valid PHP (php -l) but are not (yet) valid
- * PHP because some interfaces or other hierargy
- * requirements are not fullfilled yet.
+ * PHP because some interfaces or other hierarchy
+ * requirements are not fulfilled yet.
  *
  * This way we can generate code that will implement
- * an interace.
+ * an interface.
  *
  * @author Hidde Booomsma <hboomsma@hostnet.nl>
  */
@@ -64,7 +64,7 @@ class ReflectionClass
 
     /**
      * Location where the class name is found.
-     * Used to prefend duplicate code for finding
+     * Used to prevent duplicate code for finding
      * the class name and location.
      *
      * @var int
@@ -116,7 +116,11 @@ class ReflectionClass
         // Check cache.
         if ($this->name === null) {
              // Find class token
-            $loc = $this->tokens->scan(0, [T_CLASS, T_TRAIT]);
+            try {
+                $loc = $this->tokens->scan(0, [T_CLASS, T_TRAIT]);
+            } catch (\OutOfBoundsException $e) {
+                throw new ClassDefinitionNotFoundException('No class is found inside ' . $this->filename  . '.', 0, $e);
+            }
 
             // Get the following token
             if ($loc !== null) {
@@ -129,7 +133,7 @@ class ReflectionClass
                 $this->name           = $this->tokens->value($loc);
                 $this->class_location = $loc;
             } else {
-                // Mark the name as NOT found (in constrast to not initialized)
+                // Mark the name as NOT found (in contrast to not initialized)
                 $this->name = false;
             }
         }
@@ -155,7 +159,11 @@ class ReflectionClass
         // Check cache.
         if ($this->namespace === null) {
             // Find namespace token
-            $loc = $this->tokens->scan(0, [T_NAMESPACE]);
+            try {
+                $loc = $this->tokens->scan(0, [T_NAMESPACE]);
+            } catch (\OutOfBoundsException $e) {
+                return $this->namespace = '';
+            }
 
             // Get the next token (start with namespace)
             if ($loc !== null) {
@@ -188,10 +196,10 @@ class ReflectionClass
             $this->use_statements = [];
 
             // Fetch start of class so we do not
-            // include use statments that import traits.
+            // include use statements that import traits.
             $class = $this->getClassNameLocation();
 
-            // Find all the use statments and parse them one by one
+            // Find all the use statements and parse them one by one
             // and then add them to the use_statements cache.
             $loc = 0;
             while (($loc = $this->tokens->scan($loc, [T_USE])) && $loc < $class) {
@@ -205,10 +213,10 @@ class ReflectionClass
     /**
      * Return all private, protected and public properties
      * for this class. Properties declared with var are not
-     * provided as var is depricated.
+     * provided as var is deprecated.
      *
      * Only declared properties are returned. Properties created
-     * at runtime are not taken into concideration.
+     * at runtime are not taken into consideration.
      *
      * @throws ClassDefinitionNotFoundException
      * @return ReflectionProperty[]
@@ -228,17 +236,17 @@ class ReflectionClass
 
             // Scan for public, protected and private because
             // these keywords denote the start of a property.
-            // var is excluded because its use is depricated.
+            // var is excluded because its use is deprecated.
             while ($vis_loc = $this->tokens->scan(
                 $vis_loc,
                 [T_PRIVATE, T_PROTECTED, T_PUBLIC, T_VAR]
             )) {
                 // Seek forward, skipping static, if it was found and check if we
-                // really have a property here, otherwise contine and try to find more
+                // really have a property here, otherwise confine and try to find more
                 // properties.
 
                 // We also skip final, to improve error handling and consistent behaviour,
-                // otherswise final private $foo whould be parsed and private final $bar
+                // otherwise final private $foo would be parsed and private final $bar
                 // would not be parsed.
                 $var_loc = $this->tokens->next($vis_loc, [T_COMMENT, T_WHITESPACE, T_STATIC, T_FINAL]);
                 if ($this->tokens->type($var_loc) === T_VARIABLE) {
@@ -319,7 +327,7 @@ class ReflectionClass
      * The comment is stripped of indentation. Returns empty string
      * when no doc comment of an empty doc comment was found.
      *
-     * @param $loc location of the visibility modifier or T_CLASS
+     * @param int $loc location of the visibility modifier or T_CLASS
      * @return string the contents of the doc comment
      */
     private function parseDocComment($loc)
@@ -342,7 +350,7 @@ class ReflectionClass
 
     /**
      * Parse visibility and static modifier of the property
-     * in to a bitfield combining all the modifiers as is
+     * in to a bit field combining all the modifiers as is
      * done in by PHP Reflection for the \ReflectionProperty.
      *
      * Note that properties can not be final and thus this
@@ -354,7 +362,7 @@ class ReflectionClass
      */
     private function parsePropertyModifiers($loc)
     {
-        $modifiers = 0; // initialize bit filed with all modifiers swithed off
+        $modifiers = 0; // initialize bit filed with all modifiers switched off
 
         // Enable visibility bits
         switch ($this->tokens->type($loc)) {
@@ -436,7 +444,7 @@ class ReflectionClass
      * @param int $loc location of the token stream where the
      *                 array starts. This should point to a
      *                 T_ARRAY or [ token.
-     * @return string code reperesentation of the parsed array
+     * @return string code representation of the parsed array
      *                without any comments or access whitespace.
      */
     private function parseArrayDefinition($loc)
@@ -500,7 +508,7 @@ class ReflectionClass
     }
     /**
      * Parse heredoc and nowdoc into a concatenated
-     * string representation to be usefull for default
+     * string representation to be useful for default
      * values and inline assignment.
      *
      * @param int $loc

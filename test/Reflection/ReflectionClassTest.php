@@ -173,7 +173,7 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
+     * @expectedException \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
      * @expectedExceptionMessage readable
      */
     public function testFileExceptionReadable()
@@ -182,7 +182,7 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException        Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
+     * @expectedException \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
      * @expectedExceptionMessage exist
      */
     public function testFileExceptionExist()
@@ -191,17 +191,27 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
+     * @expectedException \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
      */
     public function testClassNotFoundException()
     {
         $class = new ReflectionClass(__DIR__ . '/fixtures/noclass.php');
-        $this->assertEquals('Error', $class->getNamespace());
+        $this->assertEquals('ThisNamespace', $class->getNamespace());
         $class->getName();
     }
 
     /**
-     * @expectedException Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
+     * @expectedException \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
+     */
+    public function testEmptyFileClassNotFoundException()
+    {
+        $class = new ReflectionClass(__DIR__ . '/fixtures/empty.php');
+        $this->assertEquals('', $class->getNamespace());
+        $class->getName();
+    }
+
+    /**
+     * @expectedException \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
      */
     public function testBroken()
     {

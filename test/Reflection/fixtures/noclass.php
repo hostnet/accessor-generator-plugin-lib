@@ -1,5 +1,5 @@
 <?php
-namespace Error;
+namespace ThisNamespace;
 
 use Exception;
 
