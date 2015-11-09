@@ -19,10 +19,10 @@ class CodeGenerationExtensionTest extends \PHPUnit_Framework_TestCase
      * @param array $data
      * @param string $dataName
      */
-    public function __construct($name = null, array $data = array(), $dataName = '')
+    public function __construct($name = null, array $data = array(), $data_name = '')
     {
         // Call Parent constructor
-        parent::__construct($name, $data, $dataName);
+        parent::__construct($name, $data, $data_name);
 
         // Create some very simple templates to test the filters
         $loader = new \Twig_Loader_Array([
@@ -150,7 +150,7 @@ class CodeGenerationExtensionTest extends \PHPUnit_Framework_TestCase
             ['vertex', 'vertices'],
             ['index', 'indices'],
             ['Alias', 'Aliases'],
-            ['Media', 'Media'],
+            ['Medium', 'Media'],
             ['NodeMedia', 'NodeMedia'],
             ['alumnus', 'alumni'],
             ['bacillus', 'bacilli'],
