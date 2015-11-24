@@ -21,45 +21,45 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
         $f = $precision < 30; // arbirary boundary, only fit fore the used test values
 
         //Scale outside boundary, precision outside boundary.
-        $case                               = $property . ' scale outside boundary, precision outside boundary';
-               $values[$case . ' (string)'] = [$scale, $precision, '4' . $on_value . '0',          $exception];
-        $f &&  $values[$case . ' (float)']  = [$scale, $precision, (float)('4' . $on_value . '4'), $exception];
+        $case                             = $property . ' scale outside boundary, precision outside boundary';
+        $values[$case . ' (string)']      = [$scale, $precision, '4' . $on_value . '0',          $exception];
+        $f && $values[$case . ' (float)'] = [$scale, $precision, (float)('4' . $on_value . '4'), $exception];
 
         //Scale outside boundary, precision on boundary.
         $case                        = $property . ' scale outside boundary, precision on boundary';
         $values[$case . ' (string)'] = [$scale, $precision, $on_value .'0', $exception];
 
         //Scale on boundary, precision outside boundary.
-        $case                              = $property . ' scale on boundary, precision outside boundary';
-              $values[$case . ' (string)'] = [$scale, $precision, '4' . $on_value,          $exception];
-        $f && $values[$case . ' (float)']  = [$scale, $precision, (float)('4' . $on_value), $exception];
-        $i && $values[$case . ' (int)']    = [$scale, $precision, (int)('4' . $on_value),   $exception];
+        $case                             = $property . ' scale on boundary, precision outside boundary';
+        $values[$case . ' (string)']      = [$scale, $precision, '4' . $on_value,          $exception];
+        $f && $values[$case . ' (float)'] = [$scale, $precision, (float)('4' . $on_value), $exception];
+        $i && $values[$case . ' (int)']   = [$scale, $precision, (int)('4' . $on_value),   $exception];
 
         //Scale on boundary, precision on boundary.
-        $case                              = $property . ' scale on boundary, precision on boundary';
-              $values[$case . ' (string)'] = [$scale, $precision, $on_value       ];
-        $f && $values[$case . ' (float)']  = [$scale, $precision, (float)$on_value];
-        $i && $values[$case . ' (int)']    = [$scale, $precision, (int)($on_value)];
+        $case                             = $property . ' scale on boundary, precision on boundary';
+        $values[$case . ' (string)']      = [$scale, $precision, $on_value       ];
+        $f && $values[$case . ' (float)'] = [$scale, $precision, (float)$on_value];
+        $i && $values[$case . ' (int)']   = [$scale, $precision, (int)($on_value)];
 
         if ($scale > 0) {
             //Scale within boundary, precision outside boundary.
-            $case                              = $property . ' scale within boundary, precision outside boundary';
-            $value                             = substr($on_value, 0, -1);
-                  $values[$case . ' (string)'] = [$scale, $precision,  '4' . $value,         $exception];
-            $f && $values[$case . ' (float)']  = [$scale, $precision, (float)('4' . $value), $exception];
+            $case                             = $property . ' scale within boundary, precision outside boundary';
+            $value                            = substr($on_value, 0, -1);
+            $values[$case . ' (string)']      = [$scale, $precision,  '4' . $value,         $exception];
+            $f && $values[$case . ' (float)'] = [$scale, $precision, (float)('4' . $value), $exception];
 
             //Scale within boundary, precision on boundary.
-            $case                              = $property . ' scale within boundary, precision on boundary';
-            $value                             = substr($on_value, 0, -1);
-                  $values[$case . ' (string)'] = [$scale, $precision, $value       ];
-            $f && $values[$case . ' (float)']  = [$scale, $precision, (float)$value];
+            $case                             = $property . ' scale within boundary, precision on boundary';
+            $value                            = substr($on_value, 0, -1);
+            $values[$case . ' (string)']      = [$scale, $precision, $value       ];
+            $f && $values[$case . ' (float)'] = [$scale, $precision, (float)$value];
 
             if ($before > 0) {
                 //Scale within boundary, precision within boundary.
-                $case                              = $property . ' scale within boundary, precision within boundary';
-                $value                             = substr($on_value, 1, -1);
-                      $values[$case . ' (string)'] = [$scale, $precision, $value       ];
-                $f && $values[$case . ' (float)']  = [$scale, $precision, (float)$value];
+                $case                             = $property . ' scale within boundary, precision within boundary';
+                $value                            = substr($on_value, 1, -1);
+                $values[$case . ' (string)']      = [$scale, $precision, $value       ];
+                $f && $values[$case . ' (float)'] = [$scale, $precision, (float)$value];
             }
         }
 
@@ -70,11 +70,11 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
             $values[$case . ' (string)'] = [$scale, $precision, $value .'0', $exception];
 
             //Scale on boundary, precision within boundary.
-            $case                              = $property . ' scale on boundary, precision within boundary';
-            $value                             = substr($on_value, 1);
-                  $values[$case . ' (string)'] = [$scale, $precision, $value       ];
-            $f && $values[$case . ' (float)']  = [$scale, $precision, (float)$value];
-                  $values[$case . ' (int)']    = [$scale, $precision, (int)$value  ];
+            $case                             = $property . ' scale on boundary, precision within boundary';
+            $value                            = substr($on_value, 1);
+            $values[$case . ' (string)']      = [$scale, $precision, $value       ];
+            $f && $values[$case . ' (float)'] = [$scale, $precision, (float)$value];
+            $values[$case . ' (int)']         = [$scale, $precision, (int)$value  ];
         }
 
         $values[$property . ' wrong type'] = [
