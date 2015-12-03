@@ -104,8 +104,17 @@ class GenerateTypesTest extends \PHPUnit_Framework_TestCase
             $setter = 'set' . Inflector::classify($property->getName());
             if (method_exists(GenerateTypes::class, $setter)) {
                 $invalid_type = $property->getName() === 'object' ? null : new \stdClass();
-                $values[]     = [$property->getName(), new \DateTime(), \BadMethodCallException::class, 1];
-                $values[]     = [$property->getName(), $invalid_type, \InvalidArgumentException::class];
+
+                // Wrong type (not needed in PHP7 for object type hints)
+                if (stripos($property->getName(), 'date') === false
+                    || PHP_VERSION_ID < 70000
+                ) {
+                    $values[] = [$property->getName(), $invalid_type, \InvalidArgumentException::class];
+                }
+
+                // Too many parameters
+                $values[] = [$property->getName(), new \DateTime(), \BadMethodCallException::class, 1];
+
             }
         }
 

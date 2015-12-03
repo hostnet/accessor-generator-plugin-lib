@@ -148,9 +148,16 @@ class TypesTest extends \PHPUnit_Framework_TestCase
         foreach ($class->getProperties() as $property) {
             $setter = 'set' . Inflector::classify($property->getName());
             if (method_exists(Types::class, $setter)) {
-                $invalid_type = $property->getName() === 'object' ? null : new \stdClass();
-                $values[]     = [$property->getName(), new \DateTime(), \BadMethodCallException::class, 1];
-                $values[]     = [$property->getName(), $invalid_type, \InvalidArgumentException::class];
+                // Too many parameters
+                $values[] = [$property->getName(), new \DateTime(), \BadMethodCallException::class, 1];
+
+                // Wrong type (not needed in PHP7 for object type hints)
+                if (stripos($property->getName(), 'date') === false
+                || PHP_VERSION_ID < 70000
+                ) {
+                    $invalid_type = $property->getName() === 'object' ? null : new \stdClass();
+                    $values[]     = [$property->getName(), $invalid_type, \InvalidArgumentException::class];
+                }
             }
         }
 
