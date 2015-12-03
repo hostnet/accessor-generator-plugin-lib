@@ -1,53 +1,55 @@
 {
-    "name" : "hostnet/accessor-generator-plugin-lib",
-    "description" : "Generate get, set, add, remove methods on the fly.",
-    "license" : "MIT",
-    "type" : "composer-plugin",
-    "require" : {
-        "php" : ">=5.5",
-        "doctrine/annotations" : "~1.2",
-        "doctrine/inflector" : "~1.0",
-        "doctrine/orm" : "~2.4",
-        "doctrine/common" : "~2.4",
-        "twig/twig" : "~1.16",
-        "composer-plugin-api" : "^1.0",
-        "symfony/filesystem": "~2.5"
+    "name":              "hostnet/accessor-generator-plugin-lib",
+    "description":       "Generate get, set, add, remove methods on the fly.",
+    "license":           "MIT",
+    "type":              "composer-plugin",
+    "require": {
+        "php":                  ">=5.5",
+        "composer-plugin-api":  "^1.0",
+        "doctrine/annotations": "~1.2",
+        "doctrine/common":      "~2.4",
+        "doctrine/inflector":   "~1.0",
+        "doctrine/orm":         "~2.4",
+        "symfony/filesystem":   "~2.5",
+        "twig/twig":            "~1.16"
     },
     "require-dev": {
-        "composer/composer" : "*@dev",
-        "hostnet/phpcs-tool" : "^3.0.0",
-        "phpunit/phpunit" : "~4.3"
+        "composer/composer":  "*@dev",
+        "hostnet/phpcs-tool": "^3.0.0",
+        "phpunit/phpunit":    "~4.3"
     },
-    "conflict" : {
-        "hostnet/entity-generator-plugin-lib" : "<1.5.0"
+    "conflict": {
+        "hostnet/entity-generator-plugin-lib": "<1.5.0"
     },
-    "minimum-stability" : "stable",
-    "repositories" : [{
-            "type" : "composer",
-            "url" : "http://packagist.hostnetbv.nl"
+    "minimum-stability": "stable",
+    "repositories": [
+        {
+            "type": "composer",
+            "url":  "http://packagist.hostnetbv.nl"
         }
     ],
-    "authors" : [{
-            "name" : "Hidde Boomsma",
-            "email" : "hboomsma@hostnet.nl"
+    "authors": [
+        {
+            "name":  "Hidde Boomsma",
+            "email": "hboomsma@hostnet.nl"
         }
     ],
-    "autoload" : {
-        "psr-4" : {
-            "Hostnet\\Component\\AccessorGenerator\\" : "src/"
+    "autoload": {
+        "psr-4": {
+            "Hostnet\\Component\\AccessorGenerator\\": "src/"
         }
     },
-    "autoload-dev" : {
-        "psr-4" : {
-            "Hostnet\\Component\\AccessorGenerator\\Generator\\fixtures\\Generated\\" : "test/Generator/fixtures/expected/",
-            "Hostnet\\Component\\AccessorGenerator\\" : "test/"
+    "autoload-dev": {
+        "psr-4": {
+            "Hostnet\\Component\\AccessorGenerator\\Generator\\fixtures\\Generated\\": "test/Generator/fixtures/expected/",
+            "Hostnet\\Component\\AccessorGenerator\\":                                 "test/"
         },
-        "files" : [
+        "files": [
             "test/annotation_loader.php"
         ]
     },
-    "archive" : {
-        "exclude" : [
+    "archive": {
+        "exclude": [
             "/test/",
             "/.gitignore",
             "/phpunit.xml.dist",
@@ -55,10 +57,7 @@
             "/cli-config.php"
         ]
     },
-    "extra" : {
-        "class" : "Hostnet\\Component\\AccessorGenerator\\Plugin"
-    },
-    "archive": {
-        "exclude": [ "/test" ]
+    "extra": {
+        "class": "Hostnet\\Component\\AccessorGenerator\\Plugin"
     }
 }

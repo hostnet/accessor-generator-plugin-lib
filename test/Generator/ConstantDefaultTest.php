@@ -1,7 +1,6 @@
 <?php
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
-use Doctrine\Common\Collections\Collection;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\ConstantDefault;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Weather;
 

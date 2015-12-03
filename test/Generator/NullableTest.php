@@ -1,8 +1,6 @@
 <?php
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
-use Doctrine\Common\Util\Inflector;
-use Doctrine\ORM\EntityNotFoundException;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Feature;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Item;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Nullable;

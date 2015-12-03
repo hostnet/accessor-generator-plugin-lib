@@ -1,12 +1,10 @@
 <?php
 namespace Hostnet\Component\AccessorGenerator\Twig;
 
-use Doctrine\Tests\Common\Inflector\InflectorTest;
 use Twig_Node as Node;
 use Twig_Node_Expression_Name as Name;
 use Twig_Node_Print as PrintNode;
 use Twig_Node_Text as TextNode;
-use Twig_Token as Token;
 
 /**
 * @covers Hostnet\Component\AccessorGenerator\Twig\PerLineNode

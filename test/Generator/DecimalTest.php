@@ -2,7 +2,6 @@
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Doctrine\Common\Util\Inflector;
-use Doctrine\ORM\EntityNotFoundException;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Decimal;
 
 class DecimalTest extends \PHPUnit_Framework_TestCase

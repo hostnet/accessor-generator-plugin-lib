@@ -1,8 +1,6 @@
 <?php
 namespace Hostnet\Component\AccessorGenerator\Twig;
 
-use Doctrine\Tests\Common\Inflector\InflectorTest;
-
 /**
  * @covers Hostnet\Component\AccessorGenerator\Twig\CodeGenerationExtension
  * @author Hidde Boomsma <hboomsma@hostnet.nl>

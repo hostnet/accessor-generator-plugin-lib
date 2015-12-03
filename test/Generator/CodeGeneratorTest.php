@@ -1,7 +1,6 @@
 <?php
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformation;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;

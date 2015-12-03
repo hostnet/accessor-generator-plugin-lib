@@ -2,7 +2,6 @@
 
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
-use Doctrine\Common\Annotations\Annotation;
 use Doctrine\Common\Annotations\DocParser;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
 

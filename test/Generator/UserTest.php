@@ -1,7 +1,6 @@
 <?php
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
-use Doctrine\ORM\EntityNotFoundException;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Address;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\User;
 

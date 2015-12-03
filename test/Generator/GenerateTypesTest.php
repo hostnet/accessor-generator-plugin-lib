@@ -2,7 +2,6 @@
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Doctrine\Common\Util\Inflector;
-use Doctrine\ORM\EntityNotFoundException;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\GenerateTypes;
 
 class GenerateTypesTest extends \PHPUnit_Framework_TestCase

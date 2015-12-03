@@ -152,7 +152,12 @@ class CodeGenerator implements CodeGeneratorInterface
      */
     private function getUniqueImports(array $imports)
     {
-        asort($imports);
+        uksort($imports, function ($a, $b) use ($imports) {
+            $alias_a = is_numeric($a) ? " as $a;" : '';
+            $alias_b = is_numeric($b) ? " as $b;" : '';
+            return strcmp($imports[$a] . $alias_a, $imports[$b] . $alias_b);
+        });
+
         $unique_imports = [];
         $next           =  null;
         do {

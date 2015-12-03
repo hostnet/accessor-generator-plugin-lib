@@ -6,8 +6,8 @@ namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 use Doctrine\ORM\Mapping as ORM;
 use Hostnet\Component\AccessorGenerator\Annotation as AG;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Cart;
-use Hostnet\Component\AccessorGenerator\Generator\fixtures\Customer;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Customer as Client;
+use Hostnet\Component\AccessorGenerator\Generator\fixtures\Customer;
 
 trait CartMethodsTrait
 {

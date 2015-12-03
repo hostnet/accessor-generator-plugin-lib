@@ -1,7 +1,6 @@
 <?php
 namespace Hostnet\Component\AccessorGenerator\Twig;
 
-use Doctrine\Tests\Common\Inflector\InflectorTest;
 use Twig_Token as Token;
 
 /**
