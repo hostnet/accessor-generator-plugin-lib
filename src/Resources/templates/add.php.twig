@@ -1,7 +1,7 @@
 /**
  {% if property.documentation -%}
  {% perline %}
- * {{ property.documentation }}
+ * {{ property.documentation | raw }}
  {% endperline %}
  {% else -%}
  * Add {{ property.name | singularize }}
