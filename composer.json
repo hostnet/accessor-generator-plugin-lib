@@ -16,7 +16,7 @@
     "require-dev": {
         "composer/composer":  "*@dev",
         "hostnet/phpcs-tool": "^3.0.0",
-        "phpunit/phpunit":    "~4.3"
+        "phpunit/phpunit":    "^5.1.0"
     },
     "conflict": {
         "hostnet/entity-generator-plugin-lib": "<1.5.0"
