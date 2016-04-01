@@ -21,6 +21,7 @@ use Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception\InvalidCol
 class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
 {
     const ZEROED_DATE_TIME = 'zeroeddatetime';
+    const YAML_ARRAY       = 'yaml_array';
 
     /**
      * Process annotations of type:
@@ -186,7 +187,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
             return 'resource';
         } elseif (in_array($type, [Type::DATETIME, Type::DATETIMETZ, Type::DATE, Type::TIME, self::ZEROED_DATE_TIME])) {
             return '\\' . \DateTime::class;
-        } elseif ($type == Type::SIMPLE_ARRAY || $type == Type::JSON_ARRAY || $type == Type::TARRAY) {
+        } elseif (in_array($type, [Type::SIMPLE_ARRAY, Type::JSON_ARRAY, Type::TARRAY, self::YAML_ARRAY])) {
             return 'array';
         } elseif ($type == Type::OBJECT) {
             return 'object';
