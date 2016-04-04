@@ -90,7 +90,6 @@ class CodeGenerationExtension extends \Twig_Extension
             } else {
                 return '0.' . str_repeat('0', abs($loc)) . $input;
             }
-
         } else {
             return $input;
         }

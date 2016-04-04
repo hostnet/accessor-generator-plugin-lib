@@ -114,7 +114,6 @@ class GenerateTypesTest extends \PHPUnit_Framework_TestCase
 
                 // Too many parameters
                 $values[] = [$property->getName(), new \DateTime(), \BadMethodCallException::class, 1];
-
             }
         }
 
