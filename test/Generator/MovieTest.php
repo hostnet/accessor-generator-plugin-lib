@@ -24,9 +24,9 @@ class MovieTest extends \PHPUnit_Framework_TestCase
     {
         $actor = new Actor();
         $movie = new Movie();
-        $this->assertEmpty($movie->getActors());
+        self::assertEmpty($movie->getActors());
         $movie->removeActor($actor);
-        $this->assertEmpty($movie->getActors());
+        self::assertEmpty($movie->getActors());
     }
 
     /**
@@ -44,9 +44,9 @@ class MovieTest extends \PHPUnit_Framework_TestCase
         $actor = new Actor();
         $movie = new Movie();
         $movie->addActor($actor);
-        $this->assertSame($actor, $movie->getActors()->first());
+        self::assertSame($actor, $movie->getActors()->first());
         $movie->addActor($actor);
-        $this->assertSame($actor, $movie->getActors()->first());
+        self::assertSame($actor, $movie->getActors()->first());
     }
 
     /**
@@ -66,24 +66,24 @@ class MovieTest extends \PHPUnit_Framework_TestCase
         $movie = new Movie();
 
         // The collection should be emptye
-        $this->assertEmpty($movie->getActors());
+        self::assertEmpty($movie->getActors());
 
         // The collection should subclass Collection
-        $this->assertInstanceOf(Collection::class, $movie->getActors());
+        self::assertInstanceOf(Collection::class, $movie->getActors());
 
         // Add actor to movie and retrieve it again from the other side
         $actor->addMovie($movie);
-        $this->assertSame($actor, $movie->getActors()->first());
+        self::assertSame($actor, $movie->getActors()->first());
 
         // Remove again
         $movie->removeActor($actor);
-        $this->assertEmpty($actor->getMovies());
+        self::assertEmpty($actor->getMovies());
 
         // Retrieve empty collection and fill afterwards,
         // the previous received object should contain the
         // new values;
         $actors = $movie->getActors();
         $actor->addMovie($movie);
-        $this->assertSame($actor, $actors->first());
+        self::assertSame($actor, $actors->first());
     }
 }

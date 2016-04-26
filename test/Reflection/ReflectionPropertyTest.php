@@ -58,55 +58,55 @@ class ReflectionPropertyTest extends \PHPUnit_Framework_TestCase
 
     public function testGetName()
     {
-        $this->assertEquals('simple', $this->simple->getName());
-        $this->assertEquals('public_static', $this->public_static->getName());
-        $this->assertEquals('complex', $this->complex->getName());
+        self::assertEquals('simple', $this->simple->getName());
+        self::assertEquals('public_static', $this->public_static->getName());
+        self::assertEquals('complex', $this->complex->getName());
     }
 
     public function testGetClass()
     {
-        $this->assertNull($this->simple->getClass());
+        self::assertNull($this->simple->getClass());
     }
 
     public function testGetDocComment()
     {
-        $this->assertNull($this->simple->getDocComment());
+        self::assertNull($this->simple->getDocComment());
 
     }
 
     public function testGetDefault()
     {
-        $this->assertNull($this->simple->getDefault());
-        $this->assertEquals('', $this->empty_doc->getDefault());
+        self::assertNull($this->simple->getDefault());
+        self::assertEquals('', $this->empty_doc->getDefault());
     }
 
     public function testModifiers()
     {
-        $this->assertTrue($this->simple->isPrivate());
-        $this->assertFalse($this->simple->isProtected());
-        $this->assertFalse($this->simple->isPublic());
-        $this->assertFalse($this->simple->isStatic());
+        self::assertTrue($this->simple->isPrivate());
+        self::assertFalse($this->simple->isProtected());
+        self::assertFalse($this->simple->isPublic());
+        self::assertFalse($this->simple->isStatic());
 
-        $this->assertFalse($this->public_static->isPrivate());
-        $this->assertFalse($this->public_static->isProtected());
-        $this->assertTrue($this->public_static->isPublic());
-        $this->assertTrue($this->public_static->isStatic());
+        self::assertFalse($this->public_static->isPrivate());
+        self::assertFalse($this->public_static->isProtected());
+        self::assertTrue($this->public_static->isPublic());
+        self::assertTrue($this->public_static->isStatic());
 
-        $this->assertFalse($this->complex->isPrivate());
-        $this->assertTrue($this->complex->isProtected());
-        $this->assertFalse($this->complex->isPublic());
-        $this->assertFalse($this->complex->isStatic());
+        self::assertFalse($this->complex->isPrivate());
+        self::assertTrue($this->complex->isProtected());
+        self::assertFalse($this->complex->isPublic());
+        self::assertFalse($this->complex->isStatic());
 
-        $this->assertTrue($this->empty_doc->isPrivate());
-        $this->assertFalse($this->empty_doc->isProtected());
-        $this->assertFalse($this->empty_doc->isPublic());
-        $this->assertFalse($this->empty_doc->isStatic());
+        self::assertTrue($this->empty_doc->isPrivate());
+        self::assertFalse($this->empty_doc->isProtected());
+        self::assertFalse($this->empty_doc->isPublic());
+        self::assertFalse($this->empty_doc->isStatic());
     }
 
     public function testToString()
     {
-        $this->assertEquals('private $simple;', $this->simple->__toString());
-        $this->assertEquals('public static $public_static;', $this->public_static->__toString());
-        $this->assertEquals("DOCS\nprotected \$complex = 'default';", $this->complex->__toString());
+        self::assertEquals('private $simple;', $this->simple->__toString());
+        self::assertEquals('public static $public_static;', $this->public_static->__toString());
+        self::assertEquals("DOCS\nprotected \$complex = 'default';", $this->complex->__toString());
     }
 }

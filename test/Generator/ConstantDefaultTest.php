@@ -74,7 +74,7 @@ class ConstantDefaultTest extends \PHPUnit_Framework_TestCase
     public function testSetWeather()
     {
         $constant_default = new ConstantDefault();
-        $this->assertSame($constant_default, $constant_default->setWeather(Weather::RAIN));
-        $this->assertEquals(Weather::RAIN, $constant_default->getWeather());
+        self::assertSame($constant_default, $constant_default->setWeather(Weather::RAIN));
+        self::assertEquals(Weather::RAIN, $constant_default->getWeather());
     }
 }

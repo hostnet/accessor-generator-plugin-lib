@@ -54,66 +54,66 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDocumentation()
     {
-        $this->assertEquals('Hidde', $this->info->getDocumentation());
+        self::assertEquals('Hidde', $this->info->getDocumentation());
     }
 
     public function testGetMethods()
     {
-        $this->assertEquals('test', $this->info->getName());
-        $this->assertEquals(null, $this->info->getDefault());
-        $this->assertEquals(null, $this->info->getType());
-        $this->assertEquals('', $this->info->getFullyQualifiedType());
-        $this->assertEquals(0, $this->info->getScale());
-        $this->assertEquals(0, $this->info->getPrecision());
-        $this->assertEquals(0, $this->info->getLength());
-        $this->assertEquals(32, $this->info->getIntegerSize());
-        $this->assertEquals('Test', $this->info->getClass());
-        $this->assertEquals('', $this->minimal_info->getClass());
-        $this->assertEquals('', $this->info->getNameSpace());
+        self::assertEquals('test', $this->info->getName());
+        self::assertEquals(null, $this->info->getDefault());
+        self::assertEquals(null, $this->info->getType());
+        self::assertEquals('', $this->info->getFullyQualifiedType());
+        self::assertEquals(0, $this->info->getScale());
+        self::assertEquals(0, $this->info->getPrecision());
+        self::assertEquals(0, $this->info->getLength());
+        self::assertEquals(32, $this->info->getIntegerSize());
+        self::assertEquals('Test', $this->info->getClass());
+        self::assertEquals('', $this->minimal_info->getClass());
+        self::assertEquals('', $this->info->getNameSpace());
 
-        $this->assertEquals(false, $this->info->isCollection());
-        $this->assertEquals(false, $this->info->isFixedPointNumber());
-        $this->assertEquals(false, $this->info->isNullable());
-        $this->assertEquals(false, $this->info->isUnique());
+        self::assertEquals(false, $this->info->isCollection());
+        self::assertEquals(false, $this->info->isFixedPointNumber());
+        self::assertEquals(false, $this->info->isNullable());
+        self::assertEquals(false, $this->info->isUnique());
 
-        $this->assertEquals(false, $this->info->willGenerateAdd());
-        $this->assertEquals(false, $this->info->willGenerateRemove());
-        $this->assertEquals(false, $this->info->willGenerateSet());
-        $this->assertEquals(false, $this->info->willGenerateGet());
-        $this->assertEquals(true, $this->info->willGenerateStrict());
+        self::assertEquals(false, $this->info->willGenerateAdd());
+        self::assertEquals(false, $this->info->willGenerateRemove());
+        self::assertEquals(false, $this->info->willGenerateSet());
+        self::assertEquals(false, $this->info->willGenerateGet());
+        self::assertEquals(true, $this->info->willGenerateStrict());
     }
 
     public function testBasicSetMethods()
     {
-        $this->assertSame($this->info, $this->info->setCollection('garbage'));
-        $this->assertEquals(true, $this->info->isCollection());
+        self::assertSame($this->info, $this->info->setCollection('garbage'));
+        self::assertEquals(true, $this->info->isCollection());
 
-        $this->assertSame($this->info, $this->info->setFixedPointNumber('garbage'));
-        $this->assertEquals(true, $this->info->isFixedPointNumber());
+        self::assertSame($this->info, $this->info->setFixedPointNumber('garbage'));
+        self::assertEquals(true, $this->info->isFixedPointNumber());
 
-        $this->assertSame($this->info, $this->info->setNullable('garbage'));
-        $this->assertEquals(true, $this->info->isNullable());
+        self::assertSame($this->info, $this->info->setNullable('garbage'));
+        self::assertEquals(true, $this->info->isNullable());
 
-        $this->assertSame($this->info, $this->info->setUnique('garbage'));
-        $this->assertEquals(true, $this->info->isUnique());
+        self::assertSame($this->info, $this->info->setUnique('garbage'));
+        self::assertEquals(true, $this->info->isUnique());
 
-        $this->assertSame($this->info, $this->info->setGenerateAdd('garbage'));
-        $this->assertEquals(true, $this->info->willGenerateAdd());
+        self::assertSame($this->info, $this->info->setGenerateAdd('garbage'));
+        self::assertEquals(true, $this->info->willGenerateAdd());
 
-        $this->assertSame($this->info, $this->info->setGenerateRemove('garbage'));
-        $this->assertEquals(true, $this->info->willGenerateRemove());
+        self::assertSame($this->info, $this->info->setGenerateRemove('garbage'));
+        self::assertEquals(true, $this->info->willGenerateRemove());
 
-        $this->assertSame($this->info, $this->info->setGenerateGet('garbage'));
-        $this->assertEquals(true, $this->info->willGenerateGet());
+        self::assertSame($this->info, $this->info->setGenerateGet('garbage'));
+        self::assertEquals(true, $this->info->willGenerateGet());
 
-        $this->assertSame($this->info, $this->info->setGenerateSet('garbage'));
-        $this->assertEquals(true, $this->info->willGenerateSet());
+        self::assertSame($this->info, $this->info->setGenerateSet('garbage'));
+        self::assertEquals(true, $this->info->willGenerateSet());
 
-        $this->assertSame($this->info, $this->info->setGenerateStrict(false));
-        $this->assertEquals(false, $this->info->willGenerateStrict());
+        self::assertSame($this->info, $this->info->setGenerateStrict(false));
+        self::assertEquals(false, $this->info->willGenerateStrict());
 
-        $this->assertSame($this->info, $this->info->setGenerateStrict('garbage'));
-        $this->assertEquals(true, $this->info->willGenerateStrict());
+        self::assertSame($this->info, $this->info->setGenerateStrict('garbage'));
+        self::assertEquals(true, $this->info->willGenerateStrict());
     }
 
     public function setReferencedPropertyProvider()
@@ -144,8 +144,8 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
     public function testSetReferencedPropery($referenced_property, $exception)
     {
         $this->setExpectedException($exception);
-        $this->assertSame($this->info, $this->info->setReferencedProperty($referenced_property));
-        $this->assertEquals($referenced_property, $this->info->getReferencedProperty());
+        self::assertSame($this->info, $this->info->setReferencedProperty($referenced_property));
+        self::assertEquals($referenced_property, $this->info->getReferencedProperty());
     }
 
 
@@ -178,8 +178,8 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
     public function testSetIntegerSize($integer_size, $exception)
     {
         $this->setExpectedException($exception);
-        $this->assertSame($this->info, $this->info->setIntegerSize($integer_size));
-        $this->assertEquals($integer_size, $this->info->getIntegerSize());
+        self::assertSame($this->info, $this->info->setIntegerSize($integer_size));
+        self::assertEquals($integer_size, $this->info->getIntegerSize());
     }
 
     public function setScaleProvider()
@@ -209,8 +209,8 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
     public function testSetScale($scale, $exception)
     {
         $this->setExpectedException($exception);
-        $this->assertSame($this->info, $this->info->setScale($scale));
-        $this->assertEquals($scale, $this->info->getScale());
+        self::assertSame($this->info, $this->info->setScale($scale));
+        self::assertEquals($scale, $this->info->getScale());
     }
 
     public function setPrecisionProvider()
@@ -240,8 +240,8 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
     public function testSetPrecision($precision, $exception)
     {
         $this->setExpectedException($exception);
-        $this->assertSame($this->info, $this->info->setPrecision($precision));
-        $this->assertEquals($precision, $this->info->getPrecision());
+        self::assertSame($this->info, $this->info->setPrecision($precision));
+        self::assertEquals($precision, $this->info->getPrecision());
     }
 
     public function setLengthProvider()
@@ -265,8 +265,8 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
     public function testSetLength($length, $exception)
     {
         $this->setExpectedException($exception);
-        $this->assertSame($this->info, $this->info->setLength($length));
-        $this->assertEquals($length, $this->info->getLength());
+        self::assertSame($this->info, $this->info->setLength($length));
+        self::assertEquals($length, $this->info->getLength());
     }
 
     public function setTypeProvider()
@@ -296,14 +296,14 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
     public function testSetType($type, $exception)
     {
         $this->setExpectedException($exception);
-        $this->assertSame($this->info, $this->info->setType($type));
+        self::assertSame($this->info, $this->info->setType($type));
         if ($this->info->isComplexType()) {
-            $this->assertEquals($type, $this->info->getTypeHint());
+            self::assertEquals($type, $this->info->getTypeHint());
         }
-        $this->assertEquals($type, $this->info->getType());
-        $this->assertSame($this->info, $this->info->setType('string'));
-        $this->assertEquals('string', $this->info->getType());
-        $this->assertNotEquals('string', $this->info->getTypeHint());
+        self::assertEquals($type, $this->info->getType());
+        self::assertSame($this->info, $this->info->setType('string'));
+        self::assertEquals('string', $this->info->getType());
+        self::assertNotEquals('string', $this->info->getTypeHint());
     }
 
     /**
@@ -314,8 +314,8 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
     public function testSetTypeHint($type, $exception)
     {
         $this->setExpectedException($exception);
-        $this->assertSame($this->info, $this->info->setTypeHint($type));
-        $this->assertEquals($type, $this->info->getTypeHint());
+        self::assertSame($this->info, $this->info->setTypeHint($type));
+        self::assertEquals($type, $this->info->getTypeHint());
     }
 
     public function setFullyQualifiedTypeProvider()
@@ -341,7 +341,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
     public function testSetFullyQualifiedType($type, $exception)
     {
         $this->setExpectedException($exception);
-        $this->assertSame($this->info, $this->info->setFullyQualifiedType($type));
-        $this->assertEquals($type, $this->info->getFullyQualifiedType());
+        self::assertSame($this->info, $this->info->setFullyQualifiedType($type));
+        self::assertEquals($type, $this->info->getFullyQualifiedType());
     }
 }

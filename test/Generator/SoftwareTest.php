@@ -15,8 +15,8 @@ class SoftwareTest extends \PHPUnit_Framework_TestCase
         $software = new Software();
         $features = $software->getFeatures();
 
-        $this->assertEmpty($features);
-        $this->assertInstanceOf(Collection::class, $features);
+        self::assertEmpty($features);
+        self::assertInstanceOf(Collection::class, $features);
     }
 
     /**
@@ -38,9 +38,9 @@ class SoftwareTest extends \PHPUnit_Framework_TestCase
 
         // Add feature and retrieve it back, also check
         // the return type of the add method.
-        $this->assertSame($software, $software->addFeature($feature));
-        $this->assertSame($feature, $software->getFeatures()->first());
-        $this->assertCount(1, $software->getFeatures());
+        self::assertSame($software, $software->addFeature($feature));
+        self::assertSame($feature, $software->getFeatures()->first());
+        self::assertCount(1, $software->getFeatures());
     }
 
     /**
@@ -72,14 +72,14 @@ class SoftwareTest extends \PHPUnit_Framework_TestCase
 
         // Add feature and retrieve it back, also check
         // the return type of the add method.
-        $this->assertSame($software, $software->addFeature($feature));
-        $this->assertSame($feature, $features->first());
-        $this->assertCount(1, $features);
+        self::assertSame($software, $software->addFeature($feature));
+        self::assertSame($feature, $features->first());
+        self::assertCount(1, $features);
 
         //Add same feature again, no error expected
-        $this->assertSame($software, $software->addFeature($feature));
-        $this->assertSame($feature, $features->first());
-        $this->assertCount(1, $features);
+        self::assertSame($software, $software->addFeature($feature));
+        self::assertSame($feature, $features->first());
+        self::assertCount(1, $features);
     }
 
     /**
@@ -108,15 +108,15 @@ class SoftwareTest extends \PHPUnit_Framework_TestCase
 
         // Add and remove feature and retrieve it back, also check
         // the return type of the add method.
-        $this->assertEmpty($features);
+        self::assertEmpty($features);
         $software->addFeature($feature);
-        $this->assertNotEmpty($features);
-        $this->assertSame($software, $software->removeFeature($feature));
-        $this->assertEmpty($features);
+        self::assertNotEmpty($features);
+        self::assertSame($software, $software->removeFeature($feature));
+        self::assertEmpty($features);
 
         // Remove same feature again, no error expected
         $software->removeFeature($feature);
-        $this->assertEmpty($features);
+        self::assertEmpty($features);
     }
 
     /**

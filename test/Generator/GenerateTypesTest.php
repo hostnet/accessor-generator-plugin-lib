@@ -76,7 +76,7 @@ class GenerateTypesTest extends \PHPUnit_Framework_TestCase
             $get = $types->$getter();
         }
 
-        $this->assertTrue(
+        self::assertTrue(
             $value === $get,
             sprintf('%s is not equal in value and type to %s', var_export($value, true), var_export($get, true))
         );
@@ -157,8 +157,8 @@ class GenerateTypesTest extends \PHPUnit_Framework_TestCase
         }
 
         // Check for fluent interface
-        $this->assertSame($types, $set);
+        self::assertSame($types, $set);
 
-        $this->assertEquals($value, $get);
+        self::assertEquals($value, $get);
     }
 }

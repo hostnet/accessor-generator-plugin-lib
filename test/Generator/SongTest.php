@@ -11,8 +11,8 @@ class SongTest extends \PHPUnit_Framework_TestCase
     {
         $song   = new Song();
         $genres = $song->getGenres();
-        $this->assertEmpty($genres);
-        $this->assertInstanceOf(Collection::class, $genres);
+        self::assertEmpty($genres);
+        self::assertInstanceOf(Collection::class, $genres);
     }
 
     /**
@@ -37,8 +37,8 @@ class SongTest extends \PHPUnit_Framework_TestCase
 
         // Add and receive a genre
         $radar_love->addGenre($rock);
-        $this->assertSame($rock, $radar_love->getGenres()->first());
-        $this->assertCount(1, $radar_love->getGenres());
+        self::assertSame($rock, $radar_love->getGenres()->first());
+        self::assertCount(1, $radar_love->getGenres());
 
         // Test if we got a reference
         $genres = $radar_love->getGenres();
@@ -46,19 +46,19 @@ class SongTest extends \PHPUnit_Framework_TestCase
         // Add the same genre again, we expect no error
         // but also no duplicate entries.
         $radar_love->addGenre($rock);
-        $this->assertSame($rock, $genres->first());
-        $this->assertCount(1, $genres);
+        self::assertSame($rock, $genres->first());
+        self::assertCount(1, $genres);
 
         // Add the same genre again, we expect no error
         // but also no duplicate entries.
         $radar_love->addGenre($jazz);
-        $this->assertSame($jazz, $genres->last());
-        $this->assertCount(2, $genres);
+        self::assertSame($jazz, $genres->last());
+        self::assertCount(2, $genres);
 
         // Add same genres to multiple songs
         $help->addGenre($rock);
         $help->addGenre($jazz);
-        $this->assertEquals([$rock, $jazz], $help->getGenres()->toArray());
+        self::assertEquals([$rock, $jazz], $help->getGenres()->toArray());
     }
 
     /**
@@ -81,20 +81,20 @@ class SongTest extends \PHPUnit_Framework_TestCase
         $genre = new Genre();
 
         // The initial list should be empty.
-        $this->assertEmpty($song->getGenres());
+        self::assertEmpty($song->getGenres());
 
         // Add and receive a genre.
         $song->addGenre($genre);
-        $this->assertSame($genre, $song->getGenres()->first());
-        $this->assertEquals(1, $song->getGenres()->count());
+        self::assertSame($genre, $song->getGenres()->first());
+        self::assertEquals(1, $song->getGenres()->count());
 
         // Remove genre, check return value and check list.
-        $this->assertSame($song->removeGenre($genre), $song);
-        $this->assertEquals(0, $song->getGenres()->count());
+        self::assertSame($song->removeGenre($genre), $song);
+        self::assertEquals(0, $song->getGenres()->count());
 
         // Remove not existing genre, check return value. No
         // error is expected.
-        $this->assertSame($song->removeGenre($genre), $song);
+        self::assertSame($song->removeGenre($genre), $song);
     }
 
     /**

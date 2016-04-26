@@ -15,7 +15,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         $customer = new Customer();
 
         $customer->setCart($cart);
-        $this->assertSame($cart, $customer->getCart());
+        self::assertSame($cart, $customer->getCart());
     }
 
     /**

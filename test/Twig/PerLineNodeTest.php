@@ -43,6 +43,6 @@ class PerLineNodeTest extends \PHPUnit_Framework_TestCase
         $node     = new PerLineNode($lines, $prefix, $postfix, 1);
         $node->compile($compiler);
 
-        $this->assertEquals(file_get_contents(__DIR__ . '/fixtures/' . $file), $compiler->getSource());
+        self::assertEquals(file_get_contents(__DIR__ . '/fixtures/' . $file), $compiler->getSource());
     }
 }

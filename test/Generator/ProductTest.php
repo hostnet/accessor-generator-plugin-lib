@@ -25,7 +25,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $id->setAccessible(true);
         $id->setValue($this->product, 10);
 
-        $this->assertEquals(10, $this->product->getId());
+        self::assertEquals(10, $this->product->getId());
     }
 
     /**
@@ -42,7 +42,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testGetIdNew()
     {
-        $this->assertNull($this->product->getId());
+        self::assertNull($this->product->getId());
     }
 
     /**
@@ -59,8 +59,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $id->setAccessible(true);
         $id->setValue($this->product, '10');
 
-        $this->assertEquals('10', $this->product->getName());
-        $this->assertTrue(is_string($this->product->getName()));
+        self::assertEquals('10', $this->product->getName());
+        self::assertTrue(is_string($this->product->getName()));
     }
 
     /**
@@ -85,13 +85,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $description->setAccessible(true);
         $description->setValue($this->product, '10');
 
-        $this->assertEquals('10', $this->product->getDescription());
-        $this->assertTrue(is_string($this->product->getDescription()), 'of type string');
+        self::assertEquals('10', $this->product->getDescription());
+        self::assertTrue(is_string($this->product->getDescription()), 'of type string');
     }
 
     public function testGetDescriptionNew()
     {
-        $this->assertEquals('empty', $this->product->getDescription());
+        self::assertEquals('empty', $this->product->getDescription());
     }
 
     /**
@@ -115,9 +115,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testSetSystemName()
     {
-        $this->assertSame($this->product, $this->product->setSystemName(100));
-        $this->assertSame('100', $this->product->getSystemName());
-        $this->assertTrue(is_string($this->product->getSystemName()), 'of type string');
+        self::assertSame($this->product, $this->product->setSystemName(100));
+        self::assertSame('100', $this->product->getSystemName());
+        self::assertTrue(is_string($this->product->getSystemName()), 'of type string');
     }
 
     /**
@@ -146,8 +146,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSystemName()
     {
-        $this->assertEmpty($this->product->getSystemName());
-        $this->assertTrue(is_string($this->product->getSystemName()), 'of type string');
+        self::assertEmpty($this->product->getSystemName());
+        self::assertTrue(is_string($this->product->getSystemName()), 'of type string');
     }
 
     /**
@@ -176,7 +176,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $duration->setAccessible(true);
         $duration->setValue($this->product, $duration);
 
-        $this->assertSame($duration, $this->product->getDuration());
+        self::assertSame($duration, $this->product->getDuration());
     }
 
     /**
@@ -198,8 +198,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testGetAttributes()
     {
         $attributes = $this->product->getAttributes();
-        $this->assertEmpty($attributes);
-        $this->assertInstanceOf(Collection::class, $attributes);
+        self::assertEmpty($attributes);
+        self::assertInstanceOf(Collection::class, $attributes);
     }
 
     /**
@@ -222,13 +222,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->product->addAttribute($attribute_a);
 
         $attributes = $this->product->getAttributes();
-        $this->assertCount(1, $attributes);
+        self::assertCount(1, $attributes);
 
         $this->product->addAttribute($attribute_b);
-        $this->assertCount(2, $attributes);
+        self::assertCount(2, $attributes);
 
-        $this->assertSame($attribute_a, $attributes->first());
-        $this->assertSame($attribute_b, $attributes->last());
+        self::assertSame($attribute_a, $attributes->first());
+        self::assertSame($attribute_b, $attributes->last());
     }
 
     /**
@@ -250,11 +250,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $attributes = $this->product->getAttributes();
 
         $this->product->addAttribute($attribute);
-        $this->assertCount(1, $attributes);
+        self::assertCount(1, $attributes);
 
         $this->product->removeAttribute($attribute);
         $this->product->removeAttribute($attribute);
-        $this->assertCount(0, $attributes);
+        self::assertCount(0, $attributes);
     }
 
     /**

@@ -36,34 +36,34 @@ class ImmutableCollectionTest extends \PHPUnit_Framework_TestCase
         $imm = $this->immutable_collection;
         $cln = $this->clone_immutable_collection;
 
-        $this->assertEquals($col[0], $imm[0]);
-        $this->assertEquals(isset($col[0]), isset($imm[0]));
+        self::assertEquals($col[0], $imm[0]);
+        self::assertEquals(isset($col[0]), isset($imm[0]));
 
         foreach ($imm as $key => $value) {
-            $this->assertSame($value, $col[$key]);
+            self::assertSame($value, $col[$key]);
         }
 
-        $this->assertSame($col->contains(1), $imm->contains(1));
-        $this->assertSame($col->contains(0), $imm->contains(0));
-        $this->assertSame($col->containsKey('a'), $imm->containsKey('a'));
-        $this->assertSame($col->containsKey('a'), $imm->containsKey('a'));
-        $this->assertSame($col->count(), $imm->count());
-        $this->assertSame($col->current(), $imm->current());
-        $this->assertSame($col->key(), $imm->key());
-        $this->assertSame($col->first(), $imm->first());
-        $this->assertSame($col->last(), $imm->last());
-        $this->assertSame($col->getValues(), $imm->getValues());
-        $this->assertSame($col->get(3), $imm->get(3));
-        $this->assertSame($col->getKeys(), $imm->getKeys());
-        $this->assertSame($col->toArray(), $imm->toArray());
-        $this->assertSame($col->indexOf(3), $imm->indexOf(3));
-        $this->assertSame($col->isEmpty(), $imm->isEmpty());
-        $this->assertSame($col->slice(2, 2), $imm->slice(2, 2));
-        $this->assertSame($col->next(), $imm->current());
-        $this->assertSame($imm->next(), $col->current());
-        $this->assertSame($col->add('a'), $cln->add('a'));
-        $this->assertSame($col->remove(0), $cln->remove(0));
-        $this->assertSame($col->removeElement('a'), $cln->removeElement('a'));
+        self::assertSame($col->contains(1), $imm->contains(1));
+        self::assertSame($col->contains(0), $imm->contains(0));
+        self::assertSame($col->containsKey('a'), $imm->containsKey('a'));
+        self::assertSame($col->containsKey('a'), $imm->containsKey('a'));
+        self::assertSame($col->count(), $imm->count());
+        self::assertSame($col->current(), $imm->current());
+        self::assertSame($col->key(), $imm->key());
+        self::assertSame($col->first(), $imm->first());
+        self::assertSame($col->last(), $imm->last());
+        self::assertSame($col->getValues(), $imm->getValues());
+        self::assertSame($col->get(3), $imm->get(3));
+        self::assertSame($col->getKeys(), $imm->getKeys());
+        self::assertSame($col->toArray(), $imm->toArray());
+        self::assertSame($col->indexOf(3), $imm->indexOf(3));
+        self::assertSame($col->isEmpty(), $imm->isEmpty());
+        self::assertSame($col->slice(2, 2), $imm->slice(2, 2));
+        self::assertSame($col->next(), $imm->current());
+        self::assertSame($imm->next(), $col->current());
+        self::assertSame($col->add('a'), $cln->add('a'));
+        self::assertSame($col->remove(0), $cln->remove(0));
+        self::assertSame($col->removeElement('a'), $cln->removeElement('a'));
     }
 
     /**
@@ -125,20 +125,20 @@ class ImmutableCollectionTest extends \PHPUnit_Framework_TestCase
     public function testCloneAdd()
     {
         $this->clone_immutable_collection->add('an item');
-        $this->assertContains('an item', $this->clone_immutable_collection);
+        self::assertContains('an item', $this->clone_immutable_collection);
     }
 
     public function testCloneClear()
     {
         $this->clone_immutable_collection->clear();
-        $this->assertEmpty($this->clone_immutable_collection);
+        self::assertEmpty($this->clone_immutable_collection);
     }
 
     public function testCloneRemove()
     {
         $this->clone_immutable_collection->remove(0);
-        $this->assertArrayNotHasKey(0, $this->clone_immutable_collection);
-        $this->assertContains(1, $this->clone_immutable_collection);
+        self::assertArrayNotHasKey(0, $this->clone_immutable_collection);
+        self::assertContains(1, $this->clone_immutable_collection);
     }
 
     public function testCloneRemoveElement()
@@ -146,30 +146,30 @@ class ImmutableCollectionTest extends \PHPUnit_Framework_TestCase
         // Remove fist element with value 1.
         $this->clone_immutable_collection->removeElement(1);
         // Make sure the second element with value 1 still exists.
-        $this->assertContains(1, $this->clone_immutable_collection);
+        self::assertContains(1, $this->clone_immutable_collection);
 
         // Remove second element with value 1.
         $this->clone_immutable_collection->removeElement(1);
         // Make sure all elements with value 1 are gone.
-        $this->assertNotContains(1, $this->clone_immutable_collection);
+        self::assertNotContains(1, $this->clone_immutable_collection);
     }
 
     public function testCloneSet()
     {
         $this->clone_immutable_collection->set(0, 0);
-        $this->assertEquals(0, $this->clone_immutable_collection[0]);
+        self::assertEquals(0, $this->clone_immutable_collection[0]);
     }
 
     public function testCloneOffsetSet()
     {
         $this->clone_immutable_collection[0] = 0;
-        $this->assertEquals(0, $this->clone_immutable_collection[0]);
+        self::assertEquals(0, $this->clone_immutable_collection[0]);
     }
 
     public function testCloneOffsetUnset()
     {
         unset($this->clone_immutable_collection[0]);
-        $this->assertArrayNotHasKey(0, $this->clone_immutable_collection);
+        self::assertArrayNotHasKey(0, $this->clone_immutable_collection);
     }
 
     public function testExists()
@@ -181,10 +181,10 @@ class ImmutableCollectionTest extends \PHPUnit_Framework_TestCase
         // Check that the function is wrapped correctly.
         $col = $this->collection->exists($exists);
         $imm = $this->immutable_collection->exists($exists);
-        $this->assertEquals($col, $imm);
+        self::assertEquals($col, $imm);
 
         // Check that the closure is actually working.
-        $this->assertTrue($imm);
+        self::assertTrue($imm);
     }
 
     public function testFilter()
@@ -196,10 +196,10 @@ class ImmutableCollectionTest extends \PHPUnit_Framework_TestCase
         // Check that the function is wrapped correctly.
         $col = $this->collection->filter($filter);
         $imm = $this->immutable_collection->filter($filter);
-        $this->assertEquals($col, $imm);
+        self::assertEquals($col, $imm);
 
         // Check that the closure is actually working.
-        $this->assertEquals(0, $imm->count());
+        self::assertEquals(0, $imm->count());
     }
 
     public function testForAll()
@@ -211,10 +211,10 @@ class ImmutableCollectionTest extends \PHPUnit_Framework_TestCase
         // Check that the function is wrapped correctly.
         $col = $this->collection->forAll($for_all);
         $imm = $this->immutable_collection->forAll($for_all);
-        $this->assertEquals($col, $imm);
+        self::assertEquals($col, $imm);
 
         // Check that the closure is actually working.
-        $this->assertFalse($imm);
+        self::assertFalse($imm);
     }
 
     public function testMap()
@@ -225,10 +225,10 @@ class ImmutableCollectionTest extends \PHPUnit_Framework_TestCase
         };
 
         // Check that the function is wrapped correctly.
-        $this->assertEquals($this->collection->map($map), $this->immutable_collection->map($map));
+        self::assertEquals($this->collection->map($map), $this->immutable_collection->map($map));
 
         // Test that we got a copy and did not change the original collection.
-        $this->assertEquals($before, $this->immutable_collection->toArray());
+        self::assertEquals($before, $this->immutable_collection->toArray());
     }
 
     public function testPartition()
@@ -241,10 +241,10 @@ class ImmutableCollectionTest extends \PHPUnit_Framework_TestCase
         // Check that the function is wrapped correctly.
         $col = $this->collection->partition($partition);
         $imm = $this->immutable_collection->partition($partition);
-        $this->assertEquals($col, $imm);
+        self::assertEquals($col, $imm);
 
         // Test that we got a copy and did not change the original collection.
-        $this->assertEquals($before, $this->immutable_collection->toArray());
+        self::assertEquals($before, $this->immutable_collection->toArray());
     }
 
     public function testMatching()
@@ -255,9 +255,9 @@ class ImmutableCollectionTest extends \PHPUnit_Framework_TestCase
         // Check that the function is wrapped correctly.
         $col = $this->collection->matching($criteria);
         $imm = $this->immutable_collection->matching($criteria);
-        $this->assertEquals($col, $imm);
+        self::assertEquals($col, $imm);
 
         // Test that we got a copy and did not change the original collection.
-        $this->assertEquals($before, $this->immutable_collection->toArray());
+        self::assertEquals($before, $this->immutable_collection->toArray());
     }
 }

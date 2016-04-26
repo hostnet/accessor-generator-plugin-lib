@@ -15,7 +15,7 @@ class PerLineTokenParserTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTag()
     {
-        $this->assertEquals('perline', (new PerLineTokenParser())->getTag());
+        self::assertEquals('perline', (new PerLineTokenParser())->getTag());
     }
 
     public function parseProvider()
@@ -66,13 +66,13 @@ class PerLineTokenParserTest extends \PHPUnit_Framework_TestCase
         $node = $token_parser->parse($stream->next());
 
         // check if we get a valid node back (of type PerLineNode)
-        $this->assertInstanceOf(PerLineNode::class, $node);
+        self::assertInstanceOf(PerLineNode::class, $node);
 
         // Check the contents of what we parsed.
         if ($node instanceof PerLineNode) {
-            $this->assertEquals($prefix, $node->getAttribute('prefix'));
-            $this->assertEquals($postfix, $node->getAttribute('postfix'));
-            $this->assertEquals($lines->__toString(), $node->getNode('lines')->__toString());
+            self::assertEquals($prefix, $node->getAttribute('prefix'));
+            self::assertEquals($postfix, $node->getAttribute('postfix'));
+            self::assertEquals($lines->__toString(), $node->getNode('lines')->__toString());
         }
     }
 }

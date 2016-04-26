@@ -14,11 +14,11 @@ class StudentTest extends \PHPUnit_Framework_TestCase
         $nico   = new Student();
 
         $nico->setStudent($stefan);
-        $this->assertSame($stefan, $nico->getStudent());
+        self::assertSame($stefan, $nico->getStudent());
 
         $stefan->setStudent($nico);
-        $this->assertSame($nico, $stefan->getStudent());
-        $this->assertSame($stefan, $nico->getStudent());
+        self::assertSame($nico, $stefan->getStudent());
+        self::assertSame($stefan, $nico->getStudent());
     }
 
     /**

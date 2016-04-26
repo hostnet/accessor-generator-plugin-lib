@@ -30,7 +30,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSubscribedEvents()
     {
-        $this->assertEquals(
+        self::assertEquals(
             [ScriptEvents::PRE_AUTOLOAD_DUMP => ['onPreAutoloadDump', 20 ]],
             Plugin::getSubscribedEvents()
         );

@@ -51,7 +51,7 @@ class TokenStreamTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException($exception);
         $output = $this->stream->type($loc);
 
-        $this->assertEquals(
+        self::assertEquals(
             $type,
             $output,
             sprintf(
@@ -86,7 +86,7 @@ class TokenStreamTest extends \PHPUnit_Framework_TestCase
     public function testValue($loc, $value, $exception = null)
     {
         $this->setExpectedException($exception);
-        $this->assertEquals($value, $this->stream->value($loc));
+        self::assertEquals($value, $this->stream->value($loc));
     }
 
     public function scanProvider()
@@ -121,7 +121,7 @@ class TokenStreamTest extends \PHPUnit_Framework_TestCase
     public function testScan(array $tokens, $input_loc, $output_loc, $exception = null)
     {
         $this->setExpectedException($exception);
-        $this->assertSame($output_loc, $this->stream->scan($input_loc, $tokens));
+        self::assertSame($output_loc, $this->stream->scan($input_loc, $tokens));
     }
 
     public function nextProvider()
@@ -155,9 +155,9 @@ class TokenStreamTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException($exception);
         if ($tokens === null) {
-            $this->assertSame($output_loc, $this->stream->next($input_loc));
+            self::assertSame($output_loc, $this->stream->next($input_loc));
         } else {
-            $this->assertSame($output_loc, $this->stream->next($input_loc, $tokens));
+            self::assertSame($output_loc, $this->stream->next($input_loc, $tokens));
         }
     }
 
@@ -193,9 +193,9 @@ class TokenStreamTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException($exception);
         if ($tokens === null) {
-            $this->assertSame($output_loc, $this->stream->previous($input_loc));
+            self::assertSame($output_loc, $this->stream->previous($input_loc));
         } else {
-            $this->assertSame($output_loc, $this->stream->previous($input_loc, $tokens));
+            self::assertSame($output_loc, $this->stream->previous($input_loc, $tokens));
         }
     }
 }

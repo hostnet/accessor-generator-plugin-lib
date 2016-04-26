@@ -15,7 +15,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $shipping = new Shipping();
 
         $item->setShipping($shipping);
-        $this->assertSame($shipping, $item->getShipping());
+        self::assertSame($shipping, $item->getShipping());
     }
 
     /**

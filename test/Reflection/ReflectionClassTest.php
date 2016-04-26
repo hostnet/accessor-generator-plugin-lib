@@ -159,17 +159,17 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
     {
         $class = new ReflectionClass(__DIR__ . '/fixtures/' . $filename);
 
-        $this->assertEquals($name, $class->getName());
-        $this->assertEquals(__DIR__ . '/fixtures/' . $filename, $class->getFilename());
-        $this->assertEquals($namespace, $class->getNamespace());
-        $this->assertEquals($imports, $class->getUseStatements());
+        self::assertEquals($name, $class->getName());
+        self::assertEquals(__DIR__ . '/fixtures/' . $filename, $class->getFilename());
+        self::assertEquals($namespace, $class->getNamespace());
+        self::assertEquals($imports, $class->getUseStatements());
 
         $reflected_properties = $class->getProperties();
         array_walk($reflected_properties, function (&$item) {
             $item = $item->__toString();
         });
 
-        $this->assertEquals($properties, $reflected_properties);
+        self::assertEquals($properties, $reflected_properties);
     }
 
     /**
@@ -196,7 +196,7 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
     public function testClassNotFoundException()
     {
         $class = new ReflectionClass(__DIR__ . '/fixtures/noclass.php');
-        $this->assertEquals('ThisNamespace', $class->getNamespace());
+        self::assertEquals('ThisNamespace', $class->getNamespace());
         $class->getName();
     }
 
@@ -206,7 +206,7 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
     public function testEmptyFileClassNotFoundException()
     {
         $class = new ReflectionClass(__DIR__ . '/fixtures/empty.php');
-        $this->assertEquals('', $class->getNamespace());
+        self::assertEquals('', $class->getNamespace());
         $class->getName();
     }
 
@@ -216,14 +216,14 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
     public function testBroken()
     {
         $class = new ReflectionClass(__DIR__ . '/fixtures/broken.php');
-        $this->assertEquals([ 'ORM' => 'Doctrine\ORM\Mapping'], $class->getUseStatements());
-        $this->assertEquals([], $class->getUseStatements());
+        self::assertEquals([ 'ORM' => 'Doctrine\ORM\Mapping'], $class->getUseStatements());
+        self::assertEquals([], $class->getUseStatements());
     }
 
     public function testCache()
     {
         $class = new ReflectionClass(__DIR__ . '/fixtures/abstract.php');
-        $this->assertEquals(['ORM' => 'Doctrine\ORM\Mapping'], $class->getUseStatements());
-        $this->assertEquals(['ORM' => 'Doctrine\ORM\Mapping'], $class->getUseStatements());
+        self::assertEquals(['ORM' => 'Doctrine\ORM\Mapping'], $class->getUseStatements());
+        self::assertEquals(['ORM' => 'Doctrine\ORM\Mapping'], $class->getUseStatements());
     }
 }

@@ -91,16 +91,16 @@ class GenerateAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         $processor->processAnnotation($annotation, $information);
 
         // Check if right information was processed.
-        $this->assertSame($get, $information->willGenerateGet());
-        $this->assertSame($set, $information->willGenerateSet());
-        $this->assertSame($add, $information->willGenerateAdd());
-        $this->assertSame($remove, $information->willGenerateRemove());
-        $this->assertSame($type, $information->getType());
+        self::assertSame($get, $information->willGenerateGet());
+        self::assertSame($set, $information->willGenerateSet());
+        self::assertSame($add, $information->willGenerateAdd());
+        self::assertSame($remove, $information->willGenerateRemove());
+        self::assertSame($type, $information->getType());
 
         // If $set, is false we wil not generate a add method and remove method.
         if ($set == false) {
-            $this->assertFalse($information->willGenerateAdd());
-            $this->assertFalse($information->willGenerateRemove());
+            self::assertFalse($information->willGenerateAdd());
+            self::assertFalse($information->willGenerateRemove());
         }
     }
 }

@@ -15,17 +15,17 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $parent->addChild($node_a)->addChild($node_b);
         $parent->removeChild($parent);
 
-        $this->assertEquals(2, count($parent->getChildren()));
-        $this->assertSame($node_a, $parent->getChildren()[0]);
-        $this->assertSame($node_b, $parent->getChildren()[1]);
+        self::assertEquals(2, count($parent->getChildren()));
+        self::assertSame($node_a, $parent->getChildren()[0]);
+        self::assertSame($node_b, $parent->getChildren()[1]);
     }
 
     public function testGetChildren()
     {
         $category = new Category();
         $children = $category->getChildren();
-        $this->assertEmpty($children);
-        $this->assertInstanceOf(Collection::class, $children);
+        self::assertEmpty($children);
+        self::assertInstanceOf(Collection::class, $children);
     }
 
     /**
@@ -46,18 +46,18 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $child    = new Category();
 
         // The initial list should be empty.
-        $this->assertEmpty($category->getChildren());
+        self::assertEmpty($category->getChildren());
 
         // Add and receive a child.
         $category->addChild($child);
-        $this->assertSame($child, $category->getChildren()->first());
-        $this->assertEquals(1, $category->getChildren()->count());
+        self::assertSame($child, $category->getChildren()->first());
+        self::assertEquals(1, $category->getChildren()->count());
 
         // Add the same child again, we expect no error
         // but also no duplicate entries.
         $category->addChild($child);
-        $this->assertSame($child, $category->getChildren()->first());
-        $this->assertEquals(1, $category->getChildren()->count());
+        self::assertSame($child, $category->getChildren()->first());
+        self::assertEquals(1, $category->getChildren()->count());
     }
 
     /**
@@ -69,13 +69,13 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $child    = new Category($category);
 
         // Add and receive a child.
-        $this->assertSame($category, $child->getParent());
+        self::assertSame($category, $child->getParent());
 
         // Add the same child again, we expect no error
         // but also no duplicate entries.
         $category->addChild($child);
-        $this->assertSame($child, $category->getChildren()->first());
-        $this->assertEquals(1, $category->getChildren()->count());
+        self::assertSame($child, $category->getChildren()->first());
+        self::assertEquals(1, $category->getChildren()->count());
     }
 
     /**
@@ -97,22 +97,22 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $child    = new Category();
 
         // The initial list should be empty.
-        $this->assertEmpty($category->getChildren());
+        self::assertEmpty($category->getChildren());
 
         // Add and receive a child.
         $category->addChild($child);
-        $this->assertSame($child, $category->getChildren()->first());
-        $this->assertEquals(1, $category->getChildren()->count());
-        $this->assertSame($category, $child->getParent());
+        self::assertSame($child, $category->getChildren()->first());
+        self::assertEquals(1, $category->getChildren()->count());
+        self::assertSame($category, $child->getParent());
 
         // Remove child, check return value and check list.
-        $this->assertSame($category->removeChild($child), $category);
-        $this->assertEquals(0, $category->getChildren()->count());
-        $this->assertNull($child->getParent());
+        self::assertSame($category->removeChild($child), $category);
+        self::assertEquals(0, $category->getChildren()->count());
+        self::assertNull($child->getParent());
 
         // Remove not existing child, check return value. No
         // error is expected.
-        $this->assertSame($category->removeChild($child), $category);
+        self::assertSame($category->removeChild($child), $category);
     }
 
     /**
@@ -157,43 +157,43 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         // Add b as child to a
         $a->addChild($b);
         $a->addChild($b);
-        $this->assertSame($b, $a->getChildren()->first());
-        $this->assertSame($a, $b->getParent());
+        self::assertSame($b, $a->getChildren()->first());
+        self::assertSame($a, $b->getParent());
 
         // Set a as parent to b
         $b->setParent($a);
         $b->setParent($a);
-        $this->assertSame($b, $a->getChildren()->first());
-        $this->assertSame($a, $b->getParent());
+        self::assertSame($b, $a->getChildren()->first());
+        self::assertSame($a, $b->getParent());
 
         // Unset parent of b
         $b->setParent(null);
-        $this->assertEquals(0, $a->getChildren()->count());
-        $this->assertNull($b->getParent());
+        self::assertEquals(0, $a->getChildren()->count());
+        self::assertNull($b->getParent());
 
         // Add b as child to c
         $c->addChild($b);
         $c->addChild($b);
-        $this->assertSame($b, $c->getChildren()->first());
-        $this->assertSame($c, $b->getParent());
+        self::assertSame($b, $c->getChildren()->first());
+        self::assertSame($c, $b->getParent());
 
         // Set a as parent to b
         $b->setParent($a);
         $b->setParent($a);
         $a->addChild($b);
-        $this->assertEquals(0, $c->getChildren()->count());
-        $this->assertSame($b, $a->getChildren()->first());
-        $this->assertSame($a, $b->getParent());
+        self::assertEquals(0, $c->getChildren()->count());
+        self::assertSame($b, $a->getChildren()->first());
+        self::assertSame($a, $b->getParent());
 
         // Set parent when get children has not been called
         $e->setParent($d);
-        $this->assertSame($e, $d->getChildren()->first());
+        self::assertSame($e, $d->getChildren()->first());
     }
 
     public function testGetParentNotInitialized()
     {
         $c = new Category();
-        $this->assertNull($c->getParent());
+        self::assertNull($c->getParent());
     }
 
     /**

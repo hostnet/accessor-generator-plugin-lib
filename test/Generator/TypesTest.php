@@ -93,7 +93,7 @@ class TypesTest extends \PHPUnit_Framework_TestCase
             $get = $types->$getter();
         }
 
-        $this->assertTrue(
+        self::assertTrue(
             $value === $get,
             sprintf('%s is not equal in value and type to %s', var_export($value, true), var_export($get, true))
         );
@@ -201,9 +201,9 @@ class TypesTest extends \PHPUnit_Framework_TestCase
         }
 
         // Check for fluent interface
-        $this->assertSame($types, $set);
+        self::assertSame($types, $set);
 
-        $this->assertEquals($value, $get);
+        self::assertEquals($value, $get);
     }
 
     /**
@@ -229,30 +229,30 @@ class TypesTest extends \PHPUnit_Framework_TestCase
         $types = new Types();
 
         $types->setDecimal('1E+8');
-        $this->assertEquals('100000000', $types->getDecimal());
+        self::assertEquals('100000000', $types->getDecimal());
 
         $types->setDecimal('1.0000000005E+8', true);
-        $this->assertEquals('100000000.1', $types->getDecimal());
+        self::assertEquals('100000000.1', $types->getDecimal());
 
         $types->setDecimal('1.0000000004E+8', true);
-        $this->assertEquals('100000000.0', $types->getDecimal());
+        self::assertEquals('100000000.0', $types->getDecimal());
 
         $types->setDecimal('+1.0000000005E+8', true);
-        $this->assertEquals('100000000.1', $types->getDecimal());
+        self::assertEquals('100000000.1', $types->getDecimal());
 
         $types->setDecimal('-1.0000000005E+8', true);
-        $this->assertEquals('-100000000.1', $types->getDecimal());
+        self::assertEquals('-100000000.1', $types->getDecimal());
 
         $types->setDecimal('+1E-1');
-        $this->assertEquals('0.1', $types->getDecimal());
+        self::assertEquals('0.1', $types->getDecimal());
 
         $types->setDecimal('+1E-2', true);
-        $this->assertEquals('0.0', $types->getDecimal());
+        self::assertEquals('0.0', $types->getDecimal());
 
         $types->setDecimal('+5E-2', true);
-        $this->assertEquals('0.1', $types->getDecimal());
+        self::assertEquals('0.1', $types->getDecimal());
 
         $types->setDecimal(+5E-20, true);
-        $this->assertEquals('0.0', $types->getDecimal());
+        self::assertEquals('0.0', $types->getDecimal());
     }
 }

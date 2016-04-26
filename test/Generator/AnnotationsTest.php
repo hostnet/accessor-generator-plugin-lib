@@ -39,7 +39,7 @@ class AnnotationsTest extends \PHPUnit_Framework_TestCase
     {
         $annotations = new Annotations();
         $date        = new \DateTime();
-        $this->assertSame($annotations, $annotations->setStupid($date));
-        $this->assertSame($date, $annotations->getStupid());
+        self::assertSame($annotations, $annotations->setStupid($date));
+        self::assertSame($date, $annotations->getStupid());
     }
 }

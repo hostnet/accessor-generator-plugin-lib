@@ -63,7 +63,7 @@ class CodeGeneratorTest extends \PHPUnit_Framework_TestCase
         $actual_contents = preg_replace($pattern, '// HEADER', $actual_contents, 1);
 
         // Test if contents is the expected contents.
-        $this->assertEquals($expected_contents, $actual_contents);
+        self::assertEquals($expected_contents, $actual_contents);
     }
 
     private function getGenerator()

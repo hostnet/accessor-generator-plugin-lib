@@ -29,12 +29,12 @@ class NullableTest extends \PHPUnit_Framework_TestCase
 
     public function testSetDatetimeDefault()
     {
-        $this->assertSame($this->nullable, $this->nullable->setDatetimeDefault(new \DateTime()));
-        $this->assertSame($this->nullable, $this->nullable->setDatetimeDefault(null));
+        self::assertSame($this->nullable, $this->nullable->setDatetimeDefault(new \DateTime()));
+        self::assertSame($this->nullable, $this->nullable->setDatetimeDefault(null));
 
         $property = new \ReflectionProperty($this->nullable, 'datetime_default');
         $property->setAccessible(true);
-        $this->assertSame(null, $property->getValue($this->nullable));
+        self::assertSame(null, $property->getValue($this->nullable));
     }
 
     /**
@@ -47,12 +47,12 @@ class NullableTest extends \PHPUnit_Framework_TestCase
 
     public function testSetDatetimeNullable()
     {
-        $this->assertSame($this->nullable, $this->nullable->setDatetimeNullable(new \DateTime()));
-        $this->assertSame($this->nullable, $this->nullable->setDatetimeNullable(null));
+        self::assertSame($this->nullable, $this->nullable->setDatetimeNullable(new \DateTime()));
+        self::assertSame($this->nullable, $this->nullable->setDatetimeNullable(null));
 
         $property = new \ReflectionProperty($this->nullable, 'datetime_nullable');
         $property->setAccessible(true);
-        $this->assertSame(null, $property->getValue($this->nullable));
+        self::assertSame(null, $property->getValue($this->nullable));
     }
 
     /**
@@ -65,12 +65,12 @@ class NullableTest extends \PHPUnit_Framework_TestCase
 
     public function testSetDatetimeBoth()
     {
-        $this->assertSame($this->nullable, $this->nullable->setDatetimeBoth(new \DateTime()));
-        $this->assertSame($this->nullable, $this->nullable->setDatetimeBoth(null));
+        self::assertSame($this->nullable, $this->nullable->setDatetimeBoth(new \DateTime()));
+        self::assertSame($this->nullable, $this->nullable->setDatetimeBoth(null));
 
         $property = new \ReflectionProperty($this->nullable, 'datetime_both');
         $property->setAccessible(true);
-        $this->assertSame(null, $property->getValue($this->nullable));
+        self::assertSame(null, $property->getValue($this->nullable));
     }
 
     /**
@@ -83,12 +83,12 @@ class NullableTest extends \PHPUnit_Framework_TestCase
 
     public function testSetFeature()
     {
-        $this->assertSame($this->nullable, $this->nullable->setFeature(new Feature()));
-        $this->assertSame($this->nullable, $this->nullable->setFeature(null));
+        self::assertSame($this->nullable, $this->nullable->setFeature(new Feature()));
+        self::assertSame($this->nullable, $this->nullable->setFeature(null));
 
         $property = new \ReflectionProperty($this->nullable, 'feature');
         $property->setAccessible(true);
-        $this->assertSame(null, $property->getValue($this->nullable));
+        self::assertSame(null, $property->getValue($this->nullable));
     }
 
     /**
@@ -101,12 +101,12 @@ class NullableTest extends \PHPUnit_Framework_TestCase
 
     public function testSetAnOtherFeature()
     {
-        $this->assertSame($this->nullable, $this->nullable->setAnotherFeature(new Feature()));
-        $this->assertSame($this->nullable, $this->nullable->setAnotherFeature(null));
+        self::assertSame($this->nullable, $this->nullable->setAnotherFeature(new Feature()));
+        self::assertSame($this->nullable, $this->nullable->setAnotherFeature(null));
 
         $property = new \ReflectionProperty($this->nullable, 'an_other_feature');
         $property->setAccessible(true);
-        $this->assertNull($property->getValue($this->nullable));
+        self::assertNull($property->getValue($this->nullable));
     }
 
     /**
@@ -143,15 +143,15 @@ class NullableTest extends \PHPUnit_Framework_TestCase
         $property->setAccessible(true);
 
         // Check default value.
-        $this->assertSame(2, $property->getValue($this->nullable));
+        self::assertSame(2, $property->getValue($this->nullable));
 
         // Set null
-        $this->assertSame($this->nullable, $this->nullable->setIntDifferent(null));
-        $this->assertSame(null, $property->getValue($this->nullable));
+        self::assertSame($this->nullable, $this->nullable->setIntDifferent(null));
+        self::assertSame(null, $property->getValue($this->nullable));
 
         // Set default.
-        $this->assertSame($this->nullable, $this->nullable->setIntDifferent());
-        $this->assertSame(2, $property->getValue($this->nullable));
+        self::assertSame($this->nullable, $this->nullable->setIntDifferent());
+        self::assertSame(2, $property->getValue($this->nullable));
     }
 
     /**
@@ -184,11 +184,11 @@ class NullableTest extends \PHPUnit_Framework_TestCase
 
     public function testSetInt()
     {
-        $this->assertSame($this->nullable, $this->nullable->setInt(5));
-        $this->assertEquals(5, $this->nullable->getInt());
+        self::assertSame($this->nullable, $this->nullable->setInt(5));
+        self::assertEquals(5, $this->nullable->getInt());
 
-        $this->assertSame($this->nullable, $this->nullable->setInt(null));
-        $this->assertEquals(null, $this->nullable->getInt());
+        self::assertSame($this->nullable, $this->nullable->setInt(null));
+        self::assertEquals(null, $this->nullable->getInt());
     }
 
     /**
@@ -236,10 +236,10 @@ class NullableTest extends \PHPUnit_Framework_TestCase
 
     public function testSetString()
     {
-        $this->assertSame($this->nullable, $this->nullable->setString(null));
-        $this->assertNull($this->nullable->getString());
-        $this->assertSame($this->nullable, $this->nullable->setString(''));
-        $this->assertSame('', $this->nullable->getString());
+        self::assertSame($this->nullable, $this->nullable->setString(null));
+        self::assertNull($this->nullable->getString());
+        self::assertSame($this->nullable, $this->nullable->setString(''));
+        self::assertSame('', $this->nullable->getString());
     }
 
     /**
@@ -266,27 +266,27 @@ class NullableTest extends \PHPUnit_Framework_TestCase
         $property->setAccessible(true);
 
         // Every thing should be null at start.
-        $this->assertNull($this->nullable->getOnlyOne());
-        $this->assertNull($property->getValue($one_to_one_a));
-        $this->assertNull($property->getValue($one_to_one_b));
+        self::assertNull($this->nullable->getOnlyOne());
+        self::assertNull($property->getValue($one_to_one_a));
+        self::assertNull($property->getValue($one_to_one_b));
 
         // Set one_to_one a, check b is still null and that the roundtrip works.
-        $this->assertSame($this->nullable, $this->nullable->setOnlyOne($one_to_one_a));
-        $this->assertSame($one_to_one_a, $this->nullable->getOnlyOne());
-        $this->assertSame($this->nullable, $property->getValue($one_to_one_a));
-        $this->assertNull($property->getValue($one_to_one_b));
+        self::assertSame($this->nullable, $this->nullable->setOnlyOne($one_to_one_a));
+        self::assertSame($one_to_one_a, $this->nullable->getOnlyOne());
+        self::assertSame($this->nullable, $property->getValue($one_to_one_a));
+        self::assertNull($property->getValue($one_to_one_b));
 
         // Set one_to_one b, check a is null again and that the roundtrip works.
-        $this->assertSame($this->nullable, $this->nullable->setOnlyOne($one_to_one_b));
-        $this->assertSame($one_to_one_b, $this->nullable->getOnlyOne());
-        $this->assertNull($property->getValue($one_to_one_a));
-        $this->assertSame($this->nullable, $property->getValue($one_to_one_b));
+        self::assertSame($this->nullable, $this->nullable->setOnlyOne($one_to_one_b));
+        self::assertSame($one_to_one_b, $this->nullable->getOnlyOne());
+        self::assertNull($property->getValue($one_to_one_a));
+        self::assertSame($this->nullable, $property->getValue($one_to_one_b));
 
         // Unset everty thing and verify everything is set to null again.
-        $this->assertSame($this->nullable, $this->nullable->setOnlyOne(null));
-        $this->assertNull($this->nullable->getOnlyOne());
-        $this->assertNull($property->getValue($one_to_one_a));
-        $this->assertNull($property->getValue($one_to_one_b));
+        self::assertSame($this->nullable, $this->nullable->setOnlyOne(null));
+        self::assertNull($this->nullable->getOnlyOne());
+        self::assertNull($property->getValue($one_to_one_a));
+        self::assertNull($property->getValue($one_to_one_b));
     }
 
     /**
@@ -310,14 +310,14 @@ class NullableTest extends \PHPUnit_Framework_TestCase
         $item = new Item();
 
         // Default situation returns null.
-        $this->assertNull($this->nullable->getUnidirectionalOneToOne());
+        self::assertNull($this->nullable->getUnidirectionalOneToOne());
 
         // Set a value and retrieve it again.
-        $this->assertSame($this->nullable, $this->nullable->setUnidirectionalOneToOne($item));
-        $this->assertSame($item, $this->nullable->getUnidirectionalOneToOne());
+        self::assertSame($this->nullable, $this->nullable->setUnidirectionalOneToOne($item));
+        self::assertSame($item, $this->nullable->getUnidirectionalOneToOne());
 
         // Unset a value and verify it is gone.
-        $this->assertSame($this->nullable, $this->nullable->setUnidirectionalOneToOne(null));
-        $this->assertNull($this->nullable->getUnidirectionalOneToOne());
+        self::assertSame($this->nullable, $this->nullable->setUnidirectionalOneToOne(null));
+        self::assertNull($this->nullable->getUnidirectionalOneToOne());
     }
 }

@@ -9,7 +9,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testGetAddressEmpty()
     {
         $user = new User();
-        $this->assertNull($user->getAddress());
+        self::assertNull($user->getAddress());
     }
 
     /**
@@ -27,10 +27,10 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $address = new Address();
 
         $user->setAddress($address);
-        $this->assertSame($address, $user->getAddress());
+        self::assertSame($address, $user->getAddress());
 
         $user->setAddress(null);
-        $this->assertNull($user->getAddress());
+        self::assertNull($user->getAddress());
     }
 
     /**

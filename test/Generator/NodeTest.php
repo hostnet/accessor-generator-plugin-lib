@@ -10,8 +10,8 @@ class NodeTest extends \PHPUnit_Framework_TestCase
     {
         $node     = new Node();
         $children = $node->getOut();
-        $this->assertEmpty($children);
-        $this->assertInstanceOf(Collection::class, $children);
+        self::assertEmpty($children);
+        self::assertInstanceOf(Collection::class, $children);
     }
 
     /**
@@ -34,18 +34,18 @@ class NodeTest extends \PHPUnit_Framework_TestCase
         $d = new Node();
 
         // The initial list should be empty.
-        $this->assertEmpty($a->getOut());
+        self::assertEmpty($a->getOut());
 
         // Add and receive a node (cycle).
         $a->addOut($a);
-        $this->assertSame($a, $a->getOut()->first());
-        $this->assertCount(1, $a->getOut());
+        self::assertSame($a, $a->getOut()->first());
+        self::assertCount(1, $a->getOut());
 
         // Add the same child again, we expect no error
         // but also no duplicate entries.
         $a->addOut($a);
-        $this->assertSame($a, $a->getOut()->first());
-        $this->assertCount(1, $a->getOut());
+        self::assertSame($a, $a->getOut()->first());
+        self::assertCount(1, $a->getOut());
 
         // Create a fully connected network of four nodes
         // inlcuding self references per node.
@@ -65,10 +65,10 @@ class NodeTest extends \PHPUnit_Framework_TestCase
         $d->addOut($b);
         $d->addOut($c);
         $d->addOut($d);
-        $this->assertEquals([$a, $b, $c, $d], $a->getOut()->toArray());
-        $this->assertEquals([$a, $b, $c, $d], $b->getOut()->toArray());
-        $this->assertEquals([$a, $b, $c, $d], $c->getOut()->toArray());
-        $this->assertEquals([$a, $b, $c, $d], $d->getOut()->toArray());
+        self::assertEquals([$a, $b, $c, $d], $a->getOut()->toArray());
+        self::assertEquals([$a, $b, $c, $d], $b->getOut()->toArray());
+        self::assertEquals([$a, $b, $c, $d], $c->getOut()->toArray());
+        self::assertEquals([$a, $b, $c, $d], $d->getOut()->toArray());
     }
 
     /**
@@ -90,20 +90,20 @@ class NodeTest extends \PHPUnit_Framework_TestCase
         $child = new Node();
 
         // The initial list should be empty.
-        $this->assertEmpty($node->getOut());
+        self::assertEmpty($node->getOut());
 
         // Add and receive a child.
         $node->addOut($child);
-        $this->assertSame($child, $node->getOut()->first());
-        $this->assertCount(1, $node->getOut());
+        self::assertSame($child, $node->getOut()->first());
+        self::assertCount(1, $node->getOut());
 
         // Remove child, check return value and check list.
-        $this->assertSame($node->removeOut($child), $node);
-        $this->assertCount(0, $node->getOut());
+        self::assertSame($node->removeOut($child), $node);
+        self::assertCount(0, $node->getOut());
 
         // Remove not existing child, check return value. No
         // error is expected.
-        $this->assertSame($node->removeOut($child), $node);
+        self::assertSame($node->removeOut($child), $node);
     }
 
     /**

@@ -24,9 +24,9 @@ class ActorTest extends \PHPUnit_Framework_TestCase
     {
         $actor = new Actor();
         $movie = new Movie();
-        $this->assertEmpty($actor->getMovies());
+        self::assertEmpty($actor->getMovies());
         $actor->removeMovie($movie);
-        $this->assertEmpty($actor->getMovies());
+        self::assertEmpty($actor->getMovies());
     }
 
     /**
@@ -45,7 +45,7 @@ class ActorTest extends \PHPUnit_Framework_TestCase
         $movie = new Movie();
         $actor->addMovie($movie);
         $actor->addMovie($movie);
-        $this->assertSame($movie, $actor->getMovies()->first());
+        self::assertSame($movie, $actor->getMovies()->first());
     }
 
     public function testActorRemoveMovie()
@@ -53,15 +53,15 @@ class ActorTest extends \PHPUnit_Framework_TestCase
         $actor = new Actor();
         $movie = new Movie();
 
-        $this->assertEmpty($actor->getMovies());
+        self::assertEmpty($actor->getMovies());
         $actor->removeMovie($movie);
-        $this->assertEmpty($actor->getMovies());
+        self::assertEmpty($actor->getMovies());
 
         $actor->addMovie($movie);
-        $this->assertSame($movie, $actor->getMovies()->first());
+        self::assertSame($movie, $actor->getMovies()->first());
 
         $actor->removeMovie($movie);
-        $this->assertEmpty($actor->getMovies());
+        self::assertEmpty($actor->getMovies());
     }
 
     /**
@@ -81,21 +81,21 @@ class ActorTest extends \PHPUnit_Framework_TestCase
         $movie = new Movie();
 
         // The collections should be emptye
-        $this->assertEmpty($movie->getActors());
+        self::assertEmpty($movie->getActors());
 
         // The collections should subclass Collection
-        $this->assertInstanceOf(Collection::class, $actor->getMovies());
-        $this->assertInstanceOf(Collection::class, $movie->getActors());
+        self::assertInstanceOf(Collection::class, $actor->getMovies());
+        self::assertInstanceOf(Collection::class, $movie->getActors());
 
         // Add actor to movie and retrieve it again from the other side
         $movie->addActor($actor);
-        $this->assertSame($movie, $actor->getMovies()->first());
-        $this->assertSame($actor, $movie->getActors()->first());
+        self::assertSame($movie, $actor->getMovies()->first());
+        self::assertSame($actor, $movie->getActors()->first());
 
         // Remove again
         $movie->removeActor($actor);
-        $this->assertEmpty($actor->getMovies());
-        $this->assertEmpty($movie->getActors());
+        self::assertEmpty($actor->getMovies());
+        self::assertEmpty($movie->getActors());
 
         // Retrieve empty collection and fill afterwards,
         // the previous received object should contain the
@@ -103,7 +103,7 @@ class ActorTest extends \PHPUnit_Framework_TestCase
         $movies = $actor->getMovies();
         $actors = $movie->getActors();
         $actor->addMovie($movie);
-        $this->assertSame($movie, $movies->first());
-        $this->assertSame($actor, $actors->first());
+        self::assertSame($movie, $movies->first());
+        self::assertSame($actor, $actors->first());
     }
 }

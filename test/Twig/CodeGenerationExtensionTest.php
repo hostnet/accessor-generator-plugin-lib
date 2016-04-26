@@ -44,7 +44,7 @@ class CodeGenerationExtensionTest extends \PHPUnit_Framework_TestCase
     public function testGetName()
     {
         $cge = new CodeGenerationExtension();
-        $this->assertEquals('Hostnet Twig Code Generation Extension', $cge->getName());
+        self::assertEquals('Hostnet Twig Code Generation Extension', $cge->getName());
     }
 
     /**
@@ -55,8 +55,8 @@ class CodeGenerationExtensionTest extends \PHPUnit_Framework_TestCase
         $cge     = new CodeGenerationExtension();
         $parsers = $cge->getTokenParsers();
 
-        $this->assertTrue(count($parsers) == 1, 'One and only one parser given');
-        $this->assertInstanceOf(PerLineTokenParser::class, current($parsers));
+        self::assertTrue(count($parsers) == 1, 'One and only one parser given');
+        self::assertInstanceOf(PerLineTokenParser::class, current($parsers));
     }
 
     /**
@@ -81,7 +81,7 @@ class CodeGenerationExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function testClassify($input, $output)
     {
-        $this->assertEquals($output, $this->twig->render('classify', ['data' => $input]));
+        self::assertEquals($output, $this->twig->render('classify', ['data' => $input]));
     }
 
     public function twosComplementMaxProvider()
@@ -101,7 +101,7 @@ class CodeGenerationExtensionTest extends \PHPUnit_Framework_TestCase
     public function testTwosComplementMin($input, $output, $exception = null)
     {
         $this->setExpectedException($exception);
-        $this->assertEquals($output, $this->twig->render('twos_complement_min', ['data' => $input]));
+        self::assertEquals($output, $this->twig->render('twos_complement_min', ['data' => $input]));
     }
 
     public function twosComplementMinProvider()
@@ -121,7 +121,7 @@ class CodeGenerationExtensionTest extends \PHPUnit_Framework_TestCase
     public function testTwosComplementMax($input, $output, $exception = null)
     {
         $this->setExpectedException($exception);
-        $this->assertEquals($output, $this->twig->render('twos_complement_max', ['data' => $input]));
+        self::assertEquals($output, $this->twig->render('twos_complement_max', ['data' => $input]));
     }
 
     /**
@@ -181,7 +181,7 @@ class CodeGenerationExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function testSingularize($singular, $plural)
     {
-        $this->assertEquals($singular, $this->twig->render('singularize', ['data' => $plural]));
+        self::assertEquals($singular, $this->twig->render('singularize', ['data' => $plural]));
     }
 
     public function perLineProvider()
@@ -198,7 +198,7 @@ class CodeGenerationExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function testPerLine($template, $input, $output)
     {
-        $this->assertEquals($output, $this->twig->render($template, ['data' => $input]));
+        self::assertEquals($output, $this->twig->render($template, ['data' => $input]));
     }
 
     public function decimalRightShiftProvider()
@@ -222,7 +222,7 @@ class CodeGenerationExtensionTest extends \PHPUnit_Framework_TestCase
     public function testDecimalRightShift($input, $amount, $output, $exception = null)
     {
         $this->setExpectedException($exception);
-        $this->assertEquals(
+        self::assertEquals(
             $output,
             $this->twig->render('decimal_right_shift', ['data' => $input, 'amount' => $amount])
         );

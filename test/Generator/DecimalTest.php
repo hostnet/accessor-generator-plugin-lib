@@ -158,10 +158,10 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
         // Check result type
         $property = new \ReflectionProperty(Decimal::class, $property);
         $property->setAccessible(true);
-        $this->assertSame($value, $property->getValue($decimal));
+        self::assertSame($value, $property->getValue($decimal));
 
         // Check for fluent interface
-        $this->assertSame($decimal, $set);
+        self::assertSame($decimal, $set);
     }
 
     public function roundProvider()
@@ -222,11 +222,11 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
         $set     = $decimal->$setter($value_in, true);
 
         // Check for fluent interface
-        $this->assertSame($decimal, $set);
+        self::assertSame($decimal, $set);
 
         // Check result type
         $property = new \ReflectionProperty(Decimal::class, $field);
         $property->setAccessible(true);
-        $this->assertSame($value_out, $property->getValue($decimal));
+        self::assertSame($value_out, $property->getValue($decimal));
     }
 }

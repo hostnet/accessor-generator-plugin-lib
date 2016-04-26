@@ -16,10 +16,10 @@ class CommentTest extends \PHPUnit_Framework_TestCase
     public function testGetCol()
     {
         $comment = new Comment();
-        $this->assertNull($comment->getCol());
+        self::assertNull($comment->getCol());
 
         $comment = new Comment('test');
-        $this->assertEquals('test', $comment->getCol());
+        self::assertEquals('test', $comment->getCol());
     }
 
     /**

@@ -9,10 +9,10 @@ class GenerateTest extends \PHPUnit_Framework_TestCase
 
         // Test default on values and availabillity of
         // the Generate Annotation public fields
-        $this->assertTrue($generate->get);
-        $this->assertTrue($generate->set);
-        $this->assertTrue($generate->add);
-        $this->assertTrue($generate->remove);
-        $this->assertTrue($generate->is);
+        self::assertTrue($generate->get);
+        self::assertTrue($generate->set);
+        self::assertTrue($generate->add);
+        self::assertTrue($generate->remove);
+        self::assertTrue($generate->is);
     }
 }

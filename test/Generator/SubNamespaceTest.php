@@ -47,7 +47,7 @@ class SubNamespaceTest extends \PHPUnit_Framework_TestCase
     public function testSetAsterix()
     {
         $subnamespace = new SubNamespace();
-        $this->assertSame($subnamespace, $subnamespace->setAsterix('panoramix'));
-        $this->assertEquals('panoramix', $subnamespace->getAsterix());
+        self::assertSame($subnamespace, $subnamespace->setAsterix('panoramix'));
+        self::assertEquals('panoramix', $subnamespace->getAsterix());
     }
 }

@@ -15,13 +15,13 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $customer = new Customer();
 
         $cart->setCustomer($customer);
-        $this->assertSame($customer, $cart->getCustomer());
+        self::assertSame($customer, $cart->getCustomer());
     }
 
     public function testGetCustomerEmpty()
     {
         $cart = new Cart();
-        $this->assertNull($cart->getCustomer());
+        self::assertNull($cart->getCustomer());
     }
 
     /**

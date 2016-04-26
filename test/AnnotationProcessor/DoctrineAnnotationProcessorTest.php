@@ -99,42 +99,42 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         $this->processor->processAnnotation($column, $this->information);
 
         // Check if right information was processed.
-        $this->assertEquals(
+        self::assertEquals(
             $output->isUnique(),
             $this->information->isUnique(),
             'Value for unique does not match'
         );
-        $this->assertEquals(
+        self::assertEquals(
             $output->isNullable(),
             $this->information->isNullable(),
             'Value for nullable does not match'
         );
-        $this->assertEquals(
+        self::assertEquals(
             $output->isFixedPointNumber(),
             $this->information->isFixedPointNumber(),
             'Value for fixed point number does not match'
         );
-        $this->assertEquals(
+        self::assertEquals(
             $output->getIntegerSize(),
             $this->information->getIntegerSize(),
             'Value for integer size does not match'
         );
-        $this->assertEquals(
+        self::assertEquals(
             $output->getPrecision(),
             $this->information->getPrecision(),
             'Value for precision does not match'
         );
-        $this->assertEquals(
+        self::assertEquals(
             $output->getScale(),
             $this->information->getScale(),
             'Value for scale does not match'
         );
-        $this->assertEquals(
+        self::assertEquals(
             $output->getLength(),
             $this->information->getLength(),
             'Value for length does not match'
         );
-        $this->assertEquals(
+        self::assertEquals(
             $output->getType(),
             $this->information->getType(),
             'Value for type does not match'
@@ -173,9 +173,9 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
 
         // These annotation should lead to isCollection is is true
         if ($annotation instanceof ManyToMany || $annotation instanceof OneToMany) {
-            $this->assertTrue($this->information->isCollection());
+            self::assertTrue($this->information->isCollection());
         } else {
-            $this->assertFalse($this->information->isCollection());
+            self::assertFalse($this->information->isCollection());
         }
 
         // Check type.
@@ -185,25 +185,25 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
             || $annotation instanceof ManyToMany
         ) {
             $type = $annotation->targetEntity;
-            $this->assertEquals($type, $this->information->getType());
+            self::assertEquals($type, $this->information->getType());
         }
 
         // Check Generated value disables
         // set method generation.
         if ($annotation instanceof GeneratedValue) {
-            $this->assertFalse($this->information->willGenerateSet(), 'generate');
+            self::assertFalse($this->information->willGenerateSet(), 'generate');
         }
 
         // Check for a bidirectional association
         if (property_exists($annotation, 'mappedBy') && $annotation->mappedBy) {
             // Bidirectional, inverse side.
-            $this->assertEquals($annotation->mappedBy, $this->information->getReferencedProperty());
+            self::assertEquals($annotation->mappedBy, $this->information->getReferencedProperty());
         } elseif (property_exists($annotation, 'inversedBy') && $annotation->inversedBy) {
             // Bidirectional, owning side.
-            $this->assertEquals($annotation->inversedBy, $this->information->getReferencedProperty());
+            self::assertEquals($annotation->inversedBy, $this->information->getReferencedProperty());
         } else {
             // Unidirectional.
-            $this->assertEmpty($this->information->getReferencedProperty());
+            self::assertEmpty($this->information->getReferencedProperty());
         }
     }
 
@@ -268,7 +268,7 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->processor->processAnnotation($annotation, $this->information);
-        $this->assertSame($php_type, $this->information->getType());
+        self::assertSame($php_type, $this->information->getType());
     }
 
     public function testOtherAnnotation()
@@ -276,6 +276,6 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         $information = clone($this->information);
         $annotation  = new \stdClass();
         $this->processor->processAnnotation($annotation, $this->information);
-        $this->assertEquals($information, $this->information);
+        self::assertEquals($information, $this->information);
     }
 }
