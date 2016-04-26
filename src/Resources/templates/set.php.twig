@@ -29,7 +29,7 @@
  * @throws \LengthException if the length of the value is to long
  {% endif -%}
  */
-public function set{{ property.name | classify }}(
+{{ property.getSetVisibility() }} function set{{ property.name | classify }}(
     {{- property.isComplexType ? property.typeHint ~ ' '-}}
     ${{ property.name -}}
     {%- if property.default %} = {{ property.default | raw }}

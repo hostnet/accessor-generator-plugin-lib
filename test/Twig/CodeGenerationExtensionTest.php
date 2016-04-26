@@ -100,7 +100,7 @@ class CodeGenerationExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function testTwosComplementMin($input, $output, $exception = null)
     {
-        $this->setExpectedException($exception);
+        $this->expectException($exception);
         self::assertEquals($output, $this->twig->render('twos_complement_min', ['data' => $input]));
     }
 
@@ -120,7 +120,7 @@ class CodeGenerationExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function testTwosComplementMax($input, $output, $exception = null)
     {
-        $this->setExpectedException($exception);
+        $this->expectException($exception);
         self::assertEquals($output, $this->twig->render('twos_complement_max', ['data' => $input]));
     }
 
@@ -221,7 +221,7 @@ class CodeGenerationExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function testDecimalRightShift($input, $amount, $output, $exception = null)
     {
-        $this->setExpectedException($exception);
+        $this->expectException($exception);
         self::assertEquals(
             $output,
             $this->twig->render('decimal_right_shift', ['data' => $input, 'amount' => $amount])

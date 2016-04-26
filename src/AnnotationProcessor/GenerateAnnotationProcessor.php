@@ -15,28 +15,39 @@ class GenerateAnnotationProcessor implements AnnotationProcessorInterface
     /**
      * @see \Hostnet\Component\AccessorGenerator\AnnotationProcessorInterface::processAnnotation()
      * @param object $annotation
-     * @param PropertyInformation $information
+     * @param PropertyInformation $info
      */
     public function processAnnotation($annotation, PropertyInformation $info)
     {
-        // Only process Generata annotations.
-        if ($annotation instanceof Generate) {
-            // Only set when not set yet.
-            //
-            // If the Generate Annotations are processed
-            // after the, for example, GeneratedValue
-            // annotation, which will disable setter generator
-            // do not enable it again.
-            $info->willGenerateGet() === null && $info->setGenerateGet($annotation->get && $annotation->is);
-            $info->willGenerateSet() === null && $info->setGenerateSet($annotation->set);
-            $info->willGenerateAdd() === null && $info->setGenerateAdd($annotation->add && $annotation->set);
-            $info->willGenerateRemove() === null && $info->setGenerateRemove($annotation->remove && $annotation->set);
-            $info->getType() === null && $annotation->type && $info->setType($annotation->type);
-
-            // Enforce always
-            $info->setGenerateStrict($annotation->strict);
-            $annotation->type && $info->setTypeHint($annotation->type);
+        // Only process Generate annotations.
+        if (!$annotation instanceof Generate) {
+            return;
         }
+
+        // By default no method is generated.
+        //
+        // Each processor can enforce a limitation on the generated methods.
+        // If processor A lets a method be private, and processor B tells it to
+        // be protected, it will end up private.
+
+        $info->limitMaximumGetVisibility(
+            Generate::getMostLimitedVisibility($annotation->getGet(), $annotation->getIs())
+        );
+        $info->limitMaximumSetVisibility(
+            Generate::getMostLimitedVisibility($annotation->getSet())
+        );
+        $info->limitMaximumAddVisibility(
+            Generate::getMostLimitedVisibility($annotation->getAdd(), $annotation->getSet())
+        );
+        $info->limitMaximumRemoveVisibility(
+            Generate::getMostLimitedVisibility($annotation->getRemove(), $annotation->getSet())
+        );
+
+        $info->getType() === null && $annotation->getType() && $info->setType($annotation->getType());
+
+        // Enforce always
+        $info->setGenerateStrict($annotation->isStrict());
+        null !== $annotation->getType() && $info->setTypeHint($annotation->getType());
     }
 
     /**

@@ -15,7 +15,7 @@
  {% endif -%}
  * @throws \InvalidArgumentException
  */
-public function {{ getter }}()
+{{ property.getGetVisibility() }} function {{ getter }}()
 {
     if (func_num_args() > 0) {
         throw new \BadMethodCallException(

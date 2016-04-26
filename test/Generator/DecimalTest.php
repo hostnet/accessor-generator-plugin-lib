@@ -123,7 +123,7 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
      */
     public function testSet($scale, $precision, $value, $exception = null, $extra_parameter = null)
     {
-        $this->setExpectedException($exception);
+        $this->expectException($exception);
         $decimal = new Decimal();
 
         $property = sprintf('decimal_%d_%d', $scale, $precision);

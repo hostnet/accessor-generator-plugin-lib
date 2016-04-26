@@ -178,7 +178,6 @@ interface PropertyInformationInterface
      * Returns null if not set explicitly,
      * null can be interperted as false.
      *
-     *
      * @return bool|null
      */
     public function isUnique();
@@ -212,7 +211,6 @@ interface PropertyInformationInterface
      * is part of a bidirectional association
      * where the referenced part is a collection
      * (a many side of the relationship).
-
      * @return string
      */
     public function isReferencingCollection();
@@ -225,7 +223,7 @@ interface PropertyInformationInterface
      * Returns null if not set explicitly,
      * null can be interperted as false.
      *
-     * @return bool|null
+     * @return bool
      */
     public function willGenerateStrict();
 
@@ -237,15 +235,24 @@ interface PropertyInformationInterface
     public function willGenerateGet();
 
     /**
+     * @return string Public, protected or private.
+     */
+    public function getGetVisibility();
+
+    /**
      * If a set function should be generated.
      *
      * Returns null if not set explicitly,
      * null can be interperted as false.
      *
-     * @return bool|null
-
+     * @return bool
      */
     public function willGenerateSet();
+
+    /**
+     * @return string Public, protected or private.
+     */
+    public function getSetVisibility();
 
     /**
      * If a add function should be generated.
@@ -253,10 +260,14 @@ interface PropertyInformationInterface
      * Returns null if not set explicitly,
      * null can be interperted as false.
      *
-     * @return bool|null
-
+     * @return bool
      */
     public function willGenerateAdd();
+
+    /**
+     * @return string Public, protected or private.
+     */
+    public function getAddVisibility();
 
     /**
      * If a remove function should be generated.
@@ -264,8 +275,12 @@ interface PropertyInformationInterface
      * Returns null if not set explicitly,
      * null can be interperted as false.
      *
-     * @return bool|null
-
+     * @return bool
      */
     public function willGenerateRemove();
+
+    /**
+     * @return string Public, protected or private.
+     */
+    public function getRemoveVisibility();
 }

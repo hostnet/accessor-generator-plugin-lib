@@ -72,7 +72,7 @@ class TypesTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetType($type, $value, $exception = null, $extra_parameter = null)
     {
-        $this->setExpectedException($exception);
+        $this->expectException($exception);
 
         $types = new Types();
 
@@ -173,7 +173,7 @@ class TypesTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetType($type, $value, $exception = null, $extra_parameter = null)
     {
-        $this->setExpectedException($exception);
+        $this->expectException($exception);
         $types = new Types();
 
         if ($type === 'boolean') {

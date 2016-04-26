@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OneToOne;
+use Hostnet\Component\AccessorGenerator\Annotation\Generate;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception\InvalidColumnSettingsException;
 
 /**
@@ -52,7 +53,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
                 // should not have a stetter function generated.
                 // If the user insists on setting this collumn
                 // a setter could be implemented by hand.
-                $information->setGenerateSet(false);
+                $information->limitMaximumSetVisibility(Generate::VISIBILITY_NONE);
                 break;
             case $annotation instanceof OneToMany:
             case $annotation instanceof ManyToMany:
@@ -85,7 +86,8 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * Return referenced entity if we have a bidirectional
      * doctrine association.
      *
-     * @param object $annotation with annotation Annotation
+     * @param object              $annotation with annotation Annotation
+     * @param PropertyInformation $information
      */
     private function processBidirectional($annotation, PropertyInformation $information)
     {
@@ -115,6 +117,8 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      *
      * @param Column $column
      * @param PropertyInformation $information
+     *
+     * @throws InvalidColumnSettingsException
      */
     protected function processColumn(Column $column, PropertyInformation $information)
     {
@@ -149,7 +153,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * Process a JoinColumn Annotation, extraxt nullable.
      *
      * @param JoinColumn $join_column
-     * @param PropertyInformationInterface $information
+     * @param PropertyInformation $information
      */
     private function processJoinColumn(JoinColumn $join_column, PropertyInformation $information)
     {

@@ -125,7 +125,7 @@ class CodeGenerator implements CodeGeneratorInterface
         // Add import for ImmutableCollection if we generate any funtions that make use of this
         // collection wrapper.
         if ($add_collection_import) {
-            $imports[] = "Hostnet\Component\AccessorGenerator\Collection\ImmutableCollection";
+            $imports[] = 'Hostnet\Component\AccessorGenerator\Collection\ImmutableCollection';
         }
 
         if ($code) {

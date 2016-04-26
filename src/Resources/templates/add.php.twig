@@ -11,7 +11,7 @@
  * @return {{ property.class }}
  * @throws \BadMethodCallException if the number of arguments is not correct
  */
-public function add{{ property.name | singularize | classify }}({{ property.typeHint }} ${{ property.name | singularize }})
+{{ property.getAddVisibility() }} function add{{ property.name | singularize | classify }}({{ property.typeHint }} ${{ property.name | singularize }})
 {
     if (func_num_args() != 1) {
         throw new \BadMethodCallException(

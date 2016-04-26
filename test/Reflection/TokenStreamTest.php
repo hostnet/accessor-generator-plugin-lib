@@ -48,7 +48,7 @@ class TokenStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function testType($loc, $type, $exception = null)
     {
-        $this->setExpectedException($exception);
+        $this->expectException($exception);
         $output = $this->stream->type($loc);
 
         self::assertEquals(
@@ -85,7 +85,7 @@ class TokenStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function testValue($loc, $value, $exception = null)
     {
-        $this->setExpectedException($exception);
+        $this->expectException($exception);
         self::assertEquals($value, $this->stream->value($loc));
     }
 
@@ -120,7 +120,7 @@ class TokenStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function testScan(array $tokens, $input_loc, $output_loc, $exception = null)
     {
-        $this->setExpectedException($exception);
+        $this->expectException($exception);
         self::assertSame($output_loc, $this->stream->scan($input_loc, $tokens));
     }
 
@@ -153,7 +153,7 @@ class TokenStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function testNext($input_loc, $output_loc, array $tokens = null, $exception = null)
     {
-        $this->setExpectedException($exception);
+        $this->expectException($exception);
         if ($tokens === null) {
             self::assertSame($output_loc, $this->stream->next($input_loc));
         } else {
@@ -191,7 +191,7 @@ class TokenStreamTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrevious($input_loc, $output_loc, array $tokens = null, $exception = null)
     {
-        $this->setExpectedException($exception);
+        $this->expectException($exception);
         if ($tokens === null) {
             self::assertSame($output_loc, $this->stream->previous($input_loc));
         } else {

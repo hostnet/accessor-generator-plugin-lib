@@ -62,7 +62,7 @@ class ReflectionProperty
         }
 
         // Invalid type used for modifiers.
-        if (!is_integer($modifiers)) {
+        if (!is_int($modifiers)) {
             throw new \InvalidArgumentException(sprintf('$modifiers (%s) is not an bitfield', $modifiers));
         }
 

@@ -55,7 +55,7 @@ class GenerateTypesTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetType($type, $value, $exception = null, $extra_parameter = null)
     {
-        $this->setExpectedException($exception);
+        $this->expectException($exception);
 
         $types = new GenerateTypes();
 
@@ -129,7 +129,7 @@ class GenerateTypesTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetType($type, $value, $exception = null, $extra_parameter = null)
     {
-        $this->setExpectedException($exception);
+        $this->expectException($exception);
         $types = new GenerateTypes();
 
         if ($type === 'boolean') {

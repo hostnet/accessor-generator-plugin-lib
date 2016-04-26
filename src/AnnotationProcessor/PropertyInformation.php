@@ -3,6 +3,7 @@
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
 use Doctrine\Common\Annotations\DocParser;
+use Hostnet\Component\AccessorGenerator\Annotation\Generate;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
 
 /**
@@ -101,25 +102,25 @@ class PropertyInformation implements PropertyInformationInterface
 
     /**
      * @see PropertyInformationInterface::willGenerateGet()
-     * @var bool|null
+     * @var string|null
      */
     private $generate_get = null;
 
     /**
      * @see PropertyInformationInterface::willGenerateSet()
-     * @var bool|null
+     * @var string|null
      */
     private $generate_set = null;
 
     /**
      * @see PropertyInformationInterface::willGenerateAdd()
-     * @var bool|null
+     * @var string|null
      */
     private $generate_add = null;
 
     /**
      * @see PropertyInformationInterface::willGenerateRemove()
-     * @var bool|null
+     * @var string|null
      */
     private $generate_remove = null;
 
@@ -179,14 +180,13 @@ class PropertyInformation implements PropertyInformationInterface
     /**
      * Start the processing of aprocessAnnotations
      *
-     * @param  array $annotations
      * @return void
      */
     public function processAnnotations()
     {
         $class    = $this->property->getClass();
         $imports  = $class ? array_change_key_case($class->getUseStatements()) : [];
-        $filename = $class ? $class->getFileName() : 'memory';
+        $filename = $class ? $class->getFilename() : 'memory';
 
         // Get all the namespaces in which parsable annotations reside.
         $namespaces = [];
@@ -321,12 +321,12 @@ class PropertyInformation implements PropertyInformationInterface
             throw new \InvalidArgumentException(sprintf('$type is not of type string but of %s', gettype($type)));
         } elseif (empty($type)) {
             throw new \DomainException(sprintf('A type name may not be empty'));
-        } elseif ((int)($type)) {
+        } elseif ((int) $type) {
             throw new \DomainException(sprintf('A type name may not start with a number. Found %s', $type));
         } elseif (in_array($type, $this->getValidTypes())) {
             // Scalar.
             return $type;
-        } elseif (ctype_upper($type[0]) || $type[0] === '\\') {
+        } elseif ($type[0] === '\\' || ctype_upper($type[0])) {
             // Class.
             return $type;
         } else {
@@ -726,17 +726,16 @@ class PropertyInformation implements PropertyInformationInterface
      */
     public function willGenerateGet()
     {
-        return $this->generate_get;
+        return $this->generate_get && $this->generate_get !== Generate::VISIBILITY_NONE;
     }
 
     /**
-     * @see PropertyInformationInterface::willGenerateGet()
-     * @param bool $generate_get
+     * @param string $visibility
      * @return PropertyInformation
      */
-    public function setGenerateGet($generate_get)
+    public function limitMaximumGetVisibility($visibility)
     {
-        $this->generate_get = $generate_get == true;
+        $this->generate_get = Generate::getMostLimitedVisibility($this->generate_get, $visibility);
         return $this;
     }
 
@@ -746,17 +745,16 @@ class PropertyInformation implements PropertyInformationInterface
      */
     public function willGenerateSet()
     {
-        return $this->generate_set;
+        return $this->generate_set && $this->generate_set !== Generate::VISIBILITY_NONE;
     }
 
     /**
-     * @see PropertyInformationInterface::willGenerateSet()
-     * @param bool $generate_set
+     * @param string $visibility
      * @return PropertyInformation
      */
-    public function setGenerateSet($generate_set)
+    public function limitMaximumSetVisibility($visibility)
     {
-        $this->generate_set = $generate_set == true;
+        $this->generate_set = Generate::getMostLimitedVisibility($this->generate_set, $visibility);
         return $this;
     }
 
@@ -766,17 +764,16 @@ class PropertyInformation implements PropertyInformationInterface
      */
     public function willGenerateAdd()
     {
-        return $this->generate_add;
+        return $this->generate_add && $this->generate_add !== Generate::VISIBILITY_NONE;
     }
 
     /**
-     * @see PropertyInformationInterface::willGenerateAdd()
-     * @param bool $generate_add
+     * @param string $visibility
      * @return PropertyInformation
      */
-    public function setGenerateAdd($generate_add)
+    public function limitMaximumAddVisibility($visibility)
     {
-        $this->generate_add = $generate_add == true;
+        $this->generate_add = Generate::getMostLimitedVisibility($this->generate_add, $visibility);
         return $this;
     }
 
@@ -786,17 +783,16 @@ class PropertyInformation implements PropertyInformationInterface
      */
     public function willGenerateRemove()
     {
-        return $this->generate_remove;
+        return $this->generate_remove && $this->generate_remove !== Generate::VISIBILITY_NONE;
     }
 
     /**
-     * @see PropertyInformationInterface::willGenerateRemove()
-     * @param bool $generate_remove
+     * @param string $visibility
      * @return PropertyInformation
      */
-    public function setGenerateRemove($generate_remove)
+    public function limitMaximumRemoveVisibility($visibility)
     {
-        $this->generate_remove = $generate_remove == true;
+        $this->generate_remove = Generate::getMostLimitedVisibility($this->generate_remove, $visibility);
         return $this;
     }
 
@@ -818,5 +814,37 @@ class PropertyInformation implements PropertyInformationInterface
             'resource',
             'object',
         ];
+    }
+
+    /**
+     * @return string Public, protected or private.
+     */
+    public function getGetVisibility()
+    {
+        return $this->generate_get;
+    }
+
+    /**
+     * @return string Public, protected or private.
+     */
+    public function getSetVisibility()
+    {
+        return $this->generate_set;
+    }
+
+    /**
+     * @return string Public, protected or private.
+     */
+    public function getAddVisibility()
+    {
+        return $this->generate_add;
+    }
+
+    /**
+     * @return string Public, protected or private.
+     */
+    public function getRemoveVisibility()
+    {
+        return $this->generate_remove;
     }
 }

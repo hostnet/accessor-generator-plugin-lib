@@ -39,26 +39,26 @@ class GenerateAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         $nothing       = new Generate();
         $type          = new Generate();
 
-        $no_is->is         = false;
-        $no_get->get       = false;
-        $no_set->set       = false;
-        $no_add->add       = false;
-        $no_remove->remove = false;
+        $no_is->is         = 'none';
+        $no_get->get       = 'none';
+        $no_set->set       = 'none';
+        $no_add->add       = 'none';
+        $no_remove->remove = 'none';
 
-        $no_collection->add    = false;
-        $no_collection->remove = false;
+        $no_collection->add    = 'none';
+        $no_collection->remove = 'none';
 
-        $nothing->get    = false;
-        $nothing->is     = false;
-        $nothing->set    = false;
-        $nothing->add    = false;
-        $nothing->remove = false;
+        $nothing->get    = 'none';
+        $nothing->is     = 'none';
+        $nothing->set    = 'none';
+        $nothing->add    = 'none';
+        $nothing->remove = 'none';
 
-        $type->get    = false;
-        $type->is     = false;
-        $type->set    = false;
-        $type->add    = false;
-        $type->remove = false;
+        $type->get    = 'none';
+        $type->is     = 'none';
+        $type->set    = 'none';
+        $type->add    = 'none';
+        $type->remove = 'none';
         $type->type   = \ArrayObject::class;
 
         return [

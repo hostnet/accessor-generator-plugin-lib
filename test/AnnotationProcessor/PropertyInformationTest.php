@@ -1,6 +1,7 @@
 <?php
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
+use Hostnet\Component\AccessorGenerator\Annotation\Generate;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
 
@@ -60,8 +61,8 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
     public function testGetMethods()
     {
         self::assertEquals('test', $this->info->getName());
-        self::assertEquals(null, $this->info->getDefault());
-        self::assertEquals(null, $this->info->getType());
+        self::assertNull($this->info->getDefault());
+        self::assertNull($this->info->getType());
         self::assertEquals('', $this->info->getFullyQualifiedType());
         self::assertEquals(0, $this->info->getScale());
         self::assertEquals(0, $this->info->getPrecision());
@@ -69,51 +70,58 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
         self::assertEquals(32, $this->info->getIntegerSize());
         self::assertEquals('Test', $this->info->getClass());
         self::assertEquals('', $this->minimal_info->getClass());
-        self::assertEquals('', $this->info->getNameSpace());
+        self::assertEquals('', $this->info->getNamespace());
 
-        self::assertEquals(false, $this->info->isCollection());
-        self::assertEquals(false, $this->info->isFixedPointNumber());
-        self::assertEquals(false, $this->info->isNullable());
-        self::assertEquals(false, $this->info->isUnique());
-
-        self::assertEquals(false, $this->info->willGenerateAdd());
-        self::assertEquals(false, $this->info->willGenerateRemove());
-        self::assertEquals(false, $this->info->willGenerateSet());
-        self::assertEquals(false, $this->info->willGenerateGet());
-        self::assertEquals(true, $this->info->willGenerateStrict());
+        self::assertFalse($this->info->isCollection());
+        self::assertFalse($this->info->isFixedPointNumber());
+        self::assertNull($this->info->isNullable());
+        self::assertNull($this->info->isUnique());
+        self::assertTrue($this->info->willGenerateStrict());
     }
 
     public function testBasicSetMethods()
     {
         self::assertSame($this->info, $this->info->setCollection('garbage'));
-        self::assertEquals(true, $this->info->isCollection());
+        self::assertTrue($this->info->isCollection());
 
         self::assertSame($this->info, $this->info->setFixedPointNumber('garbage'));
-        self::assertEquals(true, $this->info->isFixedPointNumber());
+        self::assertTrue($this->info->isFixedPointNumber());
 
         self::assertSame($this->info, $this->info->setNullable('garbage'));
-        self::assertEquals(true, $this->info->isNullable());
+        self::assertTrue($this->info->isNullable());
 
         self::assertSame($this->info, $this->info->setUnique('garbage'));
-        self::assertEquals(true, $this->info->isUnique());
+        self::assertTrue($this->info->isUnique());
 
-        self::assertSame($this->info, $this->info->setGenerateAdd('garbage'));
-        self::assertEquals(true, $this->info->willGenerateAdd());
+        self::assertFalse($this->info->willGenerateAdd());
+        self::assertSame($this->info, $this->info->limitMaximumAddVisibility(Generate::VISIBILITY_PROTECTED));
+        self::assertTrue($this->info->willGenerateAdd());
+        self::assertSame($this->info, $this->info->limitMaximumAddVisibility(Generate::VISIBILITY_NONE));
+        self::assertFalse($this->info->willGenerateAdd());
 
-        self::assertSame($this->info, $this->info->setGenerateRemove('garbage'));
-        self::assertEquals(true, $this->info->willGenerateRemove());
+        self::assertFalse($this->info->willGenerateRemove());
+        self::assertSame($this->info, $this->info->limitMaximumRemoveVisibility(Generate::VISIBILITY_PROTECTED));
+        self::assertTrue($this->info->willGenerateRemove());
+        self::assertSame($this->info, $this->info->limitMaximumRemoveVisibility(Generate::VISIBILITY_NONE));
+        self::assertFalse($this->info->willGenerateRemove());
 
-        self::assertSame($this->info, $this->info->setGenerateGet('garbage'));
-        self::assertEquals(true, $this->info->willGenerateGet());
+        self::assertFalse($this->info->willGenerateSet());
+        self::assertSame($this->info, $this->info->limitMaximumSetVisibility(Generate::VISIBILITY_PUBLIC));
+        self::assertTrue($this->info->willGenerateSet());
+        self::assertSame($this->info, $this->info->limitMaximumSetVisibility(Generate::VISIBILITY_NONE));
+        self::assertFalse($this->info->willGenerateSet());
 
-        self::assertSame($this->info, $this->info->setGenerateSet('garbage'));
-        self::assertEquals(true, $this->info->willGenerateSet());
+        self::assertFalse($this->info->willGenerateGet());
+        self::assertSame($this->info, $this->info->limitMaximumGetVisibility(Generate::VISIBILITY_PRIVATE));
+        self::assertTrue($this->info->willGenerateGet());
+        self::assertSame($this->info, $this->info->limitMaximumGetVisibility(Generate::VISIBILITY_NONE));
+        self::assertFalse($this->info->willGenerateGet());
 
         self::assertSame($this->info, $this->info->setGenerateStrict(false));
-        self::assertEquals(false, $this->info->willGenerateStrict());
+        self::assertFalse($this->info->willGenerateStrict());
 
         self::assertSame($this->info, $this->info->setGenerateStrict('garbage'));
-        self::assertEquals(true, $this->info->willGenerateStrict());
+        self::assertTrue($this->info->willGenerateStrict());
     }
 
     public function setReferencedPropertyProvider()
@@ -143,7 +151,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetReferencedPropery($referenced_property, $exception)
     {
-        $this->setExpectedException($exception);
+        $this->expectException($exception);
         self::assertSame($this->info, $this->info->setReferencedProperty($referenced_property));
         self::assertEquals($referenced_property, $this->info->getReferencedProperty());
     }
@@ -177,7 +185,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetIntegerSize($integer_size, $exception)
     {
-        $this->setExpectedException($exception);
+        $this->expectException($exception);
         self::assertSame($this->info, $this->info->setIntegerSize($integer_size));
         self::assertEquals($integer_size, $this->info->getIntegerSize());
     }
@@ -208,7 +216,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetScale($scale, $exception)
     {
-        $this->setExpectedException($exception);
+        $this->expectException($exception);
         self::assertSame($this->info, $this->info->setScale($scale));
         self::assertEquals($scale, $this->info->getScale());
     }
@@ -239,7 +247,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetPrecision($precision, $exception)
     {
-        $this->setExpectedException($exception);
+        $this->expectException($exception);
         self::assertSame($this->info, $this->info->setPrecision($precision));
         self::assertEquals($precision, $this->info->getPrecision());
     }
@@ -264,7 +272,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetLength($length, $exception)
     {
-        $this->setExpectedException($exception);
+        $this->expectException($exception);
         self::assertSame($this->info, $this->info->setLength($length));
         self::assertEquals($length, $this->info->getLength());
     }
@@ -295,7 +303,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetType($type, $exception)
     {
-        $this->setExpectedException($exception);
+        $this->expectException($exception);
         self::assertSame($this->info, $this->info->setType($type));
         if ($this->info->isComplexType()) {
             self::assertEquals($type, $this->info->getTypeHint());
@@ -313,7 +321,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetTypeHint($type, $exception)
     {
-        $this->setExpectedException($exception);
+        $this->expectException($exception);
         self::assertSame($this->info, $this->info->setTypeHint($type));
         self::assertEquals($type, $this->info->getTypeHint());
     }
@@ -340,7 +348,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetFullyQualifiedType($type, $exception)
     {
-        $this->setExpectedException($exception);
+        $this->expectException($exception);
         self::assertSame($this->info, $this->info->setFullyQualifiedType($type));
         self::assertEquals($type, $this->info->getFullyQualifiedType());
     }
