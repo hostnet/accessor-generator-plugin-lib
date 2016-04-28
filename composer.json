@@ -50,7 +50,7 @@
     },
     "archive": {
         "exclude": [
-            "/test/",
+            "/test",
             "/.gitignore",
             "/phpunit.xml.dist",
             "/phpcs.xml.dist",
