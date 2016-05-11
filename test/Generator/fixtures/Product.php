@@ -69,7 +69,8 @@ class Product
      *   targetEntity="Attribute",
      *   mappedBy="product",
      *   cascade={"all"},
-     *   orphanRemoval=true
+     *   orphanRemoval=true,
+     *   indexBy="name"
      * )
      * @AG\Generate
      */

@@ -3,7 +3,6 @@ namespace Hostnet\Component\AccessorGenerator\Reflection;
 
 /**
  * @covers Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 class ReflectionClassTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,7 +20,7 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
                     'protected $baz = 0x88;',
                     'private $bar = 10;',
                     'private $foz;',
-                ]
+                ],
             ],
             [
                 'abstract.php',
@@ -29,15 +28,15 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
                 'Test',
                 ['ORM' => 'Doctrine\ORM\Mapping'],
                 [
-                    '/**'                                                    . PHP_EOL .
-                    ' * Waarom dit dan?'                                     . PHP_EOL .
-                    ' *'                                                     . PHP_EOL .
-                    ' * en dit dan?'                                         . PHP_EOL .
-                    ' * @version bluh'                                       . PHP_EOL .
+                    '/**' . PHP_EOL .
+                    ' * Waarom dit dan?' . PHP_EOL .
+                    ' *' . PHP_EOL .
+                    ' * en dit dan?' . PHP_EOL .
+                    ' * @version bluh' . PHP_EOL .
                     ' * @ORM\Column(name="stam", length=100, type="string")' . PHP_EOL .
-                    ' */'                                                    . PHP_EOL .
-                    'private $stam;'
-                ]
+                    ' */' . PHP_EOL .
+                    'private $stam;',
+                ],
             ],
             [
                 'static.php',
@@ -45,13 +44,13 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
                 '',
                 ['ORM' => 'Doctrine\ORM\Mapping', 'AG' => 'Hostnet\Component\AccessorGenerator\Annotation'],
                 [
-                    '/**'                                                    . PHP_EOL .
-                    ' * Waarom dit dan?'                                     . PHP_EOL .
-                    ' * @version bluh'                                       . PHP_EOL .
+                    '/**' . PHP_EOL .
+                    ' * Waarom dit dan?' . PHP_EOL .
+                    ' * @version bluh' . PHP_EOL .
                     ' * @ORM\Column(name="stam", length=100, type="string")' . PHP_EOL .
-                    ' */'                                                    . PHP_EOL .
-                    'private static $stam;'
-                ]
+                    ' */' . PHP_EOL .
+                    'private static $stam;',
+                ],
             ],
             [
                 'trait.php',
@@ -69,7 +68,7 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
                     'private $nog_steeds_meer_naalden = "	HOI";',
                     'private $nog_steeds_veel_meer_naalden = \'	HOI\' . "\n" . \'	$hoi\';',
                     'private $denneboom;',
-                ]
+                ],
             ],
             [
                 'use_trait_extend_class.php',
@@ -78,7 +77,7 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
                 [],
                 [
                     'private $klein;',
-                ]
+                ],
             ],
             [
                 'modifiers.php',
@@ -103,7 +102,7 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
                     'public $kruin;',
                     'public $nerf;',
                     'private $riet;',
-                ]
+                ],
             ],
             [
                 'nullable.php',
@@ -112,7 +111,7 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
                 [],
                 [
                     'private $nullable = null;',
-                ]
+                ],
             ],
             [
                 'array.php',
@@ -128,7 +127,7 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
                     'private $f = [0 => \'string\', 1 => \'2\', \'three\' => 3];',
                     'private $g = [0 => \'string\', [\'1\' => [\'2\']], \'three\' => 3];',
                     'private $h = [0 => \'string\', [\'1\' => [(\'2\')]], \'three\' => 3];',
-                ]
+                ],
             ],
             [
                 'const.php',
@@ -141,7 +140,7 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
                     'private $color = self::COLOR;',
                     'private $color = An\Other\Place::class;',
                     'private $color = \An\Other\Place::class;',
-                ]
+                ],
             ],
         ];
     }
@@ -154,20 +153,34 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
      *      ReflectionClass::getNamespace()
      *
      * @dataProvider fileProvider
+     * @param $filename
+     * @param $name
+     * @param $namespace
+     * @param array $imports
+     * @param array $properties
+     * @throws Exception\ClassDefinitionNotFoundException
+     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
+     * @throws \OutOfBoundsException
      */
     public function testGetters($filename, $name, $namespace, array $imports, array $properties)
     {
-        $class = new ReflectionClass(__DIR__ . '/fixtures/' . $filename);
+        $class = new ReflectionClass(__DIR__ . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . $filename);
 
         self::assertEquals($name, $class->getName());
-        self::assertEquals(__DIR__ . '/fixtures/' . $filename, $class->getFilename());
+        self::assertEquals(
+            __DIR__ . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . $filename,
+            $class->getFilename()
+        );
         self::assertEquals($namespace, $class->getNamespace());
         self::assertEquals($imports, $class->getUseStatements());
-
+        self::assertEquals($namespace . '\\' . $name, $class->getFullyQualifiedClassName());
         $reflected_properties = $class->getProperties();
-        array_walk($reflected_properties, function (&$item) {
-            $item = $item->__toString();
-        });
+        array_walk(
+            $reflected_properties,
+            function (&$item) {
+                $item = (string)$item;
+            }
+        );
 
         self::assertEquals($properties, $reflected_properties);
     }
@@ -175,6 +188,7 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
      * @expectedExceptionMessage readable
+     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
      */
     public function testFileExceptionReadable()
     {
@@ -184,24 +198,31 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
      * @expectedExceptionMessage exist
+     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
      */
     public function testFileExceptionExist()
     {
-        new ReflectionClass(__DIR__ . '/fixtures/doesnotexist.php');
+        new ReflectionClass(__DIR__ . '/fixtures/does_not_exist.php');
     }
 
     /**
      * @expectedException \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
+     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
+     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
+     * @throws \OutOfBoundsException
      */
     public function testClassNotFoundException()
     {
-        $class = new ReflectionClass(__DIR__ . '/fixtures/noclass.php');
+        $class = new ReflectionClass(__DIR__ . '/fixtures/no_class.php');
         self::assertEquals('ThisNamespace', $class->getNamespace());
         $class->getName();
     }
 
     /**
      * @expectedException \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
+     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
+     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
+     * @throws \OutOfBoundsException
      */
     public function testEmptyFileClassNotFoundException()
     {
@@ -212,11 +233,14 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
+     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
+     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
+     * @throws \OutOfBoundsException
      */
     public function testBroken()
     {
         $class = new ReflectionClass(__DIR__ . '/fixtures/broken.php');
-        self::assertEquals([ 'ORM' => 'Doctrine\ORM\Mapping'], $class->getUseStatements());
+        self::assertEquals(['ORM' => 'Doctrine\ORM\Mapping'], $class->getUseStatements());
         self::assertEquals([], $class->getUseStatements());
     }
 

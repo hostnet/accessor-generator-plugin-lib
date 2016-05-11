@@ -8,11 +8,9 @@ use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
 
 /**
  * Gather all the information needed for accessor methods code
- * generation. It is possbile to register various annotation
+ * generation. It is possible to register various annotation
  * processors that will process information from the doc blocks
  * and add it to the PropertyInformation.
- *
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 class PropertyInformation implements PropertyInformationInterface
 {
@@ -119,6 +117,18 @@ class PropertyInformation implements PropertyInformationInterface
     private $generate_add = null;
 
     /**
+     * @see PropertyInformationInterface::getIndex()
+     * @var string|null
+     */
+    private $index = null;
+
+    /**
+     * @see PropertyInformationInterface::getIndex()
+     * @var string|null
+     */
+    private $referenced_index = null;
+
+    /**
      * @see PropertyInformationInterface::willGenerateRemove()
      * @var string|null
      */
@@ -127,7 +137,7 @@ class PropertyInformation implements PropertyInformationInterface
     /**
      * Information parsed from the PHP
      *
-     * @var ReflectionProperty
+     * @var \ReflectionProperty
      */
     private $property;
 
@@ -140,9 +150,9 @@ class PropertyInformation implements PropertyInformationInterface
     private $parser;
 
     /**
-     * List of registerd annotation processors
+     * List of registered annotation processors
      * that will be used in the parsing of the
-     * docblocks.
+     * doc blocks.
      *
      * @var AnnotationProcessorInterface[]
      */
@@ -178,9 +188,10 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * Start the processing of aprocessAnnotations
+     * Start the processing of processAnnotations
      *
      * @return void
+     * @throws \RuntimeException
      */
     public function processAnnotations()
     {
@@ -188,7 +199,7 @@ class PropertyInformation implements PropertyInformationInterface
         $imports  = $class ? array_change_key_case($class->getUseStatements()) : [];
         $filename = $class ? $class->getFilename() : 'memory';
 
-        // Get all the namespaces in which parsable annotations reside.
+        // Get all the namespaces in which annotations reside.
         $namespaces = [];
         foreach ($this->annotation_processors as $processor) {
             $namespaces[] = $processor->getProcessableAnnotationNamespace();
@@ -204,6 +215,7 @@ class PropertyInformation implements PropertyInformationInterface
                     return true;
                 }
             }
+            return false;
         });
 
         $this->parser->setImports($without_foreign_annotations);
@@ -319,14 +331,14 @@ class PropertyInformation implements PropertyInformationInterface
     {
         if (! is_string($type)) {
             throw new \InvalidArgumentException(sprintf('$type is not of type string but of %s', gettype($type)));
-        } elseif (empty($type)) {
+        } elseif ('' === $type) {
             throw new \DomainException(sprintf('A type name may not be empty'));
         } elseif ((int) $type) {
             throw new \DomainException(sprintf('A type name may not start with a number. Found %s', $type));
-        } elseif (in_array($type, $this->getValidTypes())) {
+        } elseif (in_array($type, static::getValidTypes(), true)) {
             // Scalar.
             return $type;
-        } elseif ($type[0] === '\\' || ctype_upper($type[0])) {
+        } elseif ('\\' === $type[0] || ctype_upper($type[0])) {
             // Class.
             return $type;
         } else {
@@ -382,14 +394,15 @@ class PropertyInformation implements PropertyInformationInterface
      * @param  string $type
      * @throws \DomainException
      * @return PropertyInformation
+     * @throws \InvalidArgumentException
      */
     public function setFullyQualifiedType($type)
     {
         if (! is_string($type)) {
             throw new \InvalidArgumentException(sprintf('$type is not of type string but of %s', gettype($type)));
-        } elseif (empty($type)) {
+        } elseif ('' === $type) {
             $this->fully_qualified_type = '';
-        } elseif ((int)($type)) {
+        } elseif ((int)$type) {
             throw new \DomainException(sprintf('A type name may not start with a number. Found %s', $type));
         } elseif ($type[0] === '\\') {
             $this->fully_qualified_type = $type;
@@ -412,14 +425,15 @@ class PropertyInformation implements PropertyInformationInterface
     /**
      * Set the maximum length for this property,
      * if set to 0 it means the length is un-
-     * boundend. Typically a length is between
+     * bounded. Typically a length is between
      * 1 to 255 (including) for varchar fields
      * and 0 (unbounded) for Text, Blob and
      * Binary fields.
      *
-     * @throws \InvalidArgumentException
-     * @throws \RangeException
+     * @param $length
      * @return PropertyInformation
+     * @throws \RangeException
+     * @throws \InvalidArgumentException
      */
     public function setLength($length)
     {
@@ -450,6 +464,7 @@ class PropertyInformation implements PropertyInformationInterface
      * Set the size of the integer that will be stored, in bits.
      *
      * @param int $integer_size
+     * @return $this
      * @throws \InvalidArgumentException
      * @throws \RangeException
      */
@@ -484,18 +499,21 @@ class PropertyInformation implements PropertyInformationInterface
 
     /**
      * @see PropertyInformationInterface::getReferencedProperty()
-     * return string
+     * @param string $referenced_property
+     * @return string
+     * @throws \DomainException
+     * @throws \InvalidArgumentException
      */
     public function setReferencedProperty($referenced_property)
     {
         // Check string.
         if (! is_string($referenced_property)) {
             throw new \InvalidArgumentException(
-                sprintf('$referenced_property is not of excpect type string but of %s)', gettype($referenced_property))
+                sprintf('$referenced_property is not of expected type string but of %s)', gettype($referenced_property))
             );
         }
         // Check valid property name
-        if ($referenced_property && !ctype_alpha(substr($referenced_property, 0, 1))) {
+        if ($referenced_property && !ctype_alpha($referenced_property[0])) {
             throw new \DomainException(
                 sprintf('$referenced_property (%s) does not start with a alpha character)', $referenced_property)
             );
@@ -529,12 +547,12 @@ class PropertyInformation implements PropertyInformationInterface
      */
     public function isComplexType()
     {
-        return $this->type && !in_array($this->type, self::getValidTypes());
+        return $this->type && !in_array($this->type, self::getValidTypes(), true);
     }
 
     /**
      * Set to true whenever this property
-     * is a collecion type like an array or
+     * is a collection type like an array or
      * DoctrineCollection.
      *
      * @param bool $is_collection
@@ -542,7 +560,7 @@ class PropertyInformation implements PropertyInformationInterface
      */
     public function setCollection($is_collection)
     {
-        $this->is_collection = $is_collection == true;
+        $this->is_collection = false !== $is_collection;
         return $this;
     }
 
@@ -557,7 +575,7 @@ class PropertyInformation implements PropertyInformationInterface
      */
     public function setReferencingCollection($is_referencing_collection)
     {
-        $this->is_referencing_collection = $is_referencing_collection == true;
+        $this->is_referencing_collection = false !== $is_referencing_collection;
         return $this;
     }
 
@@ -573,10 +591,11 @@ class PropertyInformation implements PropertyInformationInterface
     /**
      * @see PropertyInformationInterface::isFixedPointNumber()
      * @param bool $is_fixed_point_number
+     * @return $this
      */
     public function setFixedPointNumber($is_fixed_point_number)
     {
-        $this->is_fixed_point_number = $is_fixed_point_number == true;
+        $this->is_fixed_point_number = false !== $is_fixed_point_number;
         return $this;
     }
     /**
@@ -595,7 +614,7 @@ class PropertyInformation implements PropertyInformationInterface
      * that case (PHP has no fixed point numbers).
      *
      * @see http://dev.mysql.com/doc/refman/5.7/en/precision-math-decimal-characteristics.html
-     * @param int $precicion
+     * @param int $precision
      * @throws \InvalidArgumentException
      * @throws \RangeException It has a range of 1 to 65.
      * @return PropertyInformation
@@ -629,7 +648,7 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * Set the number of significant digits afer the
+     * Set the number of significant digits after the
      * decimal point. Only applicable to fixed
      * point storage. The type will be float in
      * that case (PHP has no fixed point numbers).
@@ -662,10 +681,10 @@ class PropertyInformation implements PropertyInformationInterface
      */
     public function isNullable()
     {
-        if ($this->nullable === null) {
+        if (null === $this->nullable) {
             return null;
         } else {
-            return $this->nullable || strtolower($this->getDefault()) === 'null';
+            return $this->nullable || 'null' === strtolower($this->getDefault());
         }
     }
 
@@ -676,7 +695,7 @@ class PropertyInformation implements PropertyInformationInterface
      */
     public function setNullable($nullable)
     {
-        $this->nullable = $nullable == true;
+        $this->nullable = false !== $nullable;
         return $this;
     }
 
@@ -696,7 +715,7 @@ class PropertyInformation implements PropertyInformationInterface
      */
     public function setUnique($unique)
     {
-        $this->unique = $unique == true;
+        $this->unique = false !== $unique;
         return $this;
     }
 
@@ -716,7 +735,7 @@ class PropertyInformation implements PropertyInformationInterface
      */
     public function setGenerateStrict($generate_strict)
     {
-        $this->generate_strict = $generate_strict == true;
+        $this->generate_strict = false !== $generate_strict;
         return $this;
     }
 
@@ -726,7 +745,7 @@ class PropertyInformation implements PropertyInformationInterface
      */
     public function willGenerateGet()
     {
-        return $this->generate_get && $this->generate_get !== Generate::VISIBILITY_NONE;
+        return $this->generate_get && Generate::VISIBILITY_NONE !== $this->generate_get;
     }
 
     /**
@@ -746,6 +765,46 @@ class PropertyInformation implements PropertyInformationInterface
     public function willGenerateSet()
     {
         return $this->generate_set && $this->generate_set !== Generate::VISIBILITY_NONE;
+    }
+
+    /**
+     * @see PropertyInformationInterface::getIndex()
+     * @return null|string
+     */
+    public function getIndex()
+    {
+        return $this->index;
+    }
+
+    /**
+     * @see PropertyInformationInterface::getIndex()
+     * @param string|null $index = null
+     * @return $this
+     */
+    public function setIndex($index = null)
+    {
+        $this->index = $index;
+        return $this;
+    }
+
+    /**
+     * @see PropertyInformationInterface::getIndex()
+     * @return null|string
+     */
+    public function getReferencedIndex()
+    {
+        return $this->referenced_index;
+    }
+
+    /**
+     * @see PropertyInformationInterface::getIndex()
+     * @param string|null $referenced_index = null
+     * @return $this
+     */
+    public function setReferencedIndex($referenced_index = null)
+    {
+        $this->referenced_index = $referenced_index;
+        return $this;
     }
 
     /**

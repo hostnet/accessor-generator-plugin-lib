@@ -38,17 +38,17 @@ class PluginTest extends \PHPUnit_Framework_TestCase
 
     public function testOnPreAutoloadDump()
     {
-        // Efectivly change installation dir of root package.
+        // Effectively change installation dir of root package.
         chdir(__DIR__ . '/fixtures');
 
         // Get fake generator
         $generator = $this->getMock(CodeGeneratorInterface::class);
 
-        // Hit every fixture two times (ignore annotations).
-        $generator->expects($this->exactly(4))->method('writeTraitForClass')->willReturn(true);
+        // Hit every fixture one time.
+        $generator->expects(self::exactly(2))->method('writeTraitForClass')->willReturn(true);
 
         $plugin = new Plugin($generator);
-        $plugin->activate(self::getMockComposer(), new BufferIO('', StreamOutput::VERBOSITY_VERY_VERBOSE));
+        $plugin->activate($this->getMockComposer(), new BufferIO('', StreamOutput::VERBOSITY_VERY_VERBOSE));
         $plugin->onPreAutoloadDump();
 
     }
@@ -67,6 +67,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
      * all with NullIO and a default empty config
      *
      * @return \Composer\Composer
+     * @throws \PHPUnit_Framework_Exception
      */
     private function getMockComposer()
     {
@@ -88,7 +89,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $repository_manager->setLocalRepository($repository);
 
         $installation_manager = $this->getMock(InstallationManager::class);
-        $installation_manager->expects($this->any())->method('getInstallPath')->willReturn(__DIR__ . '/fixtures');
+        $installation_manager->expects(self::any())->method('getInstallPath')->willReturn(__DIR__ . '/fixtures');
 
         $composer = new Composer();
         $composer->setPackage($root_package);

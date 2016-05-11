@@ -4,16 +4,17 @@ namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OneToOne;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception\InvalidColumnSettingsException;
+use Hostnet\Component\AccessorGenerator\Reflection\Metadata;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
 
 /**
  * @covers Hostnet\Component\AccessorGenerator\AnnotationProcessor\DoctrineAnnotationProcessor
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,13 +37,17 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
     {
         // Set up dependencies.
         $this->information = new PropertyInformation(new ReflectionProperty('test'));
-        $this->processor   = new DoctrineAnnotationProcessor();
+        $this->processor   = new DoctrineAnnotationProcessor(new Metadata());
     }
+
     /**
      * Generate TestCases for the parsing
      * of the @Column annotation.
      *
      * @return Column|mixed[][]
+     * @throws \RangeException
+     * @throws \InvalidArgumentException
+     * @throws \DomainException
      */
     public function processColumnAnnotationProvider()
     {
@@ -62,7 +67,7 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         $explicit->length = 100;
         $explicit_info->setLength(100);
 
-        $explicit->nullable = 'jumbodumbo';
+        $explicit->nullable = 'jumbo_dumbo';
         $explicit_info->setNullable(true);
 
         $explicit->precision = 3;
@@ -89,6 +94,13 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider processColumnAnnotationProvider
+     * @param Column $column
+     * @param PropertyInformationInterface $output
+     * @param $exception
+     * @throws \DomainException
+     * @throws \Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception\InvalidColumnSettingsException
+     * @throws \InvalidArgumentException
+     * @throws \RangeException
      */
     public function testProcessColumnAnnotation(Column $column, PropertyInformationInterface $output, $exception)
     {
@@ -148,11 +160,19 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         $one_to_many     = new OneToMany();
         $one_to_one      = new OneToOne();
         $generated_value = new GeneratedValue();
+        $join_column     = new JoinColumn();
+        $one_to_one_bi   = new OneToOne();
+        $one_to_many_bi  = new OneToMany();
 
-        $many_to_many->targetEntity = '\\Employee';
-        $many_to_one->targetEntity  = 'Employee';
-        $one_to_many->targetEntity  = '\\Employer';
-        $one_to_one->targetEntity   = 'Boss';
+        $many_to_many->targetEntity   = '\\Employee';
+        $many_to_one->targetEntity    = 'Employee';
+        $one_to_many->targetEntity    = '\\Employer';
+        $one_to_one->targetEntity     = 'Boss';
+        $join_column->name            = 'id';
+        $one_to_one_bi->inversedBy    = 'id';
+        $one_to_one_bi->targetEntity  = 'Employee\\Boss';
+        $one_to_many_bi->mappedBy     = 'id';
+        $one_to_many_bi->targetEntity = 'LunchLady';
 
         return [
             [$many_to_many],
@@ -160,11 +180,19 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
             [$one_to_many],
             [$one_to_one],
             [$generated_value],
+            [$join_column],
+            [$one_to_one_bi],
+            [$one_to_many_bi],
         ];
     }
 
     /**
      * @dataProvider processAssociationAnnotationProvider
+     * @param $annotation
+     * @throws \DomainException
+     * @throws \Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception\InvalidColumnSettingsException
+     * @throws \InvalidArgumentException
+     * @throws \RangeException
      */
     public function testAssociationAnnotations($annotation)
     {
@@ -248,13 +276,18 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
      * @dataProvider typeConversionDataProvider
      * @param string $doctrine_type
      * @param string $php_type
+     * @param null $exception
+     * @throws \DomainException
+     * @throws \Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception\InvalidColumnSettingsException
+     * @throws \InvalidArgumentException
+     * @throws \RangeException
      */
     public function testTypeConversion($doctrine_type, $php_type, $exception = null)
     {
-        // Set exeception if we except one.
+        // Set exception if we except one.
         $this->expectException($exception);
 
-        // Check if we have an assosciation or a scalar db type.
+        // Check if we have an association or a scalar db type.
         if (is_string($doctrine_type)
             && $doctrine_type
             && (ctype_upper($doctrine_type[0]) || $doctrine_type[0] === '\\')
@@ -273,9 +306,14 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testOtherAnnotation()
     {
-        $information = clone($this->information);
+        $information = clone $this->information;
         $annotation  = new \stdClass();
         $this->processor->processAnnotation($annotation, $this->information);
         self::assertEquals($information, $this->information);
+    }
+
+    public function testGetProcessableAnnotationNamespace()
+    {
+        self::assertSame('Doctrine\ORM\Mapping', $this->processor->getProcessableAnnotationNamespace());
     }
 }

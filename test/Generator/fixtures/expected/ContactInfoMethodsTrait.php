@@ -13,7 +13,7 @@ trait ContactInfoMethodsTrait
     /**
      * Get address_line
      *
-     * @return string
+     * @return string|null
      * @throws \InvalidArgumentException
      */
     private function getAddressLine()
@@ -26,15 +26,9 @@ trait ContactInfoMethodsTrait
                 )
             );
         }
+
         if ($this->address_line === null) {
-            throw new \LogicException(sprintf(
-                'Property address_line is null, but the column is not nullable, '.
-                'make sure your object is initialized in such a way the properties are in '.
-                'a valid state, for example by using a proper constructor. If you want to ' .
-                'test if an object is new for the database please consult the UnitOfWork.' .
-                'It could also be that your column in code is set tot not nullable and in' .
-                'and contains null values in the database'
-            ));
+            return null;
         }
 
         return $this->address_line;
@@ -77,7 +71,7 @@ trait ContactInfoMethodsTrait
     /**
      * Get name
      *
-     * @return string
+     * @return string|null
      * @throws \InvalidArgumentException
      */
     public function getName()
@@ -90,15 +84,9 @@ trait ContactInfoMethodsTrait
                 )
             );
         }
+
         if ($this->name === null) {
-            throw new \LogicException(sprintf(
-                'Property name is null, but the column is not nullable, '.
-                'make sure your object is initialized in such a way the properties are in '.
-                'a valid state, for example by using a proper constructor. If you want to ' .
-                'test if an object is new for the database please consult the UnitOfWork.' .
-                'It could also be that your column in code is set tot not nullable and in' .
-                'and contains null values in the database'
-            ));
+            return null;
         }
 
         return $this->name;
@@ -141,7 +129,7 @@ trait ContactInfoMethodsTrait
     /**
      * Is deleted
      *
-     * @return boolean
+     * @return boolean|null
      * @throws \InvalidArgumentException
      */
     protected function isDeleted()
@@ -154,15 +142,9 @@ trait ContactInfoMethodsTrait
                 )
             );
         }
+
         if ($this->deleted === null) {
-            throw new \LogicException(sprintf(
-                'Property deleted is null, but the column is not nullable, '.
-                'make sure your object is initialized in such a way the properties are in '.
-                'a valid state, for example by using a proper constructor. If you want to ' .
-                'test if an object is new for the database please consult the UnitOfWork.' .
-                'It could also be that your column in code is set tot not nullable and in' .
-                'and contains null values in the database'
-            ));
+            return null;
         }
 
         return $this->deleted;
@@ -200,7 +182,7 @@ trait ContactInfoMethodsTrait
     /**
      * Is spends_lots_of_money
      *
-     * @return boolean
+     * @return boolean|null
      * @throws \InvalidArgumentException
      */
     private function isSpendsLotsOfMoney()
@@ -213,15 +195,9 @@ trait ContactInfoMethodsTrait
                 )
             );
         }
+
         if ($this->spends_lots_of_money === null) {
-            throw new \LogicException(sprintf(
-                'Property spends_lots_of_money is null, but the column is not nullable, '.
-                'make sure your object is initialized in such a way the properties are in '.
-                'a valid state, for example by using a proper constructor. If you want to ' .
-                'test if an object is new for the database please consult the UnitOfWork.' .
-                'It could also be that your column in code is set tot not nullable and in' .
-                'and contains null values in the database'
-            ));
+            return null;
         }
 
         return $this->spends_lots_of_money;
@@ -353,7 +329,7 @@ trait ContactInfoMethodsTrait
     /**
      * Get referrer
      *
-     * @return ContactInfo
+     * @return ContactInfo|null
      * @throws \InvalidArgumentException
      */
     public function getReferrer()
@@ -515,7 +491,7 @@ trait ContactInfoMethodsTrait
     /**
      * Get friended_by
      *
-     * @return ContactInfo
+     * @return ContactInfo|null
      * @throws \InvalidArgumentException
      */
     public function getFriendedBy()

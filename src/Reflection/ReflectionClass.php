@@ -12,8 +12,6 @@ use Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException;
  *
  * This way we can generate code that will implement
  * an interface.
- *
- * @author Hidde Booomsma <hboomsma@hostnet.nl>
  */
 class ReflectionClass
 {
@@ -110,6 +108,9 @@ class ReflectionClass
      * Return the name of the class inside this file.
      * This is the simple class name and not the fully
      * qualified class name.
+     *
+     * @throws Exception\ClassDefinitionNotFoundException
+     * @throws \OutOfBoundsException
      */
     public function getName()
     {
@@ -172,10 +173,9 @@ class ReflectionClass
 
             // If the start of the namespace is found,
             // parse it, otherwise save empty namespace.
+            $this->namespace = '';
             if ($loc !== null) {
                 $this->namespace = $this->parseNamespace($loc);
-            } else {
-                $this->namespace = '';
             }
         }
 
@@ -183,11 +183,26 @@ class ReflectionClass
     }
 
     /**
+     * Return the name of the class inside this file.
+     * This is the fully qualified class name, thus
+     * including the full namespace.
+     *
+     * @return string
+     * @throws \OutOfBoundsException
+     * @throws Exception\ClassDefinitionNotFoundException
+     */
+    public function getFullyQualifiedClassName()
+    {
+        return $this->getNamespace() . '\\' . $this->getName();
+    }
+
+    /**
      * Returns an array with key values.
      * where the key is used as alias.
      *
-     * @return string[] key is numeric when no alias is uses
-     *                  and string if an alias is used.
+     * @return string[] key is numeric when no alias is uses and string if an alias is used.
+     * @throws \OutOfBoundsException
+     * @throws Exception\ClassDefinitionNotFoundException
      */
     public function getUseStatements()
     {
@@ -203,7 +218,9 @@ class ReflectionClass
             // and then add them to the use_statements cache.
             $loc = 0;
             while (($loc = $this->tokens->scan($loc, [T_USE])) && $loc < $class) {
-                $this->use_statements = array_merge($this->use_statements, $this->parseUse($loc++));
+                foreach ($this->parseUse($loc++) as $alias => $use_statement) {
+                    $this->use_statements[$alias] = $use_statement;
+                }
             }
         }
 

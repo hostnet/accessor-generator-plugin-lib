@@ -1,6 +1,7 @@
 <?php
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
+use Doctrine\ORM\Mapping\Column;
 use Hostnet\Component\AccessorGenerator\Annotation\Generate;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
 
@@ -10,7 +11,7 @@ use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
  */
 class GenerateAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
 {
-    // Some constatns for better reading of the
+    // Some constants for better reading of the
     // parameters parsed into function.
     const GET       = true;
     const NO_GET    = false;
@@ -38,6 +39,7 @@ class GenerateAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         $no_collection = new Generate();
         $nothing       = new Generate();
         $type          = new Generate();
+        $column        = new Column();
 
         $no_is->is         = 'none';
         $no_get->get       = 'none';
@@ -62,6 +64,7 @@ class GenerateAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         $type->type   = \ArrayObject::class;
 
         return [
+            [$column,        self::NO_GET, self::NO_SET, self::NO_ADD, self::NO_REMOVE, null               ],
             [$all,           self::GET   , self::SET,    self::ADD,    self::REMOVE,    null               ],
             [$no_get,        self::NO_GET, self::SET,    self::ADD,    self::REMOVE,    null               ],
             [$no_is,         self::NO_GET, self::SET,    self::ADD,    self::REMOVE,    null               ],
@@ -76,11 +79,12 @@ class GenerateAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider processAnnotationProvider
-     * @param object $annotation
+     * @param mixed $annotation
      * @param bool $get
      * @param bool $set
      * @param bool $add
      * @param bool $remove
+     * @param string $type
      */
     public function testProcessAnnotation($annotation, $get, $set, $add, $remove, $type)
     {
@@ -98,9 +102,17 @@ class GenerateAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         self::assertSame($type, $information->getType());
 
         // If $set, is false we wil not generate a add method and remove method.
-        if ($set == false) {
+        if ($set === false) {
             self::assertFalse($information->willGenerateAdd());
             self::assertFalse($information->willGenerateRemove());
         }
+    }
+
+    public function testGetProcessableAnnotationNamespace()
+    {
+        self::assertSame(
+            'Hostnet\Component\AccessorGenerator\Annotation',
+            (new GenerateAnnotationProcessor())->getProcessableAnnotationNamespace()
+        );
     }
 }

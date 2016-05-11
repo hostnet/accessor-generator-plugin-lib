@@ -7,7 +7,6 @@ use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
 
 /**
  * @covers Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformation
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 class PropertyInformationTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,22 +20,21 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
      */
     private $minimal_info;
 
-
-    public function setUp()
+    /**
+     * {@inheritDoc}
+     */
+    protected function setUp()
     {
         $class = $this->getMockBuilder(ReflectionClass::class)->disableOriginalConstructor()->getMock();
-        $class->expects($this->any())->method('getNamespace')->willReturn('');
-        $class->expects($this->any())->method('getUseStatements')->willReturn([]);
-        $class->expects($this->any())->method('getName')->willReturn('Test');
+        $class->expects(self::any())->method('getNamespace')->willReturn('');
+        $class->expects(self::any())->method('getUseStatements')->willReturn([]);
+        $class->expects(self::any())->method('getName')->willReturn('Test');
 
         $property = new ReflectionProperty(
             'test',
             ReflectionProperty::IS_PRIVATE,
             null,
-            '/**
-              * Hidde
-              * @Hostnet\Component\AccessorGenerator\Annotation\Generate(get=false)
-              */',
+            file_get_contents(__DIR__ . '/fixtures/doc_block.txt'),
             $class
         );
 
@@ -47,8 +45,9 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
     public function testProcessAnnotations()
     {
         $processor = $this->getMock(AnnotationProcessorInterface::class);
-        $processor->expects($this->atLeastOnce())->method('processAnnotation');
+        $processor->expects(self::atLeastOnce())->method('processAnnotation');
 
+        /** @var AnnotationProcessorInterface $processor */
         $this->info->registerAnnotationProcessor($processor);
         $this->info->processAnnotations();
     }
@@ -71,12 +70,18 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
         self::assertEquals('Test', $this->info->getClass());
         self::assertEquals('', $this->minimal_info->getClass());
         self::assertEquals('', $this->info->getNamespace());
-
         self::assertFalse($this->info->isCollection());
         self::assertFalse($this->info->isFixedPointNumber());
         self::assertNull($this->info->isNullable());
         self::assertNull($this->info->isUnique());
         self::assertTrue($this->info->willGenerateStrict());
+        self::assertNull($this->info->getIndex());
+        self::assertNull($this->info->getReferencedIndex());
+        self::assertFalse($this->info->isReferencingCollection());
+        self::assertNull($this->info->getGetVisibility());
+        self::assertNull($this->info->getSetVisibility());
+        self::assertNull($this->info->getAddVisibility());
+        self::assertNull($this->info->getRemoveVisibility());
     }
 
     public function testBasicSetMethods()
@@ -122,6 +127,15 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
 
         self::assertSame($this->info, $this->info->setGenerateStrict('garbage'));
         self::assertTrue($this->info->willGenerateStrict());
+
+        self::assertSame($this->info, $this->info->setIndex('garbage'));
+        self::assertSame('garbage', $this->info->getIndex());
+
+        self::assertSame($this->info, $this->info->setReferencedIndex('garbage'));
+        self::assertSame('garbage', $this->info->getReferencedIndex());
+
+        self::assertSame($this->info, $this->info->setReferencingCollection(true));
+        self::assertTrue($this->info->isReferencingCollection());
     }
 
     public function setReferencedPropertyProvider()
@@ -148,8 +162,10 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
      * @dataProvider setReferencedPropertyProvider
      * @param string $referenced_property
      * @param string $exception
+     * @throws \DomainException
+     * @throws \InvalidArgumentException
      */
-    public function testSetReferencedPropery($referenced_property, $exception)
+    public function testSetReferencedProperty($referenced_property, $exception)
     {
         $this->expectException($exception);
         self::assertSame($this->info, $this->info->setReferencedProperty($referenced_property));
@@ -182,6 +198,8 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
      * @dataProvider setIntegerSizeProvider
      * @param string $integer_size
      * @param string $exception
+     * @throws \InvalidArgumentException
+     * @throws \RangeException
      */
     public function testSetIntegerSize($integer_size, $exception)
     {
@@ -213,6 +231,8 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
      * @dataProvider setScaleProvider
      * @param string $scale
      * @param string $exception
+     * @throws \InvalidArgumentException
+     * @throws \RangeException
      */
     public function testSetScale($scale, $exception)
     {
@@ -244,6 +264,8 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
      * @dataProvider setPrecisionProvider
      * @param string $precision
      * @param string $exception
+     * @throws \InvalidArgumentException
+     * @throws \RangeException
      */
     public function testSetPrecision($precision, $exception)
     {
@@ -269,6 +291,8 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
      * @dataProvider setLengthProvider
      * @param string $length
      * @param string $exception
+     * @throws \InvalidArgumentException
+     * @throws \RangeException
      */
     public function testSetLength($length, $exception)
     {
@@ -300,6 +324,8 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
      * @dataProvider setTypeProvider
      * @param string $type
      * @param string $exception
+     * @throws \DomainException
+     * @throws \InvalidArgumentException
      */
     public function testSetType($type, $exception)
     {
@@ -318,6 +344,8 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
      * @dataProvider setTypeHintProvider
      * @param string $type
      * @param string $exception
+     * @throws \DomainException
+     * @throws \InvalidArgumentException
      */
     public function testSetTypeHint($type, $exception)
     {
@@ -345,11 +373,18 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
      * @dataProvider setFullyQualifiedTypeProvider
      * @param string $type
      * @param string $exception
+     * @throws \DomainException
+     * @throws \InvalidArgumentException
      */
     public function testSetFullyQualifiedType($type, $exception)
     {
         $this->expectException($exception);
         self::assertSame($this->info, $this->info->setFullyQualifiedType($type));
         self::assertEquals($type, $this->info->getFullyQualifiedType());
+    }
+
+    public function testGetNamespaceEmptyClass()
+    {
+        self::assertSame('', $this->minimal_info->getNamespace());
     }
 }

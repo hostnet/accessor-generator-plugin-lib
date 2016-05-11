@@ -11,18 +11,27 @@ use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OneToOne;
 use Hostnet\Component\AccessorGenerator\Annotation\Generate;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception\InvalidColumnSettingsException;
+use Hostnet\Component\AccessorGenerator\Reflection\Metadata;
 
 /**
  * Process Column, ManyToMany, OneToOne, ManyToOne,
  * OneToMany and GeneratedValue Doctrine ORM annotations
  * and extract the type and relationship information.
- *
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
 {
     const ZEROED_DATE_TIME = 'zeroeddatetime';
     const YAML_ARRAY       = 'yaml_array';
+
+    /**
+     * @var Metadata
+     */
+    private $metadata;
+
+    public function __construct(Metadata $metadata)
+    {
+        $this->metadata = $metadata;
+    }
 
     /**
      * Process annotations of type:
@@ -33,9 +42,13 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      *  OneToMany,
      *  OneToOne.
      *
-     * @param  object              $annotation  object of a class annotated with @annotation
+     * @param  mixed $annotation object of a class annotated with @annotation
      * @param  PropertyInformation $information
      * @return void
+     * @throws \RangeException
+     * @throws \Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception\InvalidColumnSettingsException
+     * @throws \InvalidArgumentException
+     * @throws \DomainException
      */
     public function processAnnotation($annotation, PropertyInformation $information)
     {
@@ -50,8 +63,8 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
                 break;
             case $annotation instanceof GeneratedValue:
                 // Generated value columns such as auto_increment
-                // should not have a stetter function generated.
-                // If the user insists on setting this collumn
+                // should not have a setter function generated.
+                // If the user insists on setting this column
                 // a setter could be implemented by hand.
                 $information->limitMaximumSetVisibility(Generate::VISIBILITY_NONE);
                 break;
@@ -86,13 +99,15 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * Return referenced entity if we have a bidirectional
      * doctrine association.
      *
-     * @param object              $annotation with annotation Annotation
+     * @param mixed $annotation with annotation Annotation
      * @param PropertyInformation $information
+     * @throws \DomainException
+     * @throws \InvalidArgumentException
      */
     private function processBidirectional($annotation, PropertyInformation $information)
     {
         // Parse the mappedBy and inversedBy columns, there is no nice interface
-        // on then so we have to check for existance of the property.
+        // on then so we have to check for existence of the property.
         if (property_exists($annotation, 'inversedBy') && $annotation->inversedBy) {
             $information->setReferencedProperty($annotation->inversedBy);
         } elseif (property_exists($annotation, 'mappedBy') && $annotation->mappedBy) {
@@ -110,7 +125,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
     }
 
     /**
-     * Process a Column Annotation, extraxt information
+     * Process a Column Annotation, extract information
      * about scale and precision for decimal types, length
      * and size of string and integer types, if the column
      * may be null and if it should be a unique value.
@@ -119,6 +134,9 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * @param PropertyInformation $information
      *
      * @throws InvalidColumnSettingsException
+     * @throws \DomainException
+     * @throws \InvalidArgumentException
+     * @throws \RangeException
      */
     protected function processColumn(Column $column, PropertyInformation $information)
     {
@@ -127,8 +145,8 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
         $information->setLength($column->length ?: 0);
         $information->setPrecision($column->precision);
         $information->setScale($column->scale);
-        $information->setUnique($column->unique);
-        $information->setNullable($column->nullable);
+        $information->setUnique($column->unique !== false);
+        $information->setNullable($column->nullable !== false);
         $information->setIntegerSize($this->getIntegerSizeForType($column->type));
 
         if ($information->isFixedPointNumber()
@@ -150,7 +168,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
     }
 
     /**
-     * Process a JoinColumn Annotation, extraxt nullable.
+     * Process a JoinColumn Annotation, extract nullable.
      *
      * @param JoinColumn $join_column
      * @param PropertyInformation $information
@@ -179,21 +197,25 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      */
     private function transformType($type)
     {
-        if ($type == Type::BOOLEAN) {
+        if ($type === Type::BOOLEAN) {
             return 'boolean';
-        } elseif ($type == Type::SMALLINT || $type == Type::BIGINT || $type == Type::INTEGER) {
+        } elseif ($type === Type::SMALLINT || $type === Type::BIGINT || $type === Type::INTEGER) {
             return 'integer';
-        } elseif ($type == Type::FLOAT) {
+        } elseif ($type === Type::FLOAT) {
             return 'float';
-        } elseif ($type == Type::TEXT || $type == Type::GUID || $type == Type::STRING || $type == Type::DECIMAL) {
+        } elseif ($type === Type::TEXT || $type === Type::GUID || $type === Type::STRING || $type === Type::DECIMAL) {
             return 'string';
-        } elseif ($type == Type::BLOB /* binary will be added in doctrine 2.5 */) {
+        } elseif ($type === Type::BLOB /* binary will be added in doctrine 2.5 */) {
             return 'resource';
-        } elseif (in_array($type, [Type::DATETIME, Type::DATETIMETZ, Type::DATE, Type::TIME, self::ZEROED_DATE_TIME])) {
+        } elseif (in_array(
+            $type,
+            [Type::DATETIME, Type::DATETIMETZ, Type::DATE, Type::TIME, self::ZEROED_DATE_TIME],
+            true
+        )) {
             return '\\' . \DateTime::class;
-        } elseif (in_array($type, [Type::SIMPLE_ARRAY, Type::JSON_ARRAY, Type::TARRAY, self::YAML_ARRAY])) {
+        } elseif (in_array($type, [Type::SIMPLE_ARRAY, Type::JSON_ARRAY, Type::TARRAY, self::YAML_ARRAY], true)) {
             return 'array';
-        } elseif ($type == Type::OBJECT) {
+        } elseif ($type === Type::OBJECT) {
             return 'object';
         } else {
             return $type;
@@ -203,10 +225,10 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
     /**
      * Transform a Doctrine complex type to a valid
      * PHP type reference. Doctrine does not require
-     * your class to start with a \ for a fully qual-
-     * lified classname. When there is a \ inside
+     * your class to start with a \ for a fully
+     * qualified class name. When there is a \ inside
      * Doctrine assumes a fully qualified name. This
-     * makes relative references to subnamespaces
+     * makes relative references to sub namespaces
      * impossible. When there is no \ in the class name
      * it is assumed to be relative to the current name-
      * space and left as-is.
@@ -226,7 +248,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
     /**
      * Return the size of an integer type in bits.
      * This value can be used by the set methods to
-     * validate that the value sent to the databse
+     * validate that the value sent to the database
      * will not be too big and chopped off.
      *
      * PHP does scale all int values automatically

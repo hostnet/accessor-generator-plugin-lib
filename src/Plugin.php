@@ -9,8 +9,10 @@ use Composer\Package\RootPackageInterface;
 use Composer\Plugin\PluginInterface;
 use Composer\Script\ScriptEvents;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Hostnet\Component\AccessorGenerator\Annotation\Generate;
 use Hostnet\Component\AccessorGenerator\Generator\CodeGenerator;
 use Hostnet\Component\AccessorGenerator\Generator\CodeGeneratorInterface;
+use Hostnet\Component\AccessorGenerator\Reflection\Metadata;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
 use Symfony\Component\Finder\Finder;
 
@@ -31,19 +33,32 @@ use Symfony\Component\Finder\Finder;
  */
 class Plugin implements PluginInterface, EventSubscriberInterface
 {
-
     const NAME = 'hostnet/accessor-generator-plugin-lib';
 
+    /**
+     * @var Composer
+     */
     private $composer;
+
+    /**
+     * @var IOInterface
+     */
     private $io;
+
+    /**
+     * @var CodeGenerator
+     */
     private $generator;
 
     /**
      * Initialize the annotation registry with composer
-     * as autoloader. Create a CodeGemerator if now was
+     * as auto loader. Create a CodeGenerator if now was
      * provided.
      *
      * @param CodeGeneratorInterface $generator
+     * @throws \InvalidArgumentException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Syntax
      */
     public function __construct(CodeGeneratorInterface $generator = null)
     {
@@ -54,6 +69,17 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         } else {
             $this->generator = new CodeGenerator();
         }
+    }
+
+    /**
+     * @see Composer\EventDispatcher\EventSubscriberInterface::getSubscribedEvents
+     * @return int|string[][]
+     */
+    public static function getSubscribedEvents()
+    {
+        return [
+            ScriptEvents::PRE_AUTOLOAD_DUMP => ['onPreAutoloadDump', 20],
+        ];
     }
 
     /**
@@ -68,32 +94,39 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     }
 
     /**
-     * @see Composer\EventDispatcher\EventSubscriberInterface::getSubscribedEvents
-     * @return int|string[][]
-     */
-    public static function getSubscribedEvents()
-    {
-        return [
-            ScriptEvents::PRE_AUTOLOAD_DUMP => ['onPreAutoloadDump', 20 ],
-        ];
-    }
-
-    /**
      * Gets called on the PRE_AUTOLOAD_DUMP event
      *
      * Generate Traits for every package that requires
      * this plugin and has php files with the @Generate
      * annotation set on at least one property.
+     * @throws \DomainException
+     * @throws \Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException
+     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     * @throws \Symfony\Component\Filesystem\Exception\IOException
+     * @throws \LogicException
      */
     public function onPreAutoloadDump()
     {
         $local_repository = $this->composer->getRepositoryManager()->getLocalRepository();
         $packages         = $local_repository->getPackages();
         $packages[]       = $this->composer->getPackage();
+        $metadata         = new Metadata();
+
         foreach ($packages as $package) {
             /* @var $package PackageInterface */
             if (array_key_exists(self::NAME, $package->getRequires())) {
-                $this->generateTraitsForPackage($package);
+                $this->generateMetadataForPackage($metadata, $package);
+            }
+        }
+
+        //Synchronize
+        foreach ($metadata->getReflectionClasses() as $reflection_class) {
+            if ($this->generator->writeTraitForClass($reflection_class, $metadata) && $this->io->isVeryVerbose()) {
+                $this->io->write(
+                    sprintf('  - generated accessors for <info>%s</info>', $reflection_class->getFilename())
+                );
             }
         }
     }
@@ -104,18 +137,23 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      * the @Generate annotation set on at least one
      * property.
      *
+     * @param Metadata $metadata
      * @param PackageInterface $package
+     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
+     * @throws \InvalidArgumentException
+     * @throws \LogicException
      */
-    private function generateTraitsForPackage(PackageInterface $package)
+    private function generateMetadataForPackage(Metadata $metadata, PackageInterface $package)
     {
         if ($this->io->isVerbose()) {
-            $this->io->write('Generating accessors for <info>' . $package->getPrettyName() .'</info>');
+            $this->io->write('Generating metadata for <info>' . $package->getPrettyName() . '</info>');
         }
 
         foreach ($this->getFilesForPackage($package) as $filename) {
-            $class = new ReflectionClass($filename);
-            if ($this->generator->writeTraitForClass($class) && $this->io->isVeryVerbose()) {
-                $this->io->write("  - generated accessors for <info>$filename</info>");
+            $reflection_class = new ReflectionClass($filename);
+            $metadata->addReflectionClass($reflection_class);
+            if ($this->io->isVeryVerbose()) {
+                $this->io->write("  - generated metadata for <info>$filename</info>");
             }
         }
     }
@@ -130,7 +168,9 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      *  - all hidden files
      *
      * @param PackageInterface $package
-     * @return Iterator
+     * @return \Iterator
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
      */
     private function getFilesForPackage(PackageInterface $package)
     {

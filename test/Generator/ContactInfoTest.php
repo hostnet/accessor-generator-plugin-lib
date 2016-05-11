@@ -1,0 +1,110 @@
+<?php
+namespace Hostnet\Component\AccessorGenerator\Generator;
+
+use Hostnet\Component\AccessorGenerator\Generator\fixtures\ContactInfo;
+
+/**
+ * {@inheritDoc}
+ */
+class ContactInfoTest extends \PHPUnit_Framework_TestCase
+{
+    public function testSetWrong()
+    {
+        $alice = new ContactInfo();
+        foreach ([
+                     'setAddressLine',
+                     'setName',
+                     'setDeleted',
+                     'setSpendsLotsOfMoney',
+                 ] as $modifier) {
+            $caught = false;
+            try {
+                $alice->$modifier([]);
+            } catch (\InvalidArgumentException $e) {
+                $caught = true;
+            }
+            self::assertTrue($caught);
+        }
+    }
+
+    public function testSet()
+    {
+        $alice = new ContactInfo();
+        self::assertSame($alice, $alice->setAddressLine(''));
+        self::assertSame($alice, $alice->setName(''));
+        self::assertSame($alice, $alice->setDeleted(false));
+        self::assertSame($alice, $alice->setSpendsLotsOfMoney(false));
+        self::assertSame($alice, $alice->setFriendedBy($alice));
+        self::assertSame($alice, $alice->setFriendedBy($alice));
+        self::assertSame($alice, $alice->setReferrer($alice));
+        self::assertSame($alice, $alice->setReferrer($alice));
+
+        foreach (ContactInfo::GETTERS as $modifier) {
+            self::assertNotNull($alice->$modifier());
+        }
+    }
+
+    public function testNull()
+    {
+        $alice = new ContactInfo();
+        foreach (ContactInfo::GETTERS as $modifier) {
+            $alice->$modifier();
+        }
+    }
+
+    public function testRemove()
+    {
+        $alice = new ContactInfo();
+        $bob   = new ContactInfo();
+
+        foreach (ContactInfo::ADDERS as $modifier) {
+            self::assertSame($alice, $alice->$modifier($bob));
+        }
+
+        foreach (ContactInfo::REMOVERS as $modifier) {
+            self::assertSame($alice, $alice->$modifier($bob));
+            self::assertSame($alice, $alice->$modifier($alice));
+        }
+    }
+
+    public function testAddTwice()
+    {
+        $alice = new ContactInfo();
+        $bob   = new ContactInfo();
+
+        foreach (ContactInfo::ADDERS as $modifier) {
+            $caught = false;
+            try {
+                $alice->$modifier($alice);
+                $alice->$modifier($alice);
+                $bob->$modifier($alice);
+            } catch (\LogicException $e) {
+                $caught = true;
+            }
+            self::assertTrue($caught);
+        }
+    }
+
+    public function testGarbage()
+    {
+        $info = new ContactInfo();
+
+        foreach (array_merge(ContactInfo::GETTERS, ContactInfo::ADDERS, ContactInfo::SETTERS, ContactInfo::REMOVERS) as
+                 $modifier) {
+            $caught = false;
+            try {
+                $info->$modifier($info, 2);
+            } catch (\BadMethodCallException $e) {
+                $caught = true;
+            }
+            self::assertTrue($caught);
+        }
+    }
+
+    public function testGetAll()
+    {
+        $info = new ContactInfo();
+        $all  = $info->getAll();
+        self::assertTrue(is_array($all));
+    }
+}

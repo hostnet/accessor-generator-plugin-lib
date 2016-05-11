@@ -3,19 +3,18 @@
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformationInterface;
+use Hostnet\Component\AccessorGenerator\Reflection\Metadata;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
 
 /**
  * Create Accessor Methods Traits.
- *
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 interface CodeGeneratorInterface
 {
     /**
      * Write Trait to file in Generated folder
      * relative to the source file of the $class.
-     * The trait will be in a subnamespace of the
+     * The trait will be in a sub namespace of the
      * one of $class.
      *
      * Will return true if a trait was created for
@@ -24,27 +23,29 @@ interface CodeGeneratorInterface
      *
      * @see generateTraitForClass
      * @param ReflectionClass $class
-     * @return boolean
+     * @param Metadata $metadata
+     * @return bool
      */
-    public function writeTraitForClass(ReflectionClass $class);
+    public function writeTraitForClass(ReflectionClass $class, Metadata $metadata);
 
     /**
      * Return the PHP code for the accessor method
-     * trait for $class. The trait will have a sub-
-     * namespace of Generated reletive to the one of
+     * trait for $class. The trait will have a sub
+     * namespace of Generated relative to the one of
      * $class.
      *
      * Will return an empty string if no code generation
      * was requested.
      *
      * @param ReflectionClass $class
+     * @param Metadata $metadata
      * @return string
      */
-    public function generateTraitForClass(ReflectionClass $class);
+    public function generateTraitForClass(ReflectionClass $class, Metadata $metadata);
 
     /**
      * Generate Accessor methods for property
-     * The ouput will contain white seperated
+     * The output will contain white separated
      * accessors and no trailing white space.
      *
      * @param PropertyInformationInterface $info

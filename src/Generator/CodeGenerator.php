@@ -9,6 +9,7 @@ use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformation;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformationInterface;
 use Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException;
 use Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException;
+use Hostnet\Component\AccessorGenerator\Reflection\Metadata;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
 use Hostnet\Component\AccessorGenerator\Twig\CodeGenerationExtension;
 use Symfony\Component\Filesystem\Filesystem;
@@ -17,22 +18,54 @@ use Symfony\Component\Filesystem\Filesystem;
  * Generate Trait files with accessor methods.
  * Put them in a Generated folder and namespace
  * relative to the file they are created for.
- *
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 class CodeGenerator implements CodeGeneratorInterface
 {
-    private $namespace   = 'Generated';
+    /**
+     * @var string
+     */
+    private $namespace = 'Generated';
+
+    /**
+     * @var string
+     */
     private $name_suffix = 'MethodsTrait';
 
     /**
-     * Initialize Twig and templates
+     * @var \Twig_TemplateInterface
+     */
+    private $add;
+
+    /**
+     * @var \Twig_TemplateInterface
+     */
+    private $set;
+
+    /**
+     * @var \Twig_TemplateInterface
+     */
+    private $get;
+
+    /**
+     * @var \Twig_TemplateInterface
+     */
+    private $remove;
+
+    /**
+     * @var \Twig_TemplateInterface
+     */
+    private $trait;
+
+    /**
+     * Initialize Twig and templates.
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Syntax
      */
     public function __construct()
     {
         $loader = new \Twig_Loader_Filesystem(__DIR__ . '/../Resources/templates');
         $twig   = new \Twig_Environment($loader);
-        $twig->clearTemplateCache();
         $twig->addExtension(new CodeGenerationExtension());
 
         $this->get    = $twig->loadTemplate('get.php.twig');
@@ -45,11 +78,18 @@ class CodeGenerator implements CodeGeneratorInterface
     /**
      * @see \Hostnet\Component\AccessorGenerator\Generator\CodeGeneratorInterface::writeTraitForClass()
      * @param ReflectionClass $class
-     * @return boolean
+     * @param Metadata $metadata
+     * @return bool
+     * @throws \RuntimeException
+     * @throws \InvalidArgumentException
+     * @throws \Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException
+     * @throws \DomainException
+     * @throws \Symfony\Component\Filesystem\Exception\IOException
+     * @throws ClassDefinitionNotFoundException
      */
-    public function writeTraitForClass(ReflectionClass $class)
+    public function writeTraitForClass(ReflectionClass $class, Metadata $metadata)
     {
-        $data = $this->generateTraitForClass($class);
+        $data = $this->generateTraitForClass($class, $metadata);
         $fs   = new Filesystem();
 
         if ($data) {
@@ -68,9 +108,15 @@ class CodeGenerator implements CodeGeneratorInterface
     /**
      * @see \Hostnet\Component\AccessorGenerator\Generator\CodeGeneratorInterface::generateTraitForClass()
      * @param ReflectionClass $class
+     * @param Metadata $metadata
      * @return string
+     * @throws \InvalidArgumentException
+     * @throws \DomainException
+     * @throws \RuntimeException
+     * @throws ClassDefinitionNotFoundException
+     * @throws TypeUnknownException
      */
-    public function generateTraitForClass(ReflectionClass $class)
+    public function generateTraitForClass(ReflectionClass $class, Metadata $metadata)
     {
         $code                  = '';
         $add_collection_import = false;
@@ -85,7 +131,7 @@ class CodeGenerator implements CodeGeneratorInterface
         $imports[] = $class->getNamespace() . '\\' . $class->getName();
 
         $generate_processor = new GenerateAnnotationProcessor();
-        $doctrine_processor = new DoctrineAnnotationProcessor();
+        $doctrine_processor = new DoctrineAnnotationProcessor($metadata);
 
         foreach ($properties as $property) {
             $parser = new DocParser();
@@ -104,14 +150,14 @@ class CodeGenerator implements CodeGeneratorInterface
                 continue;
             }
 
-            // Complex Type within curent namespace. Since our trait is in a sub
-            // namespace we have to import those aswell (php does not no .. in namespace).
+            // Complex Type within current namespace. Since our trait is in a sub
+            // namespace we have to import those as well (php does not no .. in namespace).
             // In principle no harm could come from these imports unless the types
             // are of a *methodsTrait type. Which will break anyway.
             self::addImportForProperty($info, $imports);
 
             // Parse and add fully qualified type information to the info object for use
-            // in docblocks to make eclipse understand the types.
+            // in doc blocks to make eclipse understand the types.
             $info->setFullyQualifiedType(self::fqcn($info->getTypeHint(), $imports));
 
             $code .= $this->generateAccessors($info);
@@ -122,7 +168,7 @@ class CodeGenerator implements CodeGeneratorInterface
             }
         }
 
-        // Add import for ImmutableCollection if we generate any funtions that make use of this
+        // Add import for ImmutableCollection if we generate any functions that make use of this
         // collection wrapper.
         if ($add_collection_import) {
             $imports[] = 'Hostnet\Component\AccessorGenerator\Collection\ImmutableCollection';
@@ -144,11 +190,14 @@ class CodeGenerator implements CodeGeneratorInterface
 
 
     /**
-     * Make sure our use statemens are sorted alphabetically and unique.
+     * Make sure our use statements are sorted alphabetically and unique.
      * The array_unique function can not be used because it does not take
      * values with different array keys into account. This loop does exactly
-     * that. This is usefull when a specific class name is imported and aliased
-     * aswell.
+     * that. This is useful when a specific class name is imported and aliased
+     * as well.
+     *
+     * @param array $imports
+     * @return array
      */
     private function getUniqueImports(array $imports)
     {
@@ -179,6 +228,7 @@ class CodeGenerator implements CodeGeneratorInterface
      * @see \Hostnet\Component\AccessorGenerator\Generator\CodeGeneratorInterface::generateAccessors()
      * @param PropertyInformationInterface $info
      * @return string
+     * @throws \Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException
      */
     public function generateAccessors(PropertyInformationInterface $info)
     {
@@ -188,7 +238,7 @@ class CodeGenerator implements CodeGeneratorInterface
         if ($info->getType() === null) {
             throw new TypeUnknownException(
                 sprintf(
-                    'Property %s in class %s\%s has no type set, nor could it be infered. %s',
+                    'Property %s in class %s\%s has no type set, nor could it be inferred. %s',
                     $info->getName(),
                     $info->getNamespace(),
                     $info->getClass(),
@@ -201,7 +251,7 @@ class CodeGenerator implements CodeGeneratorInterface
         if ($info->willGenerateGet()) {
             // Compute the name of the get method. For boolean values
             // an is method is generated instead of a get method.
-            if ($info->getType() == 'boolean') {
+            if ($info->getType() === 'boolean') {
                 if (preg_match('/^is[_A-Z0-9]/', $info->getName())) {
                     $getter = Inflector::camelize($info->getName());
                 } else {
@@ -245,45 +295,45 @@ class CodeGenerator implements CodeGeneratorInterface
 
     /**
      * Return the fully qualified class name based on the
-     * use statments in the current file.
+     * use statements in the current file.
      *
-     * @param $name class name
+     * @param string $name class name
      * @param array $imports
      * @return string
      */
     private static function fqcn($name, array $imports)
     {
         // Already FQCN
-        if (substr($name, 0, 1) === '\\') {
+        if ($name[0] === '\\') {
             return $name;
         }
 
         // Aliased
-        if (isset($imports[$name])) {
+        if (array_key_exists($name, $imports)) {
             return '\\' . $imports[$name];
         }
 
         // Check other imports
-        if (($plain = self::getPlainImportIfExists($name, $imports))) {
+        if ($plain = self::getPlainImportIfExists($name, $imports)) {
             return '\\' .  $plain;
         }
 
-        // Not a complex type, or otherwise unkown.
+        // Not a complex type, or otherwise unknown.
         return '';
     }
 
     /**
      * Returns if this class is in an
-     * aliassed namespace.
+     * aliased namespace.
      *
-     * @param class name $name
+     * @param string $name class name
      * @param array $imports
      * @return boolean
      */
     private static function isAliased($name, array $imports)
     {
-        $aliasses = array_keys($imports);
-        foreach ($aliasses as $alias) {
+        $aliases = array_keys($imports);
+        foreach ($aliases as $alias) {
             if (strpos($name, $alias) === 0) {
                 return true;
             }
@@ -300,12 +350,11 @@ class CodeGenerator implements CodeGeneratorInterface
     private static function getPlainImportIfExists($type, $imports)
     {
         foreach ($imports as $alias => $import) {
-            if (is_numeric($alias)) {
-                if (substr($import, -1 - strlen($type)) == '\\' . $type) {
-                    return $import;
-                }
+            if (is_numeric($alias) && substr($import, -1 - strlen($type)) === '\\' . $type) {
+                return $import;
             }
         }
+        return null;
     }
 
     /**
@@ -321,7 +370,7 @@ class CodeGenerator implements CodeGeneratorInterface
             if (strpos($type_hint, '\\') !== 0) {
                 self::addImportForType($type_hint, $info->getNamespace(), $imports);
             }
-            if ($type != $type_hint && strpos($type, '\\') !== 0) {
+            if ($type !== $type_hint && strpos($type, '\\') !== 0) {
                 self::addImportForType($type, $info->getNamespace(), $imports);
             }
         }
@@ -333,17 +382,16 @@ class CodeGenerator implements CodeGeneratorInterface
     }
 
     /**
-     *
      * @param string $type
      * @param string $namespace
-     * @param array $imports
+     * @param array &$imports
      */
     private static function addImportForType($type, $namespace, array &$imports)
     {
         if (!self::isAliased($type, $imports)) {
             $first_part = strstr($type, '\\', true);
             if ($first_part) {
-                // Subnamespace;
+                // Sub namespace;
                 $imports[$first_part] = $namespace . '\\' . $first_part;
             } else {
                 // Inside own namespace

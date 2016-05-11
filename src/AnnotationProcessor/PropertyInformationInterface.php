@@ -2,14 +2,12 @@
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
 /**
- * Information about a property that is usefull
+ * Information about a property that is useful
  * for generating accessor methods.
  *
  * Some of the information is only applicable
  * when the data is persisted in some kind of
  * secondary storage like a RDBMS (ex MySQL).
- *
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 interface PropertyInformationInterface
 {
@@ -24,7 +22,7 @@ interface PropertyInformationInterface
 
     /**
      * Get the name of the class implementing
-     * this property. Usefull for creating
+     * this property. Useful for creating
      * fluent interfaces that make use of method
      * chaining in code generation.
      *
@@ -97,7 +95,7 @@ interface PropertyInformationInterface
     public function getFullyQualifiedType();
 
     /**
-     * Returns if the propery is a scalar
+     * Returns if the property is a scalar
      * type from the php language as boolean
      * integer, array or that is is a complex
      * class type like \DateTime or a user
@@ -149,7 +147,7 @@ interface PropertyInformationInterface
     public function getPrecision();
 
     /**
-     * Get the amount of digets after
+     * Get the amount of digits after
      * the decimal point. Use in combination
      * with getPrecision.
      *
@@ -162,7 +160,7 @@ interface PropertyInformationInterface
 
     /**
      * Returns the documentation part
-     * of the docblock for this property
+     * of the doc block for this property
      * thus the part before the first
      * annotation.
      *
@@ -176,7 +174,7 @@ interface PropertyInformationInterface
      * if isCollection returns true.
      *
      * Returns null if not set explicitly,
-     * null can be interperted as false.
+     * null can be interpreted as false.
      *
      * @return bool|null
      */
@@ -187,7 +185,7 @@ interface PropertyInformationInterface
      * null.
      *
      * Returns null if not set explicitly,
-     * null can be interperted as false.
+     * null can be interpreted as false.
      * @return bool|null
      */
     public function isNullable();
@@ -200,11 +198,40 @@ interface PropertyInformationInterface
     public function isCollection();
 
     /**
-     * The property referened for this association
-     * on the other side of the association
+     * The property referenced for this association
+     * on the other side of the association.
      * @return string
      */
     public function getReferencedProperty();
+
+    /**
+     * Return if this ManyTo{One,Many} relation
+     * should be indexed by a specific column.
+     *
+     * In doctrine this behaviour is used by
+     * putting an IndexBy property on a ManyToOne
+     * or ManyToMany annotation.
+     *
+     * @return string|null
+     */
+    public function getIndex();
+
+    /**
+     * Return if this {One,Many}ToMany relation
+     * should be indexed by a specific column.
+     *
+     * This method co exists with getIndex()
+     * because for a many-to-many bi-directional
+     * connection indexed on both sides, you need
+     * the values for both sided.
+     *
+     * In doctrine this behaviour is used by
+     * putting an IndexBy property on a ManyToOne
+     * or ManyToMany annotation.
+     *
+     * @return string|null
+     */
+    public function getReferencedIndex();
 
     /**
      * Set to true whenever this property
@@ -221,7 +248,7 @@ interface PropertyInformationInterface
      * state according to the nullable columns.
      *
      * Returns null if not set explicitly,
-     * null can be interperted as false.
+     * null can be interpreted as false.
      *
      * @return bool
      */
@@ -243,7 +270,7 @@ interface PropertyInformationInterface
      * If a set function should be generated.
      *
      * Returns null if not set explicitly,
-     * null can be interperted as false.
+     * null can be interpreted as false.
      *
      * @return bool
      */
@@ -258,7 +285,7 @@ interface PropertyInformationInterface
      * If a add function should be generated.
      *
      * Returns null if not set explicitly,
-     * null can be interperted as false.
+     * null can be interpreted as false.
      *
      * @return bool
      */
@@ -273,7 +300,7 @@ interface PropertyInformationInterface
      * If a remove function should be generated.
      *
      * Returns null if not set explicitly,
-     * null can be interperted as false.
+     * null can be interpreted as false.
      *
      * @return bool
      */

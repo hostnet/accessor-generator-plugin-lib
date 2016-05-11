@@ -21,7 +21,7 @@ class ReflectionPropertyTest extends \PHPUnit_Framework_TestCase
             ReflectionProperty::IS_PROTECTED,
             '\'default\'',
             'DOCS',
-            new ReflectionClass(__DIR__ . '/fixtures/noclass.php')
+            new ReflectionClass(__DIR__ . '/fixtures/no_class.php')
         );
 
         $this->empty_doc = new ReflectionProperty(
