@@ -28,17 +28,35 @@
         return $this;
     }
 
+{% if property.index %}
+    $reflection_index = new \ReflectionProperty({{ property.type }}::class, '{{ property.index }}');
+    $reflection_index->setAccessible(true);
+    $index = $reflection_index->getValue(${{ property.name | singularize }});
+    $reflection_index->setAccessible(false);
+    if ($this->{{ property.name}}->containsKey($index)) {
+        throw new \LogicException(sprintf('index {{ property.index }} with value "%s" is already taken, meaning the index is not unique!', $index));
+    }
+    $this->{{ property.name}}->set($index, ${{ property.name | singularize }});
+{% else %}
     $this->{{ property.name}}->add(${{ property.name | singularize }});
+{% endif %}
 {% if property.referencedProperty %}
     $property = new \ReflectionProperty({{ property.type }}::class, '{{ property.referencedProperty }}');
     $property->setAccessible(true);
 {% if property.isReferencingCollection %}
-    $collection = $property->getValue(${{ property.name | singularize }});
-    if (!$collection) {
-        $collection = new \Doctrine\Common\Collections\ArrayCollection();
-        $property->setValue(${{ property.name | singularize }}, $collection);
+    if (method_exists({{ property.type }}::class, 'add{{ property.referencedProperty | singularize | classify}}')) {
+        $adder = new \ReflectionMethod({{ property.type }}::class, 'add{{ property.referencedProperty | singularize | classify}}');
+        $adder->setAccessible(true);
+        $adder->invoke(${{ property.name | singularize }}, $this);
+        $adder->setAccessible(false);
+    } else {
+        $collection = $property->getValue(${{ property.name | singularize }});
+        if (!$collection) {
+            $collection = new \Doctrine\Common\Collections\ArrayCollection();
+            $property->setValue(${{ property.name | singularize }}, $collection);
+        }
+        $collection->add($this);
     }
-    $collection->add($this);
 {% else %}
     $value = $property->getValue(${{ property.name | singularize }});
     if ($value && $value !== $this) {

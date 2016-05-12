@@ -62,12 +62,19 @@ trait ActorMethodsTrait
         $this->movies->add($movie);
         $property = new \ReflectionProperty(\Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie::class, 'a');
         $property->setAccessible(true);
-        $collection = $property->getValue($movie);
-        if (!$collection) {
-            $collection = new \Doctrine\Common\Collections\ArrayCollection();
-            $property->setValue($movie, $collection);
+        if (method_exists(\Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie::class, 'addA')) {
+            $adder = new \ReflectionMethod(\Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie::class, 'addA');
+            $adder->setAccessible(true);
+            $adder->invoke($movie, $this);
+            $adder->setAccessible(false);
+        } else {
+            $collection = $property->getValue($movie);
+            if (!$collection) {
+                $collection = new \Doctrine\Common\Collections\ArrayCollection();
+                $property->setValue($movie, $collection);
+            }
+            $collection->add($this);
         }
-        $collection->add($this);
         $property->setAccessible(false);
         return $this;
     }

@@ -248,7 +248,14 @@ trait ProductMethodsTrait
             return $this;
         }
 
-        $this->attributes->add($attribute);
+        $reflection_index = new \ReflectionProperty(Attribute::class, 'name');
+        $reflection_index->setAccessible(true);
+        $index = $reflection_index->getValue($attribute);
+        $reflection_index->setAccessible(false);
+        if ($this->attributes->containsKey($index)) {
+            throw new \LogicException(sprintf('index name with value "%s" is already taken, meaning the index is not unique!', $index));
+        }
+        $this->attributes->set($index, $attribute);
         $property = new \ReflectionProperty(Attribute::class, 'product');
         $property->setAccessible(true);
         $value = $property->getValue($attribute);

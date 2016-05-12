@@ -215,8 +215,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddAttribute()
     {
-        $attribute_a = new Attribute();
-        $attribute_b = new Attribute();
+        $attribute_a       = new Attribute();
+        $attribute_a->name = 'A';
+        $attribute_b       = new Attribute();
+        $attribute_b->name = 'B';
 
         $this->product->addAttribute($attribute_a);
         $this->product->addAttribute($attribute_a);
@@ -229,6 +231,25 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         self::assertSame($attribute_a, $attributes->first());
         self::assertSame($attribute_b, $attributes->last());
+
+        self::assertSame($attribute_a, $attributes['A']);
+        self::assertSame($attribute_b, $attributes['B']);
+    }
+
+    /**
+     * @depends testGetAttributes
+     * @expectedException \LogicException
+     * @throws \BadMethodCallException
+     */
+    public function testAddAttributeNonUniqueIndex()
+    {
+        $attribute_a       = new Attribute();
+        $attribute_a->name = 'Same';
+        $attribute_b       = new Attribute();
+        $attribute_b->name = 'Same';
+
+        $this->product->addAttribute($attribute_a);
+        $this->product->addAttribute($attribute_b);
     }
 
     /**

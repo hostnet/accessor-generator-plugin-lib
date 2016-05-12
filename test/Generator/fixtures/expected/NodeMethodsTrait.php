@@ -62,12 +62,19 @@ trait NodeMethodsTrait
         $this->out->add($out);
         $property = new \ReflectionProperty(Node::class, 'in');
         $property->setAccessible(true);
-        $collection = $property->getValue($out);
-        if (!$collection) {
-            $collection = new \Doctrine\Common\Collections\ArrayCollection();
-            $property->setValue($out, $collection);
+        if (method_exists(Node::class, 'addIn')) {
+            $adder = new \ReflectionMethod(Node::class, 'addIn');
+            $adder->setAccessible(true);
+            $adder->invoke($out, $this);
+            $adder->setAccessible(false);
+        } else {
+            $collection = $property->getValue($out);
+            if (!$collection) {
+                $collection = new \Doctrine\Common\Collections\ArrayCollection();
+                $property->setValue($out, $collection);
+            }
+            $collection->add($this);
         }
-        $collection->add($this);
         $property->setAccessible(false);
         return $this;
     }

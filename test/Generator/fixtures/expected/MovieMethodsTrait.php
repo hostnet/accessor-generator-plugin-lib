@@ -63,12 +63,19 @@ trait MovieMethodsTrait
         $this->a->add($a);
         $property = new \ReflectionProperty(Actor::class, 'movies');
         $property->setAccessible(true);
-        $collection = $property->getValue($a);
-        if (!$collection) {
-            $collection = new \Doctrine\Common\Collections\ArrayCollection();
-            $property->setValue($a, $collection);
+        if (method_exists(Actor::class, 'addMovie')) {
+            $adder = new \ReflectionMethod(Actor::class, 'addMovie');
+            $adder->setAccessible(true);
+            $adder->invoke($a, $this);
+            $adder->setAccessible(false);
+        } else {
+            $collection = $property->getValue($a);
+            if (!$collection) {
+                $collection = new \Doctrine\Common\Collections\ArrayCollection();
+                $property->setValue($a, $collection);
+            }
+            $collection->add($this);
         }
-        $collection->add($this);
         $property->setAccessible(false);
         return $this;
     }

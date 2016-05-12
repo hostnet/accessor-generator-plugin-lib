@@ -21,7 +21,7 @@ class Attribute
     /**
      * @ORM\Column
      */
-    private $name = '';
+    public $name = '';
     /**
      * @ORM\ManyToOne(targetEntity="Product", inversedBy="attributes")
      * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
