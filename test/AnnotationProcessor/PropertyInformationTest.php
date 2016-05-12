@@ -76,7 +76,6 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
         self::assertNull($this->info->isUnique());
         self::assertTrue($this->info->willGenerateStrict());
         self::assertNull($this->info->getIndex());
-        self::assertNull($this->info->getReferencedIndex());
         self::assertFalse($this->info->isReferencingCollection());
         self::assertNull($this->info->getGetVisibility());
         self::assertNull($this->info->getSetVisibility());
@@ -130,9 +129,6 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
 
         self::assertSame($this->info, $this->info->setIndex('garbage'));
         self::assertSame('garbage', $this->info->getIndex());
-
-        self::assertSame($this->info, $this->info->setReferencedIndex('garbage'));
-        self::assertSame('garbage', $this->info->getReferencedIndex());
 
         self::assertSame($this->info, $this->info->setReferencingCollection(true));
         self::assertTrue($this->info->isReferencingCollection());

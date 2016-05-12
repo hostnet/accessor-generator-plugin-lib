@@ -39,7 +39,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     public function testOnPreAutoloadDump()
     {
         // Effectively change installation dir of root package.
-        chdir(__DIR__ . '/fixtures');
+        chdir(__DIR__ . '/fixtures/root');
 
         // Get fake generator
         $generator = $this->getMock(CodeGeneratorInterface::class);
@@ -89,7 +89,10 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $repository_manager->setLocalRepository($repository);
 
         $installation_manager = $this->getMock(InstallationManager::class);
-        $installation_manager->expects(self::any())->method('getInstallPath')->willReturn(__DIR__ . '/fixtures');
+        $installation_manager
+            ->expects(self::any())
+            ->method('getInstallPath')
+            ->willReturn(__DIR__ . '/fixtures/package');
 
         $composer = new Composer();
         $composer->setPackage($root_package);

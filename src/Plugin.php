@@ -12,7 +12,6 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 use Hostnet\Component\AccessorGenerator\Annotation\Generate;
 use Hostnet\Component\AccessorGenerator\Generator\CodeGenerator;
 use Hostnet\Component\AccessorGenerator\Generator\CodeGeneratorInterface;
-use Hostnet\Component\AccessorGenerator\Reflection\Metadata;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
 use Symfony\Component\Finder\Finder;
 
@@ -28,8 +27,6 @@ use Symfony\Component\Finder\Finder;
  * require the package.
  *
  * For more information on usage please see README.md
- *
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 class Plugin implements PluginInterface, EventSubscriberInterface
 {
@@ -106,27 +103,18 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      * @throws \RuntimeException
      * @throws \Symfony\Component\Filesystem\Exception\IOException
      * @throws \LogicException
+     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
      */
     public function onPreAutoloadDump()
     {
         $local_repository = $this->composer->getRepositoryManager()->getLocalRepository();
         $packages         = $local_repository->getPackages();
         $packages[]       = $this->composer->getPackage();
-        $metadata         = new Metadata();
 
         foreach ($packages as $package) {
             /* @var $package PackageInterface */
             if (array_key_exists(self::NAME, $package->getRequires())) {
-                $this->generateMetadataForPackage($metadata, $package);
-            }
-        }
-
-        //Synchronize
-        foreach ($metadata->getReflectionClasses() as $reflection_class) {
-            if ($this->generator->writeTraitForClass($reflection_class, $metadata) && $this->io->isVeryVerbose()) {
-                $this->io->write(
-                    sprintf('  - generated accessors for <info>%s</info>', $reflection_class->getFilename())
-                );
+                $this->generateTraitForPackage($package);
             }
         }
     }
@@ -137,13 +125,18 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      * the @Generate annotation set on at least one
      * property.
      *
-     * @param Metadata $metadata
      * @param PackageInterface $package
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
      * @throws \InvalidArgumentException
      * @throws \LogicException
+     * @throws \DomainException
+     * @throws \Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException
+     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
+     * @throws \OutOfBoundsException
+     * @throws \RuntimeException
+     * @throws \Symfony\Component\Filesystem\Exception\IOException
      */
-    private function generateMetadataForPackage(Metadata $metadata, PackageInterface $package)
+    private function generateTraitForPackage(PackageInterface $package)
     {
         if ($this->io->isVerbose()) {
             $this->io->write('Generating metadata for <info>' . $package->getPrettyName() . '</info>');
@@ -151,8 +144,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
 
         foreach ($this->getFilesForPackage($package) as $filename) {
             $reflection_class = new ReflectionClass($filename);
-            $metadata->addReflectionClass($reflection_class);
-            if ($this->io->isVeryVerbose()) {
+            if ($this->generator->writeTraitForClass($reflection_class) && $this->io->isVeryVerbose()) {
                 $this->io->write("  - generated metadata for <info>$filename</info>");
             }
         }

@@ -217,23 +217,6 @@ interface PropertyInformationInterface
     public function getIndex();
 
     /**
-     * Return if this {One,Many}ToMany relation
-     * should be indexed by a specific column.
-     *
-     * This method co exists with getIndex()
-     * because for a many-to-many bi-directional
-     * connection indexed on both sides, you need
-     * the values for both sided.
-     *
-     * In doctrine this behaviour is used by
-     * putting an IndexBy property on a ManyToOne
-     * or ManyToMany annotation.
-     *
-     * @return string|null
-     */
-    public function getReferencedIndex();
-
-    /**
      * Set to true whenever this property
      * is part of a bidirectional association
      * where the referenced part is a collection

@@ -9,7 +9,6 @@ use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformation;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformationInterface;
 use Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException;
 use Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException;
-use Hostnet\Component\AccessorGenerator\Reflection\Metadata;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
 use Hostnet\Component\AccessorGenerator\Twig\CodeGenerationExtension;
 use Symfony\Component\Filesystem\Filesystem;
@@ -78,8 +77,8 @@ class CodeGenerator implements CodeGeneratorInterface
     /**
      * @see \Hostnet\Component\AccessorGenerator\Generator\CodeGeneratorInterface::writeTraitForClass()
      * @param ReflectionClass $class
-     * @param Metadata $metadata
      * @return bool
+     * @throws \OutOfBoundsException
      * @throws \RuntimeException
      * @throws \InvalidArgumentException
      * @throws \Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException
@@ -87,9 +86,9 @@ class CodeGenerator implements CodeGeneratorInterface
      * @throws \Symfony\Component\Filesystem\Exception\IOException
      * @throws ClassDefinitionNotFoundException
      */
-    public function writeTraitForClass(ReflectionClass $class, Metadata $metadata)
+    public function writeTraitForClass(ReflectionClass $class)
     {
-        $data = $this->generateTraitForClass($class, $metadata);
+        $data = $this->generateTraitForClass($class);
         $fs   = new Filesystem();
 
         if ($data) {
@@ -108,15 +107,15 @@ class CodeGenerator implements CodeGeneratorInterface
     /**
      * @see \Hostnet\Component\AccessorGenerator\Generator\CodeGeneratorInterface::generateTraitForClass()
      * @param ReflectionClass $class
-     * @param Metadata $metadata
      * @return string
+     * @throws \OutOfBoundsException
      * @throws \InvalidArgumentException
      * @throws \DomainException
      * @throws \RuntimeException
      * @throws ClassDefinitionNotFoundException
      * @throws TypeUnknownException
      */
-    public function generateTraitForClass(ReflectionClass $class, Metadata $metadata)
+    public function generateTraitForClass(ReflectionClass $class)
     {
         $code                  = '';
         $add_collection_import = false;
@@ -131,7 +130,7 @@ class CodeGenerator implements CodeGeneratorInterface
         $imports[] = $class->getNamespace() . '\\' . $class->getName();
 
         $generate_processor = new GenerateAnnotationProcessor();
-        $doctrine_processor = new DoctrineAnnotationProcessor($metadata);
+        $doctrine_processor = new DoctrineAnnotationProcessor();
 
         foreach ($properties as $property) {
             $parser = new DocParser();
@@ -175,186 +174,19 @@ class CodeGenerator implements CodeGeneratorInterface
         }
 
         if ($code) {
-            $code = $this->trait->render([
-                'namespace' => $class->getNamespace() . '\\' . $this->namespace,
-                'name'      => $class->getName() . $this->name_suffix,
-                'uses'      => $this->getUniqueImports($imports),
-                'methods'   => rtrim($code),
-                'username'  => get_current_user(),
-                'hostname'  => gethostname()
-            ]);
-        }
-
-        return $code;
-    }
-
-
-    /**
-     * Make sure our use statements are sorted alphabetically and unique.
-     * The array_unique function can not be used because it does not take
-     * values with different array keys into account. This loop does exactly
-     * that. This is useful when a specific class name is imported and aliased
-     * as well.
-     *
-     * @param array $imports
-     * @return array
-     */
-    private function getUniqueImports(array $imports)
-    {
-        uksort($imports, function ($a, $b) use ($imports) {
-            $alias_a = is_numeric($a) ? " as $a;" : '';
-            $alias_b = is_numeric($b) ? " as $b;" : '';
-            return strcmp($imports[$a] . $alias_a, $imports[$b] . $alias_b);
-        });
-
-        $unique_imports = [];
-        $next           =  null;
-        do {
-            $key   = key($imports);
-            $value = current($imports);
-            $next  = next($imports);
-            if ($value !==  $next || $key !== key($imports)) {
-                if ($key) {
-                    $unique_imports[$key] = $value;
-                } else {
-                    $unique_imports[] = $value;
-                }
-            }
-        } while ($next !== false);
-        return $unique_imports;
-    }
-
-    /**
-     * @see \Hostnet\Component\AccessorGenerator\Generator\CodeGeneratorInterface::generateAccessors()
-     * @param PropertyInformationInterface $info
-     * @return string
-     * @throws \Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException
-     */
-    public function generateAccessors(PropertyInformationInterface $info)
-    {
-        $code = '';
-
-        // Check if there is enough information to generate accessors.
-        if ($info->getType() === null) {
-            throw new TypeUnknownException(
-                sprintf(
-                    'Property %s in class %s\%s has no type set, nor could it be inferred. %s',
-                    $info->getName(),
-                    $info->getNamespace(),
-                    $info->getClass(),
-                    'Did you forget to import Doctrine\ORM\Mapping as ORM?'
-                )
+            $code = $this->trait->render(
+                [
+                    'namespace' => $class->getNamespace() . '\\' . $this->namespace,
+                    'name'      => $class->getName() . $this->name_suffix,
+                    'uses'      => $this->getUniqueImports($imports),
+                    'methods'   => rtrim($code),
+                    'username'  => get_current_user(),
+                    'hostname'  => gethostname(),
+                ]
             );
         }
 
-        // Generate a get method.
-        if ($info->willGenerateGet()) {
-            // Compute the name of the get method. For boolean values
-            // an is method is generated instead of a get method.
-            if ($info->getType() === 'boolean') {
-                if (preg_match('/^is[_A-Z0-9]/', $info->getName())) {
-                    $getter = Inflector::camelize($info->getName());
-                } else {
-                    $getter = 'is' . Inflector::classify($info->getName());
-                }
-            } else {
-                $getter = 'get' . Inflector::classify($info->getName());
-            }
-
-            // Render the get/is method.
-            $code .= $this->get->render([
-                    'property' => $info,
-                    'getter' => $getter,
-                    'PHP_INT_SIZE' => PHP_INT_SIZE
-            ]) . PHP_EOL;
-        }
-
-        // Render add/remove methods for collections and set methods for
-        // non collection values.
-        if ($info->isCollection()) {
-            // Generate an add method.
-            if ($info->willGenerateAdd()) {
-                $code .= $this->add->render(['property' => $info]). PHP_EOL;
-            }
-            // Generate a remove method.
-            if ($info->willGenerateRemove()) {
-                $code .= $this->remove->render(['property' => $info]). PHP_EOL;
-            }
-        } else {
-            // No collection thus, generate a set method.
-            if ($info->willGenerateSet()) {
-                $code .= $this->set->render([
-                        'property' => $info,
-                        'PHP_INT_SIZE' => PHP_INT_SIZE
-                ]). PHP_EOL;
-            }
-        }
-
         return $code;
-    }
-
-    /**
-     * Return the fully qualified class name based on the
-     * use statements in the current file.
-     *
-     * @param string $name class name
-     * @param array $imports
-     * @return string
-     */
-    private static function fqcn($name, array $imports)
-    {
-        // Already FQCN
-        if ($name[0] === '\\') {
-            return $name;
-        }
-
-        // Aliased
-        if (array_key_exists($name, $imports)) {
-            return '\\' . $imports[$name];
-        }
-
-        // Check other imports
-        if ($plain = self::getPlainImportIfExists($name, $imports)) {
-            return '\\' .  $plain;
-        }
-
-        // Not a complex type, or otherwise unknown.
-        return '';
-    }
-
-    /**
-     * Returns if this class is in an
-     * aliased namespace.
-     *
-     * @param string $name class name
-     * @param array $imports
-     * @return boolean
-     */
-    private static function isAliased($name, array $imports)
-    {
-        $aliases = array_keys($imports);
-        foreach ($aliases as $alias) {
-            if (strpos($name, $alias) === 0) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     *
-     * @param string $type
-     * @param array $imports
-     * @return string|null
-     */
-    private static function getPlainImportIfExists($type, $imports)
-    {
-        foreach ($imports as $alias => $import) {
-            if (is_numeric($alias) && substr($import, -1 - strlen($type)) === '\\' . $type) {
-                return $import;
-            }
-        }
-        return null;
     }
 
     /**
@@ -395,11 +227,190 @@ class CodeGenerator implements CodeGeneratorInterface
                 $imports[$first_part] = $namespace . '\\' . $first_part;
             } else {
                 // Inside own namespace
-                if (! self::getPlainImportIfExists($type, $imports)) {
+                if (!self::getPlainImportIfExists($type, $imports)) {
                     // Not already imported
                     $imports[] = $namespace . '\\' . $type;
                 }
             }
         }
+    }
+
+    /**
+     * Returns if this class is in an
+     * aliased namespace.
+     *
+     * @param string $name class name
+     * @param array $imports
+     * @return boolean
+     */
+    private static function isAliased($name, array $imports)
+    {
+        $aliases = array_keys($imports);
+        foreach ($aliases as $alias) {
+            if (strpos($name, $alias) === 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     *
+     * @param string $type
+     * @param array $imports
+     * @return string|null
+     */
+    private static function getPlainImportIfExists($type, $imports)
+    {
+        foreach ($imports as $alias => $import) {
+            if (is_numeric($alias) && substr($import, -1 - strlen($type)) === '\\' . $type) {
+                return $import;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Return the fully qualified class name based on the
+     * use statements in the current file.
+     *
+     * @param string $name class name
+     * @param array $imports
+     * @return string
+     */
+    private static function fqcn($name, array $imports)
+    {
+        // Already FQCN
+        if ($name[0] === '\\') {
+            return $name;
+        }
+
+        // Aliased
+        if (array_key_exists($name, $imports)) {
+            return '\\' . $imports[$name];
+        }
+
+        // Check other imports
+        if ($plain = self::getPlainImportIfExists($name, $imports)) {
+            return '\\' . $plain;
+        }
+
+        // Not a complex type, or otherwise unknown.
+        return '';
+    }
+
+    /**
+     * @see \Hostnet\Component\AccessorGenerator\Generator\CodeGeneratorInterface::generateAccessors()
+     * @param PropertyInformationInterface $info
+     * @return string
+     * @throws \Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException
+     */
+    public function generateAccessors(PropertyInformationInterface $info)
+    {
+        $code = '';
+
+        // Check if there is enough information to generate accessors.
+        if ($info->getType() === null) {
+            throw new TypeUnknownException(
+                sprintf(
+                    'Property %s in class %s\%s has no type set, nor could it be inferred. %s',
+                    $info->getName(),
+                    $info->getNamespace(),
+                    $info->getClass(),
+                    'Did you forget to import Doctrine\ORM\Mapping as ORM?'
+                )
+            );
+        }
+
+        // Generate a get method.
+        if ($info->willGenerateGet()) {
+            // Compute the name of the get method. For boolean values
+            // an is method is generated instead of a get method.
+            if ($info->getType() === 'boolean') {
+                if (preg_match('/^is[_A-Z0-9]/', $info->getName())) {
+                    $getter = Inflector::camelize($info->getName());
+                } else {
+                    $getter = 'is' . Inflector::classify($info->getName());
+                }
+            } else {
+                $getter = 'get' . Inflector::classify($info->getName());
+            }
+
+            // Render the get/is method.
+            $code .= $this->get->render(
+                [
+                    'property'     => $info,
+                    'getter'       => $getter,
+                    'PHP_INT_SIZE' => PHP_INT_SIZE,
+                ]
+            ) . PHP_EOL;
+        }
+
+        // Render add/remove methods for collections and set methods for
+        // non collection values.
+        if ($info->isCollection()) {
+            // Generate an add method.
+            if ($info->willGenerateAdd()) {
+                $code .= $this->add->render(['property' => $info]) . PHP_EOL;
+            }
+            // Generate a remove method.
+            if ($info->willGenerateRemove()) {
+                $code .= $this->remove->render(['property' => $info]) . PHP_EOL;
+            }
+        } else {
+            // No collection thus, generate a set method.
+            if ($info->willGenerateSet()) {
+                $code .= $this->set->render(
+                    [
+                        'property'     => $info,
+                        'PHP_INT_SIZE' => PHP_INT_SIZE,
+                    ]
+                ) . PHP_EOL;
+            }
+        }
+
+        return $code;
+    }
+
+    /**
+     * Make sure our use statements are sorted alphabetically and unique.
+     * The array_unique function can not be used because it does not take
+     * values with different array keys into account. This loop does exactly
+     * that. This is useful when a specific class name is imported and aliased
+     * as well.
+     *
+     * @param array $imports
+     * @return array
+     */
+    private function getUniqueImports(array $imports)
+    {
+        uksort(
+            $imports,
+            function ($a, $b) use ($imports) {
+                $alias_a = is_numeric($a) ? " as $a;" : '';
+                $alias_b = is_numeric($b) ? " as $b;" : '';
+
+                return strcmp($imports[$a] . $alias_a, $imports[$b] . $alias_b);
+            }
+        );
+
+        $unique_imports = [];
+        $next           = null;
+        do {
+            $key   = key($imports);
+            $value = current($imports);
+            $next  = next($imports);
+            if ($value !== $next || $key !== key($imports)) {
+                if ($key) {
+                    $unique_imports[$key] = $value;
+                } else {
+                    $unique_imports[] = $value;
+                }
+            }
+        } while ($next !== false);
+
+        return $unique_imports;
     }
 }

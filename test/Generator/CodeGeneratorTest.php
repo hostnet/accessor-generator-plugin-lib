@@ -3,7 +3,6 @@ namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformation;
 use Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException;
-use Hostnet\Component\AccessorGenerator\Reflection\Metadata;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
 use Symfony\Component\Filesystem\Filesystem;
@@ -54,15 +53,15 @@ class CodeGeneratorTest extends \PHPUnit_Framework_TestCase
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      * @throws \Symfony\Component\Filesystem\Exception\IOException
+     * @throws \OutOfBoundsException
      */
     public function testWriteTraitForClass($filename)
     {
         // Read class information;
-        $class    = new ReflectionClass($filename);
-        $metadata = new Metadata();
+        $class = new ReflectionClass($filename);
 
         // Generate the accessor methods trait.
-        $this->getGenerator()->writeTraitForClass($class, $metadata);
+        $this->getGenerator()->writeTraitForClass($class);
 
 
         // Get file names

@@ -191,6 +191,8 @@ class PropertyInformation implements PropertyInformationInterface
      * Start the processing of processAnnotations
      *
      * @return void
+     * @throws \OutOfBoundsException
+     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
      * @throws \RuntimeException
      */
     public function processAnnotations()
@@ -258,6 +260,8 @@ class PropertyInformation implements PropertyInformationInterface
     /**
      * @see PropertyInformationInterface::getClass()
      * @return string
+     * @throws \OutOfBoundsException
+     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
      */
     public function getClass()
     {
@@ -784,26 +788,6 @@ class PropertyInformation implements PropertyInformationInterface
     public function setIndex($index = null)
     {
         $this->index = $index;
-        return $this;
-    }
-
-    /**
-     * @see PropertyInformationInterface::getIndex()
-     * @return null|string
-     */
-    public function getReferencedIndex()
-    {
-        return $this->referenced_index;
-    }
-
-    /**
-     * @see PropertyInformationInterface::getIndex()
-     * @param string|null $referenced_index = null
-     * @return $this
-     */
-    public function setReferencedIndex($referenced_index = null)
-    {
-        $this->referenced_index = $referenced_index;
         return $this;
     }
 

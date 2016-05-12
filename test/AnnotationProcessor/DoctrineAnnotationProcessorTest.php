@@ -10,7 +10,6 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OneToOne;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception\InvalidColumnSettingsException;
-use Hostnet\Component\AccessorGenerator\Reflection\Metadata;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
 
 /**
@@ -37,7 +36,7 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
     {
         // Set up dependencies.
         $this->information = new PropertyInformation(new ReflectionProperty('test'));
-        $this->processor   = new DoctrineAnnotationProcessor(new Metadata());
+        $this->processor   = new DoctrineAnnotationProcessor();
     }
 
     /**
@@ -101,6 +100,8 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
      * @throws \Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception\InvalidColumnSettingsException
      * @throws \InvalidArgumentException
      * @throws \RangeException
+     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
+     * @throws \OutOfBoundsException
      */
     public function testProcessColumnAnnotation(Column $column, PropertyInformationInterface $output, $exception)
     {
@@ -155,24 +156,27 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function processAssociationAnnotationProvider()
     {
-        $many_to_many    = new ManyToMany();
-        $many_to_one     = new ManyToOne();
-        $one_to_many     = new OneToMany();
-        $one_to_one      = new OneToOne();
-        $generated_value = new GeneratedValue();
-        $join_column     = new JoinColumn();
-        $one_to_one_bi   = new OneToOne();
-        $one_to_many_bi  = new OneToMany();
+        $many_to_many      = new ManyToMany();
+        $many_to_one       = new ManyToOne();
+        $one_to_many       = new OneToMany();
+        $one_to_one        = new OneToOne();
+        $generated_value   = new GeneratedValue();
+        $join_column       = new JoinColumn();
+        $one_to_one_bi     = new OneToOne();
+        $one_to_many_bi    = new OneToMany();
+        $one_to_many_index = new OneToMany();
 
-        $many_to_many->targetEntity   = '\\Employee';
-        $many_to_one->targetEntity    = 'Employee';
-        $one_to_many->targetEntity    = '\\Employer';
-        $one_to_one->targetEntity     = 'Boss';
-        $join_column->name            = 'id';
-        $one_to_one_bi->inversedBy    = 'id';
-        $one_to_one_bi->targetEntity  = 'Employee\\Boss';
-        $one_to_many_bi->mappedBy     = 'id';
-        $one_to_many_bi->targetEntity = 'LunchLady';
+        $many_to_many->targetEntity      = '\\Employee';
+        $many_to_one->targetEntity       = 'Employee';
+        $one_to_many->targetEntity       = '\\Employer';
+        $one_to_one->targetEntity        = 'Boss';
+        $join_column->name               = 'id';
+        $one_to_one_bi->inversedBy       = 'id';
+        $one_to_one_bi->targetEntity     = 'Employee\\Boss';
+        $one_to_many_bi->mappedBy        = 'id';
+        $one_to_many_bi->targetEntity    = 'LunchLady';
+        $one_to_many_index->indexBy      = 'index';
+        $one_to_many_index->targetEntity = '\\Employee';
 
         return [
             [$many_to_many],
@@ -183,6 +187,7 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
             [$join_column],
             [$one_to_one_bi],
             [$one_to_many_bi],
+            [$one_to_many_index],
         ];
     }
 
@@ -193,6 +198,8 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
      * @throws \Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception\InvalidColumnSettingsException
      * @throws \InvalidArgumentException
      * @throws \RangeException
+     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
+     * @throws \OutOfBoundsException
      */
     public function testAssociationAnnotations($annotation)
     {

@@ -3,7 +3,6 @@
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformationInterface;
-use Hostnet\Component\AccessorGenerator\Reflection\Metadata;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
 
 /**
@@ -23,10 +22,9 @@ interface CodeGeneratorInterface
      *
      * @see generateTraitForClass
      * @param ReflectionClass $class
-     * @param Metadata $metadata
      * @return bool
      */
-    public function writeTraitForClass(ReflectionClass $class, Metadata $metadata);
+    public function writeTraitForClass(ReflectionClass $class);
 
     /**
      * Return the PHP code for the accessor method
@@ -38,10 +36,9 @@ interface CodeGeneratorInterface
      * was requested.
      *
      * @param ReflectionClass $class
-     * @param Metadata $metadata
      * @return string
      */
-    public function generateTraitForClass(ReflectionClass $class, Metadata $metadata);
+    public function generateTraitForClass(ReflectionClass $class);
 
     /**
      * Generate Accessor methods for property
