@@ -218,8 +218,11 @@ class ReflectionClass
             // and then add them to the use_statements cache.
             $loc = 0;
             while (($loc = $this->tokens->scan($loc, [T_USE])) && $loc < $class) {
-                foreach ($this->parseUse($loc++) as $alias => $use_statement) {
+                list($alias, $use_statement) = $this->parseUse($loc++);
+                if ($alias !== null) {
                     $this->use_statements[$alias] = $use_statement;
+                } else {
+                    $this->use_statements[] = $use_statement;
                 }
             }
         }
@@ -301,15 +304,16 @@ class ReflectionClass
 
     /**
      *
-     * @param  int      $loc location of the T_USE token
-     * @return string[] key as alias and value as the namespace
+     * @param  int $loc location of the T_USE token
+     * @return array|null   [string|null $alias, string $namespace]
+     * @throws \OutOfBoundsException
      */
     private function parseUse($loc)
     {
         // Parse FQCN
         $loc   = $this->tokens->next($loc);
         $use   = $this->parseNamespace($loc);
-        $alias = 0; // default array index of PHP
+        $alias = null; // default array index of PHP
 
         // Parse alias
         $loc = $this->tokens->next($loc, [T_NS_SEPARATOR, T_STRING, T_COMMENT, T_WHITESPACE]);
@@ -318,7 +322,7 @@ class ReflectionClass
             $alias = $this->parseNamespace($loc);
         }
 
-        return [$alias => $use];
+        return [$alias, $use];
     }
 
     /**

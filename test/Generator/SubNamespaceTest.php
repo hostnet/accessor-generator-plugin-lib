@@ -50,4 +50,29 @@ class SubNamespaceTest extends \PHPUnit_Framework_TestCase
         self::assertSame($subnamespace, $subnamespace->setAsterix('panoramix'));
         self::assertEquals('panoramix', $subnamespace->getAsterix());
     }
+
+    /**
+     * @expectedException \BadMethodCallException
+     */
+    public function testSetSuperNamespaceTooManyArguments()
+    {
+        $subnamespace = new SubNamespace();
+        $subnamespace->setSuperNamespace('1', 2);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testSetSuperNamespaceInvalidArgument()
+    {
+        $subnamespace = new SubNamespace();
+        $subnamespace->setSuperNamespace([]);
+    }
+
+    public function testSetSuperNamespace()
+    {
+        $subnamespace = new SubNamespace();
+        self::assertSame($subnamespace, $subnamespace->setSuperNamespace('panoramix'));
+        self::assertEquals('panoramix', $subnamespace->super_namespace);
+    }
 }
