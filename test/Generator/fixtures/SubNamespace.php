@@ -3,6 +3,7 @@ namespace Hostnet\Component\AccessorGenerator\Generator\fixtures;
 
 use Doctrine\ORM\Mapping as ORM;
 use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Plugin;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Comic\Obelix;
 
 /**
@@ -31,4 +32,10 @@ class SubNamespace
      * @var Comic\Obelix
      */
     private $friend;
+
+    /**
+     * @ORM\Column
+     * @AG\Generate(get="none")
+     **/
+    public $super_namespace = Plugin::NAME;
 }

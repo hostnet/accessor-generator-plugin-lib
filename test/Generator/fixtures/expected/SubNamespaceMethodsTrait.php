@@ -8,6 +8,7 @@ use Hostnet\Component\AccessorGenerator\Annotation as AG;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Comic as Comic;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Comic\Obelix;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\SubNamespace;
+use Hostnet\Component\AccessorGenerator\Plugin;
 
 trait SubNamespaceMethodsTrait
 {
@@ -72,6 +73,40 @@ trait SubNamespaceMethodsTrait
         }
 
         $this->asterix = $asterix;
+        return $this;
+    }
+
+    /**
+     * Set super_namespace
+     *
+     * @param string $super_namespace
+     * @return SubNamespace
+     * @throws \BadMethodCallException if the number of arguments is not correct
+     * @throws \InvalidArgumentException if value is not of the right type
+     */
+    public function setSuperNamespace($super_namespace = Plugin::NAME)
+    {
+        if (func_num_args() > 1) {
+            throw new \BadMethodCallException(
+                sprintf(
+                    'setSuperNamespace() has one optional argument but %d given.',
+                    func_num_args()
+                )
+            );
+        }
+
+        if ($super_namespace === null
+            || is_scalar($super_namespace)
+            || is_callable([$super_namespace, '__toString'])
+        ) {
+            $super_namespace = (string)$super_namespace;
+        } else {
+            throw new \InvalidArgumentException(
+                'Parameter super_namespace must be convertable to string.'
+            );
+        }
+
+        $this->super_namespace = $super_namespace;
         return $this;
     }
 }
