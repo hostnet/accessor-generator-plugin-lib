@@ -42,7 +42,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         chdir(__DIR__ . '/fixtures/root');
 
         // Get fake generator
-        $generator = $this->getMock(CodeGeneratorInterface::class);
+        $generator = $this->createMock(CodeGeneratorInterface::class);
 
         // Hit every fixture one time.
         $generator->expects(self::exactly(2))->method('writeTraitForClass')->willReturn(true);
@@ -88,7 +88,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $repository_manager = new RepositoryManager($io, $config);
         $repository_manager->setLocalRepository($repository);
 
-        $installation_manager = $this->getMock(InstallationManager::class);
+        $installation_manager = $this->createMock(InstallationManager::class);
         $installation_manager
             ->expects(self::any())
             ->method('getInstallPath')

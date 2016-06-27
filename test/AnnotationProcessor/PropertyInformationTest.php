@@ -44,7 +44,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessAnnotations()
     {
-        $processor = $this->getMock(AnnotationProcessorInterface::class);
+        $processor = $this->createMock(AnnotationProcessorInterface::class);
         $processor->expects(self::atLeastOnce())->method('processAnnotation');
 
         /** @var AnnotationProcessorInterface $processor */
