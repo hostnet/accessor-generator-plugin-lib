@@ -209,7 +209,6 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
             ['decimal_30_65',  $huge . '55', $huge . '6'],
             ['decimal_30_65',  '-' . $huge . '55', '-' . $huge . '6'],
         ];
-
     }
 
    /**

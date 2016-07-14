@@ -50,7 +50,6 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $plugin = new Plugin($generator);
         $plugin->activate($this->getMockComposer(), new BufferIO('', StreamOutput::VERBOSITY_VERY_VERBOSE));
         $plugin->onPreAutoloadDump();
-
     }
 
     /**

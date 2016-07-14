@@ -59,7 +59,6 @@ class PerLineTokenParser extends \Twig_TokenParser
 
         // turn out body in a nicely formatted PerLineNode
         return $this->parseBody($body);
-
     }
 
     /**

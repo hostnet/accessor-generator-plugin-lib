@@ -71,7 +71,6 @@ class ReflectionPropertyTest extends \PHPUnit_Framework_TestCase
     public function testGetDocComment()
     {
         self::assertNull($this->simple->getDocComment());
-
     }
 
     public function testGetDefault()

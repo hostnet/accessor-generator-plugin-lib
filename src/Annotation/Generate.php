@@ -222,7 +222,7 @@ class Generate
      * @param array ...$requirements
      * @return string
      */
-    public static function getMostLimitedVisibility(... $requirements)
+    public static function getMostLimitedVisibility(...$requirements)
     {
         foreach ([self::VISIBILITY_NONE, self::VISIBILITY_PRIVATE, self::VISIBILITY_PROTECTED] as $search_string) {
             foreach ($requirements as $requirement) {
