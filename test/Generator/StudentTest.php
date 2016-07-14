@@ -2,6 +2,7 @@
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Student;
+use Hostnet\Component\AccessorGenerator\Generator\fixtures\StudentInterface;
 
 /**
  * @author Hidde Boomsma <hboomsma@hostnet.nl>

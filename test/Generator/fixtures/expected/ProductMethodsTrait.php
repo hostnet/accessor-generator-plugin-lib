@@ -256,7 +256,15 @@ trait ProductMethodsTrait
             throw new \LogicException(sprintf('index name with value "%s" is already taken, meaning the index is not unique!', $index));
         }
         $this->attributes->set($index, $attribute);
-        $property = new \ReflectionProperty(Attribute::class, 'product');
+        try {
+            $property = new \ReflectionProperty($attribute, 'product');
+        } catch (\ReflectionException $e) {
+            throw new \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException(
+                $e->getMessage(),
+                $e->getCode(),
+                $e
+            );
+        }
         $property->setAccessible(true);
         $value = $property->getValue($attribute);
         if ($value && $value !== $this) {

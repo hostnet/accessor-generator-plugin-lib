@@ -62,7 +62,15 @@ trait SoftwareMethodsTrait
         }
 
         $this->features->add($feature);
-        $property = new \ReflectionProperty(Feature::class, 'software');
+        try {
+            $property = new \ReflectionProperty($feature, 'software');
+        } catch (\ReflectionException $e) {
+            throw new \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException(
+                $e->getMessage(),
+                $e->getCode(),
+                $e
+            );
+        }
         $property->setAccessible(true);
         $value = $property->getValue($feature);
         if ($value && $value !== $this) {

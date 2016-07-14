@@ -60,7 +60,15 @@ trait ActorMethodsTrait
         }
 
         $this->movies->add($movie);
-        $property = new \ReflectionProperty(\Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie::class, 'a');
+        try {
+            $property = new \ReflectionProperty($movie, 'a');
+        } catch (\ReflectionException $e) {
+            throw new \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException(
+                $e->getMessage(),
+                $e->getCode(),
+                $e
+            );
+        }
         $property->setAccessible(true);
         if (method_exists(\Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie::class, 'addA')) {
             $adder = new \ReflectionMethod(\Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie::class, 'addA');

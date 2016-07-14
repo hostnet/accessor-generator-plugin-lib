@@ -151,13 +151,16 @@ class TypesTest extends \PHPUnit_Framework_TestCase
                 // Too many parameters
                 $values[] = [$property->getName(), new \DateTime(), \BadMethodCallException::class, 1];
 
-                // Wrong type (not needed in PHP7 for object type hints)
+                // Wrong type gives other Errors since PHP 7
                 if (stripos($property->getName(), 'date') === false
-                || PHP_VERSION_ID < 70000
+                || PHP_MAJOR_VERSION < 7
                 ) {
-                    $invalid_type = $property->getName() === 'object' ? null : new \stdClass();
-                    $values[]     = [$property->getName(), $invalid_type, \InvalidArgumentException::class];
+                    $error_class = \InvalidArgumentException::class;
+                } else {
+                    $error_class = \TypeError::class;
                 }
+                $invalid_type = $property->getName() === 'object' ? null : new \stdClass();
+                $values[]     = [$property->getName(), $invalid_type, $error_class];
             }
         }
 

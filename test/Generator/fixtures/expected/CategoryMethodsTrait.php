@@ -60,7 +60,15 @@ trait CategoryMethodsTrait
         }
 
         $this->children->add($child);
-        $property = new \ReflectionProperty(Category::class, 'parent');
+        try {
+            $property = new \ReflectionProperty($child, 'parent');
+        } catch (\ReflectionException $e) {
+            throw new \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException(
+                $e->getMessage(),
+                $e->getCode(),
+                $e
+            );
+        }
         $property->setAccessible(true);
         $value = $property->getValue($child);
         if ($value && $value !== $this) {

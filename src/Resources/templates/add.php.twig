@@ -41,7 +41,15 @@
     $this->{{ property.name}}->add(${{ property.name | singularize }});
 {% endif %}
 {% if property.referencedProperty %}
-    $property = new \ReflectionProperty({{ property.type }}::class, '{{ property.referencedProperty }}');
+    try {
+        $property = new \ReflectionProperty(${{ property.name | singularize }}, '{{ property.referencedProperty }}');
+    } catch (\ReflectionException $e) {
+        throw new \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException(
+            $e->getMessage(),
+            $e->getCode(),
+            $e
+        );
+    }
     $property->setAccessible(true);
 {% if property.isReferencingCollection %}
     if (method_exists({{ property.type }}::class, 'add{{ property.referencedProperty | singularize | classify}}')) {

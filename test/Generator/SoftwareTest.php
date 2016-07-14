@@ -2,12 +2,11 @@
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Doctrine\Common\Collections\Collection;
+use Hostnet\Component\AccessorGenerator\Generator\fixtures\EmptyFeature;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Feature;
+use Hostnet\Component\AccessorGenerator\Generator\fixtures\NiceFeature;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Software;
 
-/**
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
- */
 class SoftwareTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetFeatures()
@@ -120,7 +119,7 @@ class SoftwareTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BadMethodCallException
+     * @expectedException \BadMethodCallException
      */
     public function testRemoveFeatureTooManyArguments()
     {
@@ -128,5 +127,27 @@ class SoftwareTest extends \PHPUnit_Framework_TestCase
         $software = new Software();
 
         $software->removeFeature($feature, 2);
+    }
+
+    /**
+     * @expectedException \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
+     */
+    public function testNonExistingPropertyWithInterface()
+    {
+        if (PHP_VERSION_ID < 70100) {
+            self::markTestSkipped('Problem does not exists below PHP7.1');
+        }
+
+        $software = new Software();
+        $feature  = new EmptyFeature();
+        $software->addFeature($feature);
+    }
+
+    public function testExistingPropertyWithInterface()
+    {
+        $software = new Software();
+        $feature  = new NiceFeature();
+        $software->addFeature($feature);
+        self::assertSame($software, $feature->getSoftware());
     }
 }

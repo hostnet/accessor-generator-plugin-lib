@@ -282,7 +282,15 @@ trait ContactInfoMethodsTrait
         }
 
         $this->referenced_contacts->add($referenced_contact);
-        $property = new \ReflectionProperty(ContactInfo::class, 'referrer');
+        try {
+            $property = new \ReflectionProperty($referenced_contact, 'referrer');
+        } catch (\ReflectionException $e) {
+            throw new \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException(
+                $e->getMessage(),
+                $e->getCode(),
+                $e
+            );
+        }
         $property->setAccessible(true);
         $value = $property->getValue($referenced_contact);
         if ($value && $value !== $this) {
@@ -444,7 +452,15 @@ trait ContactInfoMethodsTrait
         }
 
         $this->friends->add($friend);
-        $property = new \ReflectionProperty(ContactInfo::class, 'friended_by');
+        try {
+            $property = new \ReflectionProperty($friend, 'friended_by');
+        } catch (\ReflectionException $e) {
+            throw new \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException(
+                $e->getMessage(),
+                $e->getCode(),
+                $e
+            );
+        }
         $property->setAccessible(true);
         $value = $property->getValue($friend);
         if ($value && $value !== $this) {

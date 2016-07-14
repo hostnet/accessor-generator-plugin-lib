@@ -60,7 +60,15 @@ trait NodeMethodsTrait
         }
 
         $this->out->add($out);
-        $property = new \ReflectionProperty(Node::class, 'in');
+        try {
+            $property = new \ReflectionProperty($out, 'in');
+        } catch (\ReflectionException $e) {
+            throw new \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException(
+                $e->getMessage(),
+                $e->getCode(),
+                $e
+            );
+        }
         $property->setAccessible(true);
         if (method_exists(Node::class, 'addIn')) {
             $adder = new \ReflectionMethod(Node::class, 'addIn');
