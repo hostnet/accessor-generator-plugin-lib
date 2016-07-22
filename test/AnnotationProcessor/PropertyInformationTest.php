@@ -163,7 +163,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetReferencedProperty($referenced_property, $exception)
     {
-        $this->expectException($exception);
+        $exception && $this->expectException($exception);
         self::assertSame($this->info, $this->info->setReferencedProperty($referenced_property));
         self::assertEquals($referenced_property, $this->info->getReferencedProperty());
     }
@@ -199,7 +199,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetIntegerSize($integer_size, $exception)
     {
-        $this->expectException($exception);
+        $exception && $this->expectException($exception);
         self::assertSame($this->info, $this->info->setIntegerSize($integer_size));
         self::assertEquals($integer_size, $this->info->getIntegerSize());
     }
@@ -232,7 +232,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetScale($scale, $exception)
     {
-        $this->expectException($exception);
+        $exception && $this->expectException($exception);
         self::assertSame($this->info, $this->info->setScale($scale));
         self::assertEquals($scale, $this->info->getScale());
     }
@@ -265,7 +265,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetPrecision($precision, $exception)
     {
-        $this->expectException($exception);
+        $exception && $this->expectException($exception);
         self::assertSame($this->info, $this->info->setPrecision($precision));
         self::assertEquals($precision, $this->info->getPrecision());
     }
@@ -292,7 +292,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetLength($length, $exception)
     {
-        $this->expectException($exception);
+        $exception && $this->expectException($exception);
         self::assertSame($this->info, $this->info->setLength($length));
         self::assertEquals($length, $this->info->getLength());
     }
@@ -325,7 +325,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetType($type, $exception)
     {
-        $this->expectException($exception);
+        $exception && $this->expectException($exception);
         self::assertSame($this->info, $this->info->setType($type));
         if ($this->info->isComplexType()) {
             self::assertEquals($type, $this->info->getTypeHint());
@@ -345,7 +345,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetTypeHint($type, $exception)
     {
-        $this->expectException($exception);
+        $exception && $this->expectException($exception);
         self::assertSame($this->info, $this->info->setTypeHint($type));
         self::assertEquals($type, $this->info->getTypeHint());
     }
@@ -374,7 +374,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetFullyQualifiedType($type, $exception)
     {
-        $this->expectException($exception);
+        $exception && $this->expectException($exception);
         self::assertSame($this->info, $this->info->setFullyQualifiedType($type));
         self::assertEquals($type, $this->info->getFullyQualifiedType());
     }

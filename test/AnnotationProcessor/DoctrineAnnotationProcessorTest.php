@@ -106,7 +106,7 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
     public function testProcessColumnAnnotation(Column $column, PropertyInformationInterface $output, $exception)
     {
         // Set if an explosion is needed.
-        $this->expectException($exception);
+        $exception && $this->expectException($exception);
 
         // Set up dependencies.
         $this->processor->processAnnotation($column, $this->information);
@@ -292,7 +292,7 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
     public function testTypeConversion($doctrine_type, $php_type, $exception = null)
     {
         // Set exception if we except one.
-        $this->expectException($exception);
+        $exception && $this->expectException($exception);
 
         // Check if we have an association or a scalar db type.
         if (is_string($doctrine_type)
