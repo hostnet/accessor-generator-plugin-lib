@@ -10,10 +10,12 @@ use Hostnet\Component\AccessorGenerator\Generator\fixtures\Types;
 trait TypesMethodsTrait
 {
     /**
-     * Get id
+     * Gets id
+     *
+     * @throws \BadMethodCallException
+     * @throws \LogicException
      *
      * @return string
-     * @throws \InvalidArgumentException
      */
     public function getId()
     {
@@ -31,8 +33,8 @@ trait TypesMethodsTrait
                 'make sure your object is initialized in such a way the properties are in '.
                 'a valid state, for example by using a proper constructor. If you want to ' .
                 'test if an object is new for the database please consult the UnitOfWork.' .
-                'It could also be that your column in code is set tot not nullable and in' .
-                'and contains null values in the database'
+                'It could also be that your column in the code is not set to be nullable ' .
+                'and it currently contains a NULL-value in the database.'
             ));
         }
 
@@ -40,10 +42,12 @@ trait TypesMethodsTrait
     }
 
     /**
-     * Get smallint
+     * Gets smallint
+     *
+     * @throws \BadMethodCallException
+     * @throws \LogicException
      *
      * @return integer
-     * @throws \InvalidArgumentException
      */
     public function getSmallint()
     {
@@ -61,8 +65,8 @@ trait TypesMethodsTrait
                 'make sure your object is initialized in such a way the properties are in '.
                 'a valid state, for example by using a proper constructor. If you want to ' .
                 'test if an object is new for the database please consult the UnitOfWork.' .
-                'It could also be that your column in code is set tot not nullable and in' .
-                'and contains null values in the database'
+                'It could also be that your column in the code is not set to be nullable ' .
+                'and it currently contains a NULL-value in the database.'
             ));
         }
 
@@ -81,13 +85,14 @@ trait TypesMethodsTrait
     }
 
     /**
-     * Set smallint
+     * Sets smallint
      *
-     * @param integer $smallint
-     * @return Types
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      * @throws \DomainException if the integer value is outside of the domain on this machine
+     *
+     * @param  integer $smallint
+     * @return $this|Types
      */
     public function setSmallint($smallint)
     {
@@ -117,14 +122,17 @@ trait TypesMethodsTrait
         }
 
         $this->smallint = $smallint;
+
         return $this;
     }
 
     /**
-     * Get integer
+     * Gets integer
+     *
+     * @throws \BadMethodCallException
+     * @throws \LogicException
      *
      * @return integer
-     * @throws \InvalidArgumentException
      */
     public function getInteger()
     {
@@ -142,8 +150,8 @@ trait TypesMethodsTrait
                 'make sure your object is initialized in such a way the properties are in '.
                 'a valid state, for example by using a proper constructor. If you want to ' .
                 'test if an object is new for the database please consult the UnitOfWork.' .
-                'It could also be that your column in code is set tot not nullable and in' .
-                'and contains null values in the database'
+                'It could also be that your column in the code is not set to be nullable ' .
+                'and it currently contains a NULL-value in the database.'
             ));
         }
 
@@ -162,13 +170,14 @@ trait TypesMethodsTrait
     }
 
     /**
-     * Set integer
+     * Sets integer
      *
-     * @param integer $integer
-     * @return Types
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      * @throws \DomainException if the integer value is outside of the domain on this machine
+     *
+     * @param  integer $integer
+     * @return $this|Types
      */
     public function setInteger($integer)
     {
@@ -198,14 +207,17 @@ trait TypesMethodsTrait
         }
 
         $this->integer = $integer;
+
         return $this;
     }
 
     /**
-     * Get bigint
+     * Gets bigint
+     *
+     * @throws \BadMethodCallException
+     * @throws \LogicException
      *
      * @return integer
-     * @throws \InvalidArgumentException
      */
     public function getBigint()
     {
@@ -223,8 +235,8 @@ trait TypesMethodsTrait
                 'make sure your object is initialized in such a way the properties are in '.
                 'a valid state, for example by using a proper constructor. If you want to ' .
                 'test if an object is new for the database please consult the UnitOfWork.' .
-                'It could also be that your column in code is set tot not nullable and in' .
-                'and contains null values in the database'
+                'It could also be that your column in the code is not set to be nullable ' .
+                'and it currently contains a NULL-value in the database.'
             ));
         }
 
@@ -247,13 +259,14 @@ trait TypesMethodsTrait
     }
 
     /**
-     * Set bigint
+     * Sets bigint
      *
-     * @param integer $bigint
-     * @return Types
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      * @throws \DomainException if the integer value is outside of the domain on this machine
+     *
+     * @param  integer $bigint
+     * @return $this|Types
      */
     public function setBigint($bigint)
     {
@@ -287,14 +300,17 @@ trait TypesMethodsTrait
 
 
         $this->bigint = $bigint;
+
         return $this;
     }
 
     /**
-     * Get decimal
+     * Gets decimal
+     *
+     * @throws \BadMethodCallException
+     * @throws \LogicException
      *
      * @return string
-     * @throws \InvalidArgumentException
      */
     public function getDecimal()
     {
@@ -312,8 +328,8 @@ trait TypesMethodsTrait
                 'make sure your object is initialized in such a way the properties are in '.
                 'a valid state, for example by using a proper constructor. If you want to ' .
                 'test if an object is new for the database please consult the UnitOfWork.' .
-                'It could also be that your column in code is set tot not nullable and in' .
-                'and contains null values in the database'
+                'It could also be that your column in the code is not set to be nullable ' .
+                'and it currently contains a NULL-value in the database.'
             ));
         }
 
@@ -321,20 +337,21 @@ trait TypesMethodsTrait
     }
 
     /**
-     * Set decimal
+     * Sets decimal
      *
-     * @param string $decimal
-     * @param bool %round round the number fit in the precision and scale (round away from zero)
-     * @return Types
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
+     *
+     * @param  string $decimal
+     * @param  bool $round round the number fit in the precision and scale (round away from zero)
+     * @return $this|Types
      */
     public function setDecimal($decimal, $round = false)
     {
         if (func_num_args() > 2) {
             throw new \BadMethodCallException(
                 sprintf(
-                    'setDecimal() has one obligatory and one optional argument but %d given.',
+                    'setDecimal() has one mandatory and one optional argument but %d given.',
                     func_num_args()
                 )
             );
@@ -392,14 +409,17 @@ trait TypesMethodsTrait
         }
 
         $this->decimal = $decimal;
+
         return $this;
     }
 
     /**
-     * Get float
+     * Gets float
+     *
+     * @throws \BadMethodCallException
+     * @throws \LogicException
      *
      * @return float
-     * @throws \InvalidArgumentException
      */
     public function getFloat()
     {
@@ -417,8 +437,8 @@ trait TypesMethodsTrait
                 'make sure your object is initialized in such a way the properties are in '.
                 'a valid state, for example by using a proper constructor. If you want to ' .
                 'test if an object is new for the database please consult the UnitOfWork.' .
-                'It could also be that your column in code is set tot not nullable and in' .
-                'and contains null values in the database'
+                'It could also be that your column in the code is not set to be nullable ' .
+                'and it currently contains a NULL-value in the database.'
             ));
         }
 
@@ -426,12 +446,13 @@ trait TypesMethodsTrait
     }
 
     /**
-     * Set float
+     * Sets float
      *
-     * @param float $float
-     * @return Types
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
+     *
+     * @param  float $float
+     * @return $this|Types
      */
     public function setFloat($float)
     {
@@ -451,14 +472,17 @@ trait TypesMethodsTrait
         }
 
         $this->float = $float;
+
         return $this;
     }
 
     /**
-     * Get string
+     * Gets string
+     *
+     * @throws \BadMethodCallException
+     * @throws \LogicException
      *
      * @return string
-     * @throws \InvalidArgumentException
      */
     public function getString()
     {
@@ -476,8 +500,8 @@ trait TypesMethodsTrait
                 'make sure your object is initialized in such a way the properties are in '.
                 'a valid state, for example by using a proper constructor. If you want to ' .
                 'test if an object is new for the database please consult the UnitOfWork.' .
-                'It could also be that your column in code is set tot not nullable and in' .
-                'and contains null values in the database'
+                'It could also be that your column in the code is not set to be nullable ' .
+                'and it currently contains a NULL-value in the database.'
             ));
         }
 
@@ -485,13 +509,14 @@ trait TypesMethodsTrait
     }
 
     /**
-     * Set string
+     * Sets string
      *
-     * @param string $string
-     * @return Types
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      * @throws \LengthException if the length of the value is to long
+     *
+     * @param  string $string
+     * @return $this|Types
      */
     public function setString($string)
     {
@@ -511,7 +536,7 @@ trait TypesMethodsTrait
             $string = (string)$string;
         } else {
             throw new \InvalidArgumentException(
-                'Parameter string must be convertable to string.'
+                'Parameter string must be convertible to string.'
             );
         }
 
@@ -520,14 +545,17 @@ trait TypesMethodsTrait
         }
 
         $this->string = $string;
+
         return $this;
     }
 
     /**
-     * Get text
+     * Gets text
+     *
+     * @throws \BadMethodCallException
+     * @throws \LogicException
      *
      * @return string
-     * @throws \InvalidArgumentException
      */
     public function getText()
     {
@@ -545,8 +573,8 @@ trait TypesMethodsTrait
                 'make sure your object is initialized in such a way the properties are in '.
                 'a valid state, for example by using a proper constructor. If you want to ' .
                 'test if an object is new for the database please consult the UnitOfWork.' .
-                'It could also be that your column in code is set tot not nullable and in' .
-                'and contains null values in the database'
+                'It could also be that your column in the code is not set to be nullable ' .
+                'and it currently contains a NULL-value in the database.'
             ));
         }
 
@@ -554,12 +582,13 @@ trait TypesMethodsTrait
     }
 
     /**
-     * Set text
+     * Sets text
      *
-     * @param string $text
-     * @return Types
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
+     *
+     * @param  string $text
+     * @return $this|Types
      */
     public function setText($text)
     {
@@ -579,19 +608,22 @@ trait TypesMethodsTrait
             $text = (string)$text;
         } else {
             throw new \InvalidArgumentException(
-                'Parameter text must be convertable to string.'
+                'Parameter text must be convertible to string.'
             );
         }
 
         $this->text = $text;
+
         return $this;
     }
 
     /**
-     * Get guid
+     * Gets guid
+     *
+     * @throws \BadMethodCallException
+     * @throws \LogicException
      *
      * @return string
-     * @throws \InvalidArgumentException
      */
     public function getGuid()
     {
@@ -609,8 +641,8 @@ trait TypesMethodsTrait
                 'make sure your object is initialized in such a way the properties are in '.
                 'a valid state, for example by using a proper constructor. If you want to ' .
                 'test if an object is new for the database please consult the UnitOfWork.' .
-                'It could also be that your column in code is set tot not nullable and in' .
-                'and contains null values in the database'
+                'It could also be that your column in the code is not set to be nullable ' .
+                'and it currently contains a NULL-value in the database.'
             ));
         }
 
@@ -618,12 +650,13 @@ trait TypesMethodsTrait
     }
 
     /**
-     * Set guid
+     * Sets guid
      *
-     * @param string $guid
-     * @return Types
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
+     *
+     * @param  string $guid
+     * @return $this|Types
      */
     public function setGuid($guid)
     {
@@ -643,19 +676,22 @@ trait TypesMethodsTrait
             $guid = (string)$guid;
         } else {
             throw new \InvalidArgumentException(
-                'Parameter guid must be convertable to string.'
+                'Parameter guid must be convertible to string.'
             );
         }
 
         $this->guid = $guid;
+
         return $this;
     }
 
     /**
-     * Get blob
+     * Gets blob
+     *
+     * @throws \BadMethodCallException
+     * @throws \LogicException
      *
      * @return resource
-     * @throws \InvalidArgumentException
      */
     public function getBlob()
     {
@@ -673,8 +709,8 @@ trait TypesMethodsTrait
                 'make sure your object is initialized in such a way the properties are in '.
                 'a valid state, for example by using a proper constructor. If you want to ' .
                 'test if an object is new for the database please consult the UnitOfWork.' .
-                'It could also be that your column in code is set tot not nullable and in' .
-                'and contains null values in the database'
+                'It could also be that your column in the code is not set to be nullable ' .
+                'and it currently contains a NULL-value in the database.'
             ));
         }
 
@@ -682,12 +718,13 @@ trait TypesMethodsTrait
     }
 
     /**
-     * Set blob
+     * Sets blob
      *
-     * @param resource $blob
-     * @return Types
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
+     *
+     * @param  resource $blob
+     * @return $this|Types
      */
     public function setBlob($blob)
     {
@@ -707,14 +744,17 @@ trait TypesMethodsTrait
         }
 
         $this->blob = $blob;
+
         return $this;
     }
 
     /**
-     * Is boolean
+     * Returns true if boolean
+     *
+     * @throws \BadMethodCallException
+     * @throws \LogicException
      *
      * @return boolean
-     * @throws \InvalidArgumentException
      */
     public function isBoolean()
     {
@@ -732,8 +772,8 @@ trait TypesMethodsTrait
                 'make sure your object is initialized in such a way the properties are in '.
                 'a valid state, for example by using a proper constructor. If you want to ' .
                 'test if an object is new for the database please consult the UnitOfWork.' .
-                'It could also be that your column in code is set tot not nullable and in' .
-                'and contains null values in the database'
+                'It could also be that your column in the code is not set to be nullable ' .
+                'and it currently contains a NULL-value in the database.'
             ));
         }
 
@@ -741,12 +781,13 @@ trait TypesMethodsTrait
     }
 
     /**
-     * Set boolean
+     * Sets boolean
      *
-     * @param boolean $boolean
-     * @return Types
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
+     *
+     * @param  boolean $boolean
+     * @return $this|Types
      */
     public function setBoolean($boolean)
     {
@@ -766,14 +807,17 @@ trait TypesMethodsTrait
         }
 
         $this->boolean = $boolean;
+
         return $this;
     }
 
     /**
-     * Is is_this_boolean
+     * Returns true if is_this_boolean
+     *
+     * @throws \BadMethodCallException
+     * @throws \LogicException
      *
      * @return boolean
-     * @throws \InvalidArgumentException
      */
     public function isThisBoolean()
     {
@@ -791,8 +835,8 @@ trait TypesMethodsTrait
                 'make sure your object is initialized in such a way the properties are in '.
                 'a valid state, for example by using a proper constructor. If you want to ' .
                 'test if an object is new for the database please consult the UnitOfWork.' .
-                'It could also be that your column in code is set tot not nullable and in' .
-                'and contains null values in the database'
+                'It could also be that your column in the code is not set to be nullable ' .
+                'and it currently contains a NULL-value in the database.'
             ));
         }
 
@@ -800,12 +844,13 @@ trait TypesMethodsTrait
     }
 
     /**
-     * Set is_this_boolean
+     * Sets is_this_boolean
      *
-     * @param boolean $is_this_boolean
-     * @return Types
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
+     *
+     * @param  boolean $is_this_boolean
+     * @return $this|Types
      */
     public function setIsThisBoolean($is_this_boolean)
     {
@@ -825,14 +870,17 @@ trait TypesMethodsTrait
         }
 
         $this->is_this_boolean = $is_this_boolean;
+
         return $this;
     }
 
     /**
-     * Get date
+     * Gets date
+     *
+     * @throws \BadMethodCallException
+     * @throws \LogicException
      *
      * @return \DateTime
-     * @throws \InvalidArgumentException
      */
     public function getDate()
     {
@@ -850,8 +898,8 @@ trait TypesMethodsTrait
                 'make sure your object is initialized in such a way the properties are in '.
                 'a valid state, for example by using a proper constructor. If you want to ' .
                 'test if an object is new for the database please consult the UnitOfWork.' .
-                'It could also be that your column in code is set tot not nullable and in' .
-                'and contains null values in the database'
+                'It could also be that your column in the code is not set to be nullable ' .
+                'and it currently contains a NULL-value in the database.'
             ));
         }
 
@@ -859,11 +907,12 @@ trait TypesMethodsTrait
     }
 
     /**
-     * Set date
+     * Sets date
      *
-     * @param \DateTime $date
-     * @return Types
      * @throws \BadMethodCallException if the number of arguments is not correct
+     *
+     * @param  \DateTime $date
+     * @return $this|Types
      */
     public function setDate(\DateTime $date)
     {
@@ -877,14 +926,17 @@ trait TypesMethodsTrait
         }
 
         $this->date = $date;
+
         return $this;
     }
 
     /**
-     * Get datetime
+     * Gets datetime
+     *
+     * @throws \BadMethodCallException
+     * @throws \LogicException
      *
      * @return \DateTime
-     * @throws \InvalidArgumentException
      */
     public function getDatetime()
     {
@@ -902,8 +954,8 @@ trait TypesMethodsTrait
                 'make sure your object is initialized in such a way the properties are in '.
                 'a valid state, for example by using a proper constructor. If you want to ' .
                 'test if an object is new for the database please consult the UnitOfWork.' .
-                'It could also be that your column in code is set tot not nullable and in' .
-                'and contains null values in the database'
+                'It could also be that your column in the code is not set to be nullable ' .
+                'and it currently contains a NULL-value in the database.'
             ));
         }
 
@@ -911,11 +963,12 @@ trait TypesMethodsTrait
     }
 
     /**
-     * Set datetime
+     * Sets datetime
      *
-     * @param \DateTime $datetime
-     * @return Types
      * @throws \BadMethodCallException if the number of arguments is not correct
+     *
+     * @param  \DateTime $datetime
+     * @return $this|Types
      */
     public function setDatetime(\DateTime $datetime)
     {
@@ -929,14 +982,17 @@ trait TypesMethodsTrait
         }
 
         $this->datetime = $datetime;
+
         return $this;
     }
 
     /**
-     * Get array
+     * Gets array
+     *
+     * @throws \BadMethodCallException
+     * @throws \LogicException
      *
      * @return array
-     * @throws \InvalidArgumentException
      */
     public function getArray()
     {
@@ -954,8 +1010,8 @@ trait TypesMethodsTrait
                 'make sure your object is initialized in such a way the properties are in '.
                 'a valid state, for example by using a proper constructor. If you want to ' .
                 'test if an object is new for the database please consult the UnitOfWork.' .
-                'It could also be that your column in code is set tot not nullable and in' .
-                'and contains null values in the database'
+                'It could also be that your column in the code is not set to be nullable ' .
+                'and it currently contains a NULL-value in the database.'
             ));
         }
 
@@ -963,12 +1019,13 @@ trait TypesMethodsTrait
     }
 
     /**
-     * Set array
+     * Sets array
      *
-     * @param array $array
-     * @return Types
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
+     *
+     * @param  array $array
+     * @return $this|Types
      */
     public function setArray($array)
     {
@@ -988,14 +1045,17 @@ trait TypesMethodsTrait
         }
 
         $this->array = $array;
+
         return $this;
     }
 
     /**
-     * Get json_array
+     * Gets json_array
+     *
+     * @throws \BadMethodCallException
+     * @throws \LogicException
      *
      * @return array
-     * @throws \InvalidArgumentException
      */
     public function getJsonArray()
     {
@@ -1013,8 +1073,8 @@ trait TypesMethodsTrait
                 'make sure your object is initialized in such a way the properties are in '.
                 'a valid state, for example by using a proper constructor. If you want to ' .
                 'test if an object is new for the database please consult the UnitOfWork.' .
-                'It could also be that your column in code is set tot not nullable and in' .
-                'and contains null values in the database'
+                'It could also be that your column in the code is not set to be nullable ' .
+                'and it currently contains a NULL-value in the database.'
             ));
         }
 
@@ -1022,12 +1082,13 @@ trait TypesMethodsTrait
     }
 
     /**
-     * Set json_array
+     * Sets json_array
      *
-     * @param array $json_array
-     * @return Types
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
+     *
+     * @param  array $json_array
+     * @return $this|Types
      */
     public function setJsonArray($json_array)
     {
@@ -1047,14 +1108,17 @@ trait TypesMethodsTrait
         }
 
         $this->json_array = $json_array;
+
         return $this;
     }
 
     /**
-     * Get object
+     * Gets object
+     *
+     * @throws \BadMethodCallException
+     * @throws \LogicException
      *
      * @return object
-     * @throws \InvalidArgumentException
      */
     public function getObject()
     {
@@ -1072,8 +1136,8 @@ trait TypesMethodsTrait
                 'make sure your object is initialized in such a way the properties are in '.
                 'a valid state, for example by using a proper constructor. If you want to ' .
                 'test if an object is new for the database please consult the UnitOfWork.' .
-                'It could also be that your column in code is set tot not nullable and in' .
-                'and contains null values in the database'
+                'It could also be that your column in the code is not set to be nullable ' .
+                'and it currently contains a NULL-value in the database.'
             ));
         }
 
@@ -1081,12 +1145,13 @@ trait TypesMethodsTrait
     }
 
     /**
-     * Set object
+     * Sets object
      *
-     * @param object $object
-     * @return Types
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
+     *
+     * @param  object $object
+     * @return $this|Types
      */
     public function setObject($object)
     {
@@ -1106,6 +1171,7 @@ trait TypesMethodsTrait
         }
 
         $this->object = $object;
+
         return $this;
     }
 }

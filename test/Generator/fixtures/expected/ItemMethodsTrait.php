@@ -11,10 +11,13 @@ use Hostnet\Component\AccessorGenerator\Generator\fixtures\Shipping;
 trait ItemMethodsTrait
 {
     /**
-     * Get shipping
+     * Gets shipping
+     *
+     * @throws \Doctrine\ORM\EntityNotFoundException
+     * @throws \BadMethodCallException
+     * @throws \LogicException
      *
      * @return Shipping
-     * @throws \InvalidArgumentException
      */
     public function getShipping()
     {
@@ -35,11 +38,12 @@ trait ItemMethodsTrait
     }
 
     /**
-     * Set shipping
+     * Sets shipping
      *
-     * @param Shipping $shipping
-     * @return Item
      * @throws \BadMethodCallException if the number of arguments is not correct
+     *
+     * @param  Shipping $shipping
+     * @return $this|Item
      */
     public function setShipping(Shipping $shipping)
     {
@@ -53,6 +57,7 @@ trait ItemMethodsTrait
         }
 
         $this->shipping = $shipping;
+
         return $this;
     }
 }

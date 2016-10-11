@@ -2,23 +2,20 @@
 namespace Hostnet\Component\AccessorGenerator\Twig;
 
 /**
- * Node representation of a {% perline %}{% endperline %}
- * block. The node has 2 arguemnts and one list of interal
- * nodes.
+ * Node representation of a {% perline %}{% endperline %} block. The node has
+ * 2 arguments and one list of internal nodes.
  *
- * Arugments:
- *   prefix:  The first block of normal text before any twig
- *            inside of the perline block. Only there if
- *            available.
+ * Arguments:
+ *   prefix:  The first block of normal text before any twig inside of the
+ *            perline block. Only there if available.
  *
- *   postifx: The last block of normal text after any twig
- *            inside of the perline block. Only there if
- *            available.
+ *   postfix: The last block of normal text after any twig inside of the
+ *            perline block. Only there if available.
+ *
  * Nodes:
- *   lines:   A single node if there is only a text or a print
- *            node inside of the perline block, otherwise a
- *            Twig_Node with sub nodes of all the nodes between
- *            the prefix and/or postfix.
+ *   lines:   A single node if there is only a text or a print node inside of
+ *            the perline block, otherwise a Twig_Node with sub nodes of all
+ *            the nodes between the prefix and/or postfix.
  *
  * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
@@ -44,7 +41,7 @@ class PerLineNode extends \Twig_Node
     }
 
     /**
-     * Perform code generation in case there is a prefix or prostfix (or both).
+     * Perform code generation in case there is a prefix or postfix (or both).
      *
      * This function is safe for indenting and does not generate empty lines.
      *
@@ -102,7 +99,7 @@ class PerLineNode extends \Twig_Node
     /**
      * Compiles the node to PHP.
      *
-     * @param Twig_Compiler A Twig_Compiler instance
+     * @param \Twig_Compiler $compiler A Twig_Compiler instance
      */
     public function compile(\Twig_Compiler $compiler)
     {

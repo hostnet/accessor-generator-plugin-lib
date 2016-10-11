@@ -13,10 +13,12 @@ use Hostnet\Component\AccessorGenerator\Plugin;
 trait SubNamespaceMethodsTrait
 {
     /**
-     * Get asterix
+     * Gets asterix
+     *
+     * @throws \BadMethodCallException
+     * @throws \LogicException
      *
      * @return string
-     * @throws \InvalidArgumentException
      */
     public function getAsterix()
     {
@@ -34,8 +36,8 @@ trait SubNamespaceMethodsTrait
                 'make sure your object is initialized in such a way the properties are in '.
                 'a valid state, for example by using a proper constructor. If you want to ' .
                 'test if an object is new for the database please consult the UnitOfWork.' .
-                'It could also be that your column in code is set tot not nullable and in' .
-                'and contains null values in the database'
+                'It could also be that your column in the code is not set to be nullable ' .
+                'and it currently contains a NULL-value in the database.'
             ));
         }
 
@@ -43,12 +45,13 @@ trait SubNamespaceMethodsTrait
     }
 
     /**
-     * Set asterix
+     * Sets asterix
      *
-     * @param string $asterix
-     * @return SubNamespace
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
+     *
+     * @param  string $asterix
+     * @return $this|SubNamespace
      */
     public function setAsterix($asterix = Comic\Asterix::class)
     {
@@ -68,21 +71,23 @@ trait SubNamespaceMethodsTrait
             $asterix = (string)$asterix;
         } else {
             throw new \InvalidArgumentException(
-                'Parameter asterix must be convertable to string.'
+                'Parameter asterix must be convertible to string.'
             );
         }
 
         $this->asterix = $asterix;
+
         return $this;
     }
 
     /**
-     * Set super_namespace
+     * Sets super_namespace
      *
-     * @param string $super_namespace
-     * @return SubNamespace
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
+     *
+     * @param  string $super_namespace
+     * @return $this|SubNamespace
      */
     public function setSuperNamespace($super_namespace = Plugin::NAME)
     {
@@ -102,11 +107,12 @@ trait SubNamespaceMethodsTrait
             $super_namespace = (string)$super_namespace;
         } else {
             throw new \InvalidArgumentException(
-                'Parameter super_namespace must be convertable to string.'
+                'Parameter super_namespace must be convertible to string.'
             );
         }
 
         $this->super_namespace = $super_namespace;
+
         return $this;
     }
 }

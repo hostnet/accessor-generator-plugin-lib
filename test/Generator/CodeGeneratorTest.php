@@ -9,7 +9,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
 /**
- * @covers Hostnet\Component\AccessorGenerator\Generator\CodeGenerator
+ * @covers \Hostnet\Component\AccessorGenerator\Generator\CodeGenerator
  */
 class CodeGeneratorTest extends \PHPUnit_Framework_TestCase
 {

@@ -11,10 +11,11 @@ use Hostnet\Component\AccessorGenerator\Generator\fixtures\ContactInfo;
 trait ContactInfoMethodsTrait
 {
     /**
-     * Get address_line
+     * Gets address_line
+     *
+     * @throws \BadMethodCallException
      *
      * @return string|null
-     * @throws \InvalidArgumentException
      */
     private function getAddressLine()
     {
@@ -35,12 +36,13 @@ trait ContactInfoMethodsTrait
     }
 
     /**
-     * Set address_line
+     * Sets address_line
      *
-     * @param string $address_line
-     * @return ContactInfo
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
+     *
+     * @param  string $address_line
+     * @return $this|ContactInfo
      */
     public function setAddressLine($address_line)
     {
@@ -60,19 +62,21 @@ trait ContactInfoMethodsTrait
             $address_line = (string)$address_line;
         } else {
             throw new \InvalidArgumentException(
-                'Parameter address_line must be convertable to string.'
+                'Parameter address_line must be convertible to string.'
             );
         }
 
         $this->address_line = $address_line;
+
         return $this;
     }
 
     /**
-     * Get name
+     * Gets name
+     *
+     * @throws \BadMethodCallException
      *
      * @return string|null
-     * @throws \InvalidArgumentException
      */
     public function getName()
     {
@@ -93,12 +97,13 @@ trait ContactInfoMethodsTrait
     }
 
     /**
-     * Set name
+     * Sets name
      *
-     * @param string $name
-     * @return ContactInfo
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
+     *
+     * @param  string $name
+     * @return $this|ContactInfo
      */
     private function setName($name)
     {
@@ -118,19 +123,21 @@ trait ContactInfoMethodsTrait
             $name = (string)$name;
         } else {
             throw new \InvalidArgumentException(
-                'Parameter name must be convertable to string.'
+                'Parameter name must be convertible to string.'
             );
         }
 
         $this->name = $name;
+
         return $this;
     }
 
     /**
-     * Is deleted
+     * Returns true if deleted
+     *
+     * @throws \BadMethodCallException
      *
      * @return boolean|null
-     * @throws \InvalidArgumentException
      */
     protected function isDeleted()
     {
@@ -151,12 +158,13 @@ trait ContactInfoMethodsTrait
     }
 
     /**
-     * Set deleted
+     * Sets deleted
      *
-     * @param boolean $deleted
-     * @return ContactInfo
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
+     *
+     * @param  boolean $deleted
+     * @return $this|ContactInfo
      */
     public function setDeleted($deleted)
     {
@@ -176,14 +184,16 @@ trait ContactInfoMethodsTrait
         }
 
         $this->deleted = $deleted;
+
         return $this;
     }
 
     /**
-     * Is spends_lots_of_money
+     * Returns true if spends_lots_of_money
+     *
+     * @throws \BadMethodCallException
      *
      * @return boolean|null
-     * @throws \InvalidArgumentException
      */
     private function isSpendsLotsOfMoney()
     {
@@ -204,12 +214,13 @@ trait ContactInfoMethodsTrait
     }
 
     /**
-     * Set spends_lots_of_money
+     * Sets spends_lots_of_money
      *
-     * @param boolean $spends_lots_of_money
-     * @return ContactInfo
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
+     *
+     * @param  boolean $spends_lots_of_money
+     * @return $this|ContactInfo
      */
     protected function setSpendsLotsOfMoney($spends_lots_of_money)
     {
@@ -229,15 +240,16 @@ trait ContactInfoMethodsTrait
         }
 
         $this->spends_lots_of_money = $spends_lots_of_money;
+
         return $this;
     }
 
     /**
-     * Get referenced_contacts
+     * Gets referenced_contacts
      *
-     * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\ContactInfo[]
-     * @return \Hostnet\Component\AccessorGenerator\Collection\ConstCollectionInterface
-     * @throws \InvalidArgumentException
+     * @throws \BadMethodCallException
+     *
+     * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\ContactInfo[]|ImmutableCollection
      */
     public function getReferencedContacts()
     {
@@ -258,11 +270,14 @@ trait ContactInfoMethodsTrait
     }
 
     /**
-     * Add referenced_contact
+     * Adds the given referenced_contact to this collection.
      *
-     * @param ContactInfo $referenced_contact
-     * @return ContactInfo
-     * @throws \BadMethodCallException if the number of arguments is not correct
+     * @throws \BadMethodCallException if the number of arguments is not correct.
+     * @throws \LogicException         if a member was added that already exists within the collection.
+     * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
+     *
+     * @param  ContactInfo $referenced_contact
+     * @return $this|ContactInfo
      */
     private function addReferencedContact(ContactInfo $referenced_contact)
     {
@@ -275,6 +290,7 @@ trait ContactInfoMethodsTrait
             );
         }
 
+        /* @var $this->referenced_contacts \Doctrine\Common\Collections\ArrayCollection */
         if ($this->referenced_contacts === null) {
             $this->referenced_contacts = new \Doctrine\Common\Collections\ArrayCollection();
         } elseif ($this->referenced_contacts->contains($referenced_contact)) {
@@ -298,15 +314,17 @@ trait ContactInfoMethodsTrait
         }
         $property->setValue($referenced_contact, $this);
         $property->setAccessible(false);
+
         return $this;
     }
 
     /**
-     * Remove referenced_contact
+     * Removes the given referenced_contact from this collection.
      *
-     * @param ContactInfo $referenced_contact
-     * @return ContactInfo
      * @throws \BadMethodCallException if the number of arguments is not correct
+     *
+     * @param  ContactInfo $referenced_contact
+     * @return $this|ContactInfo
      */
     private function removeReferencedContact(ContactInfo $referenced_contact)
     {
@@ -331,14 +349,16 @@ trait ContactInfoMethodsTrait
         $property->setAccessible(true);
         $property->setValue($referenced_contact, null);
         $property->setAccessible(false);
+
         return $this;
     }
 
     /**
-     * Get referrer
+     * Gets referrer
+     *
+     * @throws \BadMethodCallException
      *
      * @return ContactInfo|null
-     * @throws \InvalidArgumentException
      */
     public function getReferrer()
     {
@@ -355,15 +375,16 @@ trait ContactInfoMethodsTrait
     }
 
     /**
-     * Set referrer
+     * Sets referrer
      *
      * Generated a default null value because the doctrine column is nullable.
      * Still require an explicit argument to set the column. If you do not like
      * this message, specify a default value or use JoinColumn(nullable=false).
      *
-     * @param ContactInfo $referrer
-     * @return ContactInfo
      * @throws \BadMethodCallException if the number of arguments is not correct
+     *
+     * @param  ContactInfo $referrer
+     * @return $this|ContactInfo
      */
     protected function setReferrer(ContactInfo $referrer = null)
     {
@@ -395,19 +416,20 @@ trait ContactInfoMethodsTrait
             }
         }
 
-        // Disallow acces again.
+        // Update the accessible flag to disallow further again.
         $property->setAccessible(false);
 
         $this->referrer = $referrer;
+
         return $this;
     }
 
     /**
-     * Get friends
+     * Gets friends
      *
-     * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\ContactInfo[]
-     * @return \Hostnet\Component\AccessorGenerator\Collection\ConstCollectionInterface
-     * @throws \InvalidArgumentException
+     * @throws \BadMethodCallException
+     *
+     * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\ContactInfo[]|ImmutableCollection
      */
     public function getFriends()
     {
@@ -428,11 +450,14 @@ trait ContactInfoMethodsTrait
     }
 
     /**
-     * Add friend
+     * Adds the given friend to this collection.
      *
-     * @param ContactInfo $friend
-     * @return ContactInfo
-     * @throws \BadMethodCallException if the number of arguments is not correct
+     * @throws \BadMethodCallException if the number of arguments is not correct.
+     * @throws \LogicException         if a member was added that already exists within the collection.
+     * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
+     *
+     * @param  ContactInfo $friend
+     * @return $this|ContactInfo
      */
     private function addFriend(ContactInfo $friend)
     {
@@ -445,6 +470,7 @@ trait ContactInfoMethodsTrait
             );
         }
 
+        /* @var $this->friends \Doctrine\Common\Collections\ArrayCollection */
         if ($this->friends === null) {
             $this->friends = new \Doctrine\Common\Collections\ArrayCollection();
         } elseif ($this->friends->contains($friend)) {
@@ -468,15 +494,17 @@ trait ContactInfoMethodsTrait
         }
         $property->setValue($friend, $this);
         $property->setAccessible(false);
+
         return $this;
     }
 
     /**
-     * Remove friend
+     * Removes the given friend from this collection.
      *
-     * @param ContactInfo $friend
-     * @return ContactInfo
      * @throws \BadMethodCallException if the number of arguments is not correct
+     *
+     * @param  ContactInfo $friend
+     * @return $this|ContactInfo
      */
     protected function removeFriend(ContactInfo $friend)
     {
@@ -501,14 +529,16 @@ trait ContactInfoMethodsTrait
         $property->setAccessible(true);
         $property->setValue($friend, null);
         $property->setAccessible(false);
+
         return $this;
     }
 
     /**
-     * Get friended_by
+     * Gets friended_by
+     *
+     * @throws \BadMethodCallException
      *
      * @return ContactInfo|null
-     * @throws \InvalidArgumentException
      */
     public function getFriendedBy()
     {
@@ -525,15 +555,16 @@ trait ContactInfoMethodsTrait
     }
 
     /**
-     * Set friended_by
+     * Sets friended_by
      *
      * Generated a default null value because the doctrine column is nullable.
      * Still require an explicit argument to set the column. If you do not like
      * this message, specify a default value or use JoinColumn(nullable=false).
      *
-     * @param ContactInfo $friended_by
-     * @return ContactInfo
      * @throws \BadMethodCallException if the number of arguments is not correct
+     *
+     * @param  ContactInfo $friended_by
+     * @return $this|ContactInfo
      */
     private function setFriendedBy(ContactInfo $friended_by = null)
     {
@@ -565,10 +596,11 @@ trait ContactInfoMethodsTrait
             }
         }
 
-        // Disallow acces again.
+        // Update the accessible flag to disallow further again.
         $property->setAccessible(false);
 
         $this->friended_by = $friended_by;
+
         return $this;
     }
 }

@@ -11,11 +11,11 @@ use Hostnet\Component\AccessorGenerator\Generator\fixtures\Node;
 trait NodeMethodsTrait
 {
     /**
-     * Get out
+     * Gets out
      *
-     * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Node[]
-     * @return \Hostnet\Component\AccessorGenerator\Collection\ConstCollectionInterface
-     * @throws \InvalidArgumentException
+     * @throws \BadMethodCallException
+     *
+     * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Node[]|ImmutableCollection
      */
     public function getOut()
     {
@@ -36,11 +36,13 @@ trait NodeMethodsTrait
     }
 
     /**
-     * Add out
+     * Adds the given out to this collection.
      *
-     * @param Node $out
-     * @return Node
-     * @throws \BadMethodCallException if the number of arguments is not correct
+     * @throws \BadMethodCallException if the number of arguments is not correct.
+     * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
+     *
+     * @param  Node $out
+     * @return $this|Node
      */
     public function addOut(Node $out)
     {
@@ -53,6 +55,7 @@ trait NodeMethodsTrait
             );
         }
 
+        /* @var $this->out \Doctrine\Common\Collections\ArrayCollection */
         if ($this->out === null) {
             $this->out = new \Doctrine\Common\Collections\ArrayCollection();
         } elseif ($this->out->contains($out)) {
@@ -84,15 +87,17 @@ trait NodeMethodsTrait
             $collection->add($this);
         }
         $property->setAccessible(false);
+
         return $this;
     }
 
     /**
-     * Remove out
+     * Removes the given out from this collection.
      *
-     * @param Node $out
-     * @return Node
      * @throws \BadMethodCallException if the number of arguments is not correct
+     *
+     * @param  Node $out
+     * @return $this|Node
      */
     public function removeOut(Node $out)
     {
@@ -120,6 +125,7 @@ trait NodeMethodsTrait
             $collection->removeElement($this);
         }
         $property->setAccessible(false);
+
         return $this;
     }
 }

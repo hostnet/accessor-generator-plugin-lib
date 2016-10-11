@@ -16,15 +16,15 @@ use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
 use Symfony\Component\Finder\Finder;
 
 /**
- * Plugin that will generate accessor methods in traits put
- * in a Generated folder and namespace relative for the file
- * the trait is created for.
+ * Plugin that will generate accessor methods in traits and puts them
+ * in a Generated folder and namespace relative for the file the trait
+ * is created for.
  *
- * The trait is included by hand in the file using the accessor-
+ * The generated trait should be included in the class manually after
  * generation.
  *
- * The plugin will ONLY generate traits for packages that directly
- * require the package.
+ * The plugin will only generate traits for classes in the application and
+ * classes in composer-packages that directly require this package.
  *
  * For more information on usage please see README.md
  */
@@ -48,9 +48,8 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     private $generator;
 
     /**
-     * Initialize the annotation registry with composer
-     * as auto loader. Create a CodeGenerator if now was
-     * provided.
+     * Initialize the annotation registry with composer as auto loader. Create
+     * a CodeGenerator if none was provided.
      *
      * @param CodeGeneratorInterface $generator
      * @throws \InvalidArgumentException
@@ -69,8 +68,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     }
 
     /**
-     * @see Composer\EventDispatcher\EventSubscriberInterface::getSubscribedEvents
-     * @return int|string[][]
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
@@ -80,9 +78,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     }
 
     /**
-     * @see \Composer\Plugin\PluginInterface::activate()
-     * @param Composer $composer
-     * @param IOInterface $io
+     * {@inheritdoc}
      */
     public function activate(Composer $composer, IOInterface $io)
     {
@@ -96,14 +92,15 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      * Generate Traits for every package that requires
      * this plugin and has php files with the @Generate
      * annotation set on at least one property.
+     *
      * @throws \DomainException
      * @throws \Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException
+     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
      * @throws \InvalidArgumentException
+     * @throws \LogicException
      * @throws \RuntimeException
      * @throws \Symfony\Component\Filesystem\Exception\IOException
-     * @throws \LogicException
-     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
      */
     public function onPreAutoloadDump()
     {
@@ -125,16 +122,17 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      * the @Generate annotation set on at least one
      * property.
      *
-     * @param PackageInterface $package
-     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
-     * @throws \InvalidArgumentException
-     * @throws \LogicException
      * @throws \DomainException
      * @throws \Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
+     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
+     * @throws \InvalidArgumentException
+     * @throws \LogicException
      * @throws \OutOfBoundsException
      * @throws \RuntimeException
      * @throws \Symfony\Component\Filesystem\Exception\IOException
+     *
+     * @param PackageInterface $package
      */
     private function generateTraitForPackage(PackageInterface $package)
     {
@@ -159,10 +157,11 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      *  - all files in Generated folders
      *  - all hidden files
      *
-     * @param PackageInterface $package
-     * @return \Iterator
      * @throws \LogicException
      * @throws \InvalidArgumentException
+     *
+     * @param PackageInterface $package
+     * @return \Iterator
      */
     private function getFilesForPackage(PackageInterface $package)
     {

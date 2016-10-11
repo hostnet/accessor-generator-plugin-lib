@@ -13,9 +13,9 @@ use Hostnet\Component\AccessorGenerator\Annotation\Generate;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception\InvalidColumnSettingsException;
 
 /**
- * Process Column, ManyToMany, OneToOne, ManyToOne,
- * OneToMany and GeneratedValue Doctrine ORM annotations
- * and extract the type and relationship information.
+ * Process Column, ManyToMany, OneToOne, ManyToOne, OneToMany and
+ * GeneratedValue Doctrine ORM annotations and extract the type and
+ * relationship information.
  */
 class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
 {
@@ -31,15 +31,16 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      *  OneToMany,
      *  OneToOne.
      *
-     * @param  mixed $annotation object of a class annotated with @annotation
-     * @param  PropertyInformation $information
-     * @return void
      * @throws \OutOfBoundsException
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
      * @throws \RangeException
      * @throws \Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception\InvalidColumnSettingsException
      * @throws \InvalidArgumentException
      * @throws \DomainException
+     *
+     * @param  mixed $annotation object of a class annotated with @annotation
+     * @param  PropertyInformation $information
+     * @return void
      */
     public function processAnnotation($annotation, PropertyInformation $information)
     {
@@ -96,10 +97,11 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * Return referenced entity if we have a bidirectional
      * doctrine association.
      *
-     * @param mixed $annotation with annotation Annotation
-     * @param PropertyInformation $information
      * @throws \DomainException
      * @throws \InvalidArgumentException
+     *
+     * @param mixed               $annotation with annotation Annotation
+     * @param PropertyInformation $information
      */
     private function processBidirectional($annotation, PropertyInformation $information)
     {
@@ -127,10 +129,9 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
     }
 
     /**
-     * Process a Column Annotation, extract information
-     * about scale and precision for decimal types, length
-     * and size of string and integer types, if the column
-     * may be null and if it should be a unique value.
+     * Process a Column Annotation, extract information about scale and
+     * precision for decimal types, length and size of string and integer
+     * types, if the column may be null and if it should be a unique value.
      *
      * @param Column $column
      * @param PropertyInformation $information
@@ -174,7 +175,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
     /**
      * Process a JoinColumn Annotation, extract nullable.
      *
-     * @param JoinColumn $join_column
+     * @param JoinColumn          $join_column
      * @param PropertyInformation $information
      */
     private function processJoinColumn(JoinColumn $join_column, PropertyInformation $information)
@@ -196,8 +197,9 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * @see http://php.net/manual/en/language.types.php
      * @see http://php.net/manual/en/function.gettype.php (double vs float)
      * @see http://doctrine-dbal.readthedocs.org/en/latest/reference/types.html
+     *
      * @param  string $type
-     * @return string Valid PHP type
+     * @return string A valid PHP type
      */
     private function transformType($type)
     {
@@ -227,17 +229,16 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
     }
 
     /**
-     * Transform a Doctrine complex type to a valid
-     * PHP type reference. Doctrine does not require
-     * your class to start with a \ for a fully
-     * qualified class name. When there is a \ inside
-     * Doctrine assumes a fully qualified name. This
-     * makes relative references to sub namespaces
-     * impossible. When there is no \ in the class name
-     * it is assumed to be relative to the current name-
-     * space and left as-is.
+     * Transform a Doctrine complex type to a valid PHP type reference.
+     * Doctrine does not require your class to start with a namespace separator
+     * for a fully qualified class name. When there is a namespace separator
+     * inside, Doctrine assumes a fully qualified name.
      *
-     * @param string $type
+     * This makes relative references to sub namespaces impossible. When there
+     * is no namespace separator in the class name, Doctrine assumes the class
+     * is in the current namespace and is left as-is.
+     *
+     * @param  string $type
      * @return string
      */
     private function transformComplexType($type)
@@ -251,15 +252,15 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
 
     /**
      * Return the size of an integer type in bits.
-     * This value can be used by the set methods to
-     * validate that the value sent to the database
-     * will not be too big and chopped off.
      *
-     * PHP does scale all int values automatically
-     * up when they grow larger and eventually turn
-     * them silently into a float.
+     * This value can be used by the set methods to validate that the value
+     * sent to the database will not be too big and chopped off.
+     *
+     * PHP does scale all int values automatically up when they grow larger and
+     * eventually turn them silently into a float.
      *
      * @see http://doctrine-dbal.readthedocs.org/en/latest/reference/types.html
+     *
      * @param  string $type
      * @return int
      */

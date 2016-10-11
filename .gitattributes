@@ -1,0 +1,6 @@
+.gitattributes export-ignore
+.gitignore export-ignore
+/test export-ignore
+/phpunit.xml.dist export-ignore
+/phpcs.xml.dist export-ignore
+/cli-config.php export-ignore

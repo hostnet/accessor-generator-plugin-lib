@@ -14,8 +14,9 @@ trait ProductMethodsTrait
     /**
      * Product Id not good etc
      *
+     * @throws \BadMethodCallException
+     *
      * @return integer|null
-     * @throws \InvalidArgumentException
      */
     public function getId()
     {
@@ -47,10 +48,13 @@ trait ProductMethodsTrait
     }
 
     /**
-     * Get duration
+     * Gets duration
+     *
+     * @throws \Doctrine\ORM\EntityNotFoundException
+     * @throws \BadMethodCallException
+     * @throws \LogicException
      *
      * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Period
-     * @throws \InvalidArgumentException
      */
     public function getDuration()
     {
@@ -71,10 +75,12 @@ trait ProductMethodsTrait
     }
 
     /**
-     * Get name
+     * Gets name
+     *
+     * @throws \BadMethodCallException
+     * @throws \LogicException
      *
      * @return string
-     * @throws \InvalidArgumentException
      */
     public function getName()
     {
@@ -92,8 +98,8 @@ trait ProductMethodsTrait
                 'make sure your object is initialized in such a way the properties are in '.
                 'a valid state, for example by using a proper constructor. If you want to ' .
                 'test if an object is new for the database please consult the UnitOfWork.' .
-                'It could also be that your column in code is set tot not nullable and in' .
-                'and contains null values in the database'
+                'It could also be that your column in the code is not set to be nullable ' .
+                'and it currently contains a NULL-value in the database.'
             ));
         }
 
@@ -103,8 +109,10 @@ trait ProductMethodsTrait
     /**
      * Used in invoices and email
      *
+     * @throws \BadMethodCallException
+     * @throws \LogicException
+     *
      * @return string
-     * @throws \InvalidArgumentException
      */
     public function getDescription()
     {
@@ -122,8 +130,8 @@ trait ProductMethodsTrait
                 'make sure your object is initialized in such a way the properties are in '.
                 'a valid state, for example by using a proper constructor. If you want to ' .
                 'test if an object is new for the database please consult the UnitOfWork.' .
-                'It could also be that your column in code is set tot not nullable and in' .
-                'and contains null values in the database'
+                'It could also be that your column in the code is not set to be nullable ' .
+                'and it currently contains a NULL-value in the database.'
             ));
         }
 
@@ -131,10 +139,12 @@ trait ProductMethodsTrait
     }
 
     /**
-     * Get system_name
+     * Gets system_name
+     *
+     * @throws \BadMethodCallException
+     * @throws \LogicException
      *
      * @return string
-     * @throws \InvalidArgumentException
      */
     public function getSystemName()
     {
@@ -152,8 +162,8 @@ trait ProductMethodsTrait
                 'make sure your object is initialized in such a way the properties are in '.
                 'a valid state, for example by using a proper constructor. If you want to ' .
                 'test if an object is new for the database please consult the UnitOfWork.' .
-                'It could also be that your column in code is set tot not nullable and in' .
-                'and contains null values in the database'
+                'It could also be that your column in the code is not set to be nullable ' .
+                'and it currently contains a NULL-value in the database.'
             ));
         }
 
@@ -161,13 +171,14 @@ trait ProductMethodsTrait
     }
 
     /**
-     * Set system_name
+     * Sets system_name
      *
-     * @param string $system_name
-     * @return Product
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      * @throws \LengthException if the length of the value is to long
+     *
+     * @param  string $system_name
+     * @return $this|Product
      */
     public function setSystemName($system_name = '')
     {
@@ -187,7 +198,7 @@ trait ProductMethodsTrait
             $system_name = (string)$system_name;
         } else {
             throw new \InvalidArgumentException(
-                'Parameter system_name must be convertable to string.'
+                'Parameter system_name must be convertible to string.'
             );
         }
 
@@ -196,15 +207,16 @@ trait ProductMethodsTrait
         }
 
         $this->system_name = $system_name;
+
         return $this;
     }
 
     /**
-     * Get attributes
+     * Gets attributes
      *
-     * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Attribute[]
-     * @return \Hostnet\Component\AccessorGenerator\Collection\ConstCollectionInterface
-     * @throws \InvalidArgumentException
+     * @throws \BadMethodCallException
+     *
+     * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Attribute[]|ImmutableCollection
      */
     public function getAttributes()
     {
@@ -225,11 +237,14 @@ trait ProductMethodsTrait
     }
 
     /**
-     * Add attribute
+     * Adds the given attribute to this collection.
      *
-     * @param Attribute $attribute
-     * @return Product
-     * @throws \BadMethodCallException if the number of arguments is not correct
+     * @throws \BadMethodCallException if the number of arguments is not correct.
+     * @throws \LogicException         if a member was added that already exists within the collection.
+     * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
+     *
+     * @param  Attribute $attribute
+     * @return $this|Product
      */
     public function addAttribute(Attribute $attribute)
     {
@@ -242,6 +257,7 @@ trait ProductMethodsTrait
             );
         }
 
+        /* @var $this->attributes \Doctrine\Common\Collections\ArrayCollection */
         if ($this->attributes === null) {
             $this->attributes = new \Doctrine\Common\Collections\ArrayCollection();
         } elseif ($this->attributes->contains($attribute)) {
@@ -272,15 +288,17 @@ trait ProductMethodsTrait
         }
         $property->setValue($attribute, $this);
         $property->setAccessible(false);
+
         return $this;
     }
 
     /**
-     * Remove attribute
+     * Removes the given attribute from this collection.
      *
-     * @param Attribute $attribute
-     * @return Product
      * @throws \BadMethodCallException if the number of arguments is not correct
+     *
+     * @param  Attribute $attribute
+     * @return $this|Product
      */
     public function removeAttribute(Attribute $attribute)
     {
@@ -305,6 +323,7 @@ trait ProductMethodsTrait
         $property->setAccessible(true);
         $property->setValue($attribute, null);
         $property->setAccessible(false);
+
         return $this;
     }
 }

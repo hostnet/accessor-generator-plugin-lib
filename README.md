@@ -1,6 +1,6 @@
 Welcome to the Accessor Generator composer plugin.
 
-##Goals
+## Goals
 The goal of this plugin is to provide dynamically generated get, set, add, remove
 accessor methods for Classes based on information that we can read from the doc comment.
 Currently we can process Doctrine ORM annotations.
@@ -10,7 +10,15 @@ will be very consistent with a lot of added boilerplate code that will make your
 fail early if you happen to use the wrong type or number of arguments with the generated
 functions.
 
-##Usage
+> **WARNING** The current version of this package is deprecated as a new
+> version is being worked on for PHP 7, which will introduce BC-breaks.
+
+## Limitations
+
+- Imports through grouped `use` statements is not supported. (https://wiki.php.net/rfc/group_use_declarations)
+- Scalar typehints is not being added (https://wiki.php.net/rfc/scalar_type_hints_v5)
+
+## Usage
 
 ```php
 <?php
@@ -46,7 +54,7 @@ file. This file can be included as trait.
 
 ### Which methods
 
-It is possible to disable generation of certain accessor methods by specifying then in
+It is possible to disable generation of certain accessor methods by specifying them in
 the annotation.
 
 ```php
@@ -63,10 +71,10 @@ If no configuration is specified, the default behaviour for all scalar typed pro
 that a getter and a settter method will be generated. Adders and Removers will be generated
 when the type is iterable (e.g. DoctrineCollection or array).
 
-##Installation
+## Installation
 
 Add `hostnet/accessor-generator-plugin` to your `composer.json` and run
 `php composer.phar update hostnet/accessor-generator-plugin`
 
 If you want to invoke generation after installing you can run `php composer.phar dump-autoload`.
-Try adding -vv for more verbosity.
+Try adding `-vv` to the dump-autoload command for more verbosity.

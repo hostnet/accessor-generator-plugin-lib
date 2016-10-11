@@ -11,10 +11,13 @@ use Hostnet\Component\AccessorGenerator\Generator\fixtures\StudentInterface;
 trait StudentMethodsTrait
 {
     /**
-     * Get student
+     * Gets student
+     *
+     * @throws \Doctrine\ORM\EntityNotFoundException
+     * @throws \BadMethodCallException
+     * @throws \LogicException
      *
      * @return StudentInterface
-     * @throws \InvalidArgumentException
      */
     public function getStudent()
     {
@@ -35,11 +38,12 @@ trait StudentMethodsTrait
     }
 
     /**
-     * Set student
+     * Sets student
      *
-     * @param StudentInterface $student
-     * @return Student
      * @throws \BadMethodCallException if the number of arguments is not correct
+     *
+     * @param  StudentInterface $student
+     * @return $this|Student
      */
     public function setStudent(StudentInterface $student)
     {
@@ -53,6 +57,7 @@ trait StudentMethodsTrait
         }
 
         $this->student = $student;
+
         return $this;
     }
 }

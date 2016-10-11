@@ -5,26 +5,24 @@ use Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotF
 use Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException;
 
 /**
- * Parse PHP files containing classes that are
- * valid PHP (php -l) but are not (yet) valid
- * PHP because some interfaces or other hierarchy
- * requirements are not fulfilled yet.
+ * Parse PHP files containing classes that are valid PHP (php -l) but are not
+ * (yet) valid PHP because some interfaces or other hierarchy requirements are
+ * not fulfilled yet.
  *
- * This way we can generate code that will implement
- * an interface.
+ * This way we can generate code that will later implement an interface.
  */
 class ReflectionClass
 {
     /**
-     * Filename of the file to parse.
+     * Name of the file to parse.
+     *
      * @var string
      */
     private $filename;
 
     /**
-     * The parsed token stream,
-     * the normal PHP token stream
-     * is a bit too raw.
+     * The parsed token stream.
+     * The normal PHP token stream is a bit too raw.
      *
      * @var TokenStream
      */
@@ -47,33 +45,32 @@ class ReflectionClass
     private $namespace = null;
 
     /**
-     * All the properties defined within
-     * the class inside the pares file.
+     * All the properties declared within the class inside the parsed file.
+     *
      * @var ReflectionProperty[]
      */
     private $properties = null;
 
     /**
-     * Al the use statements.
-     * Not the traits but the class namespaces.
+     * A list of all imports (use statements).
+     *
      * @var string[]
      */
     private $use_statements = null;
 
     /**
-     * Location where the class name is found.
-     * Used to prevent duplicate code for finding
-     * the class name and location.
+     * Location where the class name is found. Used to prevent duplicate code
+     * for finding the class name and location.
      *
      * @var int
      */
     private $class_location = null;
 
     /**
-     * Create a reflection class for a class contained in
-     * a filename. This can not be loaded class because than
-     * it can not be invalid PHP any longer. This will NOT
-     * load the class from $filename into memory.
+     * Create a reflection class for a class contained in the given file. The
+     * class should not be already loaded into memory previously, because this
+     * implementation of ReflectionClass assumes that the class contains
+     * invalid PHP due to missing implementations from an interface.
      *
      * @param  string        $filename valid readable filename
      * @throws FileException
@@ -96,7 +93,8 @@ class ReflectionClass
     }
 
     /**
-     * Filename of the parsed file
+     * Returns the name of the parsed file.
+     *
      * @return string
      */
     public function getFilename()
@@ -105,12 +103,15 @@ class ReflectionClass
     }
 
     /**
-     * Return the name of the class inside this file.
+     * Returns the name of the class, inside this file.
+     *
      * This is the simple class name and not the fully
      * qualified class name.
      *
      * @throws Exception\ClassDefinitionNotFoundException
      * @throws \OutOfBoundsException
+     *
+     * @return string
      */
     public function getName()
     {
@@ -148,10 +149,8 @@ class ReflectionClass
     }
 
     /**
-     * Get the namespace of the file.
-     * If there is no namespace this will
-     * return '' and not \ as the root
-     * namespace.
+     * Returns the namespace of the class in this file or an empty string if no
+     * namespace was declared.
      *
      * @return string
      */
@@ -183,13 +182,13 @@ class ReflectionClass
     }
 
     /**
-     * Return the name of the class inside this file.
-     * This is the fully qualified class name, thus
-     * including the full namespace.
+     * Returns the fully qualified class name, thus including the full
+     * namespace, for the class in this file.
      *
-     * @return string
      * @throws \OutOfBoundsException
      * @throws Exception\ClassDefinitionNotFoundException
+     *
+     * @return string
      */
     public function getFullyQualifiedClassName()
     {
@@ -197,12 +196,13 @@ class ReflectionClass
     }
 
     /**
-     * Returns an array with key values.
-     * where the key is used as alias.
+     * Returns an associative array of class imports.
+     * If aliases are used in the file, the alias names are used as keys.
      *
-     * @return string[] key is numeric when no alias is uses and string if an alias is used.
      * @throws \OutOfBoundsException
      * @throws Exception\ClassDefinitionNotFoundException
+     *
+     * @return string[]
      */
     public function getUseStatements()
     {
@@ -231,12 +231,12 @@ class ReflectionClass
     }
 
     /**
-     * Return all private, protected and public properties
-     * for this class. Properties declared with var are not
-     * provided as var is deprecated.
+     * Returns all private, protected and public properties for this class.
+     * Properties declared with var are not provided as var declarations are
+     * deprecated.
      *
-     * Only declared properties are returned. Properties created
-     * at runtime are not taken into consideration.
+     * Only declared properties are returned. Properties created at runtime
+     * are not taken into consideration.
      *
      * @throws ClassDefinitionNotFoundException
      * @return ReflectionProperty[]
@@ -285,7 +285,7 @@ class ReflectionClass
     }
 
     /**
-     * Return the location of the class name token.
+     * Returns the location of the class name token.
      *
      * @throws ClassDefinitionNotFoundException
      * @return int location of the class name token (T_STRING)
@@ -344,12 +344,12 @@ class ReflectionClass
     }
 
     /**
-     * Returns the doc comment for a property, function or class
-     * The comment is stripped of indentation. Returns empty string
-     * when no doc comment of an empty doc comment was found.
+     * Returns the doc comment for a property, method or class. The comment is
+     * stripped of leading whitespaces. Returns an empty string if no doc-
+     * comment or an empty doc comment was found.
      *
-     * @param int $loc location of the visibility modifier or T_CLASS
-     * @return string the contents of the doc comment
+     * @param  int    $loc location of the visibility modifier or T_CLASS
+     * @return string      the contents of the doc comment
      */
     private function parseDocComment($loc)
     {
@@ -370,12 +370,12 @@ class ReflectionClass
     }
 
     /**
-     * Parse visibility and static modifier of the property
-     * in to a bit field combining all the modifiers as is
-     * done in by PHP Reflection for the \ReflectionProperty.
+     * Parse visibility and static modifier of the property in to a bit field
+     * combining all the modifiers as is done in by PHP Reflection for the
+     * \ReflectionProperty.
      *
-     * Note that properties can not be final and thus this
-     * function does not scan for T_FINAL.
+     * Note that properties can not be final and thus this function does not
+     * scan for T_FINAL.
      *
      * @see \ReflectionProperty
      * @param  int $loc location of the visibility modifier
@@ -412,18 +412,15 @@ class ReflectionClass
     }
 
     /**
-     * Parse the default value assignment for a property
-     * and return the default value or null if there is
-     * no default value assigned.
+     * Parses the default value assignment for a property and returns the
+     * default value or null if there is no default value assigned.
      *
-     * The returned value includes
-     * single or double quotes as used in the code. This
-     * way we can keep those and this also enables us to
-     * parse a default value of null.
+     * The returned value includes single or double quotes as used in the code.
+     * This way we can keep those and this also enables us to parse a default
+     * value of null.
      *
      * @param  int         $loc location of the property name (T_STRING)
-     * @return null|string will return null if there is no default
-     *                     value, string if there is
+     * @return null|string Null if there is no default value, string otherwise
      */
     private function parseDefaultValue($loc)
     {
@@ -458,15 +455,14 @@ class ReflectionClass
     }
 
     /**
-     * Parse an array definition, the definition can contain
-     * arrays itself. The whole content of the array definition
-     * is stripped from comments and excess whitespace.
+     * Parse an array definition. The definition can contain arrays itself. The
+     * whole content of the array definition is stripped from comments and
+     * excessive whitespaces.
      *
-     * @param int $loc location of the token stream where the
-     *                 array starts. This should point to a
-     *                 T_ARRAY or [ token.
-     * @return string code representation of the parsed array
-     *                without any comments or access whitespace.
+     * @param  int $loc location of the token stream where the array starts.
+     *                  This should point to a T_ARRAY or [ token.
+     * @return string   code representation of the parsed array without any
+     *                  comments or excessive whitespace.
      */
     private function parseArrayDefinition($loc)
     {
@@ -509,10 +505,10 @@ class ReflectionClass
     }
 
     /**
-     * Give tokens found within an array definition PSR conforming
+     * Returns tokens found within an array definition PSR conforming
      * whitespace to make the code more readable.
      *
-     * @param int $loc location in the token stream
+     * @param  int $loc location in the token stream
      * @return string code with PSR spacing for array notation
      */
     private function arrayWhitespace($loc)
@@ -528,11 +524,10 @@ class ReflectionClass
         }
     }
     /**
-     * Parse heredoc and nowdoc into a concatenated
-     * string representation to be useful for default
-     * values and inline assignment.
+     * Parse heredoc and nowdoc into a concatenated string representation to be
+     * useful for default values and inline assignment.
      *
-     * @param int $loc
+     * @param  int $loc
      * @return string|null
      */
     private function parseHereNowDocConcat($loc)

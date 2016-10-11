@@ -12,8 +12,9 @@ trait CommentMethodsTrait
     /**
      * --> col <--
      *
+     * @throws \BadMethodCallException
+     *
      * @return string
-     * @throws \InvalidArgumentException
      */
     public function getCol()
     {

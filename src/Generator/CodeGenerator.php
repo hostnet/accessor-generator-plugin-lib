@@ -14,9 +14,8 @@ use Hostnet\Component\AccessorGenerator\Twig\CodeGenerationExtension;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * Generate Trait files with accessor methods.
- * Put them in a Generated folder and namespace
- * relative to the file they are created for.
+ * Generates Trait files with accessor methods and places them in a "Generated"
+ * folder and namespace relative to the file they are created for.
  */
 class CodeGenerator implements CodeGeneratorInterface
 {
@@ -75,16 +74,7 @@ class CodeGenerator implements CodeGeneratorInterface
     }
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\Generator\CodeGeneratorInterface::writeTraitForClass()
-     * @param ReflectionClass $class
-     * @return bool
-     * @throws \OutOfBoundsException
-     * @throws \RuntimeException
-     * @throws \InvalidArgumentException
-     * @throws \Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException
-     * @throws \DomainException
-     * @throws \Symfony\Component\Filesystem\Exception\IOException
-     * @throws ClassDefinitionNotFoundException
+     * {@inheritdoc}
      */
     public function writeTraitForClass(ReflectionClass $class)
     {
@@ -105,15 +95,7 @@ class CodeGenerator implements CodeGeneratorInterface
     }
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\Generator\CodeGeneratorInterface::generateTraitForClass()
-     * @param ReflectionClass $class
-     * @return string
-     * @throws \OutOfBoundsException
-     * @throws \InvalidArgumentException
-     * @throws \DomainException
-     * @throws \RuntimeException
-     * @throws ClassDefinitionNotFoundException
-     * @throws TypeUnknownException
+     * {@inheritdoc}
      */
     public function generateTraitForClass(ReflectionClass $class)
     {
@@ -139,8 +121,8 @@ class CodeGenerator implements CodeGeneratorInterface
             $info->registerAnnotationProcessor($doctrine_processor);
             $info->processAnnotations();
 
-            // Check if we will generate anything, so we will not do
-            // useless effort.
+            // Check if we have anything to do. If not, continue to the next
+            // property.
             if (!$info->willGenerateAdd()
                 && !$info->willGenerateGet()
                 && !$info->willGenerateRemove()
@@ -149,14 +131,14 @@ class CodeGenerator implements CodeGeneratorInterface
                 continue;
             }
 
-            // Complex Type within current namespace. Since our trait is in a sub
-            // namespace we have to import those as well (php does not no .. in namespace).
-            // In principle no harm could come from these imports unless the types
-            // are of a *methodsTrait type. Which will break anyway.
+            // Complex Type within current namespace. Since our trait is in a
+            // sub-namespace we have to import those as well. Theoretically no
+            // harm could come from these imports unless the types are of a
+            // *methodsTrait type. Which will break anyway.
             self::addImportForProperty($info, $imports);
 
-            // Parse and add fully qualified type information to the info object for use
-            // in doc blocks to make eclipse understand the types.
+            // Parse and add fully qualified type information to the info
+            // object for use in doc blocks to make IDE's understand the types properly.
             $info->setFullyQualifiedType(self::fqcn($info->getTypeHint(), $imports));
 
             $code .= $this->generateAccessors($info);
@@ -167,8 +149,8 @@ class CodeGenerator implements CodeGeneratorInterface
             }
         }
 
-        // Add import for ImmutableCollection if we generate any functions that make use of this
-        // collection wrapper.
+        // Add import for ImmutableCollection if we generate any functions that
+        // make use of this collection wrapper.
         if ($add_collection_import) {
             $imports[] = 'Hostnet\Component\AccessorGenerator\Collection\ImmutableCollection';
         }
@@ -190,9 +172,8 @@ class CodeGenerator implements CodeGeneratorInterface
     }
 
     /**
-     *
      * @param PropertyInformation $info
-     * @param array $imports
+     * @param string[]            &$imports
      */
     private static function addImportForProperty(PropertyInformation $info, array &$imports)
     {
@@ -214,9 +195,9 @@ class CodeGenerator implements CodeGeneratorInterface
     }
 
     /**
-     * @param string $type
-     * @param string $namespace
-     * @param array &$imports
+     * @param string   $type
+     * @param string   $namespace
+     * @param string[] &$imports
      */
     private static function addImportForType($type, $namespace, array &$imports)
     {
@@ -236,11 +217,11 @@ class CodeGenerator implements CodeGeneratorInterface
     }
 
     /**
-     * Returns if this class is in an
-     * aliased namespace.
+     * Returns true if the given class name is in an aliased namespace, false
+     * otherwise.
      *
-     * @param string $name class name
-     * @param array $imports
+     * @param  string   $name
+     * @param  string[] $imports
      * @return boolean
      */
     private static function isAliased($name, array $imports)
@@ -256,9 +237,8 @@ class CodeGenerator implements CodeGeneratorInterface
     }
 
     /**
-     *
-     * @param string $type
-     * @param array $imports
+     * @param  string   $type
+     * @param  string[] $imports
      * @return string|null
      */
     private static function getPlainImportIfExists($type, $imports)
@@ -273,11 +253,11 @@ class CodeGenerator implements CodeGeneratorInterface
     }
 
     /**
-     * Return the fully qualified class name based on the
-     * use statements in the current file.
+     * Return the fully qualified class name based on the use statements in
+     * the current file.
      *
-     * @param string $name class name
-     * @param array $imports
+     * @param  string   $name
+     * @param  string[] $imports
      * @return string
      */
     private static function fqcn($name, array $imports)
@@ -302,10 +282,7 @@ class CodeGenerator implements CodeGeneratorInterface
     }
 
     /**
-     * @see \Hostnet\Component\AccessorGenerator\Generator\CodeGeneratorInterface::generateAccessors()
-     * @param PropertyInformationInterface $info
-     * @return string
-     * @throws \Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException
+     * {@inheritdoc}
      */
     public function generateAccessors(PropertyInformationInterface $info)
     {
@@ -375,14 +352,14 @@ class CodeGenerator implements CodeGeneratorInterface
     }
 
     /**
-     * Make sure our use statements are sorted alphabetically and unique.
-     * The array_unique function can not be used because it does not take
-     * values with different array keys into account. This loop does exactly
-     * that. This is useful when a specific class name is imported and aliased
-     * as well.
+     * Make sure our use statements are sorted alphabetically and unique. The
+     * array_unique function can not be used because it does not take values
+     * with different array keys into account. This loop does exactly that.
+     * This is useful when a specific class name is imported and aliased as
+     * well.
      *
-     * @param array $imports
-     * @return array
+     * @param  string[] $imports
+     * @return string[]
      */
     private function getUniqueImports(array $imports)
     {

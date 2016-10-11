@@ -8,4 +8,5 @@ use Doctrine\ORM\Tools\Setup;
 $paths         = [ 'test/Generator/fixtures'];
 $config        = Setup::createAnnotationMetadataConfiguration($paths, true, null, null, false);
 $entityManager = EntityManager::create([driver => 'pdo_sqlite', 'memory' => true], $config);
+
 return ConsoleRunner::createHelperSet($entityManager);

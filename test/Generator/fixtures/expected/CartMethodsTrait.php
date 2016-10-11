@@ -12,10 +12,11 @@ use Hostnet\Component\AccessorGenerator\Generator\fixtures\Customer;
 trait CartMethodsTrait
 {
     /**
-     * Get customer
+     * Gets customer
+     *
+     * @throws \BadMethodCallException
      *
      * @return Client|null
-     * @throws \InvalidArgumentException
      */
     public function getCustomer()
     {
@@ -32,11 +33,12 @@ trait CartMethodsTrait
     }
 
     /**
-     * Set customer
+     * Sets customer
      *
-     * @param Client $customer
-     * @return Cart
      * @throws \BadMethodCallException if the number of arguments is not correct
+     *
+     * @param  Client $customer
+     * @return $this|Cart
      */
     public function setCustomer(Client $customer)
     {
@@ -52,15 +54,15 @@ trait CartMethodsTrait
         $property = new \ReflectionProperty(Customer::class, 'cart');
         $property->setAccessible(true);
 
-        // Unset old value and set the new value
-        // keeping the inverse side up-to-date.
+        // Unset old value and set the new value to keep the inverse side in sync.
         $this->customer && $property->setValue($this->customer, null);
         $customer && $property->setValue($customer, $this);
 
-        // Disallow acces again.
+        // Update the accessible flag to disallow further again.
         $property->setAccessible(false);
 
         $this->customer = $customer;
+
         return $this;
     }
 }

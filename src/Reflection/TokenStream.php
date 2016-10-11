@@ -4,28 +4,32 @@ namespace Hostnet\Component\AccessorGenerator\Reflection;
 class TokenStream
 {
     /**
-     * Location of type within the PHP Token
+     * Location of type within the PHP Token.
+     *
      * @internal
      * @var int
      */
     const TYPE = 0;
 
     /**
-     * Location of value within the PHP Token
+     * Location of value within the PHP Token.
+     *
      * @internal
      * @var int
      */
     const VALUE = 1;
 
     /**
-     * Search direction Left to Right
+     * Search direction from left to right.
+     *
      * @internal
      * @var int
      */
     const LTR = 1;
 
     /**
-     * Search direction Right to Left
+     * Search direction from right to left.
+     *
      * @internal
      * @var int
      */
@@ -33,10 +37,14 @@ class TokenStream
 
     /**
      * PHP Token Stack.
+     *
      * @var array
      */
     private $tokens = [];
 
+    /**
+     * @param string $source
+     */
     public function __construct($source)
     {
         $this->tokens = token_get_all($source);

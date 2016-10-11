@@ -13,11 +13,11 @@ use Hostnet\Component\AccessorGenerator\Generator\fixtures\Software;
 trait SoftwareMethodsTrait
 {
     /**
-     * Get features
+     * Gets features
      *
-     * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\FeatureInterface[]
-     * @return \Hostnet\Component\AccessorGenerator\Collection\ConstCollectionInterface
-     * @throws \InvalidArgumentException
+     * @throws \BadMethodCallException
+     *
+     * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\FeatureInterface[]|ImmutableCollection
      */
     public function getFeatures()
     {
@@ -38,11 +38,14 @@ trait SoftwareMethodsTrait
     }
 
     /**
-     * Add feature
+     * Adds the given feature to this collection.
      *
-     * @param FeatureInterface $feature
-     * @return Software
-     * @throws \BadMethodCallException if the number of arguments is not correct
+     * @throws \BadMethodCallException if the number of arguments is not correct.
+     * @throws \LogicException         if a member was added that already exists within the collection.
+     * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
+     *
+     * @param  FeatureInterface $feature
+     * @return $this|Software
      */
     public function addFeature(FeatureInterface $feature)
     {
@@ -55,6 +58,7 @@ trait SoftwareMethodsTrait
             );
         }
 
+        /* @var $this->features \Doctrine\Common\Collections\ArrayCollection */
         if ($this->features === null) {
             $this->features = new \Doctrine\Common\Collections\ArrayCollection();
         } elseif ($this->features->contains($feature)) {
@@ -78,15 +82,17 @@ trait SoftwareMethodsTrait
         }
         $property->setValue($feature, $this);
         $property->setAccessible(false);
+
         return $this;
     }
 
     /**
-     * Remove feature
+     * Removes the given feature from this collection.
      *
-     * @param FeatureInterface $feature
-     * @return Software
      * @throws \BadMethodCallException if the number of arguments is not correct
+     *
+     * @param  FeatureInterface $feature
+     * @return $this|Software
      */
     public function removeFeature(FeatureInterface $feature)
     {
@@ -111,6 +117,7 @@ trait SoftwareMethodsTrait
         $property->setAccessible(true);
         $property->setValue($feature, null);
         $property->setAccessible(false);
+
         return $this;
     }
 }

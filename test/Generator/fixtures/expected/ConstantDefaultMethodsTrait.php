@@ -11,10 +11,12 @@ use Hostnet\Component\AccessorGenerator\Generator\fixtures\Weather;
 trait ConstantDefaultMethodsTrait
 {
     /**
-     * Get weather
+     * Gets weather
+     *
+     * @throws \BadMethodCallException
+     * @throws \LogicException
      *
      * @return integer
-     * @throws \InvalidArgumentException
      */
     public function getWeather()
     {
@@ -32,8 +34,8 @@ trait ConstantDefaultMethodsTrait
                 'make sure your object is initialized in such a way the properties are in '.
                 'a valid state, for example by using a proper constructor. If you want to ' .
                 'test if an object is new for the database please consult the UnitOfWork.' .
-                'It could also be that your column in code is set tot not nullable and in' .
-                'and contains null values in the database'
+                'It could also be that your column in the code is not set to be nullable ' .
+                'and it currently contains a NULL-value in the database.'
             ));
         }
 
@@ -52,13 +54,14 @@ trait ConstantDefaultMethodsTrait
     }
 
     /**
-     * Set weather
+     * Sets weather
      *
-     * @param integer $weather
-     * @return ConstantDefault
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      * @throws \DomainException if the integer value is outside of the domain on this machine
+     *
+     * @param  integer $weather
+     * @return $this|ConstantDefault
      */
     public function setWeather($weather = Weather::SUN)
     {
@@ -88,6 +91,7 @@ trait ConstantDefaultMethodsTrait
         }
 
         $this->weather = $weather;
+
         return $this;
     }
 }

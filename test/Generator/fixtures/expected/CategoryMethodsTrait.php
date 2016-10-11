@@ -11,11 +11,11 @@ use Hostnet\Component\AccessorGenerator\Generator\fixtures\Category;
 trait CategoryMethodsTrait
 {
     /**
-     * Get children
+     * Gets children
      *
-     * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Category[]
-     * @return \Hostnet\Component\AccessorGenerator\Collection\ConstCollectionInterface
-     * @throws \InvalidArgumentException
+     * @throws \BadMethodCallException
+     *
+     * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Category[]|ImmutableCollection
      */
     public function getChildren()
     {
@@ -36,11 +36,14 @@ trait CategoryMethodsTrait
     }
 
     /**
-     * Add child
+     * Adds the given child to this collection.
      *
-     * @param Category $child
-     * @return Category
-     * @throws \BadMethodCallException if the number of arguments is not correct
+     * @throws \BadMethodCallException if the number of arguments is not correct.
+     * @throws \LogicException         if a member was added that already exists within the collection.
+     * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
+     *
+     * @param  Category $child
+     * @return $this|Category
      */
     public function addChild(Category $child)
     {
@@ -53,6 +56,7 @@ trait CategoryMethodsTrait
             );
         }
 
+        /* @var $this->children \Doctrine\Common\Collections\ArrayCollection */
         if ($this->children === null) {
             $this->children = new \Doctrine\Common\Collections\ArrayCollection();
         } elseif ($this->children->contains($child)) {
@@ -76,15 +80,17 @@ trait CategoryMethodsTrait
         }
         $property->setValue($child, $this);
         $property->setAccessible(false);
+
         return $this;
     }
 
     /**
-     * Remove child
+     * Removes the given child from this collection.
      *
-     * @param Category $child
-     * @return Category
      * @throws \BadMethodCallException if the number of arguments is not correct
+     *
+     * @param  Category $child
+     * @return $this|Category
      */
     public function removeChild(Category $child)
     {
@@ -109,14 +115,16 @@ trait CategoryMethodsTrait
         $property->setAccessible(true);
         $property->setValue($child, null);
         $property->setAccessible(false);
+
         return $this;
     }
 
     /**
-     * Get parent
+     * Gets parent
+     *
+     * @throws \BadMethodCallException
      *
      * @return Category
-     * @throws \InvalidArgumentException
      */
     public function getParent()
     {
@@ -133,11 +141,12 @@ trait CategoryMethodsTrait
     }
 
     /**
-     * Set parent
+     * Sets parent
      *
-     * @param Category $parent
-     * @return Category
      * @throws \BadMethodCallException if the number of arguments is not correct
+     *
+     * @param  Category $parent
+     * @return $this|Category
      */
     public function setParent(Category $parent = null)
     {
@@ -169,10 +178,11 @@ trait CategoryMethodsTrait
             }
         }
 
-        // Disallow acces again.
+        // Update the accessible flag to disallow further again.
         $property->setAccessible(false);
 
         $this->parent = $parent;
+
         return $this;
     }
 }

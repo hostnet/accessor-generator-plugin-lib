@@ -11,10 +11,13 @@ use Hostnet\Component\AccessorGenerator\Generator\fixtures\Customer;
 trait CustomerMethodsTrait
 {
     /**
-     * Get cart
+     * Gets cart
+     *
+     * @throws \Doctrine\ORM\EntityNotFoundException
+     * @throws \BadMethodCallException
+     * @throws \LogicException
      *
      * @return Cart
-     * @throws \InvalidArgumentException
      */
     public function getCart()
     {
@@ -35,11 +38,12 @@ trait CustomerMethodsTrait
     }
 
     /**
-     * Set cart
+     * Sets cart
      *
-     * @param Cart $cart
-     * @return Customer
      * @throws \BadMethodCallException if the number of arguments is not correct
+     *
+     * @param  Cart $cart
+     * @return $this|Customer
      */
     public function setCart(Cart $cart)
     {
@@ -55,15 +59,15 @@ trait CustomerMethodsTrait
         $property = new \ReflectionProperty(Cart::class, 'customer');
         $property->setAccessible(true);
 
-        // Unset old value and set the new value
-        // keeping the inverse side up-to-date.
+        // Unset old value and set the new value to keep the inverse side in sync.
         $this->cart && $property->setValue($this->cart, null);
         $cart && $property->setValue($cart, $this);
 
-        // Disallow acces again.
+        // Update the accessible flag to disallow further again.
         $property->setAccessible(false);
 
         $this->cart = $cart;
+
         return $this;
     }
 }

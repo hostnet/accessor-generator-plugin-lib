@@ -7,10 +7,10 @@ use Hostnet\Component\AccessorGenerator\Annotation\Generate;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
 
 /**
- * Gather all the information needed for accessor methods code
- * generation. It is possible to register various annotation
- * processors that will process information from the doc blocks
- * and add it to the PropertyInformation.
+ * Gather all the information needed for code generation for the accessor
+ * methods. It is possible to register various annotation processors that will
+ * process information from the doc blocks and add it to the
+ * PropertyInformation.
  */
 class PropertyInformation implements PropertyInformationInterface
 {
@@ -123,12 +123,6 @@ class PropertyInformation implements PropertyInformationInterface
     private $index = null;
 
     /**
-     * @see PropertyInformationInterface::getIndex()
-     * @var string|null
-     */
-    private $referenced_index = null;
-
-    /**
      * @see PropertyInformationInterface::willGenerateRemove()
      * @var string|null
      */
@@ -239,7 +233,7 @@ class PropertyInformation implements PropertyInformationInterface
     public function getDocumentation()
     {
         $block = strstr($this->property->getDocComment(), '@', true);
-        $block = preg_replace('/^\/\*\*\n/m', '', $block);
+        $block = preg_replace('/\/\*\*\n/m', '', $block);
         $block = preg_replace('/\n[ \t]*[ ]?\*\/$/', '', $block);
         $block = preg_replace('/\n\n/', '', $block);
         $block = preg_replace('/^[ \t]*\*[ ]?/m', '', $block);
@@ -329,7 +323,7 @@ class PropertyInformation implements PropertyInformationInterface
      * @param  string $type
      * @throws \DomainException
      * @throws \InvalidArgumentException
-     * @return PropertyInformation
+     * @return string
      */
     private function validateType($type)
     {
@@ -427,17 +421,15 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * Set the maximum length for this property,
-     * if set to 0 it means the length is un-
-     * bounded. Typically a length is between
-     * 1 to 255 (including) for varchar fields
-     * and 0 (unbounded) for Text, Blob and
-     * Binary fields.
+     * Set the maximum length for this property, if set to 0 it means the
+     * length is unbound. Typically a length is between 1 to 255 (including)
+     * for varchar fields and 0 (unbounded) for Text, Blob and  Binary fields.
      *
-     * @param $length
-     * @return PropertyInformation
      * @throws \RangeException
      * @throws \InvalidArgumentException
+     *
+     * @param  int $length
+     * @return PropertyInformation
      */
     public function setLength($length)
     {
@@ -457,6 +449,7 @@ class PropertyInformation implements PropertyInformationInterface
 
     /**
      * @see PropertyInformationInterface::getIntegerSize()
+     *
      * @return int
      */
     public function getIntegerSize()
@@ -467,10 +460,11 @@ class PropertyInformation implements PropertyInformationInterface
     /**
      * Set the size of the integer that will be stored, in bits.
      *
-     * @param int $integer_size
-     * @return $this
      * @throws \InvalidArgumentException
      * @throws \RangeException
+     *
+     * @param int $integer_size
+     * @return $this
      */
     public function setIntegerSize($integer_size)
     {
@@ -493,9 +487,10 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-    * @see PropertyInformationInterface::getReferencedProperty()
-    * return string
-    */
+     * @see PropertyInformationInterface::getReferencedProperty()
+     *
+     * return string
+     */
     public function getReferencedProperty()
     {
         return $this->referenced_property;
@@ -503,10 +498,12 @@ class PropertyInformation implements PropertyInformationInterface
 
     /**
      * @see PropertyInformationInterface::getReferencedProperty()
-     * @param string $referenced_property
-     * @return string
+     *
      * @throws \DomainException
      * @throws \InvalidArgumentException
+     *
+     * @param  string $referenced_property
+     * @return string
      */
     public function setReferencedProperty($referenced_property)
     {
@@ -529,6 +526,7 @@ class PropertyInformation implements PropertyInformationInterface
 
     /**
      * @see PropertyInformationInterface::isCollection()
+     *
      * @return bool
      */
     public function isCollection()
@@ -538,6 +536,7 @@ class PropertyInformation implements PropertyInformationInterface
 
     /**
      * @see PropertyInformationInterface::isReferencingCollection()
+     *
      * @return bool
      */
     public function isReferencingCollection()
@@ -547,6 +546,7 @@ class PropertyInformation implements PropertyInformationInterface
 
     /**
      * @see PropertyInformationInterface::isComplexType()
+     *
      * @return boolean
      */
     public function isComplexType()
@@ -555,11 +555,10 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * Set to true whenever this property
-     * is a collection type like an array or
-     * DoctrineCollection.
+     * Set to true whenever this property is a collection type like an array or
+     * a DoctrineCollection.
      *
-     * @param bool $is_collection
+     * @param  bool $is_collection
      * @return PropertyInformation
      */
     public function setCollection($is_collection)
@@ -569,12 +568,11 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * Set to true whenever this property
-     * is part of a bidirectional association
-     * where the referenced part is a collection
-     * (a many side of the relationship).
+     * Set to true whenever this property is part of a bidirectional
+     * association where the referenced part is a collection - a many side of
+     * the relationship.
      *
-     * @param bool $is_referencing_collection
+     * @param  bool $is_referencing_collection
      * @return PropertyInformation
      */
     public function setReferencingCollection($is_referencing_collection)
@@ -585,6 +583,7 @@ class PropertyInformation implements PropertyInformationInterface
 
     /**
      * @see PropertyInformationInterface::isFixedPointNumber()
+     *
      * @return bool
      */
     public function isFixedPointNumber()
@@ -594,7 +593,8 @@ class PropertyInformation implements PropertyInformationInterface
 
     /**
      * @see PropertyInformationInterface::isFixedPointNumber()
-     * @param bool $is_fixed_point_number
+     *
+     * @param  bool $is_fixed_point_number
      * @return $this
      */
     public function setFixedPointNumber($is_fixed_point_number)
@@ -604,6 +604,7 @@ class PropertyInformation implements PropertyInformationInterface
     }
     /**
      * @see PropertyInformationInterface::getPrecision()
+     *
      * @return int
      */
     public function getPrecision()
@@ -612,15 +613,17 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * Set the number of significant digits for a
-     * decimal number. Only applicable to fixed
-     * point storage. The type will be string in
-     * that case (PHP has no fixed point numbers).
+     * Set the number of significant digits for a decimal number.
+     *
+     * This is only applicable to fixed point storage. The type will be a
+     * string in that case because PHP has no fixed point numbers.
      *
      * @see http://dev.mysql.com/doc/refman/5.7/en/precision-math-decimal-characteristics.html
-     * @param int $precision
+     *
      * @throws \InvalidArgumentException
      * @throws \RangeException It has a range of 1 to 65.
+     *
+     * @param  int $precision
      * @return PropertyInformation
      */
     public function setPrecision($precision)
@@ -644,6 +647,7 @@ class PropertyInformation implements PropertyInformationInterface
 
     /**
      * @see PropertyInformationInterface::getScale()
+     *
      * @return number
      */
     public function getScale()
@@ -652,15 +656,16 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * Set the number of significant digits after the
-     * decimal point. Only applicable to fixed
-     * point storage. The type will be float in
-     * that case (PHP has no fixed point numbers).
+     * Set the number of significant digits after the decimal point.
+     * This is only applicable to fixed point storage. The type will be a float
+     * in that case because PHP has no fixed point numbers.
      *
      * @see http://dev.mysql.com/doc/refman/5.7/en/precision-math-decimal-characteristics.html
-     * @param int $scale
+     *
      * @throws \InvalidArgumentException
      * @throws \RangeException
+     *
+     * @param  int $scale
      * @return PropertyInformation
      */
     public function setScale($scale)
@@ -681,6 +686,7 @@ class PropertyInformation implements PropertyInformationInterface
 
     /**
      * @see PropertyInformationInterface::isNullable()
+     *
      * @return boolean|null
      */
     public function isNullable()
@@ -694,7 +700,8 @@ class PropertyInformation implements PropertyInformationInterface
 
     /**
      * @see PropertyInformationInterface::isNullable()
-     * @param bool $nullable
+     *
+     * @param  bool $nullable
      * @return PropertyInformation
      */
     public function setNullable($nullable)
@@ -705,6 +712,7 @@ class PropertyInformation implements PropertyInformationInterface
 
     /**
      * @see PropertyInformationInterface::isUnique()
+     *
      * @return boolean
      */
     public function isUnique()
@@ -714,7 +722,8 @@ class PropertyInformation implements PropertyInformationInterface
 
     /**
      * @see PropertyInformationInterface::isUnique()
-     * @param bool $unique
+     *
+     * @param  bool $unique
      * @return PropertyInformation
      */
     public function setUnique($unique)
@@ -725,6 +734,7 @@ class PropertyInformation implements PropertyInformationInterface
 
     /**
      * @see PropertyInformationInterface::willGenerateStrict()
+     *
      * @return bool
      */
     public function willGenerateStrict()
@@ -734,7 +744,8 @@ class PropertyInformation implements PropertyInformationInterface
 
     /**
      * @see PropertyInformationInterface::willGenerateStrict()
-     * @param bool $generate_strict
+     *
+     * @param  bool $generate_strict
      * @return PropertyInformation
      */
     public function setGenerateStrict($generate_strict)
@@ -745,6 +756,7 @@ class PropertyInformation implements PropertyInformationInterface
 
     /**
      * @see PropertyInformationInterface::willGenerateGet()
+     *
      * @return bool
      */
     public function willGenerateGet()
@@ -753,7 +765,7 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @param string $visibility
+     * @param  string $visibility
      * @return PropertyInformation
      */
     public function limitMaximumGetVisibility($visibility)
@@ -764,6 +776,7 @@ class PropertyInformation implements PropertyInformationInterface
 
     /**
      * @see PropertyInformationInterface::willGenerateSet()
+     *
      * @return bool
      */
     public function willGenerateSet()
@@ -773,6 +786,7 @@ class PropertyInformation implements PropertyInformationInterface
 
     /**
      * @see PropertyInformationInterface::getIndex()
+     *
      * @return null|string
      */
     public function getIndex()
@@ -782,7 +796,8 @@ class PropertyInformation implements PropertyInformationInterface
 
     /**
      * @see PropertyInformationInterface::getIndex()
-     * @param string|null $index = null
+     *
+     * @param  string|null $index = null
      * @return $this
      */
     public function setIndex($index = null)
@@ -792,7 +807,7 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @param string $visibility
+     * @param  string $visibility
      * @return PropertyInformation
      */
     public function limitMaximumSetVisibility($visibility)
@@ -803,6 +818,7 @@ class PropertyInformation implements PropertyInformationInterface
 
     /**
      * @see PropertyInformationInterface::willGenerateAdd()
+     *
      * @return bool
      */
     public function willGenerateAdd()
@@ -811,7 +827,7 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @param string $visibility
+     * @param  string $visibility
      * @return PropertyInformation
      */
     public function limitMaximumAddVisibility($visibility)
@@ -822,6 +838,7 @@ class PropertyInformation implements PropertyInformationInterface
 
     /**
      * @see PropertyInformationInterface::willGenerateRemove()
+     *
      * @return bool
      */
     public function willGenerateRemove()
@@ -830,7 +847,7 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @param string $visibility
+     * @param  string $visibility
      * @return PropertyInformation
      */
     public function limitMaximumRemoveVisibility($visibility)
@@ -840,10 +857,11 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * Return the valid PHP types for validation purposes.
+     * Returns the valid PHP types for validation purposes.
      *
      * @see http://php.net/manual/en/language.types.php
      * @see http://php.net/manual/en/function.gettype.php (double vs float)
+     *
      * @return string[]
      */
     private static function getValidTypes()
@@ -860,7 +878,9 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @return string Public, protected or private.
+     * {@inheritdoc}
+     *
+     * @return string
      */
     public function getGetVisibility()
     {
@@ -868,7 +888,9 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @return string Public, protected or private.
+     * {@inheritdoc}
+     *
+     * @return string
      */
     public function getSetVisibility()
     {
@@ -876,7 +898,9 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @return string Public, protected or private.
+     * {@inheritdoc}
+     *
+     * @return string
      */
     public function getAddVisibility()
     {
@@ -884,7 +908,9 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @return string Public, protected or private.
+     * {@inheritdoc}
+     *
+     * @return string
      */
     public function getRemoveVisibility()
     {

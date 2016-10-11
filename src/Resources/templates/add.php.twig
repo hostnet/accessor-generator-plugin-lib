@@ -4,12 +4,19 @@
  * {{ property.documentation | raw }}
  {% endperline %}
  {% else -%}
- * Add {{ property.name | singularize }}
+ * Adds the given {{ property.name | singularize }} to this collection.
  {% endif -%}
  *
- * @param {{ property.typeHint}} ${{ property.name | singularize }}
- * @return {{ property.class }}
- * @throws \BadMethodCallException if the number of arguments is not correct
+ * @throws \BadMethodCallException if the number of arguments is not correct.
+ {% if not property.isReferencingCollection -%}
+ * @throws \LogicException         if a member was added that already exists within the collection.
+ {% endif -%}
+ {% if property.referencedProperty -%}
+ * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
+ {% endif -%}
+ *
+ * @param  {{ property.typeHint}} ${{ property.name | singularize }}
+ * @return $this|{{ property.class }}
  */
 {{ property.getAddVisibility() }} function add{{ property.name | singularize | classify }}({{ property.typeHint }} ${{ property.name | singularize }})
 {
@@ -22,6 +29,7 @@
         );
     }
 
+    /* @var $this->{{ property.name }} \Doctrine\Common\Collections\ArrayCollection */
     if ($this->{{ property.name}} === null) {
         $this->{{ property.name}} = new \Doctrine\Common\Collections\ArrayCollection();
     } elseif ($this->{{ property.name}}->contains(${{ property.name | singularize }})) {
@@ -74,5 +82,6 @@
 {% endif %}
     $property->setAccessible(false);
 {% endif %}
+
     return $this;
 }

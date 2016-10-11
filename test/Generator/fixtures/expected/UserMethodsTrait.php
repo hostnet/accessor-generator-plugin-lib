@@ -11,10 +11,11 @@ use Hostnet\Component\AccessorGenerator\Generator\fixtures\User;
 trait UserMethodsTrait
 {
     /**
-     * Get address
+     * Gets address
+     *
+     * @throws \BadMethodCallException
      *
      * @return Address
-     * @throws \InvalidArgumentException
      */
     public function getAddress()
     {
@@ -31,11 +32,12 @@ trait UserMethodsTrait
     }
 
     /**
-     * Set address
+     * Sets address
      *
-     * @param Address $address
-     * @return User
      * @throws \BadMethodCallException if the number of arguments is not correct
+     *
+     * @param  Address $address
+     * @return $this|User
      */
     public function setAddress(Address $address = null)
     {
@@ -49,6 +51,7 @@ trait UserMethodsTrait
         }
 
         $this->address = $address;
+
         return $this;
     }
 }

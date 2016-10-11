@@ -4,13 +4,11 @@ namespace Hostnet\Component\AccessorGenerator\Annotation;
 use Doctrine\Common\Annotations\Annotation\Enum;
 
 /**
- * Annotation to activate accessor method generation
- * for a property. You can disable generation of cer-
- * tain methods by setting them to false in your an-
+ * Annotation to activate accessor method generation for a property. You can
+ * disable generation of certain methods by setting them to false in your
  * notation.
  *
- * The this annotation is designed to be used with
- * doctrine/annotations.
+ * The annotation is designed to be used with doctrine/annotations.
  *
  * @Annotation
  * @Target("PROPERTY")
@@ -105,7 +103,7 @@ class Generate
     public $is = self::VISIBILITY_PUBLIC;
 
     /**
-     * Determine the typehint to use for the setter/adder/remover, and the
+     * Determine the type hint to use for the setter/adder/remover, and the
      * return type of the getter.
      *
      * Insert the fully qualified class name here.

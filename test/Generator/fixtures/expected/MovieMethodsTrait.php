@@ -12,11 +12,11 @@ use Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie;
 trait MovieMethodsTrait
 {
     /**
-     * Get a
+     * Gets a
      *
-     * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Actor[]
-     * @return \Hostnet\Component\AccessorGenerator\Collection\ConstCollectionInterface
-     * @throws \InvalidArgumentException
+     * @throws \BadMethodCallException
+     *
+     * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Actor[]|ImmutableCollection
      */
     public function getA()
     {
@@ -37,11 +37,13 @@ trait MovieMethodsTrait
     }
 
     /**
-     * Add a
+     * Adds the given a to this collection.
      *
-     * @param Actor $a
-     * @return Movie
-     * @throws \BadMethodCallException if the number of arguments is not correct
+     * @throws \BadMethodCallException if the number of arguments is not correct.
+     * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
+     *
+     * @param  Actor $a
+     * @return $this|Movie
      */
     public function addA(Actor $a)
     {
@@ -54,6 +56,7 @@ trait MovieMethodsTrait
             );
         }
 
+        /* @var $this->a \Doctrine\Common\Collections\ArrayCollection */
         if ($this->a === null) {
             $this->a = new \Doctrine\Common\Collections\ArrayCollection();
         } elseif ($this->a->contains($a)) {
@@ -85,15 +88,17 @@ trait MovieMethodsTrait
             $collection->add($this);
         }
         $property->setAccessible(false);
+
         return $this;
     }
 
     /**
-     * Remove a
+     * Removes the given a from this collection.
      *
-     * @param Actor $a
-     * @return Movie
      * @throws \BadMethodCallException if the number of arguments is not correct
+     *
+     * @param  Actor $a
+     * @return $this|Movie
      */
     public function removeA(Actor $a)
     {
@@ -121,6 +126,7 @@ trait MovieMethodsTrait
             $collection->removeElement($this);
         }
         $property->setAccessible(false);
+
         return $this;
     }
 }

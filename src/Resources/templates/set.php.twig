@@ -4,7 +4,7 @@
  * {{ property.documentation | raw }}
  {% endperline %}
  {% else -%}
- * Set {{ property.name }}
+ * Sets {{ property.name }}
  {% endif -%}
  *
  {% if property.isNullable and not property.default -%}
@@ -13,11 +13,6 @@
  * this message, specify a default value or use JoinColumn(nullable=false).
  *
  {% endif -%}
- * @param {{ property.typeHint }} ${{ property.name }}
- {% if property.isFixedPointNumber -%}
- * @param bool %round round the number fit in the precision and scale (round away from zero)
- {% endif -%}
- * @return {{ property.class }}
  * @throws \BadMethodCallException if the number of arguments is not correct
  {% if not property.isComplexType -%}
  * @throws \InvalidArgumentException if value is not of the right type
@@ -28,6 +23,12 @@
  {% if property.length -%}
  * @throws \LengthException if the length of the value is to long
  {% endif -%}
+ *
+ * @param  {{ property.typeHint }} ${{ property.name }}
+ {% if property.isFixedPointNumber -%}
+ * @param  bool $round round the number fit in the precision and scale (round away from zero)
+ {% endif -%}
+ * @return $this|{{ property.class }}
  */
 {{ property.getSetVisibility() }} function set{{ property.name | classify }}(
     {{- property.isComplexType ? property.typeHint ~ ' '-}}
@@ -61,7 +62,7 @@
     if (func_num_args() > 2) {
         throw new \BadMethodCallException(
             sprintf(
-                'set{{ property.name | classify }}() has one obligatory and one optional argument but %d given.',
+                'set{{ property.name | classify }}() has one mandatory and one optional argument but %d given.',
                 func_num_args()
             )
         );
@@ -104,7 +105,7 @@
         ${{ property.name }} = (string)${{ property.name }};
     } else {
         throw new \InvalidArgumentException(
-            'Parameter {{ property.name }} must be convertable to string.'
+            'Parameter {{ property.name }} must be convertible to string.'
         );
     }
 {% else %}
@@ -144,16 +145,16 @@
         }
     }
 {% else %}
-    // Unset old value and set the new value
-    // keeping the inverse side up-to-date.
+    // Unset old value and set the new value to keep the inverse side in sync.
     $this->{{ property.name }} && $property->setValue($this->{{ property.name }}, null);
     ${{ property.name }} && $property->setValue(${{ property.name }}, $this);
 {% endif %}
 
-    // Disallow acces again.
+    // Update the accessible flag to disallow further again.
     $property->setAccessible(false);
 {% endif %}
 
     $this->{{ property.name }} = ${{ property.name }};
+
     return $this;
 }

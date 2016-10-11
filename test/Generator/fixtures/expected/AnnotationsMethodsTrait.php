@@ -10,10 +10,12 @@ use Symfony\Component\Console as Stupid;
 trait AnnotationsMethodsTrait
 {
     /**
-     * Get stupid
+     * Gets stupid
+     *
+     * @throws \BadMethodCallException
+     * @throws \LogicException
      *
      * @return \DateTime
-     * @throws \InvalidArgumentException
      */
     public function getStupid()
     {
@@ -31,8 +33,8 @@ trait AnnotationsMethodsTrait
                 'make sure your object is initialized in such a way the properties are in '.
                 'a valid state, for example by using a proper constructor. If you want to ' .
                 'test if an object is new for the database please consult the UnitOfWork.' .
-                'It could also be that your column in code is set tot not nullable and in' .
-                'and contains null values in the database'
+                'It could also be that your column in the code is not set to be nullable ' .
+                'and it currently contains a NULL-value in the database.'
             ));
         }
 
@@ -40,11 +42,12 @@ trait AnnotationsMethodsTrait
     }
 
     /**
-     * Set stupid
+     * Sets stupid
      *
-     * @param \DateTime $stupid
-     * @return Annotations
      * @throws \BadMethodCallException if the number of arguments is not correct
+     *
+     * @param  \DateTime $stupid
+     * @return $this|Annotations
      */
     public function setStupid(\DateTime $stupid)
     {
@@ -58,6 +61,7 @@ trait AnnotationsMethodsTrait
         }
 
         $this->stupid = $stupid;
+
         return $this;
     }
 }

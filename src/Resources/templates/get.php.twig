@@ -4,16 +4,22 @@
  * {{ property.documentation | raw}}
  {% endperline %}
  {% else -%}
- * {{  property.type == 'boolean' ? 'Is' : 'Get' }} {{ property.name }}
+ * {{  property.type == 'boolean' ? 'Returns true if' : 'Gets' }} {{ property.name }}
+ {% endif -%}
+ *
+ {% if property.willGenerateStrict and property.isComplexType and not property.isNullable and property.type != '\\DateTime' -%}
+ * @throws \Doctrine\ORM\EntityNotFoundException
+ {% endif -%}
+ * @throws \BadMethodCallException
+ {% if property.willGenerateStrict and not property.isNullable -%}
+ * @throws \LogicException
  {% endif -%}
  *
  {% if property.collection -%}
- * @return {{ property.fullyQualifiedType }}[]
- * @return \Hostnet\Component\AccessorGenerator\Collection\ConstCollectionInterface
+ * @return {{ property.fullyQualifiedType }}[]|ImmutableCollection
  {% else -%}
  * @return {{ property.isComplexType ? property.typeHint : property.type}}{{ not property.willGenerateStrict ? '|null' }}
  {% endif -%}
- * @throws \InvalidArgumentException
  */
 {{ property.getGetVisibility() }} function {{ getter }}()
 {
@@ -33,8 +39,8 @@
             'make sure your object is initialized in such a way the properties are in '.
             'a valid state, for example by using a proper constructor. If you want to ' .
             'test if an object is new for the database please consult the UnitOfWork.' .
-            'It could also be that your column in code is set tot not nullable and in' .
-            'and contains null values in the database'
+            'It could also be that your column in the code is not set to be nullable ' .
+            'and it currently contains a NULL-value in the database.'
         ));
     }
 {% endif %}

@@ -7,16 +7,14 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Selectable;
 
 /**
- * Wrapper for Doctrine collections to make them immutable.
- * Implements the ConstCollectionInterface for code completion
- * and use in type hints. Implements Collection for compatebillity
- * with Doctrine.
+ * Wrapper for Doctrine collections to make them immutable. Implements the
+ * ConstCollectionInterface for code completion and use in type hints.
+ * Implements Collection for compatibility with Doctrine.
  *
  * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 class ImmutableCollection implements Collection, ConstCollectionInterface, Selectable
 {
-
     /**
      * @var bool
      */
@@ -39,8 +37,10 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
 
     /**
      * Do not use, this collection is immutable.
-     * {@inheritDoc}
-     * @throws \LogicException when not cloned
+     *
+     * {@inheritdoc}
+     *
+     * @throws \LogicException if the collection not cloned.
      */
     public function add($element)
     {
@@ -53,8 +53,10 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
 
     /**
      * Do not use, this collection is immutable.
-     * {@inheritDoc}
-     * @throws \LogicException when not cloned
+     *
+     * {@inheritdoc}
+     *
+     * @throws \LogicException if the collection is not cloned.
      */
     public function clear()
     {
@@ -66,7 +68,7 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function contains($element)
     {
@@ -74,7 +76,7 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function isEmpty()
     {
@@ -83,8 +85,8 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
 
     /**
      * Do not use, this collection is immutable.
-     * {@inheritDoc}
-     * @throws \LogicException when not cloned
+     * {@inheritdoc}
+     * @throws \LogicException if the collection is not cloned.
      */
     public function remove($key)
     {
@@ -97,8 +99,8 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
 
     /**
      * Do not use, this collection is immutable.
-     * {@inheritDoc}
-     * @throws \LogicException when not cloned
+     * {@inheritdoc}
+     * @throws \LogicException if the collection is not cloned.
      */
     public function removeElement($element)
     {
@@ -110,7 +112,7 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function containsKey($key)
     {
@@ -118,7 +120,7 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function get($key)
     {
@@ -126,7 +128,7 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getKeys()
     {
@@ -134,7 +136,7 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getValues()
     {
@@ -151,7 +153,7 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function toArray()
     {
@@ -159,7 +161,7 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function first()
     {
@@ -167,7 +169,7 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function last()
     {
@@ -175,7 +177,7 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function key()
     {
@@ -183,7 +185,7 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function current()
     {
@@ -191,7 +193,7 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function next()
     {
@@ -199,31 +201,31 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
-    public function exists(Closure $p)
+    public function exists(Closure $predicate)
     {
-        return $this->collection->exists($p);
+        return $this->collection->exists($predicate);
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
-    public function filter(Closure $p)
+    public function filter(Closure $predicate)
     {
-        return $this->collection->filter($p);
+        return $this->collection->filter($predicate);
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
-    public function forAll(Closure $p)
+    public function forAll(Closure $predicate)
     {
-        return $this->collection->forAll($p);
+        return $this->collection->forAll($predicate);
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function map(Closure $func)
     {
@@ -231,15 +233,15 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
-    public function partition(Closure $p)
+    public function partition(Closure $predicate)
     {
-        return $this->collection->partition($p);
+        return $this->collection->partition($predicate);
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function indexOf($element)
     {
@@ -247,7 +249,7 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function slice($offset, $length = null)
     {
@@ -255,7 +257,7 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function count()
     {
@@ -263,7 +265,7 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getIterator()
     {
@@ -271,7 +273,7 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function offsetExists($offset)
     {
@@ -279,7 +281,7 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function offsetGet($offset)
     {
@@ -288,8 +290,8 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
 
     /**
      * Do not use, this collection is immutable.
-     * {@inheritDoc}
-     * @throws \LogicException when not cloned
+     * {@inheritdoc}
+     * @throws \LogicException if the collection is not cloned.
      */
     public function offsetSet($offset, $value)
     {
@@ -302,8 +304,8 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
 
     /**
      * Do not use, this collection is immutable.
-     * {@inheritDoc}
-     * @throws \LogicException when not cloned
+     * {@inheritdoc}
+     * @throws \LogicException if the collection is not cloned.
      */
     public function offsetUnset($offset)
     {
@@ -315,7 +317,7 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function matching(Criteria $criteria)
     {

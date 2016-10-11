@@ -13,11 +13,12 @@ use Hostnet\Component\AccessorGenerator\Generator\fixtures\OneToOneNullable;
 trait NullableMethodsTrait
 {
     /**
-     * Set datetime_default
+     * Sets datetime_default
      *
-     * @param \DateTime $datetime_default
-     * @return Nullable
      * @throws \BadMethodCallException if the number of arguments is not correct
+     *
+     * @param  \DateTime $datetime_default
+     * @return $this|Nullable
      */
     public function setDatetimeDefault(\DateTime $datetime_default = null)
     {
@@ -31,19 +32,21 @@ trait NullableMethodsTrait
         }
 
         $this->datetime_default = $datetime_default;
+
         return $this;
     }
 
     /**
-     * Set datetime_nullable
+     * Sets datetime_nullable
      *
      * Generated a default null value because the doctrine column is nullable.
      * Still require an explicit argument to set the column. If you do not like
      * this message, specify a default value or use JoinColumn(nullable=false).
      *
-     * @param \DateTime $datetime_nullable
-     * @return Nullable
      * @throws \BadMethodCallException if the number of arguments is not correct
+     *
+     * @param  \DateTime $datetime_nullable
+     * @return $this|Nullable
      */
     public function setDatetimeNullable(\DateTime $datetime_nullable = null)
     {
@@ -57,15 +60,17 @@ trait NullableMethodsTrait
         }
 
         $this->datetime_nullable = $datetime_nullable;
+
         return $this;
     }
 
     /**
-     * Set datetime_both
+     * Sets datetime_both
      *
-     * @param \DateTime $datetime_both
-     * @return Nullable
      * @throws \BadMethodCallException if the number of arguments is not correct
+     *
+     * @param  \DateTime $datetime_both
+     * @return $this|Nullable
      */
     public function setDatetimeBoth(\DateTime $datetime_both = null)
     {
@@ -79,14 +84,16 @@ trait NullableMethodsTrait
         }
 
         $this->datetime_both = $datetime_both;
+
         return $this;
     }
 
     /**
-     * Get int
+     * Gets int
+     *
+     * @throws \BadMethodCallException
      *
      * @return integer
-     * @throws \InvalidArgumentException
      */
     public function getInt()
     {
@@ -118,13 +125,14 @@ trait NullableMethodsTrait
     }
 
     /**
-     * Set int
+     * Sets int
      *
-     * @param integer $int
-     * @return Nullable
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      * @throws \DomainException if the integer value is outside of the domain on this machine
+     *
+     * @param  integer $int
+     * @return $this|Nullable
      */
     public function setInt($int = null)
     {
@@ -159,17 +167,19 @@ trait NullableMethodsTrait
         }
 
         $this->int = $int;
+
         return $this;
     }
 
     /**
-     * Set int_different
+     * Sets int_different
      *
-     * @param integer $int_different
-     * @return Nullable
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      * @throws \DomainException if the integer value is outside of the domain on this machine
+     *
+     * @param  integer $int_different
+     * @return $this|Nullable
      */
     public function setIntDifferent($int_different = 2)
     {
@@ -204,19 +214,21 @@ trait NullableMethodsTrait
         }
 
         $this->int_different = $int_different;
+
         return $this;
     }
 
     /**
-     * Set feature
+     * Sets feature
      *
      * Generated a default null value because the doctrine column is nullable.
      * Still require an explicit argument to set the column. If you do not like
      * this message, specify a default value or use JoinColumn(nullable=false).
      *
-     * @param Feature $feature
-     * @return Nullable
      * @throws \BadMethodCallException if the number of arguments is not correct
+     *
+     * @param  Feature $feature
+     * @return $this|Nullable
      */
     public function setFeature(Feature $feature = null)
     {
@@ -230,19 +242,21 @@ trait NullableMethodsTrait
         }
 
         $this->feature = $feature;
+
         return $this;
     }
 
     /**
-     * Set an_other_feature
+     * Sets an_other_feature
      *
      * Generated a default null value because the doctrine column is nullable.
      * Still require an explicit argument to set the column. If you do not like
      * this message, specify a default value or use JoinColumn(nullable=false).
      *
-     * @param Feature $an_other_feature
-     * @return Nullable
      * @throws \BadMethodCallException if the number of arguments is not correct
+     *
+     * @param  Feature $an_other_feature
+     * @return $this|Nullable
      */
     public function setAnOtherFeature(Feature $an_other_feature = null)
     {
@@ -256,14 +270,16 @@ trait NullableMethodsTrait
         }
 
         $this->an_other_feature = $an_other_feature;
+
         return $this;
     }
 
     /**
-     * Get string
+     * Gets string
+     *
+     * @throws \BadMethodCallException
      *
      * @return string
-     * @throws \InvalidArgumentException
      */
     public function getString()
     {
@@ -284,12 +300,13 @@ trait NullableMethodsTrait
     }
 
     /**
-     * Set string
+     * Sets string
      *
-     * @param string $string
-     * @return Nullable
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
+     *
+     * @param  string $string
+     * @return $this|Nullable
      */
     public function setString($string = null)
     {
@@ -314,19 +331,21 @@ trait NullableMethodsTrait
             $string = (string)$string;
         } else {
             throw new \InvalidArgumentException(
-                'Parameter string must be convertable to string.'
+                'Parameter string must be convertible to string.'
             );
         }
 
         $this->string = $string;
+
         return $this;
     }
 
     /**
-     * Get only_one
+     * Gets only_one
+     *
+     * @throws \BadMethodCallException
      *
      * @return OneToOneNullable
-     * @throws \InvalidArgumentException
      */
     public function getOnlyOne()
     {
@@ -343,11 +362,12 @@ trait NullableMethodsTrait
     }
 
     /**
-     * Set only_one
+     * Sets only_one
      *
-     * @param OneToOneNullable $only_one
-     * @return Nullable
      * @throws \BadMethodCallException if the number of arguments is not correct
+     *
+     * @param  OneToOneNullable $only_one
+     * @return $this|Nullable
      */
     public function setOnlyOne(OneToOneNullable $only_one = null)
     {
@@ -363,23 +383,24 @@ trait NullableMethodsTrait
         $property = new \ReflectionProperty(OneToOneNullable::class, 'one_only');
         $property->setAccessible(true);
 
-        // Unset old value and set the new value
-        // keeping the inverse side up-to-date.
+        // Unset old value and set the new value to keep the inverse side in sync.
         $this->only_one && $property->setValue($this->only_one, null);
         $only_one && $property->setValue($only_one, $this);
 
-        // Disallow acces again.
+        // Update the accessible flag to disallow further again.
         $property->setAccessible(false);
 
         $this->only_one = $only_one;
+
         return $this;
     }
 
     /**
-     * Get unidirectional_one_to_one
+     * Gets unidirectional_one_to_one
+     *
+     * @throws \BadMethodCallException
      *
      * @return Item
-     * @throws \InvalidArgumentException
      */
     public function getUnidirectionalOneToOne()
     {
@@ -396,11 +417,12 @@ trait NullableMethodsTrait
     }
 
     /**
-     * Set unidirectional_one_to_one
+     * Sets unidirectional_one_to_one
      *
-     * @param Item $unidirectional_one_to_one
-     * @return Nullable
      * @throws \BadMethodCallException if the number of arguments is not correct
+     *
+     * @param  Item $unidirectional_one_to_one
+     * @return $this|Nullable
      */
     public function setUnidirectionalOneToOne(Item $unidirectional_one_to_one = null)
     {
@@ -414,6 +436,7 @@ trait NullableMethodsTrait
         }
 
         $this->unidirectional_one_to_one = $unidirectional_one_to_one;
+
         return $this;
     }
 }

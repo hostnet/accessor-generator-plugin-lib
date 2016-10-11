@@ -6,19 +6,17 @@ use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformationI
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
 
 /**
- * Create Accessor Methods Traits.
+ * Creates traits with accessor methods.
  */
 interface CodeGeneratorInterface
 {
     /**
-     * Write Trait to file in Generated folder
-     * relative to the source file of the $class.
-     * The trait will be in a sub namespace of the
-     * one of $class.
+     * Write Trait to file in Generated folder relative to the source file of
+     * the {$class}. The trait will be in a sub namespace relative to the
+     * namespace of {$class}.
      *
-     * Will return true if a trait was created for
-     * this class and false if there where no annotations
-     * found an creating a trait was not needed.
+     * Returns true if a trait was created for this class or false if there
+     * where no annotations found and/or creating a trait was not needed.
      *
      * @see generateTraitForClass
      * @param ReflectionClass $class
@@ -27,25 +25,23 @@ interface CodeGeneratorInterface
     public function writeTraitForClass(ReflectionClass $class);
 
     /**
-     * Return the PHP code for the accessor method
-     * trait for $class. The trait will have a sub
-     * namespace of Generated relative to the one of
-     * $class.
+     * Returns the generated PHP code for the accessor methods trait for
+     * the given {$class}. The trait will have a subs-namespace with the name
+     * "Generated" relative to the namespace of {$class}.
      *
-     * Will return an empty string if no code generation
-     * was requested.
+     * Returns an empty string if no code generation was needed nor done.
      *
-     * @param ReflectionClass $class
+     * @param  ReflectionClass $class
      * @return string
      */
     public function generateTraitForClass(ReflectionClass $class);
 
     /**
-     * Generate Accessor methods for property
-     * The output will contain white separated
-     * accessors and no trailing white space.
+     * Generate Accessor methods for property associated with the given
+     * {$info}. The output will consist of generated code for the accessors
+     * separated with line-breaks.
      *
-     * @param PropertyInformationInterface $info
+     * @param  PropertyInformationInterface $info
      * @return string
      */
     public function generateAccessors(PropertyInformationInterface $info);

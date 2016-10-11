@@ -12,11 +12,11 @@ use Hostnet\Component\AccessorGenerator\Generator\fixtures\Song;
 trait SongMethodsTrait
 {
     /**
-     * Get genres
+     * Gets genres
      *
-     * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Genre[]
-     * @return \Hostnet\Component\AccessorGenerator\Collection\ConstCollectionInterface
-     * @throws \InvalidArgumentException
+     * @throws \BadMethodCallException
+     *
+     * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Genre[]|ImmutableCollection
      */
     public function getGenres()
     {
@@ -37,11 +37,12 @@ trait SongMethodsTrait
     }
 
     /**
-     * Add genre
+     * Adds the given genre to this collection.
      *
-     * @param Genre $genre
-     * @return Song
-     * @throws \BadMethodCallException if the number of arguments is not correct
+     * @throws \BadMethodCallException if the number of arguments is not correct.
+     *
+     * @param  Genre $genre
+     * @return $this|Song
      */
     public function addGenre(Genre $genre)
     {
@@ -54,6 +55,7 @@ trait SongMethodsTrait
             );
         }
 
+        /* @var $this->genres \Doctrine\Common\Collections\ArrayCollection */
         if ($this->genres === null) {
             $this->genres = new \Doctrine\Common\Collections\ArrayCollection();
         } elseif ($this->genres->contains($genre)) {
@@ -61,15 +63,17 @@ trait SongMethodsTrait
         }
 
         $this->genres->add($genre);
+
         return $this;
     }
 
     /**
-     * Remove genre
+     * Removes the given genre from this collection.
      *
-     * @param Genre $genre
-     * @return Song
      * @throws \BadMethodCallException if the number of arguments is not correct
+     *
+     * @param  Genre $genre
+     * @return $this|Song
      */
     public function removeGenre(Genre $genre)
     {
@@ -89,6 +93,7 @@ trait SongMethodsTrait
         }
 
         $this->genres->removeElement($genre);
+
 
         return $this;
     }

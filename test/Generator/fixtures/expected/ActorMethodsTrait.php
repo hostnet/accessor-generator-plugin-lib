@@ -11,11 +11,11 @@ use Hostnet\Component\AccessorGenerator\Generator\fixtures\Actor;
 trait ActorMethodsTrait
 {
     /**
-     * Get movies
+     * Gets movies
      *
-     * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie[]
-     * @return \Hostnet\Component\AccessorGenerator\Collection\ConstCollectionInterface
-     * @throws \InvalidArgumentException
+     * @throws \BadMethodCallException
+     *
+     * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie[]|ImmutableCollection
      */
     public function getMovies()
     {
@@ -36,11 +36,13 @@ trait ActorMethodsTrait
     }
 
     /**
-     * Add movie
+     * Adds the given movie to this collection.
      *
-     * @param \Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie $movie
-     * @return Actor
-     * @throws \BadMethodCallException if the number of arguments is not correct
+     * @throws \BadMethodCallException if the number of arguments is not correct.
+     * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
+     *
+     * @param  \Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie $movie
+     * @return $this|Actor
      */
     public function addMovie(\Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie $movie)
     {
@@ -53,6 +55,7 @@ trait ActorMethodsTrait
             );
         }
 
+        /* @var $this->movies \Doctrine\Common\Collections\ArrayCollection */
         if ($this->movies === null) {
             $this->movies = new \Doctrine\Common\Collections\ArrayCollection();
         } elseif ($this->movies->contains($movie)) {
@@ -84,15 +87,17 @@ trait ActorMethodsTrait
             $collection->add($this);
         }
         $property->setAccessible(false);
+
         return $this;
     }
 
     /**
-     * Remove movie
+     * Removes the given movie from this collection.
      *
-     * @param \Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie $movie
-     * @return Actor
      * @throws \BadMethodCallException if the number of arguments is not correct
+     *
+     * @param  \Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie $movie
+     * @return $this|Actor
      */
     public function removeMovie(\Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie $movie)
     {
@@ -120,6 +125,7 @@ trait ActorMethodsTrait
             $collection->removeElement($this);
         }
         $property->setAccessible(false);
+
         return $this;
     }
 }

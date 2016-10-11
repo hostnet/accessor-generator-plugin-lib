@@ -10,20 +10,21 @@ use Hostnet\Component\AccessorGenerator\Generator\fixtures\Decimal;
 trait DecimalMethodsTrait
 {
     /**
-     * Set decimal_0_10
+     * Sets decimal_0_10
      *
-     * @param string $decimal_0_10
-     * @param bool %round round the number fit in the precision and scale (round away from zero)
-     * @return Decimal
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
+     *
+     * @param  string $decimal_0_10
+     * @param  bool $round round the number fit in the precision and scale (round away from zero)
+     * @return $this|Decimal
      */
     public function setDecimal010($decimal_0_10, $round = false)
     {
         if (func_num_args() > 2) {
             throw new \BadMethodCallException(
                 sprintf(
-                    'setDecimal010() has one obligatory and one optional argument but %d given.',
+                    'setDecimal010() has one mandatory and one optional argument but %d given.',
                     func_num_args()
                 )
             );
@@ -81,24 +82,26 @@ trait DecimalMethodsTrait
         }
 
         $this->decimal_0_10 = $decimal_0_10;
+
         return $this;
     }
 
     /**
-     * Set decimal_1_10
+     * Sets decimal_1_10
      *
-     * @param string $decimal_1_10
-     * @param bool %round round the number fit in the precision and scale (round away from zero)
-     * @return Decimal
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
+     *
+     * @param  string $decimal_1_10
+     * @param  bool $round round the number fit in the precision and scale (round away from zero)
+     * @return $this|Decimal
      */
     public function setDecimal110($decimal_1_10, $round = false)
     {
         if (func_num_args() > 2) {
             throw new \BadMethodCallException(
                 sprintf(
-                    'setDecimal110() has one obligatory and one optional argument but %d given.',
+                    'setDecimal110() has one mandatory and one optional argument but %d given.',
                     func_num_args()
                 )
             );
@@ -156,24 +159,26 @@ trait DecimalMethodsTrait
         }
 
         $this->decimal_1_10 = $decimal_1_10;
+
         return $this;
     }
 
     /**
-     * Set decimal_5_10
+     * Sets decimal_5_10
      *
-     * @param string $decimal_5_10
-     * @param bool %round round the number fit in the precision and scale (round away from zero)
-     * @return Decimal
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
+     *
+     * @param  string $decimal_5_10
+     * @param  bool $round round the number fit in the precision and scale (round away from zero)
+     * @return $this|Decimal
      */
     public function setDecimal510($decimal_5_10, $round = false)
     {
         if (func_num_args() > 2) {
             throw new \BadMethodCallException(
                 sprintf(
-                    'setDecimal510() has one obligatory and one optional argument but %d given.',
+                    'setDecimal510() has one mandatory and one optional argument but %d given.',
                     func_num_args()
                 )
             );
@@ -231,24 +236,26 @@ trait DecimalMethodsTrait
         }
 
         $this->decimal_5_10 = $decimal_5_10;
+
         return $this;
     }
 
     /**
-     * Set decimal_10_10
+     * Sets decimal_10_10
      *
-     * @param string $decimal_10_10
-     * @param bool %round round the number fit in the precision and scale (round away from zero)
-     * @return Decimal
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
+     *
+     * @param  string $decimal_10_10
+     * @param  bool $round round the number fit in the precision and scale (round away from zero)
+     * @return $this|Decimal
      */
     public function setDecimal1010($decimal_10_10, $round = false)
     {
         if (func_num_args() > 2) {
             throw new \BadMethodCallException(
                 sprintf(
-                    'setDecimal1010() has one obligatory and one optional argument but %d given.',
+                    'setDecimal1010() has one mandatory and one optional argument but %d given.',
                     func_num_args()
                 )
             );
@@ -306,24 +313,26 @@ trait DecimalMethodsTrait
         }
 
         $this->decimal_10_10 = $decimal_10_10;
+
         return $this;
     }
 
     /**
-     * Set decimal_18_20
+     * Sets decimal_18_20
      *
-     * @param string $decimal_18_20
-     * @param bool %round round the number fit in the precision and scale (round away from zero)
-     * @return Decimal
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
+     *
+     * @param  string $decimal_18_20
+     * @param  bool $round round the number fit in the precision and scale (round away from zero)
+     * @return $this|Decimal
      */
     public function setDecimal1820($decimal_18_20, $round = false)
     {
         if (func_num_args() > 2) {
             throw new \BadMethodCallException(
                 sprintf(
-                    'setDecimal1820() has one obligatory and one optional argument but %d given.',
+                    'setDecimal1820() has one mandatory and one optional argument but %d given.',
                     func_num_args()
                 )
             );
@@ -381,17 +390,19 @@ trait DecimalMethodsTrait
         }
 
         $this->decimal_18_20 = $decimal_18_20;
+
         return $this;
     }
 
     /**
-     * Set decimal_19_20
+     * Sets decimal_19_20
      *
-     * @param string $decimal_19_20
-     * @param bool %round round the number fit in the precision and scale (round away from zero)
-     * @return Decimal
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
+     *
+     * @param  string $decimal_19_20
+     * @param  bool $round round the number fit in the precision and scale (round away from zero)
+     * @return $this|Decimal
      */
     public function setDecimal1920($decimal_19_20 = '1.2345678901234567890', $round = false)
     {
@@ -456,24 +467,26 @@ trait DecimalMethodsTrait
         }
 
         $this->decimal_19_20 = $decimal_19_20;
+
         return $this;
     }
 
     /**
-     * Set decimal_30_65
+     * Sets decimal_30_65
      *
-     * @param string $decimal_30_65
-     * @param bool %round round the number fit in the precision and scale (round away from zero)
-     * @return Decimal
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
+     *
+     * @param  string $decimal_30_65
+     * @param  bool $round round the number fit in the precision and scale (round away from zero)
+     * @return $this|Decimal
      */
     public function setDecimal3065($decimal_30_65, $round = false)
     {
         if (func_num_args() > 2) {
             throw new \BadMethodCallException(
                 sprintf(
-                    'setDecimal3065() has one obligatory and one optional argument but %d given.',
+                    'setDecimal3065() has one mandatory and one optional argument but %d given.',
                     func_num_args()
                 )
             );
@@ -531,6 +544,7 @@ trait DecimalMethodsTrait
         }
 
         $this->decimal_30_65 = $decimal_30_65;
+
         return $this;
     }
 }

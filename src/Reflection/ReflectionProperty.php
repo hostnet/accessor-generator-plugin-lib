@@ -43,14 +43,13 @@ class ReflectionProperty
     }
 
     /**
-     * Check modifiers for right type and
-     * to have at least a visibility bit
-     * enabled. Also turn null into private
-     * visabillity
+     * Check modifiers for right type and to have at least a visibility bit
+     * enabled. Also turns null into private visibility.
      *
-     * @param  int                       $modifiers
      * @throws \InvalidArgumentException
      * @throws \DomainException
+     *
+     * @param int $modifiers
      */
     private function setModifiers($modifiers)
     {
@@ -63,22 +62,22 @@ class ReflectionProperty
 
         // Invalid type used for modifiers.
         if (!is_int($modifiers)) {
-            throw new \InvalidArgumentException(sprintf('$modifiers (%s) is not an bitfield', $modifiers));
+            throw new \InvalidArgumentException(sprintf('$modifiers (%s) is not a valid bit.', $modifiers));
         }
 
         // Get the number of active visibility modifiers amount all modifies.
-        $active_visibiltity_modifiers =
+        $active_visibility_modifiers =
             ((bool) ($modifiers & self::IS_PRIVATE)) +
             ((bool) ($modifiers & self::IS_PROTECTED)) +
             ((bool) ($modifiers & self::IS_PUBLIC));
 
-        // Not one and only one of pirvate, protected and public is selected, throw exception.
-        if ($active_visibiltity_modifiers !== 1) {
+        // Not one and only one of private, protected and public is selected, throw exception.
+        if ($active_visibility_modifiers !== 1) {
             throw new \DomainException(
                 sprintf(
                     '$modifiers (%s) has not ONE of IS_PRIVATE, IS_PROTECTED or IS_PUBLIC set, but found %s.',
                     $modifiers,
-                    $active_visibiltity_modifiers
+                    $active_visibility_modifiers
                 )
             );
         }
@@ -87,8 +86,7 @@ class ReflectionProperty
     }
 
     /**
-     * Return the Class or Trait that
-     * this property belongs to.
+     * Return the Class or Trait that this property belongs to.
      *
      * @return ReflectionClass
      */
@@ -108,9 +106,7 @@ class ReflectionProperty
     }
 
     /**
-     * Get the name of the property.
-     * The name is returned without
-     * the $ sign.
+     * Get the name of the property. The name is returned without the $-prefix.
      *
      * @return string
      */
@@ -120,7 +116,7 @@ class ReflectionProperty
     }
 
     /**
-     * Returns if this property is static.
+     * Returns true if this property is static, false otherwise.
      *
      * @return boolean
      */
@@ -130,9 +126,8 @@ class ReflectionProperty
     }
 
     /**
-     * Returns if this property is private.
-     * If true, isProtected and isPublic will
-     * return false.
+     * Returns true if this property is private, false otherwise. If true,
+     * isProtected and isPublic will return false.
      *
      * @return boolean
      */
@@ -142,9 +137,8 @@ class ReflectionProperty
     }
 
     /**
-     * Returns if this property is protected.
-     * If true, isPrivate and isPublic will
-     * return false.
+     * Returns true if this property is protected, false otherwise.  If true,
+     * isPrivate and isPublic will return false.
      *
      * @return boolean
      */
@@ -154,9 +148,8 @@ class ReflectionProperty
     }
 
     /**
-     * Returns if this property is public.
-     * If true, isPrivate and isProtected will
-     * return false.
+     * Returns true if this property is public, false otherwise. If true,
+     * isPrivate and isProtected will return false.
      *
      * @return boolean
      */
@@ -166,13 +159,11 @@ class ReflectionProperty
     }
 
     /**
-     * Return the default assinged value of
-     * this property. For example for
-     *   private $foo = 'bar'
+     * Return the default assigned value of this property. For example for
+     * private $foo = 'bar'.
      *
-     * it will return 'bar' including the
-     * quotes. It will return null if there
-     * is no default set.
+     * It will return 'bar' including the quotes. It will return null if no
+     * default value was defined.
      *
      * @return string|null
      */
@@ -182,17 +173,14 @@ class ReflectionProperty
     }
 
     /**
-     * Valid PHP string representation of how
-     * the parser understood the property that
-     * was parsed.
+     * Valid PHP string representation of how the parser understood the
+     * property that was parsed.
      *
-     * This can result in invalid PHP if the
-     * parsed code did not pass linting (php -l).
+     * This can result in invalid PHP if the parsed code did not pass linting
+     * (php -l).
      *
-     * The string returned inlcudes multiple lines
-     * if needed and no trailing whitespace that
-     * was not there in the original code (doc
-     * comment).
+     * The string returned includes multiple lines if needed and no trailing
+     * whitespace that was not there in the original code (doc comment).
      *
      * @return string
      */
