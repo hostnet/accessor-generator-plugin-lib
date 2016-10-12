@@ -67,7 +67,11 @@ trait SoftwareMethodsTrait
 
         $this->features->add($feature);
         try {
-            $property = new \ReflectionProperty($feature, 'software');
+            if ($feature instanceof Feature) {
+                $property = new \ReflectionProperty(Feature::class, 'software');
+            } else {
+                $property = new \ReflectionProperty($feature, 'software');
+            }
         } catch (\ReflectionException $e) {
             throw new \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException(
                 $e->getMessage(),

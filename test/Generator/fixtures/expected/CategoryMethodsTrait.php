@@ -65,7 +65,7 @@ trait CategoryMethodsTrait
 
         $this->children->add($child);
         try {
-            $property = new \ReflectionProperty($child, 'parent');
+            $property = new \ReflectionProperty(Category::class, 'parent');
         } catch (\ReflectionException $e) {
             throw new \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException(
                 $e->getMessage(),

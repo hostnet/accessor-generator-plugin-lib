@@ -273,7 +273,7 @@ trait ProductMethodsTrait
         }
         $this->attributes->set($index, $attribute);
         try {
-            $property = new \ReflectionProperty($attribute, 'product');
+            $property = new \ReflectionProperty(Attribute::class, 'product');
         } catch (\ReflectionException $e) {
             throw new \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException(
                 $e->getMessage(),

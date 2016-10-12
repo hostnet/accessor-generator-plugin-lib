@@ -64,7 +64,7 @@ trait NodeMethodsTrait
 
         $this->out->add($out);
         try {
-            $property = new \ReflectionProperty($out, 'in');
+            $property = new \ReflectionProperty(Node::class, 'in');
         } catch (\ReflectionException $e) {
             throw new \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException(
                 $e->getMessage(),
