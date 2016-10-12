@@ -50,7 +50,15 @@
 {% endif %}
 {% if property.referencedProperty %}
     try {
-        $property = new \ReflectionProperty(${{ property.name | singularize }}, '{{ property.referencedProperty }}');
+{% if property.type == property.typeHint %}
+        $property = new \ReflectionProperty({{ property.type }}::class, '{{ property.referencedProperty }}');
+{% else %}
+        if (${{ property.name | singularize }} instanceof {{ property.type }}) {
+            $property = new \ReflectionProperty({{ property.type }}::class, '{{ property.referencedProperty }}');
+        } else {
+            $property = new \ReflectionProperty(${{ property.name | singularize }}, '{{ property.referencedProperty }}');
+        }
+{% endif %}
     } catch (\ReflectionException $e) {
         throw new \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException(
             $e->getMessage(),

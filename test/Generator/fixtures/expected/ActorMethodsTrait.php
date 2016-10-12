@@ -64,7 +64,7 @@ trait ActorMethodsTrait
 
         $this->movies->add($movie);
         try {
-            $property = new \ReflectionProperty($movie, 'a');
+            $property = new \ReflectionProperty(\Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie::class, 'a');
         } catch (\ReflectionException $e) {
             throw new \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException(
                 $e->getMessage(),

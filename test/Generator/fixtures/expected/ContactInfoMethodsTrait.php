@@ -299,7 +299,7 @@ trait ContactInfoMethodsTrait
 
         $this->referenced_contacts->add($referenced_contact);
         try {
-            $property = new \ReflectionProperty($referenced_contact, 'referrer');
+            $property = new \ReflectionProperty(ContactInfo::class, 'referrer');
         } catch (\ReflectionException $e) {
             throw new \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException(
                 $e->getMessage(),
@@ -479,7 +479,7 @@ trait ContactInfoMethodsTrait
 
         $this->friends->add($friend);
         try {
-            $property = new \ReflectionProperty($friend, 'friended_by');
+            $property = new \ReflectionProperty(ContactInfo::class, 'friended_by');
         } catch (\ReflectionException $e) {
             throw new \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException(
                 $e->getMessage(),
