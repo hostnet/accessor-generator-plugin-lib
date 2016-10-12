@@ -73,8 +73,8 @@ when the type is iterable (e.g. DoctrineCollection or array).
 
 ## Installation
 
-Add `hostnet/accessor-generator-plugin` to your `composer.json` and run
-`php composer.phar update hostnet/accessor-generator-plugin`
+Add `hostnet/accessor-generator-plugin-lib` to your `composer.json` and run
+`php composer.phar update hostnet/accessor-generator-plugin-lib`
 
 If you want to invoke generation after installing you can run `php composer.phar dump-autoload`.
 Try adding `-vv` to the dump-autoload command for more verbosity.
