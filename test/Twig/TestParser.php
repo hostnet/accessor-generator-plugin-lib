@@ -38,8 +38,7 @@ class TestParser extends \Twig_Parser
         // expression parser
         $this->expressionParser = new \Twig_ExpressionParser(
             $this,
-            $this->env->getUnaryOperators(),
-            $this->env->getBinaryOperators()
+            $this->env
         );
     }
 
