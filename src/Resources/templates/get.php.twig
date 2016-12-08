@@ -69,7 +69,16 @@
     }
 {% endif %}
 
-{% if property.type == 'integer' %}
+{% if property.encryptionAlias() %}
+    list($env_key_length, $iv_length, $pieces) = explode(',', $this->{{ property.name }}, 3);
+    $env_key                                   = hex2bin(substr($pieces, 0, $env_key_length));
+    $iv                                        = hex2bin(substr($pieces, $env_key_length, $iv_length));
+    $sealed_data                               = hex2bin(substr($pieces, $env_key_length + $iv_length));
+
+    openssl_open($sealed_data, $open_data, $env_key, openssl_get_privatekey('{{ private_key }}'), 'AES256', $iv);
+
+    return $open_data;
+{% elseif property.type == 'integer' %}
     return (int) $this->{{ property.name }};
 {% elseif property.collection %}
     return new ImmutableCollection($this->{{ property.name }});

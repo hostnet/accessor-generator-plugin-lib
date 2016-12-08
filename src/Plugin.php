@@ -140,6 +140,9 @@ class Plugin implements PluginInterface, EventSubscriberInterface
             $this->io->write('Generating metadata for <info>' . $package->getPrettyName() . '</info>');
         }
 
+        $extra = $this->composer->getPackage()->getExtra();
+        isset($extra['accessor-generator']) && $this->generator->setEncryptionAliases($extra['accessor-generator']);
+
         foreach ($this->getFilesForPackage($package) as $filename) {
             $reflection_class = new ReflectionClass($filename);
             if ($this->generator->writeTraitForClass($reflection_class) && $this->io->isVeryVerbose()) {

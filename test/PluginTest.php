@@ -46,6 +46,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
 
         // Hit every fixture one time.
         $generator->expects(self::exactly(2))->method('writeTraitForClass')->willReturn(true);
+        $generator->expects(self::exactly(2))->method('setEncryptionAliases');
 
         $plugin = new Plugin($generator);
         $plugin->activate($this->getMockComposer(), new BufferIO('', StreamOutput::VERBOSITY_VERY_VERBOSE));
@@ -99,6 +100,15 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $composer->setRepositoryManager($repository_manager);
         $composer->setInstallationManager($installation_manager);
         $composer->setEventDispatcher(new EventDispatcher($composer, $io));
+
+        $composer->getPackage()->setExtra([
+            'accessor-generator' => [
+                'database.table.column' => [
+                    'public-key' => 'public',
+                    'private-key' => 'secret'
+                ]
+            ]
+        ]);
 
         return $composer;
     }

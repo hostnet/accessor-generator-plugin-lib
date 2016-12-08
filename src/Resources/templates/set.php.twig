@@ -154,7 +154,18 @@
     $property->setAccessible(false);
 {% endif %}
 
+{% if property.encryptionAlias() %}
+    $iv = openssl_random_pseudo_bytes(32);
+    openssl_seal(${{ property.name }}, $sealed_data, $env_keys, [openssl_get_publickey('{{ public_key }}')], 'AES256', $iv);
+
+    $env_key        = bin2hex($env_keys[0]);
+    $iv             = bin2hex($iv);
+    $sealed_data    = bin2hex($sealed_data);
+
+    $this->{{ property.name }} = sprintf('%d,%d,%s%s%s', strlen($env_key), strlen($iv), $env_key, $iv, $sealed_data);
+{% else %}
     $this->{{ property.name }} = ${{ property.name }};
+{% endif %}
 
     return $this;
 }

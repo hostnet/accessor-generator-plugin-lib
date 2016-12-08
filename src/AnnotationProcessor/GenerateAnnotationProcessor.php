@@ -44,11 +44,13 @@ class GenerateAnnotationProcessor implements AnnotationProcessorInterface
             Generate::getMostLimitedVisibility($annotation->getRemove(), $annotation->getSet())
         );
 
-        $info->getType() === null && $annotation->getType() && $info->setType($annotation->getType());
+        null === $info->getType() && $annotation->getType() && $info->setType($annotation->getType());
+        null !== $annotation->getType() && $info->setTypeHint($annotation->getType());
+
+        null !== $annotation->getEncryptionAlias() && $info->setEncryptionAlias($annotation->getEncryptionAlias());
 
         // Enforce always
         $info->setGenerateStrict($annotation->isStrict());
-        null !== $annotation->getType() && $info->setTypeHint($annotation->getType());
     }
 
     /**

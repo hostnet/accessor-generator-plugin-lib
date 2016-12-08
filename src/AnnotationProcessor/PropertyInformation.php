@@ -3,6 +3,7 @@
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
 use Doctrine\Common\Annotations\DocParser;
+use Doctrine\ORM\Mapping\Column;
 use Hostnet\Component\AccessorGenerator\Annotation\Generate;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
 
@@ -33,10 +34,16 @@ class PropertyInformation implements PropertyInformationInterface
     private $fully_qualified_type = '';
 
     /**
+     * @see PropertyInformationInterface::getEncryptionAlias()
+     * @var string
+     */
+    private $encryption_alias = null;
+
+    /**
      * @see PropertyInformationInterface::getIntegerSize()
      * @var int
      */
-    private $integer_size = 32; // Be on the save side for database interaction.
+    private $integer_size = 32; // Be on the safe side for database interaction.
 
     /**
      * @see PropertyInformationInterface::getLength()
@@ -219,10 +226,36 @@ class PropertyInformation implements PropertyInformationInterface
 
         $annotations = $this->parser->parse($this->property->getDocComment(), $filename);
 
+        // If the property is encrypted, column type MUST be string.
+        $is_encrypted = false;
+        $is_string    = true;
         foreach ($this->annotation_processors as $processor) {
             foreach ($annotations as $annotation) {
                 $processor->processAnnotation($annotation, $this);
+
+                if ($annotation instanceof Generate
+                    && isset($annotation->encryption_alias)
+                ) {
+                    $is_encrypted = true;
+                }
+
+                if ($annotation instanceof Column
+                    && isset($annotation->type)
+                    && $annotation->type !== 'string'
+                ) {
+                    $is_string = false;
+                }
+
             }
+        }
+
+        if ($is_encrypted && ! $is_string) {
+            throw new \RuntimeException(sprintf(
+                'Property %s in class %s\%s has an encryption_alias set, but is not declared as column type \'string\'',
+                $this->getName(),
+                $this->getNamespace(),
+                $this->getClass()
+            ));
         }
     }
 
@@ -391,8 +424,8 @@ class PropertyInformation implements PropertyInformationInterface
      *
      * @param  string $type
      * @throws \DomainException
-     * @return PropertyInformation
      * @throws \InvalidArgumentException
+     * @return PropertyInformation
      */
     public function setFullyQualifiedType($type)
     {
@@ -407,6 +440,50 @@ class PropertyInformation implements PropertyInformationInterface
         } else {
             throw new \DomainException(sprintf('The type %s is not a valid fully qualified class name', $type));
         }
+
+        return $this;
+    }
+
+    /**
+     * @see PropertyInformationInterface::getEncryptionAlias()
+     * @return string|null
+     */
+    public function getEncryptionAlias()
+    {
+        return $this->encryption_alias;
+    }
+
+    /**
+     * Set the encryption alias for this property, used to encrypt the value before storing.
+     *
+     * The alias must be added to the composer.json of the app, with the proper keys defined (depending
+     * on if the app will encrypt, decrypt or do both).
+     *
+     * "extra": {
+     *     "accessor-generator": {
+     *         $encryption_alias: {
+     *             public-key:
+     *             private-key:
+     * ...
+     *
+     * @param string $encryption_alias
+     * @throws \InvalidArgumentException
+     * @return PropertyInformation
+     */
+    public function setEncryptionAlias($encryption_alias)
+    {
+        if (! is_string($encryption_alias)) {
+            throw new \InvalidArgumentException(sprintf(
+                'encryption_alias must be of type string but is of type %s',
+                gettype($encryption_alias)
+            ));
+        }
+
+        if (empty($encryption_alias)) {
+            throw new \InvalidArgumentException(sprintf('encryption_alias must not be empty %s', $encryption_alias));
+        }
+
+        $this->encryption_alias = $encryption_alias;
 
         return $this;
     }

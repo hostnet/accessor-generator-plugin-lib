@@ -55,6 +55,11 @@ class CodeGenerator implements CodeGeneratorInterface
     private $trait;
 
     /**
+     * @var array
+     */
+    private $encryption_aliases = [];
+
+    /**
      * Initialize Twig and templates.
      *
      * @throws \Twig_Error_Loader
@@ -169,6 +174,14 @@ class CodeGenerator implements CodeGeneratorInterface
         }
 
         return $code;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEncryptionAliases(array $encryption_aliases)
+    {
+        $this->encryption_aliases = $encryption_aliases;
     }
 
     /**
@@ -301,6 +314,13 @@ class CodeGenerator implements CodeGeneratorInterface
             );
         }
 
+        $public_key = isset($this->encryption_aliases[$info->getEncryptionAlias()]['public-key'])
+            ? 'file://' . getcwd() . '/' . $this->encryption_aliases[$info->getEncryptionAlias()]['public-key']
+            : null;
+        $private_key = isset($this->encryption_aliases[$info->getEncryptionAlias()]['private-key'])
+            ? 'file://' . getcwd() . '/' . $this->encryption_aliases[$info->getEncryptionAlias()]['private-key']
+            : null;
+
         // Generate a get method.
         if ($info->willGenerateGet()) {
             // Compute the name of the get method. For boolean values
@@ -319,6 +339,7 @@ class CodeGenerator implements CodeGeneratorInterface
             $code .= $this->get->render(
                 [
                     'property'     => $info,
+                    'private_key'  => $private_key,
                     'getter'       => $getter,
                     'PHP_INT_SIZE' => PHP_INT_SIZE,
                 ]
@@ -342,6 +363,7 @@ class CodeGenerator implements CodeGeneratorInterface
                 $code .= $this->set->render(
                     [
                         'property'     => $info,
+                        'public_key'   => $public_key,
                         'PHP_INT_SIZE' => PHP_INT_SIZE,
                     ]
                 ) . PHP_EOL;

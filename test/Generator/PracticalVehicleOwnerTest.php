@@ -45,8 +45,7 @@ class PracticalVehicleOwnerTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddVehicleTooManyArguments()
     {
-        $car  = new Car();
-
+        $car   = new Car();
         $owner = new PracticalVehicleOwner();
         $owner->addVehicle($car, $car);
     }

@@ -133,6 +133,13 @@ class Generate
     public $strict = true;
 
     /**
+     * Determine if the property should be stored encrypted.
+     *
+     * Insert the unique name that's used to map the key files to the property.
+     */
+    public $encryption_alias;
+
+    /**
      * @return string
      */
     public function getGet()
@@ -186,6 +193,14 @@ class Generate
     public function isStrict()
     {
         return $this->strict;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getEncryptionAlias()
+    {
+        return $this->encryption_alias;
     }
 
     /**
