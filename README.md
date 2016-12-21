@@ -87,15 +87,15 @@ The alias used there should be added to the application's composer.json as follo
 "extra": {
      "accessor-generator": {
          <encryption_alias>: {
-             public-key: <file>
-             private-key: <file>
+             public-key: <key_file>
+             private-key: <key_file>
 ...
 ```
 
 If the application has to encrypt, add the public key. If the application has to decrypt, add the private key. If
 the application has to do both, add both.
 
-The <file> has to contain the file path relative to the composer.json.
+The key_file has to contain the file path relative to the composer.json.
 
 Do not forget to use the setter in the constructor body as well to trigger the encryption.
 
