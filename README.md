@@ -71,6 +71,34 @@ If no configuration is specified, the default behaviour for all scalar typed pro
 that a getter and a settter method will be generated. Adders and Removers will be generated
 when the type is iterable (e.g. DoctrineCollection or array).
 
+### Encryption
+
+To use asymmetric encryption on a column's value add the 'encryption_alias' field to the Generate annotation. 
+Also make sure the type of the database column has a big enough length. At least 1064 for key and IV is needed,
+plus the length of the sealed data itself.
+
+```php
+@AG\Generate(encryption_alias="database.table.column")
+```
+
+The alias used there should be added to the application's composer.json as follows:
+
+```php
+"extra": {
+     "accessor-generator": {
+         <encryption_alias>: {
+             public-key: <file>
+             private-key: <file>
+...
+```
+
+If the application has to encrypt, add the public key. If the application has to decrypt, add the private key. If
+the application has to do both, add both.
+
+The <file> has to contain the file path relative to the composer.json.
+
+Do not forget to use the setter in the constructor body as well to trigger the encryption.
+
 ## Installation
 
 Add `hostnet/accessor-generator-plugin-lib` to your `composer.json` and run

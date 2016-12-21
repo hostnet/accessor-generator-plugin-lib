@@ -39,6 +39,7 @@ class GenerateAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         $no_collection = new Generate();
         $nothing       = new Generate();
         $type          = new Generate();
+        $encryption    = new Generate();
         $column        = new Column();
 
         $no_is->is         = 'none';
@@ -63,17 +64,33 @@ class GenerateAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         $type->remove = 'none';
         $type->type   = \ArrayObject::class;
 
+        $encryption->get              = 'none';
+        $encryption->is               = 'none';
+        $encryption->set              = 'none';
+        $encryption->add              = 'none';
+        $encryption->remove           = 'none';
+        $encryption->encryption_alias = 'database.table.column';
+
         return [
-            [$column,        self::NO_GET, self::NO_SET, self::NO_ADD, self::NO_REMOVE, null               ],
-            [$all,           self::GET   , self::SET,    self::ADD,    self::REMOVE,    null               ],
-            [$no_get,        self::NO_GET, self::SET,    self::ADD,    self::REMOVE,    null               ],
-            [$no_is,         self::NO_GET, self::SET,    self::ADD,    self::REMOVE,    null               ],
-            [$no_set,        self::GET,    self::NO_SET, self::NO_ADD, self::NO_REMOVE, null               ],
-            [$no_add,        self::GET,    self::SET,    self::NO_ADD, self::REMOVE,    null               ],
-            [$no_remove,     self::GET,    self::SET,    self::ADD,    self::NO_REMOVE, null               ],
-            [$no_collection, self::GET,    self::SET,    self::NO_ADD, self::NO_REMOVE, null               ],
-            [$nothing,       self::NO_GET, self::NO_SET, self::NO_ADD, self::NO_REMOVE, null               ],
-            [$type,          self::NO_GET, self::NO_SET, self::NO_ADD, self::NO_REMOVE, \ArrayObject::class],
+            [$column,        self::NO_GET, self::NO_SET, self::NO_ADD, self::NO_REMOVE, null,                null],
+            [$all,           self::GET   , self::SET,    self::ADD,    self::REMOVE,    null,                null],
+            [$no_get,        self::NO_GET, self::SET,    self::ADD,    self::REMOVE,    null,                null],
+            [$no_is,         self::NO_GET, self::SET,    self::ADD,    self::REMOVE,    null,                null],
+            [$no_set,        self::GET,    self::NO_SET, self::NO_ADD, self::NO_REMOVE, null,                null],
+            [$no_add,        self::GET,    self::SET,    self::NO_ADD, self::REMOVE,    null,                null],
+            [$no_remove,     self::GET,    self::SET,    self::ADD,    self::NO_REMOVE, null,                null],
+            [$no_collection, self::GET,    self::SET,    self::NO_ADD, self::NO_REMOVE, null,                null],
+            [$nothing,       self::NO_GET, self::NO_SET, self::NO_ADD, self::NO_REMOVE, null,                null],
+            [$type,          self::NO_GET, self::NO_SET, self::NO_ADD, self::NO_REMOVE, \ArrayObject::class, null],
+            [
+                $encryption,
+                self::NO_GET,
+                self::NO_SET,
+                self::NO_ADD,
+                self::NO_REMOVE,
+                null,
+                'database.table.column'
+            ],
         ];
     }
 
@@ -85,8 +102,9 @@ class GenerateAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
      * @param bool $add
      * @param bool $remove
      * @param string $type
+     * @param string $encryption
      */
-    public function testProcessAnnotation($annotation, $get, $set, $add, $remove, $type)
+    public function testProcessAnnotation($annotation, $get, $set, $add, $remove, $type, $encryption)
     {
         // Set up dependencies.
         $property    = new ReflectionProperty('test');
@@ -100,6 +118,7 @@ class GenerateAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         self::assertSame($add, $information->willGenerateAdd());
         self::assertSame($remove, $information->willGenerateRemove());
         self::assertSame($type, $information->getType());
+        self::assertSame($encryption, $information->getEncryptionAlias());
 
         // If $set, is false we wil not generate a add method and remove method.
         if ($set === false) {

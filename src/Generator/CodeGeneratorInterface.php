@@ -45,4 +45,15 @@ interface CodeGeneratorInterface
      * @return string
      */
     public function generateAccessors(PropertyInformationInterface $info);
+
+    /**
+     * Expects an array of aliases, each alias can contain a public key file and/or a private key file.
+     * These aliases are used to generate an encryption (setter) or decryption (getter) sequence
+     * for the columns on which the aliases have been defined.
+     *
+     * ex. [{encryption_alias} => ['public-key' => {key_file}, 'private-key' => {key_file}], ...]
+     *
+     * @param array $encryption_aliases
+     */
+    public function setEncryptionAliases(array $encryption_aliases);
 }

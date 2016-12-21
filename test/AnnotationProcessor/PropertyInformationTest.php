@@ -63,6 +63,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
         self::assertNull($this->info->getDefault());
         self::assertNull($this->info->getType());
         self::assertEquals('', $this->info->getFullyQualifiedType());
+        self::assertNull($this->info->getEncryptionAlias());
         self::assertEquals(0, $this->info->getScale());
         self::assertEquals(0, $this->info->getPrecision());
         self::assertEquals(0, $this->info->getLength());
@@ -377,6 +378,32 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
         $exception && $this->expectException($exception);
         self::assertSame($this->info, $this->info->setFullyQualifiedType($type));
         self::assertEquals($type, $this->info->getFullyQualifiedType());
+    }
+
+    public function setEncryptionProvider()
+    {
+        return [
+            ['alias',   null,                           ],
+            ['',        \InvalidArgumentException::class],
+            [['test'],  \InvalidArgumentException::class],
+            [10,        \InvalidArgumentException::class],
+        ];
+    }
+
+    /**
+     * @dataProvider setEncryptionProvider
+     * @param string $encryption
+     * @param string $exception
+     * @throws \InvalidArgumentException
+     */
+    public function testSetEncryption($encryption_alias, $exception)
+    {
+        $exception && $this->expectException($exception);
+        self::assertSame($this->info, $this->info->setEncryptionAlias($encryption_alias));
+
+        self::assertEquals($encryption_alias, $this->info->getEncryptionAlias());
+        self::assertSame($this->info, $this->info->setEncryptionAlias('string'));
+        self::assertEquals('string', $this->info->getEncryptionAlias());
     }
 
     public function testGetNamespaceEmptyClass()

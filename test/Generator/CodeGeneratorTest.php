@@ -30,11 +30,12 @@ class CodeGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $provider = [];
         $finder   = new Finder();
-        $files    = $finder->name('*.php')
-                           ->exclude('expected')
-                           ->exclude('Generated')
-                           ->in(__DIR__ . '/fixtures/')
-                           ->getIterator();
+        $files    = $finder
+            ->name('*.php')
+            ->exclude('expected')
+            ->exclude('Generated')
+            ->in(__DIR__ . '/fixtures/')
+            ->getIterator();
 
         foreach ($files as $file) {
             $provider[] = [$file];
@@ -63,7 +64,6 @@ class CodeGeneratorTest extends \PHPUnit_Framework_TestCase
         // Generate the accessor methods trait.
         $this->getGenerator()->writeTraitForClass($class);
 
-
         // Get file names
         $actual   = dirname($filename) . '/Generated/' . basename($filename, '.php') . 'MethodsTrait.php';
         $expected = dirname($filename) . '/expected/' . basename($filename, '.php') . 'MethodsTrait.php';
@@ -76,6 +76,18 @@ class CodeGeneratorTest extends \PHPUnit_Framework_TestCase
         $pattern         = '#^// Generated at 20[\d]{2}-[\d]{2}-[\d]{2} [\d]{2}:[\d]{2}:[\d]{2} by .*$#m';
         $actual_contents = preg_replace($pattern, '// HEADER', $actual_contents, 1);
 
+        // Alter the way the locations to the key files are decided.
+        $actual_contents = preg_replace(
+            "#openssl_get_publickey\((.*?)\)#",
+            "openssl_get_publickey('file://' . getcwd() . '/test/Generator/Key/credentials_public_key.pem')",
+            $actual_contents
+        );
+        $actual_contents = preg_replace(
+            "#openssl_get_privatekey\((.*?)\)#",
+            "openssl_get_privatekey('file://' . getcwd() . '/test/Generator/Key/credentials_private_key.pem')",
+            $actual_contents
+        );
+
         // Test if contents is the expected contents.
         self::assertEquals($expected_contents, $actual_contents);
     }
@@ -85,6 +97,14 @@ class CodeGeneratorTest extends \PHPUnit_Framework_TestCase
         if ($this->generator === null) {
             $this->generator = new CodeGenerator();
         }
+
+        // Set some encryption aliases.
+        $this->generator->setEncryptionAliases([
+            'database.table.column' => [
+                'public-key' => '/test/Generator/Key/credentials_public_key.pem',
+                'private-key' => '/test/Generator/Key/credentials_private_key.pem'
+            ]
+        ]);
 
         return $this->generator;
     }

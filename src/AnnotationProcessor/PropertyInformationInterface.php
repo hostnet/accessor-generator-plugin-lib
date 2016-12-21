@@ -84,6 +84,13 @@ interface PropertyInformationInterface
     public function getFullyQualifiedType();
 
     /**
+     * Get the encryption alias.
+     *
+     * @return string
+     */
+    public function getEncryptionAlias();
+
+    /**
      * Returns true if the type is a complex type, like an object or array or
      * false if it represents a scalar such as integer, string or boolean.
      *

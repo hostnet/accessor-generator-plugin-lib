@@ -16,17 +16,20 @@ class GenerateTest extends \PHPUnit_Framework_TestCase
         self::assertSame(Generate::VISIBILITY_PUBLIC, $generate->is);
         self::assertTrue($generate->strict);
         self::assertNull($generate->type);
+        self::assertNull($generate->encryption_alias);
     }
 
-    public function testTypeAndStrictness()
+    public function testTypeAndStrictnessAndEncryptionAlias()
     {
         $generate = new Generate();
 
-        $generate->strict = false;
-        $generate->type   = \stdClass::class;
+        $generate->strict           = false;
+        $generate->type             = \stdClass::class;
+        $generate->encryption_alias = 'database.table.column';
 
         self::assertFalse($generate->isStrict());
         self::assertSame(\stdClass::class, $generate->getType());
+        self::assertSame('database.table.column', $generate->getEncryptionAlias());
     }
 
     /**
