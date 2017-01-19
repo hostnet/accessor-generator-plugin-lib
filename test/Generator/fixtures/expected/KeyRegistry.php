@@ -4,18 +4,19 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
 /**
- * This class provides methods to add your own key on
+ * This class holds all the keys for the Traits in the same directory. It also
+ * provides methods to statically add keys (useful when testing).
  */
 class KeyRegistry
 {
     private static $public_key_paths = [
-       'database.table.column' => 'file:///home/msteltenpool/projects/libs/maarten-accessor-generator-plugin//test/Generator/Key/credentials_public_key.pem',
-       'database.table.column_again' => 'file:///home/msteltenpool/projects/libs/maarten-accessor-generator-plugin//test/Generator/Key/credentials_public_key.pem',
+       'database.table.column' => '',
+       'database.table.column_again' => '',
     ];
 
     private static $private_key_paths = [
-       'database.table.column' => 'file:///home/msteltenpool/projects/libs/maarten-accessor-generator-plugin//test/Generator/Key/credentials_private_key.pem',
-       'database.table.column_again' => 'file:///home/msteltenpool/projects/libs/maarten-accessor-generator-plugin//test/Generator/Key/credentials_private_key.pem',
+       'database.table.column' => '',
+       'database.table.column_again' => '',
     ];
 
     public static function getPublicKeyPath($alias)

@@ -43,7 +43,7 @@ trait CredentialsMethodsTrait
         }
 
         if (false === ($private_key = openssl_get_privatekey($private_key_path))) {
-            throw new \InvalidArgumentException(sprintf('The path %s does not contain a private key.', $private_key_path));
+            throw new \InvalidArgumentException(sprintf('The path "%s" does not contain a private key.', $private_key_path));
         }
 
         list($env_key_length, $iv_length, $pieces) = explode(',', $this->password, 3);
@@ -92,7 +92,7 @@ trait CredentialsMethodsTrait
         }
 
         if (false === ($public_key = openssl_get_publickey($public_key_path))) {
-            throw new \InvalidArgumentException(sprintf('The path %s does not contain a public key.', $public_key_path));
+            throw new \InvalidArgumentException(sprintf('The path "%s" does not contain a public key.', $public_key_path));
         }
 
         $iv = openssl_random_pseudo_bytes(32);

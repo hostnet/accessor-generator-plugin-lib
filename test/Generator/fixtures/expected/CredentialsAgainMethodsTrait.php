@@ -45,7 +45,7 @@ trait CredentialsAgainMethodsTrait
         }
 
         if (false === ($public_key = openssl_get_publickey($public_key_path))) {
-            throw new \InvalidArgumentException(sprintf('The path %s does not contain a public key.', $public_key_path));
+            throw new \InvalidArgumentException(sprintf('The path "%s" does not contain a public key.', $public_key_path));
         }
 
         $iv = openssl_random_pseudo_bytes(32);

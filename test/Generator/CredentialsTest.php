@@ -2,6 +2,7 @@
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Credentials;
+use Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated\KeyRegistry;
 
 class CredentialsTest extends \PHPUnit_Framework_TestCase
 {
@@ -12,6 +13,15 @@ class CredentialsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        KeyRegistry::addPublicKeyPath(
+            'database.table.column',
+            'file:///' . __DIR__ . '/Key/credentials_public_key.pem'
+        );
+        KeyRegistry::addPrivateKeyPath(
+            'database.table.column',
+            'file:///' . __DIR__ . '/Key/credentials_private_key.pem'
+        );
+
         $this->credentials = new Credentials();
     }
 

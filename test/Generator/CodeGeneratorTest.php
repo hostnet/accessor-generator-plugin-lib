@@ -67,39 +67,29 @@ class CodeGeneratorTest extends \PHPUnit_Framework_TestCase
             $this->generator = new CodeGenerator();
         }
 
-        // Set some encryption aliases.
-        $this->generator->setEncryptionAliases([
-            'database.table.column' => [
-                'public-key' => '/test/Generator/Key/credentials_public_key.pem',
-                'private-key' => '/test/Generator/Key/credentials_private_key.pem'
-            ],
-            'database.table.column_again' => [
-                'public-key' => '/test/Generator/Key/credentials_public_key.pem',
-                'private-key' => '/test/Generator/Key/credentials_private_key.pem'
-            ]
-        ]);
-
         return $this->generator;
     }
 
     private function compareExpectedToGeneratedFiles($inverse = false)
     {
-        $paths  = ['/expected', '/Generated'];
-        $paths  = $inverse ? array_reverse($paths) : $paths;
-        $finder = new Finder();
-        $files  = $finder->name('*.php')->in(__DIR__ . '/fixtures' . $paths[0])->getIterator();
+        $paths           = ['/expected', '/Generated'];
+        $paths           = $inverse ? array_reverse($paths) : $paths;
+        $finder          = new Finder();
+        $expected_files  = $finder->name('*.php')->in(__DIR__ . '/fixtures' . $paths[0])->getIterator();
 
-        foreach ($files as $file) {
+        foreach ($expected_files as $expected_file) {
             // Get the mirrored file.
-            $actual_contents = file_get_contents(str_replace($paths[0], $paths[1], $file->getPathname()));
+            $actual_file_path = str_replace($paths[0], $paths[1], $expected_file->getPathname());
+            $actual_contents  = file_get_contents($actual_file_path);
 
             // Remove system, time and user dependend header
             $pattern           = '#^// Generated at 20[\d]{2}-[\d]{2}-[\d]{2} [\d]{2}:[\d]{2}:[\d]{2} by .*$#m';
-            $expected_contents = preg_replace($pattern, '// HEADER', $file->getContents(), 1);
+            $expected_contents = preg_replace($pattern, '// HEADER', $expected_file->getContents(), 1);
             $actual_contents   = preg_replace($pattern, '// HEADER', $actual_contents, 1);
 
-
-            // Test if contents is the expected contents.
+            // Assert we're not comparing the same file.
+            self::assertNotEquals($expected_file->getPathname(), $actual_file_path);
+            // Assert the contents is the expected contents.
             self::assertEquals($expected_contents, $actual_contents);
         }
     }
