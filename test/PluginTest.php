@@ -46,7 +46,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
 
         // Hit every fixture one time.
         $generator->expects(self::exactly(2))->method('writeTraitForClass')->willReturn(true);
-        $generator->expects(self::exactly(2))->method('setEncryptionAliases');
+        $generator->expects(self::once())->method('setEncryptionAliases');
 
         $plugin = new Plugin($generator);
         $plugin->activate($this->getMockComposer(), new BufferIO('', StreamOutput::VERBOSITY_VERY_VERBOSE));

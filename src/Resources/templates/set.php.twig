@@ -155,8 +155,16 @@
 {% endif %}
 
 {% if property.encryptionAlias() %}
+    if (false == ($public_key_path = KeyRegistry::getPublicKeyPath('{{ property.encryptionAlias() }}'))) {
+        throw new \InvalidArgumentException('A public key path must be set to use this method.');
+    }
+
+    if (false === ($public_key = openssl_get_publickey($public_key_path))) {
+        throw new \InvalidArgumentException(sprintf('The path %s does not contain a public key.', $public_key_path));
+    }
+
     $iv = openssl_random_pseudo_bytes(32);
-    openssl_seal(${{ property.name }}, $sealed_data, $env_keys, [openssl_get_publickey('{{ public_key }}')], 'AES256', $iv);
+    openssl_seal(${{ property.name }}, $sealed_data, $env_keys, [$public_key], 'AES256', $iv);
 
     $env_key        = bin2hex($env_keys[0]);
     $iv             = bin2hex($iv);

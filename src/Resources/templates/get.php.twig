@@ -70,12 +70,20 @@
 {% endif %}
 
 {% if property.encryptionAlias() %}
+    if (false == ($private_key_path = KeyRegistry::getPrivateKeyPath('{{ property.encryptionAlias() }}'))) {
+        throw new \InvalidArgumentException('A private key path must be set to use this method.');
+    }
+
+    if (false === ($private_key = openssl_get_privatekey($private_key_path))) {
+        throw new \InvalidArgumentException(sprintf('The path %s does not contain a private key.', $private_key_path));
+    }
+
     list($env_key_length, $iv_length, $pieces) = explode(',', $this->{{ property.name }}, 3);
     $env_key                                   = hex2bin(substr($pieces, 0, $env_key_length));
     $iv                                        = hex2bin(substr($pieces, $env_key_length, $iv_length));
     $sealed_data                               = hex2bin(substr($pieces, $env_key_length + $iv_length));
 
-    openssl_open($sealed_data, $open_data, $env_key, openssl_get_privatekey('{{ private_key }}'), 'AES256', $iv);
+    openssl_open($sealed_data, $open_data, $env_key, $private_key, 'AES256', $iv);
 
     return $open_data;
 {% elseif property.type == 'integer' %}

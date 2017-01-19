@@ -245,7 +245,6 @@ class PropertyInformation implements PropertyInformationInterface
                 ) {
                     $is_string = false;
                 }
-
             }
         }
 

@@ -30,6 +30,11 @@ class CodeGenerator implements CodeGeneratorInterface
     private $name_suffix = 'MethodsTrait';
 
     /**
+     * @var string
+     */
+    private $key_registry_class = 'KeyRegistry';
+
+    /**
      * @var \Twig_TemplateInterface
      */
     private $add;
@@ -55,9 +60,21 @@ class CodeGenerator implements CodeGeneratorInterface
     private $trait;
 
     /**
+     * @var \Twig_TemplateInterface
+     */
+    private $keys;
+
+    /**
      * @var array
      */
     private $encryption_aliases = [];
+
+    /**
+     * Contains the namespace and corresponding encryption aliases indexed on unique class directory.
+     *
+     * @var array
+     */
+    private $key_registry_data = [];
 
     /**
      * Initialize Twig and templates.
@@ -76,6 +93,7 @@ class CodeGenerator implements CodeGeneratorInterface
         $this->add    = $twig->loadTemplate('add.php.twig');
         $this->remove = $twig->loadTemplate('remove.php.twig');
         $this->trait  = $twig->loadTemplate('trait.php.twig');
+        $this->keys   = $twig->loadTemplate('keys.php.twig');
     }
 
     /**
@@ -84,12 +102,12 @@ class CodeGenerator implements CodeGeneratorInterface
     public function writeTraitForClass(ReflectionClass $class)
     {
         $data = $this->generateTraitForClass($class);
-        $fs   = new Filesystem();
 
         if ($data) {
             $path     = dirname($class->getFilename()) . DIRECTORY_SEPARATOR . $this->namespace;
             $filename = $path . DIRECTORY_SEPARATOR . $class->getName() . $this->name_suffix . '.php';
 
+            $fs = new Filesystem();
             $fs->mkdir($path);
             $fs->dumpFile($filename, $data);
 
@@ -145,6 +163,22 @@ class CodeGenerator implements CodeGeneratorInterface
             // Parse and add fully qualified type information to the info
             // object for use in doc blocks to make IDE's understand the types properly.
             $info->setFullyQualifiedType(self::fqcn($info->getTypeHint(), $imports));
+
+            // If the property information has an encryption alias defined store
+            // some information to generate the KeyRegistry classes afterwards.
+            if ($info->getEncryptionAlias()) {
+                $dir_name = dirname($class->getFilename());
+                if (! isset($this->key_registry_data[$dir_name])) {
+                    $this->key_registry_data[$dir_name] = [];
+                }
+
+                $keys = isset($this->encryption_aliases[$info->getEncryptionAlias()])
+                    ? $this->encryption_aliases[$info->getEncryptionAlias()]
+                    : null;
+
+                $this->key_registry_data[$dir_name]['namespace']                         = $class->getNamespace();
+                $this->key_registry_data[$dir_name]['keys'][$info->getEncryptionAlias()] = $keys;
+            }
 
             $code .= $this->generateAccessors($info);
 
@@ -314,13 +348,6 @@ class CodeGenerator implements CodeGeneratorInterface
             );
         }
 
-        $public_key = isset($this->encryption_aliases[$info->getEncryptionAlias()]['public-key'])
-            ? 'file://' . getcwd() . '/' . $this->encryption_aliases[$info->getEncryptionAlias()]['public-key']
-            : null;
-        $private_key = isset($this->encryption_aliases[$info->getEncryptionAlias()]['private-key'])
-            ? 'file://' . getcwd() . '/' . $this->encryption_aliases[$info->getEncryptionAlias()]['private-key']
-            : null;
-
         // Generate a get method.
         if ($info->willGenerateGet()) {
             // Compute the name of the get method. For boolean values
@@ -339,7 +366,6 @@ class CodeGenerator implements CodeGeneratorInterface
             $code .= $this->get->render(
                 [
                     'property'     => $info,
-                    'private_key'  => $private_key,
                     'getter'       => $getter,
                     'PHP_INT_SIZE' => PHP_INT_SIZE,
                 ]
@@ -363,7 +389,6 @@ class CodeGenerator implements CodeGeneratorInterface
                 $code .= $this->set->render(
                     [
                         'property'     => $info,
-                        'public_key'   => $public_key,
                         'PHP_INT_SIZE' => PHP_INT_SIZE,
                     ]
                 ) . PHP_EOL;
@@ -371,6 +396,34 @@ class CodeGenerator implements CodeGeneratorInterface
         }
 
         return $code;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function writeKeyRegistriesForPackage()
+    {
+        foreach ($this->key_registry_data as $directory => $data) {
+            $path     = $directory . DIRECTORY_SEPARATOR . $this->namespace;
+            $filename = $path . DIRECTORY_SEPARATOR . $this->key_registry_class . '.php';
+            $fs       = new Filesystem();
+
+            $data = $this->keys->render([
+                'namespace' => $data['namespace'] . '\\' . $this->namespace,
+                'keys'      => $data['keys'],
+                'base_path' => getcwd(),
+                'username'  => get_current_user(),
+                'hostname'  => gethostname()
+            ]);
+
+            $fs->mkdir($path);
+            $fs->dumpFile($filename, $data);
+        }
+
+        // Clear the key registry data.
+        $this->key_registry_data = [];
+
+        return true;
     }
 
     /**

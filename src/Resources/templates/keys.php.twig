@@ -1,0 +1,42 @@
+<?php
+// Generated at {{ "now" | date("Y-m-d H:i:s") }} by {{ username }} on {{ hostname }}
+
+namespace {{ namespace }};
+
+/**
+ * This class provides methods to add your own key on
+ */
+class KeyRegistry
+{
+    private static $public_key_paths = [
+{% for alias, path in keys %}
+       '{{ alias }}' => '{{ path['public-key'] ? 'file://' ~ base_path ~ '/' ~ path['public-key'] : ''}}',
+{% endfor %}
+    ];
+
+    private static $private_key_paths = [
+{% for alias, path in keys %}
+       '{{ alias }}' => '{{ path['private-key'] ? 'file://' ~ base_path ~ '/' ~ path['private-key'] : ''}}',
+{% endfor %}
+    ];
+
+    public static function getPublicKeyPath($alias)
+    {
+        return self::$public_key_paths[$alias] ?? '';
+    }
+
+    public static function getPrivateKeyPath($alias)
+    {
+        return self::$private_key_paths[$alias] ?? '';
+    }
+
+    public static function addPublicKeyPath($alias, $path)
+    {
+        self::$public_key_paths[$alias] = $path;
+    }
+
+    public static function addPrivateKeyPath($alias, $path)
+    {
+        self::$private_key_paths[$alias] = $path;
+    }
+}

@@ -13,7 +13,6 @@ use Symfony\Component\Finder\Finder;
  */
 class CodeGeneratorTest extends \PHPUnit_Framework_TestCase
 {
-
     private $generator;
 
     /**
@@ -26,27 +25,7 @@ class CodeGeneratorTest extends \PHPUnit_Framework_TestCase
         $fs->remove(__DIR__ . '/fixtures/Generated');
     }
 
-    public function writeTraitForClassProvider()
-    {
-        $provider = [];
-        $finder   = new Finder();
-        $files    = $finder
-            ->name('*.php')
-            ->exclude('expected')
-            ->exclude('Generated')
-            ->in(__DIR__ . '/fixtures/')
-            ->getIterator();
-
-        foreach ($files as $file) {
-            $provider[] = [$file];
-        }
-
-        return $provider;
-    }
-
     /**
-     * @dataProvider writeTraitForClassProvider
-     * @param $filename
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
      * @throws \DomainException
      * @throws \Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException
@@ -56,40 +35,30 @@ class CodeGeneratorTest extends \PHPUnit_Framework_TestCase
      * @throws \Symfony\Component\Filesystem\Exception\IOException
      * @throws \OutOfBoundsException
      */
-    public function testWriteTraitForClass($filename)
+    public function testWriteTraitForClass()
     {
-        // Read class information;
-        $class = new ReflectionClass($filename);
+        $finder = new Finder();
+        $files  = $finder
+            ->name('*.php')
+            ->exclude('expected')
+            ->exclude('Generated')
+            ->in(__DIR__ . '/fixtures/')
+            ->getIterator();
 
-        // Generate the accessor methods trait.
-        $this->getGenerator()->writeTraitForClass($class);
+        $generator = $this->getGenerator();
+        foreach ($files as $filename) {
+            // Read class information;
+            $class = new ReflectionClass($filename);
 
-        // Get file names
-        $actual   = dirname($filename) . '/Generated/' . basename($filename, '.php') . 'MethodsTrait.php';
-        $expected = dirname($filename) . '/expected/' . basename($filename, '.php') . 'MethodsTrait.php';
+            // Generate the accessor methods trait.
+            $generator->writeTraitForClass($class);
+        }
 
-        // Get file contents
-        $expected_contents = file_exists($expected) ? file_get_contents($expected) : '';
-        $actual_contents   = file_exists($actual) ? file_get_contents($actual) : '';
+        // Generate the KeyRegistry class(es).
+        $generator->writeKeyRegistriesForPackage();
 
-        // Remove system, time and user depended header
-        $pattern         = '#^// Generated at 20[\d]{2}-[\d]{2}-[\d]{2} [\d]{2}:[\d]{2}:[\d]{2} by .*$#m';
-        $actual_contents = preg_replace($pattern, '// HEADER', $actual_contents, 1);
-
-        // Alter the way the locations to the key files are decided.
-        $actual_contents = preg_replace(
-            "#openssl_get_publickey\((.*?)\)#",
-            "openssl_get_publickey('file://' . getcwd() . '/test/Generator/Key/credentials_public_key.pem')",
-            $actual_contents
-        );
-        $actual_contents = preg_replace(
-            "#openssl_get_privatekey\((.*?)\)#",
-            "openssl_get_privatekey('file://' . getcwd() . '/test/Generator/Key/credentials_private_key.pem')",
-            $actual_contents
-        );
-
-        // Test if contents is the expected contents.
-        self::assertEquals($expected_contents, $actual_contents);
+        $this->compareExpectedToGeneratedFiles();
+        $this->compareExpectedToGeneratedFiles(true);
     }
 
     private function getGenerator()
@@ -103,10 +72,36 @@ class CodeGeneratorTest extends \PHPUnit_Framework_TestCase
             'database.table.column' => [
                 'public-key' => '/test/Generator/Key/credentials_public_key.pem',
                 'private-key' => '/test/Generator/Key/credentials_private_key.pem'
+            ],
+            'database.table.column_again' => [
+                'public-key' => '/test/Generator/Key/credentials_public_key.pem',
+                'private-key' => '/test/Generator/Key/credentials_private_key.pem'
             ]
         ]);
 
         return $this->generator;
+    }
+
+    private function compareExpectedToGeneratedFiles($inverse = false)
+    {
+        $paths  = ['/expected', '/Generated'];
+        $paths  = $inverse ? array_reverse($paths) : $paths;
+        $finder = new Finder();
+        $files  = $finder->name('*.php')->in(__DIR__ . '/fixtures' . $paths[0])->getIterator();
+
+        foreach ($files as $file) {
+            // Get the mirrored file.
+            $actual_contents = file_get_contents(str_replace($paths[0], $paths[1], $file->getPathname()));
+
+            // Remove system, time and user dependend header
+            $pattern           = '#^// Generated at 20[\d]{2}-[\d]{2}-[\d]{2} [\d]{2}:[\d]{2}:[\d]{2} by .*$#m';
+            $expected_contents = preg_replace($pattern, '// HEADER', $file->getContents(), 1);
+            $actual_contents   = preg_replace($pattern, '// HEADER', $actual_contents, 1);
+
+
+            // Test if contents is the expected contents.
+            self::assertEquals($expected_contents, $actual_contents);
+        }
     }
 
     /**

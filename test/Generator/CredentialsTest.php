@@ -1,10 +1,6 @@
 <?php
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
-use Doctrine\Common\Collections\Collection;
-use Hostnet\Component\AccessorGenerator\Generator\fixtures\Attribute;
-use Hostnet\Component\AccessorGenerator\Generator\fixtures\Period;
-use Hostnet\Component\AccessorGenerator\Generator\fixtures\Product;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Credentials;
 
 class CredentialsTest extends \PHPUnit_Framework_TestCase
@@ -21,6 +17,7 @@ class CredentialsTest extends \PHPUnit_Framework_TestCase
 
     public function testPassword()
     {
+        // change the keys.
         $this->credentials->setPassword('password');
         self::assertEquals('password', $this->credentials->getPassword());
 
@@ -38,5 +35,44 @@ class CredentialsTest extends \PHPUnit_Framework_TestCase
 
         $this->credentials->setPassword($very_long_password);
         self::assertEquals($very_long_password, $this->credentials->getPassword());
+    }
+
+    /**
+     * @expectedException BadMethodCallException
+     */
+    public function testGetPasswordTooManyArguments()
+    {
+        $credentials = new Credentials();
+        $credentials->getPassword('pass');
+    }
+
+    /**
+     * @expectedException BadMethodCallException
+     */
+    public function testSetPasswordTooManyArguments()
+    {
+        $credentials = new Credentials();
+        $credentials->setPassword(1, 2);
+    }
+
+    /**
+     * @expectedException \LogicException
+     */
+    public function testGetPasswordEmpty()
+    {
+        $credentials = new Credentials();
+        $property    = new \ReflectionProperty($credentials, 'password');
+        $property->setAccessible(true);
+        $property->setValue($credentials, null);
+        $credentials->getPassword();
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testSetPasswordArray()
+    {
+        $credentials = new Credentials();
+        $credentials->setPassword([]);
     }
 }
