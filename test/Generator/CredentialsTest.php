@@ -1,11 +1,8 @@
 <?php
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
-use Doctrine\Common\Collections\Collection;
-use Hostnet\Component\AccessorGenerator\Generator\fixtures\Attribute;
-use Hostnet\Component\AccessorGenerator\Generator\fixtures\Period;
-use Hostnet\Component\AccessorGenerator\Generator\fixtures\Product;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Credentials;
+use Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated\KeyRegistry;
 
 class CredentialsTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,11 +13,21 @@ class CredentialsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        KeyRegistry::addPublicKeyPath(
+            'database.table.column',
+            'file:///' . __DIR__ . '/Key/credentials_public_key.pem'
+        );
+        KeyRegistry::addPrivateKeyPath(
+            'database.table.column',
+            'file:///' . __DIR__ . '/Key/credentials_private_key.pem'
+        );
+
         $this->credentials = new Credentials();
     }
 
     public function testPassword()
     {
+        // change the keys.
         $this->credentials->setPassword('password');
         self::assertEquals('password', $this->credentials->getPassword());
 
@@ -38,5 +45,44 @@ class CredentialsTest extends \PHPUnit_Framework_TestCase
 
         $this->credentials->setPassword($very_long_password);
         self::assertEquals($very_long_password, $this->credentials->getPassword());
+    }
+
+    /**
+     * @expectedException BadMethodCallException
+     */
+    public function testGetPasswordTooManyArguments()
+    {
+        $credentials = new Credentials();
+        $credentials->getPassword('pass');
+    }
+
+    /**
+     * @expectedException BadMethodCallException
+     */
+    public function testSetPasswordTooManyArguments()
+    {
+        $credentials = new Credentials();
+        $credentials->setPassword(1, 2);
+    }
+
+    /**
+     * @expectedException \LogicException
+     */
+    public function testGetPasswordEmpty()
+    {
+        $credentials = new Credentials();
+        $property    = new \ReflectionProperty($credentials, 'password');
+        $property->setAccessible(true);
+        $property->setValue($credentials, null);
+        $credentials->getPassword();
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testSetPasswordArray()
+    {
+        $credentials = new Credentials();
+        $credentials->setPassword([]);
     }
 }

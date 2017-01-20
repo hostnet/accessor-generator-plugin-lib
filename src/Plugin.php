@@ -108,6 +108,9 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         $packages         = $local_repository->getPackages();
         $packages[]       = $this->composer->getPackage();
 
+        $extra = $this->composer->getPackage()->getExtra();
+        isset($extra['accessor-generator']) && $this->generator->setEncryptionAliases($extra['accessor-generator']);
+
         foreach ($packages as $package) {
             /* @var $package PackageInterface */
             if (array_key_exists(self::NAME, $package->getRequires())) {
@@ -140,15 +143,16 @@ class Plugin implements PluginInterface, EventSubscriberInterface
             $this->io->write('Generating metadata for <info>' . $package->getPrettyName() . '</info>');
         }
 
-        $extra = $this->composer->getPackage()->getExtra();
-        isset($extra['accessor-generator']) && $this->generator->setEncryptionAliases($extra['accessor-generator']);
-
         foreach ($this->getFilesForPackage($package) as $filename) {
             $reflection_class = new ReflectionClass($filename);
             if ($this->generator->writeTraitForClass($reflection_class) && $this->io->isVeryVerbose()) {
                 $this->io->write("  - generated metadata for <info>$filename</info>");
             }
         }
+
+        // At the end of generating the Traits for each package we need to write the KeyRegistry classes
+        // which hold the encryption key paths.
+        $this->generator->writeKeyRegistriesForPackage();
     }
 
     /**

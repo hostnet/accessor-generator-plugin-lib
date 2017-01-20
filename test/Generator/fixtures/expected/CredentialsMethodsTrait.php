@@ -38,12 +38,20 @@ trait CredentialsMethodsTrait
             ));
         }
 
+        if (false == ($private_key_path = KeyRegistry::getPrivateKeyPath('database.table.column'))) {
+            throw new \InvalidArgumentException('A private key path must be set to use this method.');
+        }
+
+        if (false === ($private_key = openssl_get_privatekey($private_key_path))) {
+            throw new \InvalidArgumentException(sprintf('The path "%s" does not contain a private key.', $private_key_path));
+        }
+
         list($env_key_length, $iv_length, $pieces) = explode(',', $this->password, 3);
         $env_key                                   = hex2bin(substr($pieces, 0, $env_key_length));
         $iv                                        = hex2bin(substr($pieces, $env_key_length, $iv_length));
         $sealed_data                               = hex2bin(substr($pieces, $env_key_length + $iv_length));
 
-        openssl_open($sealed_data, $open_data, $env_key, openssl_get_privatekey('file://' . getcwd() . '/test/Generator/Key/credentials_private_key.pem'), 'AES256', $iv);
+        openssl_open($sealed_data, $open_data, $env_key, $private_key, 'AES256', $iv);
 
         return $open_data;
     }
@@ -79,8 +87,16 @@ trait CredentialsMethodsTrait
             );
         }
 
+        if (false == ($public_key_path = KeyRegistry::getPublicKeyPath('database.table.column'))) {
+            throw new \InvalidArgumentException('A public key path must be set to use this method.');
+        }
+
+        if (false === ($public_key = openssl_get_publickey($public_key_path))) {
+            throw new \InvalidArgumentException(sprintf('The path "%s" does not contain a public key.', $public_key_path));
+        }
+
         $iv = openssl_random_pseudo_bytes(32);
-        openssl_seal($password, $sealed_data, $env_keys, [openssl_get_publickey('file://' . getcwd() . '/test/Generator/Key/credentials_public_key.pem')], 'AES256', $iv);
+        openssl_seal($password, $sealed_data, $env_keys, [$public_key], 'AES256', $iv);
 
         $env_key        = bin2hex($env_keys[0]);
         $iv             = bin2hex($iv);

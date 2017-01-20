@@ -56,4 +56,13 @@ interface CodeGeneratorInterface
      * @param array $encryption_aliases
      */
     public function setEncryptionAliases(array $encryption_aliases);
+
+    /**
+     * Method to write KeyRegistry class(es), call this after all the Traits have been generated
+     * for a package. These KeyRegistry classes contain the encryption aliases and corresponding
+     * public/private key paths.
+     *
+     * @return bool
+     */
+    public function writeKeyRegistriesForPackage();
 }
