@@ -49,6 +49,15 @@ class CodeGenerationExtension extends \Twig_Extension
             new \Twig_SimpleFilter('singularize', function ($string) {
                 return Inflector::singularize($string);
             }),
+            new \Twig_SimpleFilter('phptype', function ($string) {
+                if ($string === 'integer') {
+                    return 'int';
+                }
+                if ($string === 'boolean') {
+                    return 'bool';
+                }
+                return $string;
+            }),
             new \Twig_SimpleFilter('twos_complement_min', function ($int) {
                 try {
                     return self::twosComplementMin($int);

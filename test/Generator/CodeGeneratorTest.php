@@ -90,7 +90,11 @@ class CodeGeneratorTest extends \PHPUnit_Framework_TestCase
             // Assert we're not comparing the same file.
             self::assertNotEquals($expected_file->getPathname(), $actual_file_path);
             // Assert the contents is the expected contents.
-            self::assertEquals($expected_contents, $actual_contents);
+            self::assertEquals(
+                $expected_contents,
+                $actual_contents,
+                'Generated result does not match for for file ' . $expected_file
+            );
         }
     }
 

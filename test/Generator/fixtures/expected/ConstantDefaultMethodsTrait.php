@@ -16,7 +16,7 @@ trait ConstantDefaultMethodsTrait
      * @throws \BadMethodCallException
      * @throws \LogicException
      *
-     * @return integer
+     * @return int
      */
     public function getWeather()
     {
@@ -60,7 +60,7 @@ trait ConstantDefaultMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      * @throws \DomainException if the integer value is outside of the domain on this machine
      *
-     * @param  integer $weather
+     * @param  int $weather
      * @return $this|ConstantDefault
      */
     public function setWeather($weather = Weather::SUN)

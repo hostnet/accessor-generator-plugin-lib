@@ -93,7 +93,7 @@ trait NullableMethodsTrait
      *
      * @throws \BadMethodCallException
      *
-     * @return integer
+     * @return int
      */
     public function getInt()
     {
@@ -131,7 +131,7 @@ trait NullableMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      * @throws \DomainException if the integer value is outside of the domain on this machine
      *
-     * @param  integer $int
+     * @param  int $int
      * @return $this|Nullable
      */
     public function setInt($int = null)
@@ -178,7 +178,7 @@ trait NullableMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      * @throws \DomainException if the integer value is outside of the domain on this machine
      *
-     * @param  integer $int_different
+     * @param  int $int_different
      * @return $this|Nullable
      */
     public function setIntDifferent($int_different = 2)

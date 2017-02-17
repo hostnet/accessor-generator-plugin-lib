@@ -47,7 +47,7 @@ trait TypesMethodsTrait
      * @throws \BadMethodCallException
      * @throws \LogicException
      *
-     * @return integer
+     * @return int
      */
     public function getSmallint()
     {
@@ -91,7 +91,7 @@ trait TypesMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      * @throws \DomainException if the integer value is outside of the domain on this machine
      *
-     * @param  integer $smallint
+     * @param  int $smallint
      * @return $this|Types
      */
     public function setSmallint($smallint)
@@ -132,7 +132,7 @@ trait TypesMethodsTrait
      * @throws \BadMethodCallException
      * @throws \LogicException
      *
-     * @return integer
+     * @return int
      */
     public function getInteger()
     {
@@ -176,7 +176,7 @@ trait TypesMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      * @throws \DomainException if the integer value is outside of the domain on this machine
      *
-     * @param  integer $integer
+     * @param  int $integer
      * @return $this|Types
      */
     public function setInteger($integer)
@@ -217,7 +217,7 @@ trait TypesMethodsTrait
      * @throws \BadMethodCallException
      * @throws \LogicException
      *
-     * @return integer
+     * @return int
      */
     public function getBigint()
     {
@@ -265,7 +265,7 @@ trait TypesMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      * @throws \DomainException if the integer value is outside of the domain on this machine
      *
-     * @param  integer $bigint
+     * @param  int $bigint
      * @return $this|Types
      */
     public function setBigint($bigint)
@@ -754,7 +754,7 @@ trait TypesMethodsTrait
      * @throws \BadMethodCallException
      * @throws \LogicException
      *
-     * @return boolean
+     * @return bool
      */
     public function isBoolean()
     {
@@ -786,7 +786,7 @@ trait TypesMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  boolean $boolean
+     * @param  bool $boolean
      * @return $this|Types
      */
     public function setBoolean($boolean)
@@ -817,7 +817,7 @@ trait TypesMethodsTrait
      * @throws \BadMethodCallException
      * @throws \LogicException
      *
-     * @return boolean
+     * @return bool
      */
     public function isThisBoolean()
     {
@@ -849,7 +849,7 @@ trait TypesMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  boolean $is_this_boolean
+     * @param  bool $is_this_boolean
      * @return $this|Types
      */
     public function setIsThisBoolean($is_this_boolean)
