@@ -408,6 +408,9 @@ class CodeGenerator implements CodeGeneratorInterface
             $filename = $path . DIRECTORY_SEPARATOR . $this->key_registry_class . '.php';
             $fs       = new Filesystem();
 
+            // make sure they are sorted
+            ksort($data['keys']);
+
             $data = $this->keys->render([
                 'namespace' => $data['namespace'] . '\\' . $this->namespace,
                 'keys'      => $data['keys'],
