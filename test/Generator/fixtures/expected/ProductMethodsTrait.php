@@ -16,7 +16,7 @@ trait ProductMethodsTrait
      *
      * @throws \BadMethodCallException
      *
-     * @return integer|null
+     * @return int|null
      */
     public function getId()
     {

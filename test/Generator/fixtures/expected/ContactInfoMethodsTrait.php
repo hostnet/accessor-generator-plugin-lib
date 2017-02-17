@@ -137,7 +137,7 @@ trait ContactInfoMethodsTrait
      *
      * @throws \BadMethodCallException
      *
-     * @return boolean|null
+     * @return bool|null
      */
     protected function isDeleted()
     {
@@ -163,7 +163,7 @@ trait ContactInfoMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  boolean $deleted
+     * @param  bool $deleted
      * @return $this|ContactInfo
      */
     public function setDeleted($deleted)
@@ -193,7 +193,7 @@ trait ContactInfoMethodsTrait
      *
      * @throws \BadMethodCallException
      *
-     * @return boolean|null
+     * @return bool|null
      */
     private function isSpendsLotsOfMoney()
     {
@@ -219,7 +219,7 @@ trait ContactInfoMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  boolean $spends_lots_of_money
+     * @param  bool $spends_lots_of_money
      * @return $this|ContactInfo
      */
     protected function setSpendsLotsOfMoney($spends_lots_of_money)

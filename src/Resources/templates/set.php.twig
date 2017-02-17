@@ -24,7 +24,7 @@
  * @throws \LengthException if the length of the value is to long
  {% endif -%}
  *
- * @param  {{ property.typeHint }} ${{ property.name }}
+ * @param  {{ property.typeHint | phptype }} ${{ property.name }}
  {% if property.isFixedPointNumber -%}
  * @param  bool $round round the number fit in the precision and scale (round away from zero)
  {% endif -%}

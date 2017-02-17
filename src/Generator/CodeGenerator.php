@@ -269,7 +269,7 @@ class CodeGenerator implements CodeGeneratorInterface
      *
      * @param  string   $name
      * @param  string[] $imports
-     * @return boolean
+     * @return bool
      */
     private static function isAliased($name, array $imports)
     {

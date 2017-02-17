@@ -18,7 +18,7 @@
  {% if property.collection -%}
  * @return {{ property.fullyQualifiedType }}[]|ImmutableCollection
  {% else -%}
- * @return {{ property.isComplexType ? property.typeHint : property.type}}{{ not property.willGenerateStrict ? '|null' }}
+ * @return {{ (property.isComplexType ? property.typeHint : property.type) | phptype }}{{ not property.willGenerateStrict ? '|null' }}
  {% endif -%}
  */
 {{ property.getGetVisibility() }} function {{ getter }}()
