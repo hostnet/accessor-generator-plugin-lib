@@ -1,10 +1,8 @@
 <?php
 namespace Hostnet\Component\AccessorGenerator\Twig;
 
-use Twig_Token as Token;
-
 /**
- * @covers Hostnet\Component\AccessorGenerator\Twig\PerLineTokenParser
+ * @covers \Hostnet\Component\AccessorGenerator\Twig\PerLineTokenParser
  * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 class PerLineTokenParserTest extends \PHPUnit_Framework_TestCase
@@ -36,6 +34,21 @@ class PerLineTokenParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Flattens all \Twig_nodes in a tree.
+     *
+     * @param \Twig_Node $node
+     * @return \Generator
+     */
+    private function iterateAllNodes(\Twig_Node $node)
+    {
+        yield $node;
+
+        foreach ($node as $child) {
+            yield from $this->iterateAllNodes($child);
+        }
+    }
+
+    /**
      * Test if we parse the content between a {% perline %} and {% endperline %}
      * tag into a valis PerLineNode with its own child nodes
      *
@@ -48,31 +61,25 @@ class PerLineTokenParserTest extends \PHPUnit_Framework_TestCase
     public function testParse($template, \Twig_Node $lines, $prefix, $postfix)
     {
         // Setup a token stream and feed it into our token parser.
-        $twig         = new \Twig_Environment();
-        $stream       = $twig->tokenize($template, 'found');
-        $token_parser = new PerLineTokenParser();
-        $twig_parser  = new TestParser($twig);
+        $twig = new TestEnvironment(new CodeGenerationExtension());
 
-        // Token parsers read the stream form their internal Twig parsers,
-        // here its feeded into the twig parser, and the Twig parser is feeded,
-        // into the token parser.
-        $twig_parser->setStream($stream);
-        $token_parser->setParser($twig_parser);
+        $stream = $twig->parse($twig->tokenize(new \Twig_Source($template, 'found')));
 
-        // Align the stream and pick the right token as start point.
-        while (!$stream->getCurrent()->test('perline')) {
-            $stream->next();
+        $per_line = null;
+        foreach ($this->iterateAllNodes($stream) as $node) {
+            if ($node instanceof \Twig_Node && $node->getNodeTag() === 'perline') {
+                $per_line = $node;
+                break;
+            }
         }
-        $node = $token_parser->parse($stream->next());
+
 
         // check if we get a valid node back (of type PerLineNode)
-        self::assertInstanceOf(PerLineNode::class, $node);
+        self::assertInstanceOf(PerLineNode::class, $per_line);
 
         // Check the contents of what we parsed.
-        if ($node instanceof PerLineNode) {
-            self::assertEquals($prefix, $node->getAttribute('prefix'));
-            self::assertEquals($postfix, $node->getAttribute('postfix'));
-            self::assertEquals($lines->__toString(), $node->getNode('lines')->__toString());
-        }
+        self::assertEquals($prefix, $per_line->getAttribute('prefix'));
+        self::assertEquals($postfix, $per_line->getAttribute('postfix'));
+        self::assertEquals($lines->__toString(), $per_line->getNode('lines')->__toString());
     }
 }

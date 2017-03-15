@@ -7,7 +7,7 @@ use Twig_Node_Print as PrintNode;
 use Twig_Node_Text as TextNode;
 
 /**
-* @covers Hostnet\Component\AccessorGenerator\Twig\PerLineNode
+* @covers \Hostnet\Component\AccessorGenerator\Twig\PerLineNode
 * @author Hidde Boomsma <hboomsma@hostnet.nl>
 */
 class PerLineNodeTest extends \PHPUnit_Framework_TestCase
@@ -29,20 +29,19 @@ class PerLineNodeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     *
      * @dataProvider parseProvider
      * @param Node $lines content nodes of the preline block
      * @param string $prefix prefix to be put before each line
-     * @param string $postifx postfix to be put after each line
+     * @param string $postfix postfix to be put after each line
      * @param string $file filename of file inside of fixtures directory to
      *                     use as refernce output.
      */
     public function testParse(Node $lines, $prefix, $postfix, $file)
     {
-        $compiler = new \Twig_Compiler(new \Twig_Environment());
+        $compiler = new \Twig_Compiler(new \Twig_Environment(new \Twig_Loader_Array()));
         $node     = new PerLineNode($lines, $prefix, $postfix, 1);
         $node->compile($compiler);
 
-        self::assertEquals(file_get_contents(__DIR__ . '/fixtures/' . $file), $compiler->getSource());
+        self::assertStringEqualsFile(__DIR__.'/fixtures/'.$file, $compiler->getSource());
     }
 }

@@ -55,7 +55,7 @@ class CodeGenerationExtensionTest extends \PHPUnit_Framework_TestCase
         $cge     = new CodeGenerationExtension();
         $parsers = $cge->getTokenParsers();
 
-        self::assertTrue(count($parsers) == 1, 'One and only one parser given');
+        self::assertCount(1, $parsers, 'One and only one parser given');
         self::assertInstanceOf(PerLineTokenParser::class, current($parsers));
     }
 
