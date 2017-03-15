@@ -24,13 +24,13 @@ class PerLineNode extends \Twig_Node
     /**
      * Create new PerLineNode
      *
-     * @param \Twig_NodeInterface $lines
-     * @param string              $prefix
-     * @param string              $postfix
-     * @param int                 $lineno
-     * @param string              $tag
+     * @param \Twig_Node $lines
+     * @param string     $prefix
+     * @param string     $postfix
+     * @param int        $lineno
+     * @param string     $tag
      */
-    public function __construct(\Twig_NodeInterface $lines, $prefix, $postfix, $lineno, $tag = 'perline')
+    public function __construct(\Twig_Node $lines, $prefix, $postfix, $lineno, $tag = 'perline')
     {
         parent::__construct(
             ['lines' => $lines],

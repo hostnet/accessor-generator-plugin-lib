@@ -29,7 +29,7 @@ class PerLineTokenParser extends \Twig_TokenParser
      * contents into some thing nice to build a PerLineNode out of.
      *
      * @param  \Twig_Token         $token
-     * @return \Twig_NodeInterface
+     * @return \Twig_Node_Print
      */
     public function parse(\Twig_Token $token)
     {
@@ -62,9 +62,9 @@ class PerLineTokenParser extends \Twig_TokenParser
      */
     private function parseBody(\Twig_Node $body)
     {
-        $prefix  = '';               // Text before the (possibly) multi line expression
-        $postfix = '';               // Text before the (possibly) multi line expression
-        $lineno  = $body->getLine(); // The line number where we found the {% perline %} tag
+        $prefix  = '';                       // Text before the (possibly) multi line expression
+        $postfix = '';                       // Text before the (possibly) multi line expression
+        $lineno  = $body->getTemplateLine(); // The line number where we found the {% perline %} tag
 
         // If the body does not contain a list of tags, the body itself is the
         // only useful content of the perline tags, so we return only the body
