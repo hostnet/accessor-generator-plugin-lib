@@ -241,7 +241,7 @@ class PropertyInformation implements PropertyInformationInterface
 
                 if ($annotation instanceof Column
                     && isset($annotation->type)
-                    && $annotation->type !== 'string'
+                    && !in_array($annotation->type, ['string', 'text'])
                 ) {
                     $is_string = false;
                 }
