@@ -73,31 +73,72 @@ when the type is iterable (e.g. DoctrineCollection or array).
 
 ### Encryption
 
-To use asymmetric encryption on a column's value add the 'encryption_alias' field to the Generate annotation. 
+To use asymmetric encryption on a column's value add the 'encryption_alias' field to the `Generate` annotation. 
 Also make sure the type of the database column has a big enough length. At least 1064 for key and IV is needed,
 plus the length of the sealed data itself.
 
 ```php
-@AG\Generate(encryption_alias="database.table.column")
+/**
+ * @AG\Generate(encryption_alias="database.table.column")
+ */
+ private $encrypted_variable;
 ```
 
 The alias used there should be added to the application's composer.json as follows:
 
-```php
+```
 "extra": {
      "accessor-generator": {
          <encryption_alias>: {
-             public-key: <key_file>
-             private-key: <key_file>
+             "public-key": <public_key_file>
+             "private-key": <private_key_file>
 ...
 ```
 
-If the application has to encrypt, add the public key. If the application has to decrypt, add the private key. If
-the application has to do both, add both.
+In order to encrypt or decrypt data, a valid private and public key must be specified.
 
-The key_file has to contain the file path relative to the composer.json.
+- The *public key* is needed to encrypt data.
+- The *private key* is needed to decrypt data.
 
-Do not forget to use the setter in the constructor body as well to trigger the encryption.
+In order to start encrypting data, a public key is necessary. However, you will first need a private key in order to 
+extract a public key from it. We can use the `openssl` tool to do so: 
+
+**Creating a key:**
+```bash
+$ openssl genrsa -out database.table.column.private_key.pem 2048
+```
+
+**Extracting a public key from a private key:**
+```bash
+$ openssl rsa -in database.table.column.private_key.pem -pubout > database.table.column.public_key.pem
+```
+
+If the application has to _encrypt_, add the _public key_. If the application has to _decrypt_, add the _private key_.
+If the application has to do both, add both.
+
+The `<public_key_file>` and `<private_key_file>` values have to contain the file paths to the keys relative 
+to the composer.json file.
+
+Do not forget to use the *setter method* in the constructor to trigger the encryption of the given value instead
+of assigning a value to the property directly.
+.
+
+```php
+<?php
+class MyEntity
+{
+    /**
+     * @AG\Generate(encryption_alias="<encryption_alias>")
+     */
+    private $my_value;
+    
+    public function __construct(string $my_value)
+    {
+        $this->my_value = $my_value;  // No encryption is taking place.
+        $this->setMyValue($my_value); // The value is now encrypted in the field.
+    }
+}
+```
 
 ## Installation
 
