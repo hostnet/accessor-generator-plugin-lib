@@ -53,7 +53,6 @@ class GenerateAnnotationProcessor implements AnnotationProcessorInterface
 
         null === $info->getType() && $annotation->getType() && $info->setType($annotation->getType());
         null !== $annotation->getType() && $info->setTypeHint($annotation->getType());
-
         null !== $annotation->getEncryptionAlias() && $info->setEncryptionAlias($annotation->getEncryptionAlias());
 
         // Enforce always
