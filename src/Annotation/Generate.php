@@ -53,7 +53,7 @@ class Generate
      *
      * @Enum({"public", "protected", "private", "none", true, false})
      */
-    public $get = self::VISIBILITY_PUBLIC;
+    public $get;
 
     /**
      * Will generate relevant methods to fully modify the property.
@@ -67,7 +67,7 @@ class Generate
      *
      * @Enum({"public", "protected", "private", "none", true, false})
      */
-    public $set = self::VISIBILITY_PUBLIC;
+    public $set;
 
     /**
      * Will generate an adder in the case of a OneToMany or ManyToMany
@@ -78,7 +78,7 @@ class Generate
      *
      * @Enum({"public", "protected", "private", "none", true, false})
      */
-    public $add = self::VISIBILITY_PUBLIC;
+    public $add;
 
     /**
      * Will generate a remover in the case of a OneToMany or ManyToMany
@@ -89,7 +89,7 @@ class Generate
      *
      * @Enum({"public", "protected", "private", "none", true, false})
      */
-    public $remove = self::VISIBILITY_PUBLIC;
+    public $remove;
 
     /**
      * Will generate a isXxx for a boolean property. Might already be disabled
@@ -101,6 +101,13 @@ class Generate
      * @Enum({"public", "protected", "private", "none", true, false})
      */
     public $is = self::VISIBILITY_PUBLIC;
+
+    /**
+     * List of enum classes to generate accessor classes for.
+     *
+     * @var \Hostnet\Component\AccessorGenerator\Annotation\Enumerator[]
+     */
+    public $enumerators = [];
 
     /**
      * Determine the type hint to use for the setter/adder/remover, and the
@@ -204,6 +211,14 @@ class Generate
     }
 
     /**
+     * @return string[]
+     */
+    public function getEnumerators()
+    {
+        return $this->enumerators;
+    }
+
+    /**
      * Cast legacy values to their string representative.
      *
      * @param bool $value
@@ -217,7 +232,7 @@ class Generate
                 E_USER_DEPRECATED
             );
         }
-        
+
         if ($value === true) {
             return self::VISIBILITY_PUBLIC;
         }
@@ -253,5 +268,26 @@ class Generate
         }
 
         return self::VISIBILITY_PUBLIC;
+    }
+
+    /**
+     * Sets the given visibility to all accessors if they are not explicitly defined.
+     *
+     * @param string $visibility
+     */
+    public function setDefaultVisibility(string $visibility)
+    {
+        if (null === $this->get) {
+            $this->get = $visibility;
+        }
+        if (null === $this->set) {
+            $this->set = $visibility;
+        }
+        if (null === $this->add) {
+            $this->add = $visibility;
+        }
+        if (null === $this->remove) {
+            $this->remove = $visibility;
+        }
     }
 }

@@ -4,6 +4,7 @@ namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
 use Doctrine\Common\Annotations\DocParser;
 use Doctrine\ORM\Mapping\Column;
+use Hostnet\Component\AccessorGenerator\Annotation\Enumerator;
 use Hostnet\Component\AccessorGenerator\Annotation\Generate;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
 
@@ -122,6 +123,14 @@ class PropertyInformation implements PropertyInformationInterface
      * @var string|null
      */
     private $generate_add = null;
+
+    /**
+     * @see PropertyInformationInterface::getEnumeratorsToGenerate()
+     * Generate enumerator accessors for the given classes.
+     *
+     * @var string[]
+     */
+    private $enums_to_generate = [];
 
     /**
      * @see PropertyInformationInterface::getIndex()
@@ -991,5 +1000,33 @@ class PropertyInformation implements PropertyInformationInterface
     public function getRemoveVisibility()
     {
         return $this->generate_remove;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return Enumerator[]
+     */
+    public function getEnumeratorsToGenerate()
+    {
+        return $this->enums_to_generate;
+    }
+
+    /**
+     * @param string[] $enums_to_generate
+     */
+    public function setEnumeratorsToGenerate(array $enums_to_generate)
+    {
+        $this->enums_to_generate = $enums_to_generate;
+    }
+
+    /**
+     * Returns true if an enumerator accessor will be generated for this property.
+     *
+     * @return bool
+     */
+    public function willGenerateEnumeratorAccessors()
+    {
+        return count($this->enums_to_generate) > 0;
     }
 }

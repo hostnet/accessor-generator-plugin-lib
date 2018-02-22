@@ -30,8 +30,11 @@ class PluginTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSubscribedEvents()
     {
-        self::assertEquals(
-            [ScriptEvents::PRE_AUTOLOAD_DUMP => ['onPreAutoloadDump', 20 ]],
+        self::assertSame(
+            [
+                ScriptEvents::PRE_AUTOLOAD_DUMP  => ['onPreAutoloadDump', 20 ],
+                ScriptEvents::POST_AUTOLOAD_DUMP => ['onPostAutoloadDump', 20 ]
+            ],
             Plugin::getSubscribedEvents()
         );
     }
@@ -46,11 +49,29 @@ class PluginTest extends \PHPUnit_Framework_TestCase
 
         // Hit every fixture one time.
         $generator->expects(self::exactly(2))->method('writeTraitForClass')->willReturn(true);
+        $generator->expects(self::exactly(0))->method('writeEnumeratorAccessorsForClass')->willReturn(true);
         $generator->expects(self::once())->method('setEncryptionAliases');
 
         $plugin = new Plugin($generator);
         $plugin->activate($this->getMockComposer(), new BufferIO('', StreamOutput::VERBOSITY_VERY_VERBOSE));
         $plugin->onPreAutoloadDump();
+    }
+
+    public function testOnPostAutoloadDump()
+    {
+        // Effectively change installation dir of root package.
+        chdir(__DIR__ . '/fixtures/root');
+
+        // Get fake generator
+        $generator = $this->createMock(CodeGeneratorInterface::class);
+
+        // Hit every fixture one time.
+        $generator->expects(self::exactly(0))->method('writeTraitForClass')->willReturn(true);
+        $generator->expects(self::exactly(2))->method('writeEnumeratorAccessorsForClass')->willReturn([]);
+
+        $plugin = new Plugin($generator);
+        $plugin->activate($this->getMockComposer(), new BufferIO('', StreamOutput::VERBOSITY_VERY_VERBOSE));
+        $plugin->onPostAutoloadDump();
     }
 
     /**

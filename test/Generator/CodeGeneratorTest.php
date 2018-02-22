@@ -52,6 +52,7 @@ class CodeGeneratorTest extends \PHPUnit_Framework_TestCase
 
             // Generate the accessor methods trait.
             $generator->writeTraitForClass($class);
+            $generator->writeEnumeratorAccessorsForClass($class);
         }
 
         // Generate the KeyRegistry class(es).
