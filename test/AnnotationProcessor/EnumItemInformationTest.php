@@ -6,27 +6,27 @@ use Doctrine\Common\Util\Inflector;
 class EnumItemInformationTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * This is array.
+     * This is of type: array.
      */
     public const A_TEST_CONSTANT = 'I_TEST_CONSTANT';
 
     /**
-     * This is int.
+     * This is of type: int.
      */
     public const I_TEST_CONSTANT = 'I_TEST_CONSTANT';
 
     /**
-     * This is string.
+     * This is of type: string.
      */
     public const S_TEST_CONSTANT = 'S_TEST_CONSTANT';
 
     /**
-     * This is float.
+     * This is of type: float.
      */
     public const F_TEST_CONSTANT = 'F_TEST_CONSTANT';
 
     /**
-     * This is bool.
+     * This is of type: bool.
      */
     public const B_TEST_CONSTANT = 'B_TEST_CONSTANT';
 
@@ -59,7 +59,7 @@ class EnumItemInformationTest extends \PHPUnit_Framework_TestCase
         $info      = new EnumItemInformation($constant);
 
         self::assertEquals($type, $info->getTypeHint());
-        self::assertEquals('* This is ' . $type . '.', $info->getDocBlock());
+        self::assertEquals('* This is of type: ' . $type . '.', $info->getDocBlock());
         self::assertEquals($name, $info->getConstName());
         self::assertEquals(substr($name, 2), $info->getName());
         self::assertEquals(Inflector::classify(strtolower(substr($name, 2))), $info->getMethodName());
