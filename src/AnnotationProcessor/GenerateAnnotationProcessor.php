@@ -35,7 +35,7 @@ class GenerateAnnotationProcessor implements AnnotationProcessorInterface
         // By default no method is generated.
         //
         // Each processor can enforce a limitation on the generated methods.
-        // If processor A lets a method be private and processor B tells it to
+        // If processor A lets a method be private, and processor B tells it to
         // be protected, it will end up private.
 
         $info->limitMaximumGetVisibility(

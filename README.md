@@ -18,7 +18,7 @@ functions.
 ## Installation
 
 Add `hostnet/accessor-generator-plugin-lib` to your `composer.json` and run
-`php composer.phar update hostnet/accessor-generator-plugin-lib`
+`composer require hostnet/accessor-generator-plugin-lib`
 
 If you want to invoke generation after installing you can run `php composer.phar dump-autoload`.
 Add `-vv` to the dump-autoload command for more verbosity.
@@ -150,7 +150,7 @@ class MyEntity
 Since version 2.8.0, the support of accessor generation of parameterized collections has been added. With this addition,
 the requirement of PHP 7.1 has been added due to the need of `ReflectionConstant`, which was added in PHP 7.1.
 
-Imagine having an entity that holds an `ArrayCollection` to another entity that holds parameters. For exmaple:
+Imagine having an entity that holds an `ArrayCollection` to another entity that holds parameters. For example:
 ```php
 $task = new Task();
 $task->setParam(MyParamEnum::I_CLIENT_ID, 123456);
@@ -208,9 +208,9 @@ class Parameter
     // This signature is a requirement for enum accessor generation.
     public function __construct($task, $name, $value)
     {
-        $this->owner  = $task;
-        $this->>name  = $name;
-        $this->>value = $value;
+        $this->owner = $task;
+        $this->name  = $name;
+        $this->value = $value;
     }
 }
 ```
