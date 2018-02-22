@@ -1,10 +1,11 @@
 <?php
-// Generated at 2018-02-22 13:12:39 by hiedema on se18-03-73-40-f6-af
+// Generated at 2018-02-22 15:32:48 by hiedema on se18-03-73-40-f6-af
 
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
 use Doctrine\ORM\Mapping as ORM;
 use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Enum\EnumeratorCompatibleEntityInterface;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Parameter;
 
 trait ParameterMethodsTrait

@@ -9,6 +9,7 @@ use Hostnet\Component\AccessorGenerator\AnnotationProcessor\EnumItemInformation;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\GenerateAnnotationProcessor;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformation;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformationInterface;
+use Hostnet\Component\AccessorGenerator\Enum\EnumeratorCompatibleEntityInterface;
 use Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException;
 use Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
@@ -617,34 +618,11 @@ class CodeGenerator implements CodeGeneratorInterface
     {
         $reflector = new \ReflectionClass($entity_class);
 
-        if (! $reflector->hasMethod('__construct')) {
+        if (! in_array(EnumeratorCompatibleEntityInterface::class, $reflector->getInterfaceNames())) {
             throw new \LogicException(sprintf(
-                'Entity class "%s" must implement __construct($owning_entity, $name) in order to be Enum-compatible.',
-                $entity_class
-            ));
-        }
-
-        if (! $reflector->hasMethod('setValue')) {
-            throw new \LogicException(sprintf(
-                'Entity class "%s" must implement setValue($value) in order to be Enum-compatible.',
-                $entity_class
-            ));
-        }
-
-        if (! $reflector->hasMethod('getValue')) {
-            throw new \LogicException(sprintf(
-                'Entity class "%s" must implement getValue() in order to be Enum-compatible.',
-                $entity_class
-            ));
-        }
-
-        // Verify __constructor signature.
-        $constructor_args = $reflector->getMethod('__construct')->getParameters();
-        if (count($constructor_args) !== 3) {
-            throw new \LogicException(sprintf(
-                'The constructor of entity "%s" must implement 2 parameters: %s',
+                'The entity "%s" must implement "%s" in order to use it with enumerator accessor classes.',
                 $entity_class,
-                '<object> owning_entity, <string> name, <?string> value'
+                EnumeratorCompatibleEntityInterface::class
             ));
         }
     }

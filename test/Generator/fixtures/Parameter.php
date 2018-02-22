@@ -3,11 +3,12 @@ namespace Hostnet\Component\AccessorGenerator\Generator\fixtures;
 
 use Doctrine\ORM\Mapping as ORM;
 use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Enum\EnumeratorCompatibleEntityInterface;
 
 /**
  * @ORM\Entity()
  */
-class Parameter
+class Parameter implements EnumeratorCompatibleEntityInterface
 {
     use Generated\ParameterMethodsTrait;
 
@@ -42,7 +43,7 @@ class Parameter
      * @param string        $name
      * @param string|NULL   $value
      */
-    public function __construct(Parameterized $parameterized, string $name, ?string $value)
+    public function __construct($parameterized, string $name, ?string $value)
     {
         $this->parameterized = $parameterized;
         $this->name          = $name;
