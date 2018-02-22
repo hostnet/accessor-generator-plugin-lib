@@ -57,7 +57,6 @@ class GenerateAnnotationProcessor implements AnnotationProcessorInterface
 
         // Enforce always
         $info->setGenerateStrict($annotation->isStrict());
-
     }
 
     /**
