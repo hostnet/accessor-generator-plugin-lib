@@ -1,6 +1,8 @@
 <?php
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
+use Hostnet\Component\AccessorGenerator\Annotation\Enumerator;
+
 /**
  * Represents information about a property that is useful for generating
  * accessor methods.
@@ -270,6 +272,20 @@ interface PropertyInformationInterface
      * @return string
      */
     public function getAddVisibility();
+
+    /**
+     * Returns a list of FQCN's to generate enumerator accessors for.
+     *
+     * @return Enumerator[]
+     */
+    public function getEnumeratorsToGenerate();
+
+    /**
+     * Returns true if an enumerator accessor will be generated for this property.
+     *
+     * @return bool
+     */
+    public function willGenerateEnumeratorAccessors();
 
     /**
      * Returns true if a "remove"-method should be generated.

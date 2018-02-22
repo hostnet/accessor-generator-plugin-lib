@@ -1,0 +1,182 @@
+<?php
+// Generated at {{ "now" | date("Y-m-d H:i:s") }} by {{ username }} on {{ hostname }}
+
+namespace {{ namespace }};
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
+
+/**
+ * Generated accessor for enum class {{ enum_class }}.
+ */
+class {{ class_name }}
+{
+    private $owning_entity;
+    private $collection;
+    private $parameter_entity_class;
+
+    /**
+     * @param ArrayCollection $collection
+     * @param Entity|*        $owning_entity
+     * @param string          $parameter_entity_class
+     */
+    public function __construct(ArrayCollection $collection, $owning_entity, string $parameter_entity_class)
+    {
+        $this->collection             = $collection;
+        $this->owning_entity          = $owning_entity;
+        $this->parameter_entity_class = $parameter_entity_class;
+    }
+{% for info in properties %}
+
+    /**
+     {{ info.docBlock | raw}}
+     *
+     * @return {{ info.typeHint }}
+     */
+    public function get{{ info.methodName }}(): {{ info.typeHint }}
+    {
+        if (! $this->has{{ info.methodName }}()) {
+            throw new \LogicException(sprintf(
+                'Parameter "%s" does not exist or has never been initialized. %s',
+                '{{ info.constName }}',
+                'Use the method has{{ info.methodName }} to make sure that this parameter exists has as a valid value.'
+            ));
+        }
+
+{% if info.typeHint == "array" %}
+        if (null === ($result = json_decode($this->get{{ info.methodName }}EntityInstance()->getValue(), true))) {
+            throw new \RuntimeException(
+                'The value of parameter "{{ info.constName }}" could not be converted to a native array type.'
+            );
+        }
+
+        return (array) $result;
+{% else %}
+        return ({{ info.typeHint }}) $this->get{{ info.methodName }}EntityInstance()->getValue();
+{% endif %}
+    }
+
+    /**
+     * Sets the value for the parameter {{ info.name }}.
+     *
+     * @param  {{ info.typeHint }} $value
+     * @return {{ class_name }}
+     */
+    public function set{{ info.methodName }}({{ info.typeHint }} $value): {{ class_name }}
+    {
+        $items = $this
+            ->collection
+            ->matching((new Criteria())
+                ->where(Criteria::expr()->eq(
+                    'name',
+                    \{{ info.enumClass }}::{{ info.constName }}
+                ))
+            );
+
+        if ($items->isEmpty()) {
+            $item = new $this->parameter_entity_class(
+                $this->owning_entity,
+                \{{ info.enumClass }}::{{ info.constName }},
+{% if info.typeHint == "array" %}
+                json_encode($value)
+{% else %}
+                $value
+{% endif %}
+            );
+            $this->collection->add($item);
+        } else {
+{% if info.typeHint == "array" %}
+            $items->first()->setValue(json_encode($value));
+{% else %}
+            $items->first()->setValue((string) $value);
+{% endif %}
+        }
+
+        return $this;
+    }
+
+    /**
+     * Returns true if the value of parameter {{ info.name }} exists and is not NULL.
+     *
+     * @return bool
+     */
+    public function has{{ info.methodName }}(): bool
+    {
+        $items = $this
+            ->collection
+            ->matching((new Criteria())
+                ->where(Criteria::expr()->eq(
+                    'name',
+                    \{{ info.enumClass }}::{{ info.constName }}
+                ))
+            );
+
+        return $items->isEmpty()
+            ? false
+            : $items->first()->getValue() !== null;
+    }
+
+    /**
+     * Removes the parameter {{ info.name }} from the collection.
+     *
+     * @throws \LogicException if the parameter does not exist.
+     * @return {{ class_name }}
+     */
+    public function remove{{ info.methodName }}(): {{ class_name }}
+    {
+        if (! $this->has{{ info.methodName }}()) {
+            throw new \LogicException(sprintf(
+                'Parameter "%s" does not exist or has never been initialized. %s',
+                '{{ info.constName }}',
+                'Use the method has{{ info.methodName }} to make sure that this parameter exists has as a valid value.'
+            ));
+        }
+
+        $this->collection->removeElement($this->get{{ info.methodName }}EntityInstance());
+
+        return $this;
+    }
+
+    /**
+     * Nullifies the data for the parameter {{ info.name }}.
+     *
+     * @throws \LogicException if the parameter does not exist or was never initialized.
+     * @return {{ class_name }}
+     */
+    public function clear{{ info.methodName }}(): {{ class_name }}
+    {
+        if (! $this->has{{ info.methodName }}()) {
+            throw new \LogicException(sprintf(
+                'Parameter "%s" does not exist or has never been initialized. %s',
+                '{{ info.constName }}',
+                'Use the method has{{ info.methodName }} to make sure that this parameter exists has as a valid value.'
+            ));
+        }
+
+        $this->get{{ info.methodName }}EntityInstance()->setValue(null);
+
+        return $this;
+    }
+{% endfor %}
+{% for info in properties %}
+
+    /**
+     * Returns the parameter element for easy access.
+     *
+     * @return object
+     */
+    private function get{{ info.methodName }}EntityInstance()
+    {
+        $items = $this
+            ->collection
+            ->matching((new Criteria())
+                ->where(Criteria::expr()->eq(
+                    'name',
+                    \{{ info.enumClass }}::{{ info.constName }}
+                ))
+            );
+
+        return $items->first();
+    }
+{% endfor %}
+}

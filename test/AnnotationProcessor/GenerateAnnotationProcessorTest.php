@@ -2,11 +2,12 @@
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
 use Doctrine\ORM\Mapping\Column;
+use Hostnet\Component\AccessorGenerator\Annotation\Enumerator;
 use Hostnet\Component\AccessorGenerator\Annotation\Generate;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
 
 /**
- * @covers Hostnet\Component\AccessorGenerator\AnnotationProcessor\GenerateAnnotationProcessor
+ * @covers \Hostnet\Component\AccessorGenerator\AnnotationProcessor\GenerateAnnotationProcessor
  * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 class GenerateAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
@@ -40,7 +41,10 @@ class GenerateAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         $nothing       = new Generate();
         $type          = new Generate();
         $encryption    = new Generate();
+        $enumerate     = new Generate();
+
         $column        = new Column();
+        $enumerator    = new Enumerator();
 
         $no_is->is         = 'none';
         $no_get->get       = 'none';
@@ -71,6 +75,10 @@ class GenerateAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         $encryption->remove           = 'none';
         $encryption->encryption_alias = 'database.table.column';
 
+        $enumerate->enumerators = [$enumerator];
+        $enumerator->name       = 'Foo';
+        $enumerator->value      = 'SomeClass';
+
         return [
             [$column,        self::NO_GET, self::NO_SET, self::NO_ADD, self::NO_REMOVE, null,                null],
             [$all,           self::GET   , self::SET,    self::ADD,    self::REMOVE,    null,                null],
@@ -82,6 +90,7 @@ class GenerateAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
             [$no_collection, self::GET,    self::SET,    self::NO_ADD, self::NO_REMOVE, null,                null],
             [$nothing,       self::NO_GET, self::NO_SET, self::NO_ADD, self::NO_REMOVE, null,                null],
             [$type,          self::NO_GET, self::NO_SET, self::NO_ADD, self::NO_REMOVE, \ArrayObject::class, null],
+            [$enumerate,     self::NO_GET, self::NO_SET, self::NO_ADD, self::NO_REMOVE, null,                null],
             [
                 $encryption,
                 self::NO_GET,
@@ -125,6 +134,35 @@ class GenerateAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
             self::assertFalse($information->willGenerateAdd());
             self::assertFalse($information->willGenerateRemove());
         }
+    }
+
+    public function testEnumeratorVisibilities()
+    {
+        $enumerator        = new Enumerator();
+        $enumerator->name  = 'Foo';
+        $enumerator->value = 'SomeClass';
+
+        $annotation = new Generate();
+        $annotation2 = new Generate();
+
+        $annotation->enumerators  = [$enumerator];
+        $annotation2->enumerators = [$enumerator];
+        $annotation2->get         = Generate::VISIBILITY_PUBLIC;
+
+        $property     = new ReflectionProperty('test');
+        $property2    = new ReflectionProperty('test2');
+        $information  = new PropertyInformation($property);
+        $information2 = new PropertyInformation($property2);
+        $processor    = new GenerateAnnotationProcessor();
+
+        $processor->processAnnotation($annotation, $information);
+        $processor->processAnnotation($annotation2, $information2);
+
+        self::assertTrue($information->willGenerateEnumeratorAccessors());
+        self::assertFalse($information->willGenerateGet());
+        self::assertFalse($information->willGenerateSet());
+        self::assertFalse($information->willGenerateAdd());
+        self::assertFalse($information->willGenerateRemove());
     }
 
     public function testGetProcessableAnnotationNamespace()

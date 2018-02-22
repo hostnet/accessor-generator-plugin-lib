@@ -1,0 +1,19 @@
+private ${{ enum_property }};
+
+/**
+ * Returns a parameter collection for {{ enum_class }}.
+ *
+ * @return {{ class_name }}
+ */
+public function get{{ name }}()
+{
+    if (! $this->{{ enum_property }}) {
+        $this->{{ enum_property }} = new {{ class_name }}(
+            $this->{{ property }},
+            $this,
+            {{ info.type }}::class
+        );
+    }
+
+    return $this->{{ enum_property }};
+}

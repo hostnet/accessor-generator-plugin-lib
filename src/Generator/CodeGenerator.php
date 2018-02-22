@@ -3,7 +3,9 @@ namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Doctrine\Common\Annotations\DocParser;
 use Doctrine\Common\Inflector\Inflector;
+use Hostnet\Component\AccessorGenerator\Annotation\Enumerator;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\DoctrineAnnotationProcessor;
+use Hostnet\Component\AccessorGenerator\AnnotationProcessor\EnumItemInformation;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\GenerateAnnotationProcessor;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformation;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformationInterface;
@@ -32,6 +34,16 @@ class CodeGenerator implements CodeGeneratorInterface
     /**
      * @var string
      */
+    private $enum_name_suffix = 'Enum';
+
+    /**
+     * @var array
+     */
+    private $enum_class_cache = [];
+
+    /**
+     * @var string
+     */
     private $key_registry_class = 'KeyRegistry';
 
     /**
@@ -52,6 +64,16 @@ class CodeGenerator implements CodeGeneratorInterface
     /**
      * @var \Twig_TemplateInterface
      */
+    private $enum_get;
+
+    /**
+     * @var \Twig_Template
+     */
+    private $enum_class;
+
+    /**
+     * @var \Twig_TemplateInterface
+     */
     private $remove;
 
     /**
@@ -63,6 +85,11 @@ class CodeGenerator implements CodeGeneratorInterface
      * @var \Twig_TemplateInterface
      */
     private $keys;
+
+    /**
+     * @var array
+     */
+    private $metadata_cache = [];
 
     /**
      * @var array
@@ -81,6 +108,7 @@ class CodeGenerator implements CodeGeneratorInterface
      *
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Syntax
+     * @throws \Twig_Error_Runtime
      */
     public function __construct()
     {
@@ -88,12 +116,14 @@ class CodeGenerator implements CodeGeneratorInterface
         $twig   = new \Twig_Environment($loader);
         $twig->addExtension(new CodeGenerationExtension());
 
-        $this->get    = $twig->loadTemplate('get.php.twig');
-        $this->set    = $twig->loadTemplate('set.php.twig');
-        $this->add    = $twig->loadTemplate('add.php.twig');
-        $this->remove = $twig->loadTemplate('remove.php.twig');
-        $this->trait  = $twig->loadTemplate('trait.php.twig');
-        $this->keys   = $twig->loadTemplate('keys.php.twig');
+        $this->get        = $twig->loadTemplate('get.php.twig');
+        $this->set        = $twig->loadTemplate('set.php.twig');
+        $this->add        = $twig->loadTemplate('add.php.twig');
+        $this->remove     = $twig->loadTemplate('remove.php.twig');
+        $this->trait      = $twig->loadTemplate('trait.php.twig');
+        $this->keys       = $twig->loadTemplate('keys.php.twig');
+        $this->enum_get   = $twig->loadTemplate('enum_get.php.twig');
+        $this->enum_class = $twig->loadTemplate('enum_class.php.twig');
     }
 
     /**
@@ -117,25 +147,95 @@ class CodeGenerator implements CodeGeneratorInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function generateTraitForClass(ReflectionClass $class)
+    public function writeEnumeratorAccessorsForClass(ReflectionClass $class): array
     {
-        $code                  = '';
-        $add_collection_import = false;
+        $metadata  = $this->getMetadataForClass($class);
+        $fs        = new Filesystem();
+        $generated = [];
+
+        foreach ($metadata['properties'] as $info) {
+            /* @var $info PropertyInformation */
+            if (! $info->willGenerateEnumeratorAccessors()) {
+                continue;
+            }
+
+            foreach ($info->getEnumeratorsToGenerate() as $enumerator) {
+                $cache_id = $enumerator->getEnumeratorClass();
+                if (isset($this->enum_class_cache[$cache_id])) {
+                    // Do not generate the same class twice.
+                    continue;
+                }
+
+                $this->enum_class_cache[$cache_id] = $this->generateEnumeratorAccessors($enumerator);
+
+                $reflector   = new \ReflectionClass($enumerator->getEnumeratorClass());
+                $generated[] = $enumerator->getEnumeratorClass();
+                $path        = dirname($reflector->getFileName()) . DIRECTORY_SEPARATOR . $this->namespace;
+                $filename    = $path
+                    . DIRECTORY_SEPARATOR
+                    . $reflector->getShortName()
+                    . $this->enum_name_suffix
+                    . '.php';
+
+                $this->validateEnumEntity($info->getType());
+
+                $fs->mkdir($path);
+                $fs->dumpFile($filename, $this->enum_class_cache[$cache_id]);
+            }
+        }
+
+        return $generated;
+    }
+
+    /**
+     * @param Enumerator $enumerator
+     * @return string
+     * @throws \ReflectionException
+     * @throws \Throwable
+     */
+    public function generateEnumeratorAccessors(Enumerator $enumerator)
+    {
+        $enum_class = $enumerator->getEnumeratorClass();
+        $reflector  = new \ReflectionClass($enum_class);
+        $class_name = $reflector->getShortName() . $this->enum_name_suffix;
+        $namespace  = $reflector->getNamespaceName() . '\\Generated';
+        $properties = [];
+
+        foreach ($reflector->getReflectionConstants() as $reflection_constant) {
+            $properties[] = new EnumItemInformation($reflection_constant);
+        }
+
+        return $this->enum_class->render([
+            'enum_class' => $enum_class,
+            'class_name' => $class_name,
+            'properties' => $properties,
+            'namespace'  => $namespace,
+            'username'   => get_current_user(),
+            'hostname'   => gethostname(),
+        ]);
+    }
+
+    private function getMetadataForClass(ReflectionClass $class)
+    {
+        $cache_key = (string) $class->getFilename();
+        if (isset($this->metadata_cache[$cache_key])) {
+            return $this->metadata_cache[$cache_key];
+        }
 
         try {
             $properties = $class->getProperties();
             $imports    = $class->getUseStatements();
         } catch (ClassDefinitionNotFoundException $e) {
-            return '';
+            return ['properties' => [], 'imports' => []];
         }
 
         $imports[] = $class->getNamespace() . '\\' . $class->getName();
 
         $generate_processor = new GenerateAnnotationProcessor();
         $doctrine_processor = new DoctrineAnnotationProcessor();
+
+        $this->metadata_cache[$cache_key]['imports']    = $imports;
+        $this->metadata_cache[$cache_key]['properties'] = [];
 
         foreach ($properties as $property) {
             $parser = new DocParser();
@@ -144,12 +244,32 @@ class CodeGenerator implements CodeGeneratorInterface
             $info->registerAnnotationProcessor($doctrine_processor);
             $info->processAnnotations();
 
+            $this->metadata_cache[$cache_key]['properties'][$info->getName()] = $info;
+        }
+
+        return $this->metadata_cache[$cache_key];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function generateTraitForClass(ReflectionClass $class)
+    {
+        $code                  = '';
+        $add_collection_import = false;
+
+        $metadata = $this->getMetadataForClass($class);
+        $imports  = $metadata['imports'];
+
+        foreach ($metadata['properties'] as $info) {
+
             // Check if we have anything to do. If not, continue to the next
             // property.
-            if (!$info->willGenerateAdd()
-                && !$info->willGenerateGet()
-                && !$info->willGenerateRemove()
-                && !$info->willGenerateSet()
+            if (! $info->willGenerateAdd()
+                && ! $info->willGenerateGet()
+                && ! $info->willGenerateRemove()
+                && ! $info->willGenerateSet()
+                && ! $info->willGenerateEnumeratorAccessors()
             ) {
                 continue;
             }
@@ -248,14 +368,14 @@ class CodeGenerator implements CodeGeneratorInterface
      */
     private static function addImportForType($type, $namespace, array &$imports)
     {
-        if (!self::isAliased($type, $imports)) {
+        if (! self::isAliased($type, $imports)) {
             $first_part = strstr($type, '\\', true);
             if ($first_part) {
                 // Sub namespace;
                 $imports[$first_part] = $namespace . '\\' . $first_part;
             } else {
                 // Inside own namespace
-                if (!self::getPlainImportIfExists($type, $imports)) {
+                if (! self::getPlainImportIfExists($type, $imports)) {
                     // Not already imported
                     $imports[] = $namespace . '\\' . $type;
                 }
@@ -348,6 +468,25 @@ class CodeGenerator implements CodeGeneratorInterface
             );
         }
 
+        if ($info->willGenerateEnumeratorAccessors()) {
+            foreach ($info->getEnumeratorsToGenerate() as $enum_to_generate) {
+                // Unhandy way to get the short name of the class since we can't use native ReflectionClass here because
+                // the composer autoload process is not finalized at this point.
+                $class_path = str_replace('\\', DIRECTORY_SEPARATOR, $enum_to_generate->getEnumeratorClass());
+                $class_ns   = str_replace(DIRECTORY_SEPARATOR, '\\', dirname($class_path)) . '\\' . $this->namespace;
+                $class_name = $class_ns . '\\' . basename($class_path) . $this->enum_name_suffix;
+
+                $code .= $this->enum_get->render([
+                    'property'      => $info->getName(),
+                    'name'          => $enum_to_generate->getName(),
+                    'class_name'    => $class_name,
+                    'info'          => $info,
+                    'enum_class'    => $enum_to_generate->getEnumeratorClass(),
+                    'enum_property' => Inflector::tableize($enum_to_generate->getName() . '_instance')
+                ]);
+            }
+        }
+
         // Generate a get method.
         if ($info->willGenerateGet()) {
             // Compute the name of the get method. For boolean values
@@ -364,12 +503,12 @@ class CodeGenerator implements CodeGeneratorInterface
 
             // Render the get/is method.
             $code .= $this->get->render(
-                [
-                    'property'     => $info,
-                    'getter'       => $getter,
-                    'PHP_INT_SIZE' => PHP_INT_SIZE,
-                ]
-            ) . PHP_EOL;
+                    [
+                        'property'     => $info,
+                        'getter'       => $getter,
+                        'PHP_INT_SIZE' => PHP_INT_SIZE,
+                    ]
+                ) . PHP_EOL;
         }
 
         // Render add/remove methods for collections and set methods for
@@ -387,11 +526,11 @@ class CodeGenerator implements CodeGeneratorInterface
             // No collection thus, generate a set method.
             if ($info->willGenerateSet()) {
                 $code .= $this->set->render(
-                    [
-                        'property'     => $info,
-                        'PHP_INT_SIZE' => PHP_INT_SIZE,
-                    ]
-                ) . PHP_EOL;
+                        [
+                            'property'     => $info,
+                            'PHP_INT_SIZE' => PHP_INT_SIZE,
+                        ]
+                    ) . PHP_EOL;
             }
         }
 
@@ -467,5 +606,46 @@ class CodeGenerator implements CodeGeneratorInterface
         } while ($next !== false);
 
         return $unique_imports;
+    }
+
+    /**
+     * Ensures the enity class complies to the "standard" for holding parameters.
+     *
+     * @param string $entity_class
+     */
+    private function validateEnumEntity(string $entity_class)
+    {
+        $reflector = new \ReflectionClass($entity_class);
+
+        if (! $reflector->hasMethod('__construct')) {
+            throw new \LogicException(sprintf(
+                'Entity class "%s" must implement __construct($owning_entity, $name) in order to be Enum-compatible.',
+                $entity_class
+            ));
+        }
+
+        if (! $reflector->hasMethod('setValue')) {
+            throw new \LogicException(sprintf(
+                'Entity class "%s" must implement setValue($value) in order to be Enum-compatible.',
+                $entity_class
+            ));
+        }
+
+        if (! $reflector->hasMethod('getValue')) {
+            throw new \LogicException(sprintf(
+                'Entity class "%s" must implement getValue() in order to be Enum-compatible.',
+                $entity_class
+            ));
+        }
+
+        // Verify __constructor signature.
+        $constructor_args = $reflector->getMethod('__construct')->getParameters();
+        if (count($constructor_args) !== 3) {
+            throw new \LogicException(sprintf(
+                'The constructor of entity "%s" must implement 2 parameters: %s',
+                $entity_class,
+                '<object> owning_entity, <string> name, <?string> value'
+            ));
+        }
     }
 }

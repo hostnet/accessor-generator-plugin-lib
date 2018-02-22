@@ -25,10 +25,17 @@ class GenerateAnnotationProcessor implements AnnotationProcessorInterface
             return;
         }
 
+        if ($annotation->getEnumerators()) {
+            $info->setEnumeratorsToGenerate($annotation->getEnumerators());
+            $annotation->setDefaultVisibility(Generate::VISIBILITY_NONE);
+        } else {
+            $annotation->setDefaultVisibility(Generate::VISIBILITY_PUBLIC);
+        }
+
         // By default no method is generated.
         //
         // Each processor can enforce a limitation on the generated methods.
-        // If processor A lets a method be private, and processor B tells it to
+        // If processor A lets a method be private and processor B tells it to
         // be protected, it will end up private.
 
         $info->limitMaximumGetVisibility(
@@ -51,6 +58,7 @@ class GenerateAnnotationProcessor implements AnnotationProcessorInterface
 
         // Enforce always
         $info->setGenerateStrict($annotation->isStrict());
+
     }
 
     /**

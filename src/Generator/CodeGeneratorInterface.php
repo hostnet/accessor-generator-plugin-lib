@@ -25,6 +25,14 @@ interface CodeGeneratorInterface
     public function writeTraitForClass(ReflectionClass $class);
 
     /**
+     * Writes one or more enumerator accessors.
+     *
+     * @param  ReflectionClass $class
+     * @return bool
+     */
+    public function writeEnumeratorAccessorsForClass(ReflectionClass $class);
+
+    /**
      * Returns the generated PHP code for the accessor methods trait for
      * the given {$class}. The trait will have a subs-namespace with the name
      * "Generated" relative to the namespace of {$class}.

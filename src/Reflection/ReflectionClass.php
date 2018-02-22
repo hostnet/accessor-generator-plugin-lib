@@ -67,6 +67,11 @@ class ReflectionClass
     private $class_location = null;
 
     /**
+     * @var \ReflectionClassConstant[]
+     */
+    private $constants;
+
+    /**
      * Create a reflection class for a class contained in the given file. The
      * class should not be already loaded into memory previously, because this
      * implementation of ReflectionClass assumes that the class contains
@@ -81,15 +86,13 @@ class ReflectionClass
 
         // Check if file exists
         if (! file_exists($filename)) {
-            throw new FileException("File \"$filename\" does nog exist.");
+            throw new FileException("File \"$filename\" does not exist.");
         }
 
         // Check if file is readable
         if (! is_readable($filename)) {
             throw new FileException("File \"$filename\" is not readable.");
         }
-
-        $this->tokens = new TokenStream(file_get_contents($filename));
     }
 
     /**
@@ -119,20 +122,20 @@ class ReflectionClass
         if ($this->name === null) {
              // Find class token
             try {
-                $loc = $this->tokens->scan(0, [T_CLASS, T_TRAIT]);
+                $loc = $this->getTokenStream()->scan(0, [T_CLASS, T_TRAIT]);
             } catch (\OutOfBoundsException $e) {
                 throw new ClassDefinitionNotFoundException('No class is found inside ' . $this->filename  . '.', 0, $e);
             }
 
             // Get the following token
             if ($loc !== null) {
-                $loc = $this->tokens->next($loc);
+                $loc = $this->getTokenStream()->next($loc);
             }
 
             // Make sure it is not :: but a name
-            if ($loc !== null && $this->tokens->type($loc) === T_STRING) {
+            if ($loc !== null && $this->getTokenStream()->type($loc) === T_STRING) {
                 // Read the name from the token
-                $this->name           = $this->tokens->value($loc);
+                $this->name           = $this->getTokenStream()->value($loc);
                 $this->class_location = $loc;
             } else {
                 // Mark the name as NOT found (in contrast to not initialized)
@@ -160,14 +163,14 @@ class ReflectionClass
         if ($this->namespace === null) {
             // Find namespace token
             try {
-                $loc = $this->tokens->scan(0, [T_NAMESPACE]);
+                $loc = $this->getTokenStream()->scan(0, [T_NAMESPACE]);
             } catch (\OutOfBoundsException $e) {
                 return $this->namespace = '';
             }
 
             // Get the next token (start with namespace)
             if ($loc !== null) {
-                $loc = $this->tokens->next($loc);
+                $loc = $this->getTokenStream()->next($loc);
             }
 
             // If the start of the namespace is found,
@@ -217,7 +220,7 @@ class ReflectionClass
             // Find all the use statements and parse them one by one
             // and then add them to the use_statements cache.
             $loc = 0;
-            while (($loc = $this->tokens->scan($loc, [T_USE])) && $loc < $class) {
+            while (($loc = $this->getTokenStream()->scan($loc, [T_USE])) && $loc < $class) {
                 list($alias, $use_statement) = $this->parseUse($loc++);
                 if ($alias !== null) {
                     $this->use_statements[$alias] = $use_statement;
@@ -228,6 +231,36 @@ class ReflectionClass
         }
 
         return $this->use_statements;
+    }
+
+    /**
+     * Returns an associative array of class imports.
+     * If aliases are used in the file, the alias names are used as keys.
+     *
+     * @throws \OutOfBoundsException
+     * @throws Exception\ClassDefinitionNotFoundException
+     *
+     * @return string[]
+     */
+    public function getConstants()
+    {
+        // Check cache.
+        if ($this->constants === null) {
+            $this->constants = [];
+
+            // Fetch start of class so we do not
+            // include use statements that import traits.
+            $class = $this->getClassNameLocation();
+
+            // Find all the use statements and parse them one by one
+            // and then add them to the use_statements cache.
+            $loc = 0;
+            while (($loc = $this->getTokenStream()->scan($loc, [T_CONST])) && $loc < $class) {
+                $this->constants[] = $this->parseConst($loc++);
+            }
+        }
+
+        return $this->constants;
     }
 
     /**
@@ -257,7 +290,7 @@ class ReflectionClass
             // Scan for public, protected and private because
             // these keywords denote the start of a property.
             // var is excluded because its use is deprecated.
-            while ($vis_loc = $this->tokens->scan(
+            while ($vis_loc = $this->getTokenStream()->scan(
                 $vis_loc,
                 [T_PRIVATE, T_PROTECTED, T_PUBLIC, T_VAR]
             )) {
@@ -268,11 +301,11 @@ class ReflectionClass
                 // We also skip final, to improve error handling and consistent behaviour,
                 // otherwise final private $foo would be parsed and private final $bar
                 // would not be parsed.
-                $var_loc = $this->tokens->next($vis_loc, [T_COMMENT, T_WHITESPACE, T_STATIC, T_FINAL]);
-                if ($this->tokens->type($var_loc) === T_VARIABLE) {
+                $var_loc = $this->getTokenStream()->next($vis_loc, [T_COMMENT, T_WHITESPACE, T_STATIC, T_FINAL]);
+                if ($this->getTokenStream()->type($var_loc) === T_VARIABLE) {
                     $doc_comment = $this->parseDocComment($vis_loc);           // doc comment
                     $modifiers   = $this->parsePropertyModifiers($vis_loc);    // public, protected, private, static
-                    $name        = substr($this->tokens->value($var_loc), 1);  // property name
+                    $name        = substr($this->getTokenStream()->value($var_loc), 1);  // property name
                     $default     = $this->parseDefaultValue($var_loc);         // default value
                     $property    = new ReflectionProperty($name, $modifiers, $default, $doc_comment, $this);
 
@@ -311,14 +344,14 @@ class ReflectionClass
     private function parseUse($loc)
     {
         // Parse FQCN
-        $loc   = $this->tokens->next($loc);
+        $loc   = $this->getTokenStream()->next($loc);
         $use   = $this->parseNamespace($loc);
         $alias = null; // default array index of PHP
 
         // Parse alias
-        $loc = $this->tokens->next($loc, [T_NS_SEPARATOR, T_STRING, T_COMMENT, T_WHITESPACE]);
-        if ($this->tokens->type($loc) == T_AS) {
-            $loc   = $this->tokens->next($loc);
+        $loc = $this->getTokenStream()->next($loc, [T_NS_SEPARATOR, T_STRING, T_COMMENT, T_WHITESPACE]);
+        if ($this->getTokenStream()->type($loc) == T_AS) {
+            $loc   = $this->getTokenStream()->next($loc);
             $alias = $this->parseNamespace($loc);
         }
 
@@ -335,9 +368,9 @@ class ReflectionClass
     private function parseNamespace($loc)
     {
         $ns = '';
-        while (in_array($this->tokens->type($loc), [T_NS_SEPARATOR, T_STRING])) {
-            $ns .= $this->tokens->value($loc);
-            $loc = $this->tokens->next($loc);
+        while (in_array($this->getTokenStream()->type($loc), [T_NS_SEPARATOR, T_STRING])) {
+            $ns .= $this->getTokenStream()->value($loc);
+            $loc = $this->getTokenStream()->next($loc);
         }
 
         return $ns;
@@ -355,11 +388,11 @@ class ReflectionClass
     {
         // Look back from T_PUBLIC, T_PROTECTED, T_PRIVATE or T_CLASS
         // for the T_DOC_COMMENT token
-        $loc = $this->tokens->previous($loc, [T_WHITESPACE, T_STATIC, T_FINAL]);
+        $loc = $this->getTokenStream()->previous($loc, [T_WHITESPACE, T_STATIC, T_FINAL]);
 
         // Check for doc comment
-        if ($loc && $this->tokens->type($loc) == T_DOC_COMMENT) {
-            $doc_comment = $this->tokens->value($loc);
+        if ($loc && $this->getTokenStream()->type($loc) == T_DOC_COMMENT) {
+            $doc_comment = $this->getTokenStream()->value($loc);
             // strip off indentation
             $doc_comment = preg_replace('/^[ \t]*\*/m', ' *', $doc_comment);
 
@@ -386,7 +419,7 @@ class ReflectionClass
         $modifiers = 0; // initialize bit filed with all modifiers switched off
 
         // Enable visibility bits
-        switch ($this->tokens->type($loc)) {
+        switch ($this->getTokenStream()->type($loc)) {
             case T_PRIVATE:
                 $modifiers |= \ReflectionProperty::IS_PRIVATE;
                 break;
@@ -400,11 +433,11 @@ class ReflectionClass
         }
 
         // Look forward and backward for STATIC modifier
-        $prev = $this->tokens->previous($loc);
-        $next = $this->tokens->next($loc);
+        $prev = $this->getTokenStream()->previous($loc);
+        $next = $this->getTokenStream()->next($loc);
 
         // If found write the bits
-        if ($this->tokens->type($prev) == T_STATIC || $this->tokens->type($next) == T_STATIC) {
+        if ($this->getTokenStream()->type($prev) == T_STATIC || $this->getTokenStream()->type($next) == T_STATIC) {
             $modifiers |= \ReflectionProperty::IS_STATIC;
         }
 
@@ -425,22 +458,22 @@ class ReflectionClass
     private function parseDefaultValue($loc)
     {
         $default = '';
-        $loc     = $this->tokens->next($loc);
+        $loc     = $this->getTokenStream()->next($loc);
 
-        if ($this->tokens->value($loc) == '=') {
-            $loc  = $this->tokens->next($loc);
-            $type = $this->tokens->type($loc);
+        if ($this->getTokenStream()->value($loc) == '=') {
+            $loc  = $this->getTokenStream()->next($loc);
+            $type = $this->getTokenStream()->type($loc);
 
             if (in_array($type, [T_DNUMBER, T_LNUMBER, T_CONSTANT_ENCAPSED_STRING])) {
                 // Easy numbers and strings.
-                $default = $this->tokens->value($loc);
+                $default = $this->getTokenStream()->value($loc);
             } elseif (in_array($type, [T_STRING, T_NS_SEPARATOR])) {
                 // Constants, definitions and null
                 $default = $this->parseNamespace($loc);
-                $loc     = $this->tokens->next($loc, [T_WHITESPACE, T_COMMENT, T_STRING, T_NS_SEPARATOR]);
-                if ($this->tokens->type($loc) == T_PAAMAYIM_NEKUDOTAYIM) {
-                    $loc      = $this->tokens->next($loc);
-                    $default .= '::' . $this->tokens->value($loc);
+                $loc     = $this->getTokenStream()->next($loc, [T_WHITESPACE, T_COMMENT, T_STRING, T_NS_SEPARATOR]);
+                if ($this->getTokenStream()->type($loc) == T_PAAMAYIM_NEKUDOTAYIM) {
+                    $loc      = $this->getTokenStream()->next($loc);
+                    $default .= '::' . $this->getTokenStream()->value($loc);
                 }
             } elseif (in_array($type, [T_ARRAY, '['])) {
                 // Array types, both old array() and shorthand [] notation.
@@ -470,10 +503,10 @@ class ReflectionClass
         $brace = 0;
         $code  = '';
         do {
-            $type = $this->tokens->type($loc);
+            $type = $this->getTokenStream()->type($loc);
             switch ($type) {
                 case T_ARRAY:
-                    $loc = $this->tokens->scan($loc, ['(']);
+                    $loc = $this->getTokenStream()->scan($loc, ['(']);
                     $brace++;
                     // intentional fallthrough
                 case '[':
@@ -499,7 +532,7 @@ class ReflectionClass
                 default:
                     $code .= $this->arrayWhitespace($loc);
             }
-        } while ($found > 0 && ($loc = $this->tokens->next($loc)));
+        } while ($found > 0 && ($loc = $this->getTokenStream()->next($loc)));
 
         return $code;
     }
@@ -513,14 +546,14 @@ class ReflectionClass
      */
     private function arrayWhitespace($loc)
     {
-        $type = $this->tokens->type($loc);
+        $type = $this->getTokenStream()->type($loc);
         switch ($type) {
             case T_DOUBLE_ARROW:
                 return ' => ';
             case ',':
                 return ', ';
             default:
-                return $this->tokens->value($loc);
+                return $this->getTokenStream()->value($loc);
         }
     }
     /**
@@ -532,11 +565,11 @@ class ReflectionClass
      */
     private function parseHereNowDocConcat($loc)
     {
-        $type = substr($this->tokens->value($loc), 3, 1);
-        $loc  = $this->tokens->next($loc);
+        $type = substr($this->getTokenStream()->value($loc), 3, 1);
+        $loc  = $this->getTokenStream()->next($loc);
 
         if ($loc) {
-            $string = substr($this->tokens->value($loc), 0, -1);
+            $string = substr($this->getTokenStream()->value($loc), 0, -1);
             if ($type === '\'') {
                 return '\'' . implode('\' . "\n" . \'', explode("\n", $string)) . '\'';
             } else {
@@ -544,5 +577,19 @@ class ReflectionClass
             }
         }
         return null;
+    }
+
+    /**
+     * Returns the TokenStream instance for the class.
+     *
+     * @return TokenStream
+     */
+    private function getTokenStream()
+    {
+        if (! $this->tokens) {
+            $this->tokens = new TokenStream(file_get_contents($this->filename));
+        }
+
+        return $this->tokens;
     }
 }
