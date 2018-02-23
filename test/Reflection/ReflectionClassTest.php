@@ -142,6 +142,13 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
                     'private $color = \An\Other\Place::class;',
                 ],
             ],
+            [
+                'use_function.php',
+                'UseFunction',
+                'ThisNamespace',
+                ['function sprintf'],
+                [],
+            ],
         ];
     }
 
