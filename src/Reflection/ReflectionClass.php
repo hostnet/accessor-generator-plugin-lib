@@ -379,7 +379,7 @@ class ReflectionClass
 
         if ($this->tokens->type($loc) !== T_FUNCTION) {
             while (in_array($tokens->type($loc), [T_NS_SEPARATOR, T_STRING])) {
-                $ns  .= $tokens->value($loc);
+                $ns .= $tokens->value($loc);
                 $loc = $tokens->next($loc);
             }
 
@@ -387,7 +387,7 @@ class ReflectionClass
         }
 
         if ($this->tokens->type($loc) === T_FUNCTION && $this->tokens->type($this->tokens->next($loc)) === T_STRING) {
-            $ns = sprintf('%s %s', $this->tokens->value($loc), $this->tokens->value($this->tokens->next($loc)));
+            $ns = $this->tokens->value($loc).' '.$this->tokens->value($this->tokens->next($loc));
         }
 
         return $ns;
