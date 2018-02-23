@@ -146,9 +146,18 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
                 'UseFunction',
                 'ThisNamespace',
                 [
-                    'function sprintf',
+                    'const ThisNamespace\HELLO',
                     'kaboom' => 'function ThisNamespace\destory',
+                    'HALLO'  => 'const ThisNamespace\HELLO',
+                    'function sprintf',
                 ],
+                [],
+            ],
+            [
+                'use_const.php',
+                'UseConst',
+                'ThisNamespace',
+                [],
                 [],
             ],
         ];

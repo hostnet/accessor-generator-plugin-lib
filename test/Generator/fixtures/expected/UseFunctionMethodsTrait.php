@@ -6,6 +6,8 @@ namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 use Doctrine\ORM\Mapping as ORM;
 use Hostnet\Component\AccessorGenerator\Annotation as AG;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\UseFunction;
+use const Hostnet\Component\AccessorGenerator\Generator\BYE as DAG;
+use const Hostnet\Component\AccessorGenerator\Generator\BYE;
 use function Hostnet\Component\AccessorGenerator\Generator\fixtures\destroy as kaboom;
 use function sprintf;
 
