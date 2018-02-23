@@ -377,8 +377,13 @@ class ReflectionClass
         $tokens = $this->getTokenStream();
         $ns     = '';
 
+        if ($this->tokens->type($loc) === T_FUNCTION) {
+            $ns .= $this->tokens->value($loc).' ';
+            $loc = $tokens->next($loc);
+        }
+
         while (in_array($tokens->type($loc), [T_NS_SEPARATOR, T_STRING])) {
-            $ns  .= $tokens->value($loc);
+            $ns .= $tokens->value($loc);
             $loc = $tokens->next($loc);
         }
 

@@ -2,11 +2,10 @@
 namespace Hostnet\Component\AccessorGenerator\Reflection;
 
 /**
- * @covers Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass
+ * @covers \Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass
  */
 class ReflectionClassTest extends \PHPUnit_Framework_TestCase
 {
-
     public function fileProvider()
     {
         return [
@@ -141,6 +140,16 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
                     'private $color = An\Other\Place::class;',
                     'private $color = \An\Other\Place::class;',
                 ],
+            ],
+            [
+                'use_function.php',
+                'UseFunction',
+                'ThisNamespace',
+                [
+                    'function sprintf',
+                    'kaboom' => 'function ThisNamespace\destory',
+                ],
+                [],
             ],
         ];
     }
