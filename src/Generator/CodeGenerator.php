@@ -616,7 +616,7 @@ class CodeGenerator implements CodeGeneratorInterface
      */
     private function validateEnumEntity(string $entity_class)
     {
-        if (! class_implements($entity_class, EnumeratorCompatibleEntityInterface::class)) {
+        if (! in_array(EnumeratorCompatibleEntityInterface::class, class_implements($entity_class))) {
             throw new \LogicException(sprintf(
                 'The entity "%s" must implement "%s" in order to use it with enumerator accessor classes.',
                 $entity_class,
