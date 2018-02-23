@@ -2,11 +2,10 @@
 namespace Hostnet\Component\AccessorGenerator\Reflection;
 
 /**
- * @covers Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass
+ * @covers \Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass
  */
 class ReflectionClassTest extends \PHPUnit_Framework_TestCase
 {
-
     public function fileProvider()
     {
         return [
@@ -146,7 +145,10 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
                 'use_function.php',
                 'UseFunction',
                 'ThisNamespace',
-                ['function sprintf'],
+                [
+                    'function sprintf',
+                    'kaboom' => 'function ThisNamespace\destory',
+                ],
                 [],
             ],
         ];

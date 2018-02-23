@@ -6,6 +6,7 @@ namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 use Doctrine\ORM\Mapping as ORM;
 use Hostnet\Component\AccessorGenerator\Annotation as AG;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\UseFunction;
+use function Hostnet\Component\AccessorGenerator\Generator\fixtures\destroy as kaboom;
 use function sprintf;
 
 trait UseFunctionMethodsTrait
