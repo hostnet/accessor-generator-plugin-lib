@@ -25,6 +25,13 @@ class GenerateAnnotationProcessor implements AnnotationProcessorInterface
             return;
         }
 
+        if ($annotation->getEnumerators()) {
+            $info->setEnumeratorsToGenerate($annotation->getEnumerators());
+            $annotation->setDefaultVisibility(Generate::VISIBILITY_NONE);
+        } else {
+            $annotation->setDefaultVisibility(Generate::VISIBILITY_PUBLIC);
+        }
+
         // By default no method is generated.
         //
         // Each processor can enforce a limitation on the generated methods.
@@ -46,7 +53,6 @@ class GenerateAnnotationProcessor implements AnnotationProcessorInterface
 
         null === $info->getType() && $annotation->getType() && $info->setType($annotation->getType());
         null !== $annotation->getType() && $info->setTypeHint($annotation->getType());
-
         null !== $annotation->getEncryptionAlias() && $info->setEncryptionAlias($annotation->getEncryptionAlias());
 
         // Enforce always

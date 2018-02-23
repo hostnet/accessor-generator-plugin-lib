@@ -9,6 +9,8 @@ class GenerateTest extends \PHPUnit_Framework_TestCase
 
         // Test default on values and availabillity of
         // the Generate Annotation public fields
+        $generate->setDefaultVisibility(Generate::VISIBILITY_PUBLIC);
+
         self::assertSame(Generate::VISIBILITY_PUBLIC, $generate->get);
         self::assertSame(Generate::VISIBILITY_PUBLIC, $generate->set);
         self::assertSame(Generate::VISIBILITY_PUBLIC, $generate->add);
