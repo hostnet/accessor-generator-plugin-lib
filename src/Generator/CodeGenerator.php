@@ -538,7 +538,7 @@ class CodeGenerator implements CodeGeneratorInterface
                 $generated_enumerator_accessors[$property] = $enumerator->getEnumeratorClass();
 
                 $code .= $this->enum_get->render([
-                    'property'      => $info->getName(),
+                    'property'      => $info->isGenerator() ? $info->getName() : $enumerator->getName(),
                     'name'          => Inflector::classify($property),
                     'class_name'    => $class_name,
                     'info'          => $info,
