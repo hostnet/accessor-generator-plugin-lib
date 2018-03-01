@@ -76,6 +76,13 @@ interface PropertyInformationInterface
     public function getTypeHint();
 
     /**
+     * Returns true if this property uses the @Generate annotation.
+     *
+     * @return bool
+     */
+    public function isGenerator();
+
+    /**
      * Returns the fully qualified name of the type, including the complete
      * namespace, prefixed with am additional namespace separator (\).
      *

@@ -1,4 +1,6 @@
+{% if add_property %}
 private ${{ enum_property }};
+{% endif %}
 
 /**
  * Returns a parameter collection for {{ enum_class }}.
@@ -17,3 +19,4 @@ public function get{{ name }}()
 
     return $this->{{ enum_property }};
 }
+
