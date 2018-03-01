@@ -178,17 +178,10 @@ class CodeGenerator implements CodeGeneratorInterface
                     . $this->enum_name_suffix
                     . '.php';
 
-                // If the "Enumerator" annotation is used directly without the "Generator" annotation, the type
-                // information will be missing, since we don't know in which entity the trait is used.
-                if ($info->getType()) {
-                    $this->validateEnumEntity($info->getType());
-                } elseif (empty($enumerator->getType())) {
-                    throw new \LogicException(sprintf(
-                        'Enumerator annotation in %s::%s must specifiy a "type" that refers to the parameter entity.',
-                        $class->getFullyQualifiedClassName(),
-                        $info->getName()
-                    ));
+                if (empty($info->getType()) && ! empty($enumerator->getType())) {
+                    $info->setType($enumerator->getType());
                 }
+                $this->validateEnumEntity($info->getType());
 
                 $fs->mkdir($path);
                 $fs->dumpFile($filename, $this->enum_class_cache[$cache_id]);
