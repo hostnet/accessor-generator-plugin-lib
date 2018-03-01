@@ -105,6 +105,9 @@ class CodeGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateAccessorsTypeUnknown()
     {
-        $this->getGenerator()->generateAccessors(new PropertyInformation(new ReflectionProperty('phpunit')));
+        $info = new PropertyInformation(new ReflectionProperty('phpunit'));
+        $info->setIsGenerator(true); // Default for all @Generate properties.
+
+        $this->getGenerator()->generateAccessors($info);
     }
 }

@@ -77,6 +77,12 @@ class PropertyInformation implements PropertyInformationInterface
     private $unique = null;
 
     /**
+     * @see PropertyInformationInterface::isGenerator()
+     * @var bool
+     */
+    private $is_generator = false;
+
+    /**
      * @see PropertyInformationInterface::isFixedPointNumber()
      * @var bool
      */
@@ -572,6 +578,22 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
+     * @see PropertyInformationInterface::isGenerator()
+     */
+    public function setIsGenerator($bool)
+    {
+        $this->is_generator = $bool;
+    }
+
+    /**
+     * @see PropertyInformationInterface::isGenerator()
+     */
+    public function isGenerator()
+    {
+        return $this->is_generator;
+    }
+
+    /**
      * @see PropertyInformationInterface::getReferencedProperty()
      *
      * return string
@@ -1013,11 +1035,11 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @param string[] $enums_to_generate
+     * @param Enumerator $enumerator
      */
-    public function setEnumeratorsToGenerate(array $enums_to_generate)
+    public function addEnumeratorToGenerate(Enumerator $enumerator)
     {
-        $this->enums_to_generate = $enums_to_generate;
+        $this->enums_to_generate[] = $enumerator;
     }
 
     /**

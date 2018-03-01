@@ -1,6 +1,7 @@
 <?php
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
+use Hostnet\Component\AccessorGenerator\Annotation\Enumerator;
 use Hostnet\Component\AccessorGenerator\Annotation\Generate;
 
 /**
@@ -20,14 +21,27 @@ class GenerateAnnotationProcessor implements AnnotationProcessorInterface
      */
     public function processAnnotation($annotation, PropertyInformation $info)
     {
-        // Only process Generate annotations.
+        // Standalone Enumerator annotation.
+        if ($annotation instanceof Enumerator) {
+            $info->addEnumeratorToGenerate($annotation);
+            $annotation->property = $info->getName();
+            if (! $info->getType() && $annotation->getType()) {
+                $info->setType($annotation->getType());
+            }
+            return;
+        }
+
+        // Only process Generate annotations from this point.
         if (!$annotation instanceof Generate) {
             return;
         }
 
+        $info->setIsGenerator(true);
         if ($annotation->getEnumerators()) {
-            $info->setEnumeratorsToGenerate($annotation->getEnumerators());
             $annotation->setDefaultVisibility(Generate::VISIBILITY_NONE);
+            foreach ($annotation->getEnumerators() as $enumerator) {
+                $info->addEnumeratorToGenerate($enumerator);
+            }
         } else {
             $annotation->setDefaultVisibility(Generate::VISIBILITY_PUBLIC);
         }
@@ -57,6 +71,7 @@ class GenerateAnnotationProcessor implements AnnotationProcessorInterface
 
         // Enforce always
         $info->setGenerateStrict($annotation->isStrict());
+        $info->setIsGenerator(true);
     }
 
     /**

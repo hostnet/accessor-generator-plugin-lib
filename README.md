@@ -187,7 +187,9 @@ class Task
 
 The `Parameter` entity must implement the following:
 ```php
-class Parameter
+use Hostnet\Component\AccessorGenerator\Enum\EnumeratorCompatibleEntityInterface;
+
+class Parameter implements EnumeratorCompatibleEntityInterface
 {
     /**
      * @ORM\ManyToOne(targetEntity="Task")
@@ -206,7 +208,7 @@ class Parameter
     private $value;
     
     // This signature is a requirement for enum accessor generation.
-    public function __construct($task, $name, $value)
+    public function __construct($task, string $name, ?string $value)
     {
         $this->owner = $task;
         $this->name  = $name;
@@ -253,6 +255,10 @@ Now that we have our three classes (`Task`, `Parameter` and `MyTaskParamNames`),
 
 With version 2.8.0 comes the `Enumerator` annotation which can be used inside the existing `Generate` annotation.
 
+> **Upgrading from 2.8.0 to 2.8.1:**
+> The "name" setting in the annotation has been changed to "property" to be more consistent. Since 2.8.1, the ability
+> to add inline enumerators through other class properties has been added. See below for more information.
+
 Taking the code that we just wrote in the examples above, we can generate an accessor method for `MyTaskParamNames`
 by modifying the annotation of the `parameters` property of our `Task` class.
 
@@ -264,16 +270,21 @@ class Task
     /**
      * @ORM\OneToMany(targetEntity="Parameter", cascade={"persist"})
      * @AG\Generate(enumerators={
-     *     @AG\Enumerator("MyTaskParamNames", name="MyParams")
+     *     @AG\Enumerator("MyTaskParamNames", property="my_params")
      * })
      */
     private $property;
+    
+    /**
+     * @var Generated\MyTaskParamNamesEnum
+     */
+    private $my_params;
 }
 ```
 
 Once the code is generated, you will now have a newly generated class called `MyTaskParamNamesEnum` in the 
 `Generated` directory (and namespace) relative to the namespace of `MyTaskParamNames`. An accessor for this class is
-generated using the `name` property in the `TaskMethodsTrait`.
+generated using the `property` settting in the `TaskMethodsTrait`.
 
 The accessor for this enum based on the code above will be called `getMyParams()`. You can give this any name you want
 as long as it is suitable for a method name.
@@ -323,15 +334,63 @@ If your annotation looks like this:
 ```php
 /**
  * @AG\Generate(enumerators={
- *     @AG\Enumerator("MyTaskParamNames", name="MyParams"),
- *     @AG\Enumerator("MoreTaskParamNames", name="MoreParams")
+ *     @AG\Enumerator("MyTaskParamNames", property="my_params"),
+ *     @AG\Enumerator("BetterParamNames", property="better_params")
  * });
+ */
+ private $parameters;
+ 
+ /**
+  * @var Generated\MyTaskParamNamesEnum
+  */
+ private $my_params;
+ 
+ /**
+  * @var Generated\BetterParamNamesEnum
+  */
+ private $better_params;
 ```
 
-The generator will now create two accessor methods for these parameters, that you can use like
+The generator will now create two accessors for these parameter enumerators that you can use like
 this:
 ```php
-$task->getMyParams()->hasClientId();     // From MyTaskParamNames
-$task->getMoreParams()->setFoobar(1234); // From MoreTaskParamNames
+$task->getMyParams()->hasClientId();       // From MyTaskParamNames
+$task->getBetterParams()->setFoobar(1234); // From BetterParamNames
 ```
 
+### Separated enumerator accessor generator
+You can also define enumerators outside the `@Generate` annotation. If used in combination with the `entity-plugin-lib`,
+it is possible to define a `trait` that holds an enumerator property that refers to a collection on your entity.
+
+Lets say we want to add an extra enumerator to our - already existing - Task entity that we have written before.
+
+```php
+use Hostnet\Component\AccessorGenerator\Annotation as AG;
+
+trait TaskTrait
+{
+    use Generated\TaskTraitMethodsTrait;
+
+    /**
+     * @AG\Enumerator("\My\Namespace\MyExtraParamName", name="parameters")
+     * @var \My\Namespace\Generated\MyExtraParamNameEnum
+     */
+    private $some_extra_params;
+}
+```
+
+The `name` setting refers to the arry collection property that holds all parameters in the entity.
+
+Once the code is generated, you can now invoke the enumerator like so:
+```php
+<?php
+
+$task = new Task();
+$task->getSomeExtraParams()->...
+
+// Whilst still having access to the already existing enumerators that we defined before.
+$task->getMyParams();
+$task->getBetterParams();
+```
+
+Make sure to include the trait `Generated\TaskTrait` - or whatever name your entity has - in the task entity to make this work.

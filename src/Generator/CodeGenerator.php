@@ -178,7 +178,17 @@ class CodeGenerator implements CodeGeneratorInterface
                     . $this->enum_name_suffix
                     . '.php';
 
-                $this->validateEnumEntity($info->getType());
+                // If the "Enumerator" annotation is used directly without the "Generator" annotation, the type
+                // information will be missing, since we don't know in which entity the trait is used.
+                if ($info->getType()) {
+                    $this->validateEnumEntity($info->getType());
+                } elseif (empty($enumerator->getType())) {
+                    throw new \LogicException(sprintf(
+                        'Enumerator annotation in %s::%s must specifiy a "type" that refers to the parameter entity.',
+                        $class->getFullyQualifiedClassName(),
+                        $info->getName()
+                    ));
+                }
 
                 $fs->mkdir($path);
                 $fs->dumpFile($filename, $this->enum_class_cache[$cache_id]);
@@ -248,7 +258,53 @@ class CodeGenerator implements CodeGeneratorInterface
             $this->metadata_cache[$cache_key]['properties'][$info->getName()] = $info;
         }
 
+        // Pre-pass to link enumerators to their associated collections. It is imperative that this is executed once
+        // because if we dont, the same Enumerator instance could be assigned to the same collection multiple times.
+        // Skip this process if we're currently dealing with a trait.
+        if (strpos($class->getFilename(), 'Trait.php') === false) {
+            $this->linkEnumeratorsToAssociatedCollections($this->metadata_cache[$cache_key]);
+        }
+
         return $this->metadata_cache[$cache_key];
+    }
+
+    private function linkEnumeratorsToAssociatedCollections(array $metadata)
+    {
+        foreach ($metadata['properties'] as $info) {
+            /* @var $info PropertyInformation */
+            if (! $info->willGenerateEnumeratorAccessors()) {
+                continue;
+            }
+
+            foreach ($info->getEnumeratorsToGenerate() as $enumerator) {
+                // Ensure the name of the enumerator refers to an existing property in this class.
+                if (! isset($metadata['properties'][$enumerator->getName()])) {
+                    if (! $info->getType()) {
+                        throw new \LogicException(sprintf(
+                            'The name "%s" in Enumerator for "%s" does not exist as a property in the class "%s".',
+                            $enumerator->getName(),
+                            $info->getName(),
+                            $info->getClass()
+                        ));
+                    }
+                    $enumerator->name = $info->getName();
+                }
+
+                $collection = $metadata['properties'][$enumerator->getName()];
+                /* @var $collection PropertyInformation */
+                // Ensure the referenced property is a collection.
+                if (! $collection->isCollection()) {
+                    throw new \LogicException(sprintf(
+                        'The property "%s" referenced in the enumerator "%s" is not a collection in the class "%s".',
+                        $collection->getName(),
+                        $info->getName(),
+                        $info->getClass()
+                    ));
+                }
+
+                $collection->addEnumeratorToGenerate($enumerator);
+            }
+        }
     }
 
     /**
@@ -283,7 +339,9 @@ class CodeGenerator implements CodeGeneratorInterface
 
             // Parse and add fully qualified type information to the info
             // object for use in doc blocks to make IDE's understand the types properly.
-            $info->setFullyQualifiedType(self::fqcn($info->getTypeHint(), $imports));
+            if ($info->isGenerator()) {
+                $info->setFullyQualifiedType(self::fqcn($info->getTypeHint(), $imports));
+            }
 
             // If the property information has an encryption alias defined store
             // some information to generate the KeyRegistry classes afterwards.
@@ -457,7 +515,7 @@ class CodeGenerator implements CodeGeneratorInterface
         $code = '';
 
         // Check if there is enough information to generate accessors.
-        if ($info->getType() === null) {
+        if ($info->isGenerator() && $info->getType() === null) {
             throw new TypeUnknownException(
                 sprintf(
                     'Property %s in class %s\%s has no type set, nor could it be inferred. %s',
@@ -470,20 +528,30 @@ class CodeGenerator implements CodeGeneratorInterface
         }
 
         if ($info->willGenerateEnumeratorAccessors()) {
-            foreach ($info->getEnumeratorsToGenerate() as $enum_to_generate) {
+            $generated_enumerator_accessors = [];
+            foreach ($info->getEnumeratorsToGenerate() as $enumerator) {
                 // Unhandy way to get the short name of the class since we can't use native ReflectionClass here because
                 // the composer autoload process is not finalized at this point.
-                $class_path = str_replace('\\', DIRECTORY_SEPARATOR, $enum_to_generate->getEnumeratorClass());
+                $class_path = str_replace('\\', DIRECTORY_SEPARATOR, $enumerator->getEnumeratorClass());
                 $class_ns   = str_replace(DIRECTORY_SEPARATOR, '\\', dirname($class_path)) . '\\' . $this->namespace;
                 $class_name = $class_ns . '\\' . basename($class_path) . $this->enum_name_suffix;
+                $property   = $enumerator->getPropertyName() ?? Inflector::tableize(
+                    basename($class_path) . $this->enum_name_suffix
+                );
+
+                if (isset($generated_enumerator_accessors[$property])) {
+                    continue;
+                }
+                $generated_enumerator_accessors[$property] = $enumerator->getEnumeratorClass();
 
                 $code .= $this->enum_get->render([
                     'property'      => $info->getName(),
-                    'name'          => $enum_to_generate->getName(),
+                    'name'          => Inflector::classify($property),
                     'class_name'    => $class_name,
                     'info'          => $info,
-                    'enum_class'    => $enum_to_generate->getEnumeratorClass(),
-                    'enum_property' => Inflector::tableize($enum_to_generate->getName() . '_instance')
+                    'enum_class'    => $enumerator->getEnumeratorClass(),
+                    'enum_property' => $property,
+                    'add_property'  => empty($enumerator->getPropertyName())
                 ]);
             }
         }

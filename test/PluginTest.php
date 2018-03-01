@@ -33,7 +33,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         self::assertSame(
             [
                 ScriptEvents::PRE_AUTOLOAD_DUMP  => ['onPreAutoloadDump', 20 ],
-                ScriptEvents::POST_AUTOLOAD_DUMP => ['onPostAutoloadDump', 20 ]
+                ScriptEvents::POST_AUTOLOAD_DUMP => ['onPostAutoloadDump', 5 ]
             ],
             Plugin::getSubscribedEvents()
         );

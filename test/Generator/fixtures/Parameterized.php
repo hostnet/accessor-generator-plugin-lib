@@ -26,10 +26,15 @@ class Parameterized
      * )
      *
      * @AG\Generate(enumerators={
-     *     @AG\Enumerator("\Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName", name="Params")
+     *     @AG\Enumerator("\Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName", property="params")
      * })
      */
     private $parameters;
+
+    /**
+     * @var ParamName
+     */
+    private $params;
 
     public function __construct()
     {
