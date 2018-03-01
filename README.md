@@ -358,7 +358,7 @@ $task->getMyParams()->hasClientId();       // From MyTaskParamNames
 $task->getBetterParams()->setFoobar(1234); // From BetterParamNames
 ```
 
-### Separated enumerator accessor generator
+### Separated enumerator accessor generation
 You can also define enumerators outside the `@Generate` annotation. If used in combination with the `entity-plugin-lib`,
 it is possible to define a `trait` that holds an enumerator property that refers to a collection on your entity.
 
@@ -378,10 +378,9 @@ trait TaskTrait
     private $some_extra_params;
 }
 ```
+The `name` setting refers to the ArrayCollection property that holds all parameters owned by that entity.
 
-The `name` setting refers to the arry collection property that holds all parameters in the entity.
-
-Once the code is generated, you can now invoke the enumerator like so:
+Once the code is generated, you can now invoke the enumerator like any other:
 ```php
 <?php
 
@@ -393,4 +392,23 @@ $task->getMyParams();
 $task->getBetterParams();
 ```
 
-Make sure to include the trait `Generated\TaskTrait` - or whatever name your entity has - in the task entity to make this work.
+Make sure to include the trait `Generated\TaskTrait` - or whatever name your entity has - in the task entity to make
+this work. So,
+```php
+<?php
+class Task
+{
+    use Generated\TaskMethodsTrait;
+}
+```
+becomes:
+
+```php
+<?php
+class Task
+{
+    use Generated\TaskTrait;
+    use Generated\TaskMethodsTrait;
+}
+```
+Please refer to the [entity-plugin-lib](https://github.com/hostnet/entity-plugin-lib) for more information.
