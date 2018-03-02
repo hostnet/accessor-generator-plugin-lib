@@ -658,7 +658,8 @@ class CodeGenerator implements CodeGeneratorInterface
             $key   = key($imports);
             $value = current($imports);
             $next  = next($imports);
-            if ($value !== $next || $key !== key($imports)) {
+
+            if ($value !== $next || (is_string($key) && $key !== key($imports))) {
                 if ($key) {
                     $unique_imports[$key] = $value;
                 } else {
