@@ -3,7 +3,7 @@
 
 namespace {{ namespace }};
 
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 
 /**
@@ -16,11 +16,11 @@ class {{ class_name }}
     private $parameter_entity_class;
 
     /**
-     * @param ArrayCollection $collection
-     * @param Entity|*        $owning_entity
-     * @param string          $parameter_entity_class
+     * @param Collection $collection
+     * @param Entity|*   $owning_entity
+     * @param string     $parameter_entity_class
      */
-    public function __construct(ArrayCollection $collection, $owning_entity, string $parameter_entity_class)
+    public function __construct(Collection $collection, $owning_entity, string $parameter_entity_class)
     {
         $this->collection             = $collection;
         $this->owning_entity          = $owning_entity;

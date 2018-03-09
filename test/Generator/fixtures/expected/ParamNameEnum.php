@@ -1,9 +1,9 @@
 <?php
-// Generated at 2018-03-01 11:55:03 by hiedema on se18-03-73-40-f6-af
+// Generated at 2018-03-09 10:46:20 by hiedema on se18-03-73-40-f6-af
 
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 
 /**
@@ -16,11 +16,11 @@ class ParamNameEnum
     private $parameter_entity_class;
 
     /**
-     * @param ArrayCollection $collection
-     * @param Entity|*        $owning_entity
-     * @param string          $parameter_entity_class
+     * @param Collection $collection
+     * @param Entity|*   $owning_entity
+     * @param string     $parameter_entity_class
      */
-    public function __construct(ArrayCollection $collection, $owning_entity, string $parameter_entity_class)
+    public function __construct(Collection $collection, $owning_entity, string $parameter_entity_class)
     {
         $this->collection             = $collection;
         $this->owning_entity          = $owning_entity;
