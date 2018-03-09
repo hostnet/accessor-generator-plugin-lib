@@ -37,6 +37,7 @@ class GenerateAnnotationProcessor implements AnnotationProcessorInterface
         }
 
         $info->setIsGenerator(true);
+
         if ($annotation->getEnumerators()) {
             $annotation->setDefaultVisibility(Generate::VISIBILITY_NONE);
             foreach ($annotation->getEnumerators() as $enumerator) {

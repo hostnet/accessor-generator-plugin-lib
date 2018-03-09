@@ -265,7 +265,7 @@ class CodeGenerator implements CodeGeneratorInterface
     {
         foreach ($metadata['properties'] as $info) {
             /* @var $info PropertyInformation */
-            if (! $info->willGenerateEnumeratorAccessors()) {
+            if (! $info->willGenerateEnumeratorAccessors() || ! $info->isGenerator()) {
                 continue;
             }
 
