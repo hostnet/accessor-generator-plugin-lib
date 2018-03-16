@@ -10,6 +10,7 @@ use Hostnet\Component\AccessorGenerator\AnnotationProcessor\GenerateAnnotationPr
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformation;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformationInterface;
 use Hostnet\Component\AccessorGenerator\Enum\EnumeratorCompatibleEntityInterface;
+use Hostnet\Component\AccessorGenerator\Generator\Exception\ReferencedClassNotFoundException;
 use Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException;
 use Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
@@ -167,7 +168,7 @@ class CodeGenerator implements CodeGeneratorInterface
                     continue;
                 }
 
-                $this->enum_class_cache[$cache_id] = $this->generateEnumeratorAccessors($enumerator);
+                $this->enum_class_cache[$cache_id] = $this->generateEnumeratorAccessors($enumerator, $info);
 
                 $reflector   = new \ReflectionClass($enumerator->getEnumeratorClass());
                 $generated[] = $enumerator->getEnumeratorClass();
@@ -192,14 +193,24 @@ class CodeGenerator implements CodeGeneratorInterface
     }
 
     /**
-     * @param Enumerator $enumerator
-     * @return string
      * @throws \ReflectionException
      * @throws \Throwable
+     * @throws ReferencedClassNotFoundException
+     * @param  Enumerator          $enumerator
+     * @param  PropertyInformation $info
+     * @return string
      */
-    public function generateEnumeratorAccessors(Enumerator $enumerator)
+    public function generateEnumeratorAccessors(Enumerator $enumerator, PropertyInformation $info)
     {
         $enum_class = $enumerator->getEnumeratorClass();
+        if (! class_exists($enum_class)) {
+            throw new ReferencedClassNotFoundException(sprintf(
+                'Enumerator accessor for "%s" was not generated because the enum class "%s" does not exist.',
+                $info->getClass(),
+                $enumerator->getEnumeratorClass()
+            ));
+        }
+
         $reflector  = new \ReflectionClass($enum_class);
         $class_name = $reflector->getShortName() . $this->enum_name_suffix;
         $namespace  = $reflector->getNamespaceName() . '\\Generated';

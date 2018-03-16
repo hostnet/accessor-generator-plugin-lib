@@ -1,6 +1,7 @@
 <?php
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
+use Hostnet\Component\AccessorGenerator\Annotation\Enumerator;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformation;
 use Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
@@ -73,10 +74,10 @@ class CodeGeneratorTest extends \PHPUnit_Framework_TestCase
 
     private function compareExpectedToGeneratedFiles($inverse = false)
     {
-        $paths           = ['/expected', '/Generated'];
-        $paths           = $inverse ? array_reverse($paths) : $paths;
-        $finder          = new Finder();
-        $expected_files  = $finder->name('*.php')->in(__DIR__ . '/fixtures' . $paths[0])->getIterator();
+        $paths          = ['/expected', '/Generated'];
+        $paths          = $inverse ? array_reverse($paths) : $paths;
+        $finder         = new Finder();
+        $expected_files = $finder->name('*.php')->in(__DIR__ . '/fixtures' . $paths[0])->getIterator();
 
         foreach ($expected_files as $expected_file) {
             // Get the mirrored file.
@@ -109,5 +110,20 @@ class CodeGeneratorTest extends \PHPUnit_Framework_TestCase
         $info->setIsGenerator(true); // Default for all @Generate properties.
 
         $this->getGenerator()->generateAccessors($info);
+    }
+
+    /**
+     * @expectedException \Hostnet\Component\AccessorGenerator\Generator\Exception\ReferencedClassNotFoundException
+     * @expectedExceptionMessage "CodeGeneratorTest" was not generated because the enum class "\This\Does\Not\Exist"
+     */
+    public function testGenerateEnumeratorClassNotFound()
+    {
+        $enumerator        = new Enumerator();
+        $enumerator->value = "\\This\\Does\\Not\\Exist";
+
+        $class = new ReflectionClass(__FILE__);
+        $info  = new PropertyInformation(new ReflectionProperty('my_prop', null, null, null, $class));
+
+        $this->getGenerator()->generateEnumeratorAccessors($enumerator, $info);
     }
 }
