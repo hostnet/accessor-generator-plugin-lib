@@ -12,6 +12,8 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 use Hostnet\Component\AccessorGenerator\Annotation\Generate;
 use Hostnet\Component\AccessorGenerator\Generator\CodeGenerator;
 use Hostnet\Component\AccessorGenerator\Generator\CodeGeneratorInterface;
+use Hostnet\Component\AccessorGenerator\Generator\Exception\ReferencedClassNotFoundException;
+use Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
 use Symfony\Component\Finder\Finder;
 
@@ -60,6 +62,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      * @throws \InvalidArgumentException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Syntax
+     * @throws \Twig_Error_Runtime
      */
     public function __construct(CodeGeneratorInterface $generator = null)
     {
@@ -138,7 +141,14 @@ class Plugin implements PluginInterface, EventSubscriberInterface
             }
 
             foreach ($this->getFilesAndReflectionClassesFromPackage($package) as $filename => $reflection_class) {
-                $generated_enum_classes = $this->generator->writeEnumeratorAccessorsForClass($reflection_class);
+                try {
+                    $generated_enum_classes = $this->generator->writeEnumeratorAccessorsForClass($reflection_class);
+                } catch (ReferencedClassNotFoundException $e) {
+                    if ($this->io->isVerbose()) {
+                        $this->io->write("    - " . $e->getMessage());
+                    }
+                }
+
                 if ($generated_enum_classes && $this->io->isVeryVerbose()) {
                     foreach ($generated_enum_classes as $generated_enum_class) {
                         $this->io->write("    - Generated enumerator accessor for <info>$generated_enum_class</info>");
