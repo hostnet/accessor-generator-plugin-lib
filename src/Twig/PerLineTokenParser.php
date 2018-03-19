@@ -6,6 +6,11 @@ declare(strict_types=1);
 
 namespace Hostnet\Component\AccessorGenerator\Twig;
 
+use Twig\Node\Node;
+use Twig\Node\TextNode;
+use Twig\Token;
+use Twig\TokenParser\AbstractTokenParser;
+
 /**
  * Parse Twig tag {% perline %}
  *
@@ -17,7 +22,7 @@ namespace Hostnet\Component\AccessorGenerator\Twig;
  *
  * After parsing a PerLineNode will be returned
  */
-class PerLineTokenParser extends \Twig_TokenParser
+class PerLineTokenParser extends AbstractTokenParser
 {
     /**
      * @see Twig_TokenParserInterface::getTag()
@@ -35,28 +40,25 @@ class PerLineTokenParser extends \Twig_TokenParser
      *
      * @param \Twig_Token $token
      *
-     * @return \Twig_Node_Print
+     * @return PerLineNode
      * @throws \Twig_Error_Syntax
      */
-    public function parse(\Twig_Token $token)
+    public function parse(\Twig_Token $token): PerLineNode
     {
         $stream = $this->parser->getStream();
 
         // perline is a very simple tag, not having anything more than its name
         // between the braces, so we expect the closing brace immediately.
-        $stream->expect(\Twig_Token::BLOCK_END_TYPE);
+        $stream->expect(Token::BLOCK_END_TYPE);
 
         // sub-parse everything until we reach the endperline tag.
-        $body = $this->parser->subparse(
-            function (\Twig_Token $token) {
-                return $token->test('endperline');
-            },
-            true
-        );
+        $body = $this->parser->subparse(function (Token $token) {
+            return $token->test('endperline');
+        }, true);
 
         // make sure our closing tag is also closed neatly and advance the
         // stream to allow continuation of parsing.
-        $stream->expect(\Twig_Token::BLOCK_END_TYPE);
+        $stream->expect(Token::BLOCK_END_TYPE);
 
         // turn out body in a nicely formatted PerLineNode
         return $this->parseBody($body);
@@ -66,8 +68,12 @@ class PerLineTokenParser extends \Twig_TokenParser
      * Parse the body into a prefix, postfix and all the
      * other twig nodes that will compile into multiple
      * lines.
+     *
+     * @param Node $body
+     *
+     * @return PerLineNode
      */
-    private function parseBody(\Twig_Node $body)
+    private function parseBody(Node $body): PerLineNode
     {
         $prefix  = '';                       // Text before the (possibly) multi line expression
         $postfix = '';                       // Text before the (possibly) multi line expression
@@ -87,7 +93,7 @@ class PerLineTokenParser extends \Twig_TokenParser
         // Check for prefix, the first node should be a text node to have a
         // prefix.
         $first = reset($nodes);
-        if ($first instanceof \Twig_Node_Text) {
+        if ($first instanceof TextNode) {
             $prefix = $first->getAttribute('data');
             array_shift($nodes);
         }
@@ -95,7 +101,7 @@ class PerLineTokenParser extends \Twig_TokenParser
         // Check for postfix, the last node should be a text node to have a
         // postfix.
         $last = end($nodes);
-        if ($last instanceof \Twig_Node_Text) {
+        if ($last instanceof TextNode) {
             $postfix = rtrim($last->getAttribute('data'));
             array_pop($nodes);
         }
@@ -106,7 +112,7 @@ class PerLineTokenParser extends \Twig_TokenParser
         if (count($nodes) == 1) {
             $nodes = current($nodes);
         } else {
-            $nodes = new \Twig_Node($nodes);
+            $nodes = new Node($nodes);
         }
 
         // Return the new structured node.

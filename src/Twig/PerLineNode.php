@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Hostnet\Component\AccessorGenerator\Twig;
 
+use Twig\Node\Node;
+
 /**
  * Node representation of a {% perline %}{% endperline %} block. The node has
  * 2 arguments and one list of internal nodes.
@@ -22,18 +24,18 @@ namespace Hostnet\Component\AccessorGenerator\Twig;
  *            the perline block, otherwise a Twig_Node with sub nodes of all
  *            the nodes between the prefix and/or postfix.
  */
-class PerLineNode extends \Twig_Node
+class PerLineNode extends Node
 {
     /**
      * Create new PerLineNode
      *
-     * @param \Twig_Node $lines
-     * @param string     $prefix
-     * @param string     $postfix
-     * @param int        $lineno
-     * @param string     $tag
+     * @param Node   $lines
+     * @param string $prefix
+     * @param string $postfix
+     * @param int    $lineno
+     * @param string $tag
      */
-    public function __construct(\Twig_Node $lines, $prefix, $postfix, $lineno, $tag = 'perline')
+    public function __construct(Node $lines, $prefix, $postfix, $lineno, $tag = 'perline')
     {
         parent::__construct(
             ['lines' => $lines],
@@ -50,7 +52,7 @@ class PerLineNode extends \Twig_Node
      *
      * @param \Twig_Compiler $compiler
      */
-    private function compileComplex(\Twig_Compiler $compiler)
+    private function compileComplex(\Twig_Compiler $compiler): void
     {
         $prefix  = $this->getAttribute('prefix');
         $postfix = $this->getAttribute('postfix');
@@ -104,7 +106,7 @@ class PerLineNode extends \Twig_Node
      *
      * @param \Twig_Compiler $compiler A Twig_Compiler instance
      */
-    public function compile(\Twig_Compiler $compiler)
+    public function compile(\Twig_Compiler $compiler): void
     {
         // Echo line information into the generated code
         $compiler->addDebugInfo($this);

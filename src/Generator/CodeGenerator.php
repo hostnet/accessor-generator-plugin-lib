@@ -21,6 +21,12 @@ use Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotF
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
 use Hostnet\Component\AccessorGenerator\Twig\CodeGenerationExtension;
 use Symfony\Component\Filesystem\Filesystem;
+use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use Twig\Loader\FilesystemLoader;
+use Twig\TemplateWrapper;
 
 /**
  * Generates Trait files with accessor methods and places them in a "Generated"
@@ -54,42 +60,42 @@ class CodeGenerator implements CodeGeneratorInterface
     private $key_registry_class = 'KeyRegistry';
 
     /**
-     * @var \Twig_TemplateWrapper
+     * @var TemplateWrapper
      */
     private $add;
 
     /**
-     * @var \Twig_TemplateWrapper
+     * @var TemplateWrapper
      */
     private $set;
 
     /**
-     * @var \Twig_TemplateWrapper
+     * @var TemplateWrapper
      */
     private $get;
 
     /**
-     * @var \Twig_TemplateWrapper
+     * @var TemplateWrapper
      */
     private $enum_get;
 
     /**
-     * @var \Twig_Template
+     * @var TemplateWrapper
      */
     private $enum_class;
 
     /**
-     * @var \Twig_TemplateWrapper
+     * @var TemplateWrapper
      */
     private $remove;
 
     /**
-     * @var \Twig_TemplateWrapper
+     * @var TemplateWrapper
      */
     private $trait;
 
     /**
-     * @var \Twig_TemplateWrapper
+     * @var TemplateWrapper
      */
     private $keys;
 
@@ -113,14 +119,14 @@ class CodeGenerator implements CodeGeneratorInterface
     /**
      * Initialize Twig and templates.
      *
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Syntax
-     * @throws \Twig_Error_Runtime
+     * @throws LoaderError
+     * @throws SyntaxError
+     * @throws RuntimeError
      */
     public function __construct()
     {
-        $loader = new \Twig_Loader_Filesystem(__DIR__.'/../Resources/templates');
-        $twig   = new \Twig_Environment($loader);
+        $loader = new FilesystemLoader(__DIR__.'/../Resources/templates');
+        $twig   = new Environment($loader);
         $twig->addExtension(new CodeGenerationExtension());
 
         $this->get        = $twig->load('get.php.twig');
