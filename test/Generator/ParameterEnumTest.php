@@ -1,4 +1,9 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2018 Hostnet B.V.
+ */
+
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Feature;
@@ -8,8 +13,9 @@ use Hostnet\Component\AccessorGenerator\Generator\fixtures\Item;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Nullable;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\OneToOneNullable;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Parameterized;
+use PHPUnit\Framework\TestCase;
 
-class ParameterEnumTest extends \PHPUnit_Framework_TestCase
+class ParameterEnumTest extends TestCase
 {
     /**
      * @var Parameterized
@@ -21,7 +27,7 @@ class ParameterEnumTest extends \PHPUnit_Framework_TestCase
         $this->entity = new Parameterized();
     }
 
-    public function testGetter()
+    public function testGetter(): void
     {
         $obj = $this->entity->getParams();
         self::assertInstanceOf(ParamNameEnum::class, $obj);
@@ -32,12 +38,12 @@ class ParameterEnumTest extends \PHPUnit_Framework_TestCase
      * @expectedException \LogicException
      * @expectedExceptionMessage Parameter "A_SOME_ARRAY" does not exist or has never been initialized.
      */
-    public function testGetterUndefinedParameter()
+    public function testGetterUndefinedParameter(): void
     {
         $this->entity->getParams()->getSomeArray();
     }
 
-    public function methodsProvider()
+    public function methodsProvider(): array
     {
         return [
             ['SomeArray', [1, 2, 3], [4, 5, 6], 'Parameter "A_SOME_ARRAY" does not exist'],
@@ -87,7 +93,7 @@ class ParameterEnumTest extends \PHPUnit_Framework_TestCase
         $object->$get();
     }
 
-    public function testArray()
+    public function testArray(): void
     {
         self::assertFalse($this->entity->getParams()->hasSomeArray());
 

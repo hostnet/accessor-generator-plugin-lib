@@ -1,7 +1,10 @@
 <?php
-namespace Hostnet\Component\AccessorGenerator\Annotation;
+/**
+ * @copyright 2018 Hostnet B.V.
+ */
+declare(strict_types=1);
 
-use Doctrine\Common\Annotations\Annotation\Enum;
+namespace Hostnet\Component\AccessorGenerator\Annotation;
 
 /**
  * @Annotation(target={"ANNOTATION", "PROPERTY"})

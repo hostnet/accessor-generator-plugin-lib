@@ -1,13 +1,19 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Doctrine\Common\Util\Inflector;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Types;
+use PHPUnit\Framework\TestCase;
 
-class TypesTest extends \PHPUnit_Framework_TestCase
+class TypesTest extends TestCase
 {
 
-    public function typeProvider()
+    public function typeProvider(): array
     {
         $resource = fopen('data://text/plain,', 'r');
         $date     = new \DateTime();
@@ -46,7 +52,7 @@ class TypesTest extends \PHPUnit_Framework_TestCase
         return $values;
     }
 
-    public function getTypeProvider()
+    public function getTypeProvider(): array
     {
         $values = [['id', 0]];
 
@@ -99,7 +105,7 @@ class TypesTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function setTypeProvider()
+    public function setTypeProvider(): array
     {
         // When an integer grows bigger than PHP_MAX_INT or smaller than
         // -PHP_MAX_INT - 1 it will be transformed into a float value.
@@ -212,7 +218,7 @@ class TypesTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException DomainException
      */
-    public function testSetDecimalTooBig()
+    public function testSetDecimalTooBig(): void
     {
         $types = new Types();
         $types->setDecimal('1E+10');
@@ -221,13 +227,13 @@ class TypesTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException DomainException
      */
-    public function testSetDecimalTooSmall()
+    public function testSetDecimalTooSmall(): void
     {
         $types = new Types();
         $types->setDecimal('+10E-2');
     }
 
-    public function testSetDecimal()
+    public function testSetDecimal(): void
     {
         $types = new Types();
 

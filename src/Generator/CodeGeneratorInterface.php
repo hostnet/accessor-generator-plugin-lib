@@ -1,4 +1,8 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
 
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
@@ -19,18 +23,21 @@ interface CodeGeneratorInterface
      * where no annotations found and/or creating a trait was not needed.
      *
      * @see generateTraitForClass
+     *
      * @param ReflectionClass $class
+     *
      * @return bool
      */
-    public function writeTraitForClass(ReflectionClass $class);
+    public function writeTraitForClass(ReflectionClass $class): bool;
 
     /**
-     * Writes one or more enumerator accessors.
+     * Generates and writes one or more enumerator accessors.
      *
-     * @param  ReflectionClass $class
-     * @return bool
+     * @param ReflectionClass $class
+     *
+     * @return array An array of generated enumerator accessors
      */
-    public function writeEnumeratorAccessorsForClass(ReflectionClass $class);
+    public function writeEnumeratorAccessorsForClass(ReflectionClass $class): array;
 
     /**
      * Returns the generated PHP code for the accessor methods trait for
@@ -39,20 +46,22 @@ interface CodeGeneratorInterface
      *
      * Returns an empty string if no code generation was needed nor done.
      *
-     * @param  ReflectionClass $class
+     * @param ReflectionClass $class
+     *
      * @return string
      */
-    public function generateTraitForClass(ReflectionClass $class);
+    public function generateTraitForClass(ReflectionClass $class): string;
 
     /**
      * Generate Accessor methods for property associated with the given
      * {$info}. The output will consist of generated code for the accessors
      * separated with line-breaks.
      *
-     * @param  PropertyInformationInterface $info
+     * @param PropertyInformationInterface $info
+     *
      * @return string
      */
-    public function generateAccessors(PropertyInformationInterface $info);
+    public function generateAccessors(PropertyInformationInterface $info): string;
 
     /**
      * Expects an array of aliases, each alias can contain a public key file and/or a private key file.
@@ -62,8 +71,10 @@ interface CodeGeneratorInterface
      * ex. [{encryption_alias} => ['public-key' => {key_file}, 'private-key' => {key_file}], ...]
      *
      * @param array $encryption_aliases
+     *
+     * @return void
      */
-    public function setEncryptionAliases(array $encryption_aliases);
+    public function setEncryptionAliases(array $encryption_aliases): void;
 
     /**
      * Method to write KeyRegistry class(es), call this after all the Traits have been generated
@@ -72,5 +83,5 @@ interface CodeGeneratorInterface
      *
      * @return bool
      */
-    public function writeKeyRegistriesForPackage();
+    public function writeKeyRegistriesForPackage(): bool;
 }

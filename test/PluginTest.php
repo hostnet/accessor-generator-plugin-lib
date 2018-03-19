@@ -1,4 +1,9 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+
 namespace Hostnet\Component\AccessorGenerator;
 
 use Composer\Composer;
@@ -13,33 +18,23 @@ use Composer\Repository\RepositoryManager;
 use Composer\Repository\WritableArrayRepository;
 use Composer\Script\ScriptEvents;
 use Hostnet\Component\AccessorGenerator\Generator\CodeGeneratorInterface;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\StreamOutput;
 
 /**
- * @covers Hostnet\Component\AccessorGenerator\Plugin
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
+ * @covers \Hostnet\Component\AccessorGenerator\Plugin
  */
-class PluginTest extends \PHPUnit_Framework_TestCase
+class PluginTest extends TestCase
 {
-    public function testActivate()
+    public function testGetSubscribedEvents(): void
     {
-        // Only a smoke test.
-        $plugin = new Plugin();
-        $plugin->activate($this->getMockComposer(), new NullIO());
+        self::assertSame([
+            ScriptEvents::PRE_AUTOLOAD_DUMP  => ['onPreAutoloadDump', 20 ],
+            ScriptEvents::POST_AUTOLOAD_DUMP => ['onPostAutoloadDump', 5 ]
+        ], Plugin::getSubscribedEvents());
     }
 
-    public function testGetSubscribedEvents()
-    {
-        self::assertSame(
-            [
-                ScriptEvents::PRE_AUTOLOAD_DUMP  => ['onPreAutoloadDump', 20 ],
-                ScriptEvents::POST_AUTOLOAD_DUMP => ['onPostAutoloadDump', 5 ]
-            ],
-            Plugin::getSubscribedEvents()
-        );
-    }
-
-    public function testOnPreAutoloadDump()
+    public function testOnPreAutoloadDump(): void
     {
         // Effectively change installation dir of root package.
         chdir(__DIR__ . '/fixtures/root');
@@ -57,7 +52,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $plugin->onPreAutoloadDump();
     }
 
-    public function testOnPostAutoloadDump()
+    public function testOnPostAutoloadDump(): void
     {
         // Effectively change installation dir of root package.
         chdir(__DIR__ . '/fixtures/root');
@@ -88,9 +83,9 @@ class PluginTest extends \PHPUnit_Framework_TestCase
      * all with NullIO and a default empty config
      *
      * @return \Composer\Composer
-     * @throws \PHPUnit_Framework_Exception
+     * @throws \ReflectionException
      */
-    private function getMockComposer()
+    private function getMockComposer(): Composer
     {
         $config = new Config();
         $io     = new NullIO();

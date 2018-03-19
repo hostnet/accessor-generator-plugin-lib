@@ -1,14 +1,20 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2016-2018 Hostnet B.V.
+ */
+
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\ContactInfo;
+use PHPUnit\Framework\TestCase;
 
 /**
  * {@inheritDoc}
  */
-class ContactInfoTest extends \PHPUnit_Framework_TestCase
+class ContactInfoTest extends TestCase
 {
-    public function testSetWrong()
+    public function testSetWrong(): void
     {
         $alice = new ContactInfo();
         foreach ([
@@ -27,7 +33,7 @@ class ContactInfoTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testSet()
+    public function testSet(): void
     {
         $alice = new ContactInfo();
         self::assertSame($alice, $alice->setAddressLine(''));
@@ -44,15 +50,7 @@ class ContactInfoTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testNull()
-    {
-        $alice = new ContactInfo();
-        foreach (ContactInfo::GETTERS as $modifier) {
-            $alice->$modifier();
-        }
-    }
-
-    public function testRemove()
+    public function testRemove(): void
     {
         $alice = new ContactInfo();
         $bob   = new ContactInfo();
@@ -67,7 +65,7 @@ class ContactInfoTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testAddTwice()
+    public function testAddTwice(): void
     {
         $alice = new ContactInfo();
         $bob   = new ContactInfo();
@@ -85,7 +83,7 @@ class ContactInfoTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testGarbage()
+    public function testGarbage(): void
     {
         $info = new ContactInfo();
 
@@ -101,7 +99,7 @@ class ContactInfoTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testGetAll()
+    public function testGetAll(): void
     {
         $info = new ContactInfo();
         $all  = $info->getAll();

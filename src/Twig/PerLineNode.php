@@ -1,5 +1,12 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Twig;
+
+use Twig\Node\Node;
 
 /**
  * Node representation of a {% perline %}{% endperline %} block. The node has
@@ -16,21 +23,19 @@ namespace Hostnet\Component\AccessorGenerator\Twig;
  *   lines:   A single node if there is only a text or a print node inside of
  *            the perline block, otherwise a Twig_Node with sub nodes of all
  *            the nodes between the prefix and/or postfix.
- *
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
-class PerLineNode extends \Twig_Node
+class PerLineNode extends Node
 {
     /**
      * Create new PerLineNode
      *
-     * @param \Twig_Node $lines
-     * @param string     $prefix
-     * @param string     $postfix
-     * @param int        $lineno
-     * @param string     $tag
+     * @param Node   $lines
+     * @param string $prefix
+     * @param string $postfix
+     * @param int    $lineno
+     * @param string $tag
      */
-    public function __construct(\Twig_Node $lines, $prefix, $postfix, $lineno, $tag = 'perline')
+    public function __construct(Node $lines, $prefix, $postfix, $lineno, $tag = 'perline')
     {
         parent::__construct(
             ['lines' => $lines],
@@ -47,7 +52,7 @@ class PerLineNode extends \Twig_Node
      *
      * @param \Twig_Compiler $compiler
      */
-    private function compileComplex(\Twig_Compiler $compiler)
+    private function compileComplex(\Twig_Compiler $compiler): void
     {
         $prefix  = $this->getAttribute('prefix');
         $postfix = $this->getAttribute('postfix');
@@ -58,7 +63,7 @@ class PerLineNode extends \Twig_Node
         $compiler->subcompile($lines);
 
         $ltrim_prefix = ltrim($prefix);                        // Trimmed version for use on first line
-        $indent       = ! trim($prefix) && ! trim($postfix);   // Are we only indenting or also prefixing
+        $indent       = !trim($prefix) && !trim($postfix);   // Are we only indenting or also prefixing
 
         // Fetch the content of the lines inside of this block
         // and itterate over them
@@ -101,7 +106,7 @@ class PerLineNode extends \Twig_Node
      *
      * @param \Twig_Compiler $compiler A Twig_Compiler instance
      */
-    public function compile(\Twig_Compiler $compiler)
+    public function compile(\Twig_Compiler $compiler): void
     {
         // Echo line information into the generated code
         $compiler->addDebugInfo($this);

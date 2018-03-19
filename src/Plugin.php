@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator;
 
 use Composer\Composer;
@@ -55,10 +60,10 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     private $metadata;
 
     /**
-     * Initialize the annotation registry with composer as auto loader. Create
-     * a CodeGenerator if none was provided.
+     * Initialize the annotation registry with composer as auto loader. Create a CodeGenerator if none was provided.
      *
      * @param CodeGeneratorInterface $generator
+     *
      * @throws \InvalidArgumentException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Syntax
@@ -78,18 +83,18 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             ScriptEvents::PRE_AUTOLOAD_DUMP  => ['onPreAutoloadDump', 20],
-            ScriptEvents::POST_AUTOLOAD_DUMP => ['onPostAutoloadDump', 5]
+            ScriptEvents::POST_AUTOLOAD_DUMP => ['onPostAutoloadDump', 5],
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function activate(Composer $composer, IOInterface $io)
+    public function activate(Composer $composer, IOInterface $io): void
     {
         $this->composer = $composer;
         $this->io       = $io;
@@ -103,15 +108,13 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      * annotation set on at least one property.
      *
      * @throws \DomainException
-     * @throws \Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException
-     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
      * @throws \InvalidArgumentException
      * @throws \LogicException
      * @throws \RuntimeException
      * @throws \Symfony\Component\Filesystem\Exception\IOException
      */
-    public function onPreAutoloadDump()
+    public function onPreAutoloadDump(): void
     {
         $local_repository = $this->composer->getRepositoryManager()->getLocalRepository();
         $packages         = $local_repository->getPackages();
@@ -128,7 +131,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         }
     }
 
-    public function onPostAutoloadDump()
+    public function onPostAutoloadDump(): void
     {
         $local_repository = $this->composer->getRepositoryManager()->getLocalRepository();
         $packages         = $local_repository->getPackages();
@@ -136,7 +139,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
 
         foreach ($packages as $package) {
             /* @var $package PackageInterface */
-            if (! array_key_exists(self::NAME, $package->getRequires())) {
+            if (!array_key_exists(self::NAME, $package->getRequires())) {
                 continue;
             }
 
@@ -174,10 +177,10 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      *
      * @param PackageInterface $package
      */
-    private function generateTraitForPackage(PackageInterface $package)
+    private function generateTraitForPackage(PackageInterface $package): void
     {
         if ($this->io->isVerbose()) {
-            $this->io->write('Generating metadata for <info>' . $package->getPrettyName() . '</info>');
+            $this->io->write('Generating metadata for <info>'.$package->getPrettyName().'</info>');
         }
 
         foreach ($this->getFilesAndReflectionClassesFromPackage($package) as $filename => $reflection_class) {
@@ -196,10 +199,11 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      * This method returns a cached instance when executed more than once for the same package.
      *
      * @param PackageInterface $package
-     * @return mixed
+     *
+     * @return array
      * @throws Reflection\Exception\FileException
      */
-    private function getFilesAndReflectionClassesFromPackage(PackageInterface $package)
+    private function getFilesAndReflectionClassesFromPackage(PackageInterface $package): array
     {
         $cache_id = $package->getName();
 
@@ -209,7 +213,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
 
         $this->metadata[$cache_id] = [];
         foreach ($this->getFilesForPackage($package) as $filename) {
-            $filename = (string) $filename;
+            $filename = (string)$filename;
             if (isset($this->metadata[$cache_id][$filename])) {
                 continue;
             }
@@ -233,6 +237,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      * @throws \InvalidArgumentException
      *
      * @param PackageInterface $package
+     *
      * @return \Iterator
      */
     private function getFilesForPackage(PackageInterface $package)

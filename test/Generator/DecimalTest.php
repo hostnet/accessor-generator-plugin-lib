@@ -1,12 +1,17 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Doctrine\Common\Util\Inflector;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Decimal;
+use PHPUnit\Framework\TestCase;
 
-class DecimalTest extends \PHPUnit_Framework_TestCase
+class DecimalTest extends TestCase
 {
-
     private function getTestValues($scale, $precision)
     {
         $values    = [];
@@ -16,7 +21,7 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
         $on_value  = sprintf('%s.%s', str_repeat('2', $before), str_repeat('3', $scale));
 
 
-        $i = bccomp($on_value, PHP_INT_MAX, 0) <= 0;
+        $i = bccomp($on_value, (string) PHP_INT_MAX, 0) <= 0;
         $f = $precision < 30; // arbirary boundary, only fit fore the used test values
 
         //Scale outside boundary, precision outside boundary.
@@ -101,7 +106,7 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
         return $values;
     }
 
-    public function setProvider()
+    public function setProvider(): array
     {
         $values = [];
         $values = array_merge($values, $this->getTestValues(0, 10));
@@ -164,7 +169,7 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
         self::assertSame($decimal, $set);
     }
 
-    public function roundProvider()
+    public function roundProvider(): array
     {
         $huge = str_repeat('1', 35) . '.' . str_repeat('5', 29);
 

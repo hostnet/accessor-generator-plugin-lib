@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
@@ -20,7 +25,7 @@ class PropertyInformation implements PropertyInformationInterface
      * @see PropertyInformationInterface::getType()
      * @var string|null
      */
-    private $type = null;
+    private $type;
 
     /**
      * @see PropertyInformationInterface::getTypeHint()
@@ -38,7 +43,7 @@ class PropertyInformation implements PropertyInformationInterface
      * @see PropertyInformationInterface::getEncryptionAlias()
      * @var string
      */
-    private $encryption_alias = null;
+    private $encryption_alias;
 
     /**
      * @see PropertyInformationInterface::getIntegerSize()
@@ -68,13 +73,13 @@ class PropertyInformation implements PropertyInformationInterface
      * @see PropertyInformationInterface::isNullable()
      * @var bool|null
      */
-    private $nullable = null;
+    private $nullable;
 
     /**
      * @see PropertyInformationInterface::isUnique()
      * @var bool|null
      */
-    private $unique = null;
+    private $unique;
 
     /**
      * @see PropertyInformationInterface::isGenerator()
@@ -116,19 +121,19 @@ class PropertyInformation implements PropertyInformationInterface
      * @see PropertyInformationInterface::willGenerateGet()
      * @var string|null
      */
-    private $generate_get = null;
+    private $generate_get;
 
     /**
      * @see PropertyInformationInterface::willGenerateSet()
      * @var string|null
      */
-    private $generate_set = null;
+    private $generate_set;
 
     /**
      * @see PropertyInformationInterface::willGenerateAdd()
      * @var string|null
      */
-    private $generate_add = null;
+    private $generate_add;
 
     /**
      * @see PropertyInformationInterface::getEnumeratorsToGenerate()
@@ -142,13 +147,13 @@ class PropertyInformation implements PropertyInformationInterface
      * @see PropertyInformationInterface::getIndex()
      * @var string|null
      */
-    private $index = null;
+    private $index;
 
     /**
      * @see PropertyInformationInterface::willGenerateRemove()
      * @var string|null
      */
-    private $generate_remove = null;
+    private $generate_remove;
 
     /**
      * Information parsed from the PHP
@@ -174,12 +179,6 @@ class PropertyInformation implements PropertyInformationInterface
      */
     private $annotation_processors;
 
-    /**
-     * Create new PropertyInformation object based
-     * on a Reflected property from PHP source.
-     *
-     * @param ReflectionProperty $property
-     */
     public function __construct(ReflectionProperty $property)
     {
         $this->property = $property;
@@ -198,7 +197,7 @@ class PropertyInformation implements PropertyInformationInterface
      *
      * @param AnnotationProcessorInterface $processor
      */
-    public function registerAnnotationProcessor(AnnotationProcessorInterface $processor)
+    public function registerAnnotationProcessor(AnnotationProcessorInterface $processor): void
     {
         $this->annotation_processors[] = $processor;
     }
@@ -211,7 +210,7 @@ class PropertyInformation implements PropertyInformationInterface
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
      * @throws \RuntimeException
      */
-    public function processAnnotations()
+    public function processAnnotations(): void
     {
         $class    = $this->property->getClass();
         $imports  = $class ? array_change_key_case($class->getUseStatements()) : [];
@@ -227,14 +226,18 @@ class PropertyInformation implements PropertyInformationInterface
         // this would let the DocParser explode with an Exception, while
         // the goal is to ignore other annotations besides the one explicitly
         // loaded.
-        $without_foreign_annotations = array_filter($imports, function ($import) use ($namespaces) {
-            foreach ($namespaces as $namespace) {
-                if (stripos($namespace, $import) === 0) {
-                    return true;
+        $without_foreign_annotations = array_filter(
+            $imports,
+            function ($import) use ($namespaces) {
+                foreach ($namespaces as $namespace) {
+                    if (stripos($namespace, $import) === 0) {
+                        return true;
+                    }
                 }
+
+                return false;
             }
-            return false;
-        });
+        );
 
         $this->parser->setImports($without_foreign_annotations);
         $this->parser->setIgnoreNotImportedAnnotations(true);
@@ -256,14 +259,14 @@ class PropertyInformation implements PropertyInformationInterface
 
                 if ($annotation instanceof Column
                     && isset($annotation->type)
-                    && ! in_array($annotation->type, ['string', 'text'])
+                    && !in_array($annotation->type, ['string', 'text'])
                 ) {
                     $is_string = false;
                 }
             }
         }
 
-        if ($is_encrypted && ! $is_string) {
+        if ($is_encrypted && !$is_string) {
             throw new \RuntimeException(sprintf(
                 'Property %s in class %s\%s has an encryption_alias set, but is not declared as column type \'string\'',
                 $this->getName(),
@@ -274,10 +277,9 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @see PropertyInformationInterface::getDocumentation()
-     * @return string
+     * {@inheritdoc}
      */
-    public function getDocumentation()
+    public function getDocumentation(): string
     {
         $block = strstr($this->property->getDocComment(), '@', true);
         $block = preg_replace('/\/\*\*\n/m', '', $block);
@@ -290,105 +292,105 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @see PropertyInformationInterface::getName()
-     * @return string
+     * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->property->getName();
     }
 
     /**
-     * @see PropertyInformationInterface::getClass()
-     * @return string
-     * @throws \OutOfBoundsException
-     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
+     * {@inheritdoc}
      */
-    public function getClass()
+    public function getClass(): string
     {
         if ($this->property->getClass() !== null) {
             return $this->property->getClass()->getName();
-        } else {
-            return '';
         }
+
+        return '';
     }
 
     /**
-     * @see PropertyInformationInterface::getNamespace()
-     * @return string
+     * {@inheritdoc}
      */
-    public function getNamespace()
+    public function getNamespace(): string
     {
         if ($this->property->getClass()) {
             return $this->property->getClass()->getNamespace();
-        } else {
-            return '';
         }
+
+        return '';
     }
 
     /**
-     * @see PropertyInformationInterface::getDefault()
-     * @return string
+     * {@inheritdoc}
      */
-    public function getDefault()
+    public function getDefault(): ?string
     {
         return $this->property->getDefault();
     }
 
     /**
-     * @see PropertyInformationInterface::getType()
-     * @return string
+     * {@inheritdoc}
      */
-    public function getType()
+    public function getType(): ?string
     {
         return $this->type;
     }
 
     /**
-     * @see PropertyInformationInterface::getTypeHint()
-     * @return string
+     * {@inheritdoc}
      */
-    public function getTypeHint()
+    public function getTypeHint(): string
     {
         return $this->type_hint;
     }
 
     /**
-     * @see PropertyInformationInterface::getFullyQualifiedType()
-     * @return string
+     * {@inheritdoc}
      */
-    public function getFullyQualifiedType()
+    public function getFullyQualifiedType(): string
     {
         return $this->fully_qualified_type;
     }
 
     /**
-     * Throw exceptions for invalid types or return
-     * the valid type.
+     * Throw exceptions for invalid types or return the valid type.
      *
      * @see http://php.net/manual/en/language.types.php
-     * @param  string $type
+     *
+     * @param string $type
+     *
+     * @return string
      * @throws \DomainException
      * @throws \InvalidArgumentException
-     * @return string
      */
-    private function validateType($type)
+    private function validateType($type): string
     {
-        if (! is_string($type)) {
+        if (!is_string($type)) {
             throw new \InvalidArgumentException(sprintf('$type is not of type string but of %s', gettype($type)));
-        } elseif ('' === $type) {
+        }
+
+        if ('' === $type) {
             throw new \DomainException(sprintf('A type name may not be empty'));
-        } elseif ((int) $type) {
+        }
+
+        if ((int)$type) {
             throw new \DomainException(sprintf('A type name may not start with a number. Found %s', $type));
-        } elseif (in_array($type, static::getValidTypes(), true)) {
+        }
+
+        if (in_array($type, static::getValidTypes(), true)) {
             // Scalar.
             return $type;
-        } elseif ('\\' === $type[0] || ctype_upper($type[0])) {
+        }
+
+        if ('\\' === $type[0] || ctype_upper($type[0])) {
             // Class.
             return $type;
-        } else {
-            throw new \DomainException(sprintf('The type %s is not supported for code generation', $type));
         }
+
+        throw new \DomainException(sprintf('The type %s is not supported for code generation', $type));
     }
 
     /**
@@ -397,15 +399,18 @@ class PropertyInformation implements PropertyInformationInterface
      * by getValidTypes.
      *
      * @see http://php.net/manual/en/language.types.php
-     * @param  string $type
+     *
+     * @param string $type
+     *
      * @throws \DomainException
      * @throws \InvalidArgumentException
      * @return PropertyInformation
      */
-    public function setType($type)
+    public function setType($type): self
     {
         $this->type                          = $this->validateType($type);
         $this->type_hint || $this->type_hint = $this->type;
+
         return $this;
     }
 
@@ -420,14 +425,17 @@ class PropertyInformation implements PropertyInformationInterface
      * set by the setType method.
      *
      * @see http://php.net/manual/en/language.types.php
+     *
      * @param string $type_hint
+     *
      * @throws \DomainException
      * @throws \InvalidArgumentException
      * @return PropertyInformation
      */
-    public function setTypeHint($type_hint)
+    public function setTypeHint($type_hint): self
     {
         $this->type_hint = $this->validateType($type_hint);
+
         return $this;
     }
 
@@ -436,16 +444,19 @@ class PropertyInformation implements PropertyInformationInterface
      * The type must be a valid class name starting from
      * the root namespace, so it should start with a \
      *
-     * @param  string $type
+     * @param string $type
+     *
      * @throws \DomainException
      * @throws \InvalidArgumentException
      * @return PropertyInformation
      */
-    public function setFullyQualifiedType($type)
+    public function setFullyQualifiedType($type): self
     {
-        if (! is_string($type)) {
+        if (!is_string($type)) {
             throw new \InvalidArgumentException(sprintf('$type is not of type string but of %s', gettype($type)));
-        } elseif ('' === $type) {
+        }
+
+        if ('' === $type) {
             $this->fully_qualified_type = '';
         } elseif ((int)$type) {
             throw new \DomainException(sprintf('A type name may not start with a number. Found %s', $type));
@@ -459,10 +470,9 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @see PropertyInformationInterface::getEncryptionAlias()
-     * @return string|null
+     * {@inheritdoc}
      */
-    public function getEncryptionAlias()
+    public function getEncryptionAlias(): ?string
     {
         return $this->encryption_alias;
     }
@@ -481,12 +491,13 @@ class PropertyInformation implements PropertyInformationInterface
      * ...
      *
      * @param string $encryption_alias
+     *
      * @throws \InvalidArgumentException
      * @return PropertyInformation
      */
-    public function setEncryptionAlias($encryption_alias)
+    public function setEncryptionAlias($encryption_alias): self
     {
-        if (! is_string($encryption_alias)) {
+        if (!is_string($encryption_alias)) {
             throw new \InvalidArgumentException(sprintf(
                 'encryption_alias must be of type string but is of type %s',
                 gettype($encryption_alias)
@@ -503,10 +514,9 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * @see PropertyInformationInterface::getLength()
-     * @return int
+     * {@inheritdoc}
      */
-    public function getLength()
+    public function getLength(): int
     {
         return $this->length;
     }
@@ -519,10 +529,11 @@ class PropertyInformation implements PropertyInformationInterface
      * @throws \RangeException
      * @throws \InvalidArgumentException
      *
-     * @param  int $length
+     * @param int $length
+     *
      * @return PropertyInformation
      */
-    public function setLength($length)
+    public function setLength($length): self
     {
         // Check type.
         if (!is_int($length)) {
@@ -535,15 +546,14 @@ class PropertyInformation implements PropertyInformationInterface
         }
 
         $this->length = $length;
+
         return $this;
     }
 
     /**
-     * @see PropertyInformationInterface::getIntegerSize()
-     *
-     * @return int
+     * {@inheritdoc}
      */
-    public function getIntegerSize()
+    public function getIntegerSize(): int
     {
         return $this->integer_size;
     }
@@ -555,9 +565,10 @@ class PropertyInformation implements PropertyInformationInterface
      * @throws \RangeException
      *
      * @param int $integer_size
-     * @return $this
+     *
+     * @return PropertyInformation
      */
-    public function setIntegerSize($integer_size)
+    public function setIntegerSize($integer_size): self
     {
         // Check type.
         if (!is_int($integer_size)) {
@@ -574,31 +585,27 @@ class PropertyInformation implements PropertyInformationInterface
 
         // Assign.
         $this->integer_size = $integer_size;
+
         return $this;
     }
 
-    /**
-     * @see PropertyInformationInterface::isGenerator()
-     */
-    public function setIsGenerator($bool)
+    public function setIsGenerator(bool $bool): void
     {
         $this->is_generator = $bool;
     }
 
     /**
-     * @see PropertyInformationInterface::isGenerator()
+     * {@inheritdoc}
      */
-    public function isGenerator()
+    public function isGenerator(): bool
     {
         return $this->is_generator;
     }
 
     /**
-     * @see PropertyInformationInterface::getReferencedProperty()
-     *
-     * return string
+     * {@inheritdoc}
      */
-    public function getReferencedProperty()
+    public function getReferencedProperty(): string
     {
         return $this->referenced_property;
     }
@@ -606,16 +613,16 @@ class PropertyInformation implements PropertyInformationInterface
     /**
      * @see PropertyInformationInterface::getReferencedProperty()
      *
+     * @param string $referenced_property
+     *
+     * @return PropertyInformation
      * @throws \DomainException
      * @throws \InvalidArgumentException
-     *
-     * @param  string $referenced_property
-     * @return string
      */
-    public function setReferencedProperty($referenced_property)
+    public function setReferencedProperty($referenced_property): self
     {
         // Check string.
-        if (! is_string($referenced_property)) {
+        if (!is_string($referenced_property)) {
             throw new \InvalidArgumentException(
                 sprintf('$referenced_property is not of expected type string but of %s)', gettype($referenced_property))
             );
@@ -628,35 +635,30 @@ class PropertyInformation implements PropertyInformationInterface
         }
 
         $this->referenced_property = $referenced_property;
+
         return $this;
     }
 
     /**
-     * @see PropertyInformationInterface::isCollection()
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function isCollection()
+    public function isCollection(): bool
     {
         return $this->is_collection;
     }
 
     /**
-     * @see PropertyInformationInterface::isReferencingCollection()
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function isReferencingCollection()
+    public function isReferencingCollection(): bool
     {
         return $this->is_referencing_collection;
     }
 
     /**
-     * @see PropertyInformationInterface::isComplexType()
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
-    public function isComplexType()
+    public function isComplexType(): bool
     {
         return $this->type && !in_array($this->type, self::getValidTypes(), true);
     }
@@ -665,12 +667,14 @@ class PropertyInformation implements PropertyInformationInterface
      * Set to true whenever this property is a collection type like an array or
      * a DoctrineCollection.
      *
-     * @param  bool $is_collection
+     * @param bool $is_collection
+     *
      * @return PropertyInformation
      */
-    public function setCollection($is_collection)
+    public function setCollection($is_collection): self
     {
         $this->is_collection = false !== $is_collection;
+
         return $this;
     }
 
@@ -679,21 +683,21 @@ class PropertyInformation implements PropertyInformationInterface
      * association where the referenced part is a collection - a many side of
      * the relationship.
      *
-     * @param  bool $is_referencing_collection
+     * @param bool $is_referencing_collection
+     *
      * @return PropertyInformation
      */
-    public function setReferencingCollection($is_referencing_collection)
+    public function setReferencingCollection($is_referencing_collection): self
     {
         $this->is_referencing_collection = false !== $is_referencing_collection;
+
         return $this;
     }
 
     /**
-     * @see PropertyInformationInterface::isFixedPointNumber()
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function isFixedPointNumber()
+    public function isFixedPointNumber(): bool
     {
         return $this->is_fixed_point_number;
     }
@@ -701,20 +705,21 @@ class PropertyInformation implements PropertyInformationInterface
     /**
      * @see PropertyInformationInterface::isFixedPointNumber()
      *
-     * @param  bool $is_fixed_point_number
-     * @return $this
+     * @param bool $is_fixed_point_number
+     *
+     * @return PropertyInformation
      */
-    public function setFixedPointNumber($is_fixed_point_number)
+    public function setFixedPointNumber($is_fixed_point_number): self
     {
         $this->is_fixed_point_number = false !== $is_fixed_point_number;
+
         return $this;
     }
+
     /**
-     * @see PropertyInformationInterface::getPrecision()
-     *
-     * @return int
+     * {@inheritdoc}
      */
-    public function getPrecision()
+    public function getPrecision(): int
     {
         return $this->precision;
     }
@@ -730,10 +735,11 @@ class PropertyInformation implements PropertyInformationInterface
      * @throws \InvalidArgumentException
      * @throws \RangeException It has a range of 1 to 65.
      *
-     * @param  int $precision
+     * @param int $precision
+     *
      * @return PropertyInformation
      */
-    public function setPrecision($precision)
+    public function setPrecision($precision): self
     {
         // Check type.
         if (!is_int($precision)) {
@@ -749,15 +755,14 @@ class PropertyInformation implements PropertyInformationInterface
             );
         }
         $this->precision = $precision;
+
         return $this;
     }
 
     /**
-     * @see PropertyInformationInterface::getScale()
-     *
-     * @return number
+     * {@inheritdoc}
      */
-    public function getScale()
+    public function getScale(): int
     {
         return $this->scale;
     }
@@ -772,10 +777,11 @@ class PropertyInformation implements PropertyInformationInterface
      * @throws \InvalidArgumentException
      * @throws \RangeException
      *
-     * @param  int $scale
+     * @param int $scale
+     *
      * @return PropertyInformation
      */
-    public function setScale($scale)
+    public function setScale($scale): self
     {
         // Check type.
         if (!is_int($scale)) {
@@ -788,41 +794,40 @@ class PropertyInformation implements PropertyInformationInterface
         }
 
         $this->scale = $scale;
+
         return $this;
     }
 
     /**
-     * @see PropertyInformationInterface::isNullable()
-     *
-     * @return boolean|null
+     * {@inheritdoc}
      */
-    public function isNullable()
+    public function isNullable(): ?bool
     {
         if (null === $this->nullable) {
             return null;
-        } else {
-            return $this->nullable || 'null' === strtolower($this->getDefault());
         }
+
+        return $this->nullable;
     }
 
     /**
      * @see PropertyInformationInterface::isNullable()
      *
-     * @param  bool $nullable
+     * @param bool $nullable
+     *
      * @return PropertyInformation
      */
-    public function setNullable($nullable)
+    public function setNullable($nullable): self
     {
         $this->nullable = false !== $nullable;
+
         return $this;
     }
 
     /**
-     * @see PropertyInformationInterface::isUnique()
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
-    public function isUnique()
+    public function isUnique(): ?bool
     {
         return $this->unique;
     }
@@ -830,21 +835,21 @@ class PropertyInformation implements PropertyInformationInterface
     /**
      * @see PropertyInformationInterface::isUnique()
      *
-     * @param  bool $unique
+     * @param bool $unique
+     *
      * @return PropertyInformation
      */
-    public function setUnique($unique)
+    public function setUnique($unique): self
     {
         $this->unique = false !== $unique;
+
         return $this;
     }
 
     /**
-     * @see PropertyInformationInterface::willGenerateStrict()
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function willGenerateStrict()
+    public function willGenerateStrict(): bool
     {
         return $this->generate_strict;
     }
@@ -852,51 +857,49 @@ class PropertyInformation implements PropertyInformationInterface
     /**
      * @see PropertyInformationInterface::willGenerateStrict()
      *
-     * @param  bool $generate_strict
+     * @param bool $generate_strict
+     *
      * @return PropertyInformation
      */
-    public function setGenerateStrict($generate_strict)
+    public function setGenerateStrict($generate_strict): self
     {
         $this->generate_strict = false !== $generate_strict;
+
         return $this;
     }
 
     /**
-     * @see PropertyInformationInterface::willGenerateGet()
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function willGenerateGet()
+    public function willGenerateGet(): bool
     {
         return $this->generate_get && Generate::VISIBILITY_NONE !== $this->generate_get;
     }
 
     /**
-     * @param  string $visibility
+     * @param string $visibility
+     *
      * @return PropertyInformation
      */
-    public function limitMaximumGetVisibility($visibility)
+    public function limitMaximumGetVisibility($visibility): self
     {
         $this->generate_get = Generate::getMostLimitedVisibility($this->generate_get, $visibility);
+
         return $this;
     }
 
     /**
-     * @see PropertyInformationInterface::willGenerateSet()
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function willGenerateSet()
+    public function willGenerateSet(): bool
     {
         return $this->generate_set && $this->generate_set !== Generate::VISIBILITY_NONE;
     }
 
     /**
-     * @see PropertyInformationInterface::getIndex()
-     *
-     * @return null|string
+     * {@inheritdoc}
      */
-    public function getIndex()
+    public function getIndex(): ?string
     {
         return $this->index;
     }
@@ -904,62 +907,66 @@ class PropertyInformation implements PropertyInformationInterface
     /**
      * @see PropertyInformationInterface::getIndex()
      *
-     * @param  string|null $index = null
-     * @return $this
-     */
-    public function setIndex($index = null)
-    {
-        $this->index = $index;
-        return $this;
-    }
-
-    /**
-     * @param  string $visibility
+     * @param string|null $index
+     *
      * @return PropertyInformation
      */
-    public function limitMaximumSetVisibility($visibility)
+    public function setIndex($index = null): self
     {
-        $this->generate_set = Generate::getMostLimitedVisibility($this->generate_set, $visibility);
+        $this->index = $index;
+
         return $this;
     }
 
     /**
-     * @see PropertyInformationInterface::willGenerateAdd()
+     * @param string $visibility
      *
-     * @return bool
+     * @return PropertyInformation
      */
-    public function willGenerateAdd()
+    public function limitMaximumSetVisibility($visibility): self
+    {
+        $this->generate_set = Generate::getMostLimitedVisibility($this->generate_set, $visibility);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function willGenerateAdd(): bool
     {
         return $this->generate_add && $this->generate_add !== Generate::VISIBILITY_NONE;
     }
 
     /**
-     * @param  string $visibility
+     * @param string $visibility
+     *
      * @return PropertyInformation
      */
-    public function limitMaximumAddVisibility($visibility)
+    public function limitMaximumAddVisibility($visibility): self
     {
         $this->generate_add = Generate::getMostLimitedVisibility($this->generate_add, $visibility);
+
         return $this;
     }
 
     /**
-     * @see PropertyInformationInterface::willGenerateRemove()
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function willGenerateRemove()
+    public function willGenerateRemove(): bool
     {
         return $this->generate_remove && $this->generate_remove !== Generate::VISIBILITY_NONE;
     }
 
     /**
-     * @param  string $visibility
+     * @param string $visibility
+     *
      * @return PropertyInformation
      */
-    public function limitMaximumRemoveVisibility($visibility)
+    public function limitMaximumRemoveVisibility($visibility): self
     {
         $this->generate_remove = Generate::getMostLimitedVisibility($this->generate_remove, $visibility);
+
         return $this;
     }
 
@@ -986,40 +993,32 @@ class PropertyInformation implements PropertyInformationInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return string
      */
-    public function getGetVisibility()
+    public function getGetVisibility(): ?string
     {
         return $this->generate_get;
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return string
      */
-    public function getSetVisibility()
+    public function getSetVisibility(): ?string
     {
         return $this->generate_set;
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return string
      */
-    public function getAddVisibility()
+    public function getAddVisibility(): ?string
     {
         return $this->generate_add;
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return string
      */
-    public function getRemoveVisibility()
+    public function getRemoveVisibility(): ?string
     {
         return $this->generate_remove;
     }
@@ -1029,25 +1028,20 @@ class PropertyInformation implements PropertyInformationInterface
      *
      * @return Enumerator[]
      */
-    public function getEnumeratorsToGenerate()
+    public function getEnumeratorsToGenerate(): array
     {
         return $this->enums_to_generate;
     }
 
-    /**
-     * @param Enumerator $enumerator
-     */
-    public function addEnumeratorToGenerate(Enumerator $enumerator)
+    public function addEnumeratorToGenerate(Enumerator $enumerator): void
     {
         $this->enums_to_generate[] = $enumerator;
     }
 
     /**
-     * Returns true if an enumerator accessor will be generated for this property.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function willGenerateEnumeratorAccessors()
+    public function willGenerateEnumeratorAccessors(): bool
     {
         return count($this->enums_to_generate) > 0;
     }

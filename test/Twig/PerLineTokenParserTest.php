@@ -1,22 +1,27 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+
 namespace Hostnet\Component\AccessorGenerator\Twig;
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Hostnet\Component\AccessorGenerator\Twig\PerLineTokenParser
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
-class PerLineTokenParserTest extends \PHPUnit_Framework_TestCase
+class PerLineTokenParserTest extends TestCase
 {
-
     /**
      * Our class should parse {% perline %} tags
      */
-    public function testGetTag()
+    public function testGetTag(): void
     {
         self::assertEquals('perline', (new PerLineTokenParser())->getTag());
     }
 
-    public function parseProvider()
+    public function parseProvider(): array
     {
         $simple_lines  = new \Twig_Node_Print(new \Twig_Node_Expression_Name('data', 1), 1);
         $complex_lines = new \Twig_Node([
@@ -39,7 +44,7 @@ class PerLineTokenParserTest extends \PHPUnit_Framework_TestCase
      * @param \Twig_Node $node
      * @return \Generator
      */
-    private function iterateAllNodes(\Twig_Node $node)
+    private function iterateAllNodes(\Twig_Node $node): ?\Generator
     {
         yield $node;
 
@@ -53,12 +58,15 @@ class PerLineTokenParserTest extends \PHPUnit_Framework_TestCase
      * tag into a valis PerLineNode with its own child nodes
      *
      * @dataProvider parseProvider
-     * @param string $template template contents to tokeninze (input)
+     *
+     * @param string     $template template contents to tokeninze (input)
      * @param \Twig_Node $lines expected internal nodes to be returned (output)
-     * @param string $prefix expected prefix (output)
-     * @param string $postfix expected postfix (output)
+     * @param string     $prefix expected prefix (output)
+     * @param string     $postfix expected postfix (output)
+     *
+     * @throws \Twig_Error_Syntax
      */
-    public function testParse($template, \Twig_Node $lines, $prefix, $postfix)
+    public function testParse($template, \Twig_Node $lines, $prefix, $postfix): void
     {
         // Setup a token stream and feed it into our token parser.
         $twig = new TestEnvironment(new CodeGenerationExtension());
@@ -72,7 +80,6 @@ class PerLineTokenParserTest extends \PHPUnit_Framework_TestCase
                 break;
             }
         }
-
 
         // check if we get a valid node back (of type PerLineNode)
         self::assertInstanceOf(PerLineNode::class, $per_line);

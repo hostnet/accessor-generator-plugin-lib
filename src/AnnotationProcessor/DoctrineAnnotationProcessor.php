@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
 use Doctrine\DBAL\Types\Type;
@@ -38,11 +43,12 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * @throws \InvalidArgumentException
      * @throws \DomainException
      *
-     * @param  mixed $annotation object of a class annotated with @annotation
-     * @param  PropertyInformation $information
+     * @param mixed               $annotation object of a class annotated with @annotation
+     * @param PropertyInformation $information
+     *
      * @return void
      */
-    public function processAnnotation($annotation, PropertyInformation $information)
+    public function processAnnotation($annotation, PropertyInformation $information): void
     {
         // Process scalar value (db-wise) columns.
         if ($annotation instanceof Column) {
@@ -88,7 +94,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
     /**
      * @see AnnotationProcessorInterface::getProcessableAnnotations()
      */
-    public function getProcessableAnnotationNamespace()
+    public function getProcessableAnnotationNamespace(): string
     {
         return 'Doctrine\ORM\Mapping';
     }
@@ -133,7 +139,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * precision for decimal types, length and size of string and integer
      * types, if the column may be null and if it should be a unique value.
      *
-     * @param Column $column
+     * @param Column              $column
      * @param PropertyInformation $information
      *
      * @throws InvalidColumnSettingsException
@@ -143,7 +149,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
      * @throws \OutOfBoundsException
      */
-    protected function processColumn(Column $column, PropertyInformation $information)
+    protected function processColumn(Column $column, PropertyInformation $information): void
     {
         $information->setType($this->transformType($column->type));
         $information->setFixedPointNumber(strtolower($column->type) === Type::DECIMAL);
@@ -178,7 +184,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * @param JoinColumn          $join_column
      * @param PropertyInformation $information
      */
-    private function processJoinColumn(JoinColumn $join_column, PropertyInformation $information)
+    private function processJoinColumn(JoinColumn $join_column, PropertyInformation $information): void
     {
         $information->setNullable($join_column->nullable);
         $information->setUnique($join_column->unique);
@@ -198,34 +204,45 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * @see http://php.net/manual/en/function.gettype.php (double vs float)
      * @see http://doctrine-dbal.readthedocs.org/en/latest/reference/types.html
      *
-     * @param  string $type
+     * @param string $type
+     *
      * @return string A valid PHP type
      */
-    private function transformType($type)
+    private function transformType($type): ?string
     {
         if ($type === Type::BOOLEAN) {
             return 'boolean';
-        } elseif ($type === Type::SMALLINT || $type === Type::BIGINT || $type === Type::INTEGER) {
-            return 'integer';
-        } elseif ($type === Type::FLOAT) {
-            return 'float';
-        } elseif ($type === Type::TEXT || $type === Type::GUID || $type === Type::STRING || $type === Type::DECIMAL) {
-            return 'string';
-        } elseif ($type === Type::BLOB /* binary will be added in doctrine 2.5 */) {
-            return 'resource';
-        } elseif (in_array(
-            $type,
-            [Type::DATETIME, Type::DATETIMETZ, Type::DATE, Type::TIME, self::ZEROED_DATE_TIME],
-            true
-        )) {
-            return '\\' . \DateTime::class;
-        } elseif (in_array($type, [Type::SIMPLE_ARRAY, Type::JSON_ARRAY, Type::TARRAY, self::YAML_ARRAY], true)) {
-            return 'array';
-        } elseif ($type === Type::OBJECT) {
-            return 'object';
-        } else {
-            return $type;
         }
+
+        if ($type === Type::SMALLINT || $type === Type::BIGINT || $type === Type::INTEGER) {
+            return 'integer';
+        }
+
+        if ($type === Type::FLOAT) {
+            return 'float';
+        }
+
+        if ($type === Type::TEXT || $type === Type::GUID || $type === Type::STRING || $type === Type::DECIMAL) {
+            return 'string';
+        }
+
+        if ($type === Type::BLOB) {
+            return 'resource';
+        }
+
+        if (in_array($type, [Type::DATETIME, Type::DATETIMETZ, Type::DATE, Type::TIME, self::ZEROED_DATE_TIME], true)) {
+            return '\\'.\DateTime::class;
+        }
+
+        if (in_array($type, [Type::SIMPLE_ARRAY, Type::JSON_ARRAY, Type::TARRAY, self::YAML_ARRAY], true)) {
+            return 'array';
+        }
+
+        if ($type === Type::OBJECT) {
+            return 'object';
+        }
+
+        return $type;
     }
 
     /**
@@ -238,16 +255,17 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * is no namespace separator in the class name, Doctrine assumes the class
      * is in the current namespace and is left as-is.
      *
-     * @param  string $type
+     * @param string $type
+     *
      * @return string
      */
-    private function transformComplexType($type)
+    private function transformComplexType($type): string
     {
         if (strpos($type, '\\') > 0) {
-            return '\\' . $type;
-        } else {
-            return $type;
+            return '\\'.$type;
         }
+
+        return $type;
     }
 
     /**
@@ -261,19 +279,24 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      *
      * @see http://doctrine-dbal.readthedocs.org/en/latest/reference/types.html
      *
-     * @param  string $type
+     * @param string $type
+     *
      * @return int
      */
-    private function getIntegerSizeForType($type)
+    private function getIntegerSizeForType($type): int
     {
         if ($type === 'bool' || $type === 'boolean') {
             return 1;
-        } elseif ($type === 'smallint') {
-            return 16;
-        } elseif ($type === 'bigint') {
-            return 64;
-        } else {
-            return 32;
         }
+
+        if ($type === 'smallint') {
+            return 16;
+        }
+
+        if ($type === 'bigint') {
+            return 64;
+        }
+
+        return 32;
     }
 }

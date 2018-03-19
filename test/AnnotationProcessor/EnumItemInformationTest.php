@@ -1,9 +1,15 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2018 Hostnet B.V.
+ */
+
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
 use Doctrine\Common\Util\Inflector;
+use PHPUnit\Framework\TestCase;
 
-class EnumItemInformationTest extends \PHPUnit_Framework_TestCase
+class EnumItemInformationTest extends TestCase
 {
     /**
      * This is of type: array.
@@ -35,7 +41,7 @@ class EnumItemInformationTest extends \PHPUnit_Framework_TestCase
      */
     public const BROKEN_CONSTANT = 'BROKEN_CONSTANT';
 
-    public function constantProvider()
+    public function constantProvider(): array
     {
         return [
             [self::A_TEST_CONSTANT, 'int'],
@@ -70,7 +76,7 @@ class EnumItemInformationTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The name of the constant "BROKEN_CONSTANT" is not prefixed with a valid type string
      */
-    public function testBrokenConstant()
+    public function testBrokenConstant(): void
     {
         $reflector = new \ReflectionClass(EnumItemInformationTest::class);
         $constant  = $reflector->getReflectionConstant('BROKEN_CONSTANT');

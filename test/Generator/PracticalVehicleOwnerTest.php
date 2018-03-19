@@ -1,4 +1,9 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2016-2018 Hostnet B.V.
+ */
+
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Bicycle;
@@ -6,13 +11,14 @@ use Hostnet\Component\AccessorGenerator\Generator\fixtures\Boat;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Car;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\PracticalVehicleOwner;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\VehicleInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated\PracticalVehicleOwnerMethodsTrait
  */
-class PracticalVehicleOwnerTest extends \PHPUnit_Framework_TestCase
+class PracticalVehicleOwnerTest extends TestCase
 {
-    public function testAddVehicle()
+    public function testAddVehicle(): void
     {
         $boat = new Boat();
         $car  = new Car();
@@ -26,24 +32,17 @@ class PracticalVehicleOwnerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
      */
-    public function testAddWrongVehicle()
+    public function testAddWrongVehicle(): void
     {
 
         $owner = new PracticalVehicleOwner();
         $owner->addVehicle($this->prophesize(VehicleInterface::class)->reveal());
     }
 
-    public function testAddCustomVehicle()
-    {
-        $owner   = new PracticalVehicleOwner();
-        $bicycle = new Bicycle();
-        $owner->addVehicle($bicycle)->addVehicle($bicycle);
-    }
-
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testAddVehicleTooManyArguments()
+    public function testAddVehicleTooManyArguments(): void
     {
         $car   = new Car();
         $owner = new PracticalVehicleOwner();
@@ -53,7 +52,7 @@ class PracticalVehicleOwnerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \LogicException
      */
-    public function testAddVehicleToMultipleOwners()
+    public function testAddVehicleToMultipleOwners(): void
     {
         $owner = new PracticalVehicleOwner();
         $thief = new PracticalVehicleOwner();

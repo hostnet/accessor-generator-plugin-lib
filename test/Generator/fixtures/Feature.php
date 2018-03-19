@@ -49,7 +49,7 @@ class Feature implements FeatureInterface
     /**
      * @ORM\ManyToOne(targetEntity="Software", inversedBy="features")
      * @ORM\JoinColumn(nullable=false)
-     * @AG\Generate(get=false, set=false)
+     * @AG\Generate(get="none", set="none")
      */
     private $software;
 }

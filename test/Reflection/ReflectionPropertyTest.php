@@ -1,12 +1,23 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+
 namespace Hostnet\Component\AccessorGenerator\Reflection;
 
+use PHPUnit\Framework\TestCase;
+
 /**
- * @covers Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
+ * @covers \Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty
  */
-class ReflectionPropertyTest extends \PHPUnit_Framework_TestCase
+class ReflectionPropertyTest extends TestCase
 {
+    private $simple;
+    private $public_static;
+    private $complex;
+    private $empty_doc;
+
     public function setUp()
     {
         $this->simple = new ReflectionProperty('simple');
@@ -24,62 +35,57 @@ class ReflectionPropertyTest extends \PHPUnit_Framework_TestCase
             new ReflectionClass(__DIR__ . '/fixtures/no_class.php')
         );
 
-        $this->empty_doc = new ReflectionProperty(
-            'empty_doc',
-            ReflectionProperty::IS_PRIVATE,
-            null,
-            ''
-        );
+        $this->empty_doc = new ReflectionProperty('empty_doc', ReflectionProperty::IS_PRIVATE, null, '');
     }
 
     /**
-     * @expectedException DomainException
+     * @expectedException \DomainException
      */
-    public function testModifiersDomainNone()
+    public function testModifiersDomainNone(): void
     {
         new ReflectionProperty('foo', 0);
     }
 
     /**
-     * @expectedException DomainException
+     * @expectedException \DomainException
      */
-    public function testModifiersDomainTwo()
+    public function testModifiersDomainTwo(): void
     {
         new ReflectionProperty('foo', \ReflectionProperty::IS_PRIVATE | \ReflectionProperty::IS_PROTECTED);
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
-    public function testInvalidType()
+    public function testInvalidType(): void
     {
         new ReflectionProperty('foo', 'bar');
     }
 
-    public function testGetName()
+    public function testGetName(): void
     {
         self::assertEquals('simple', $this->simple->getName());
         self::assertEquals('public_static', $this->public_static->getName());
         self::assertEquals('complex', $this->complex->getName());
     }
 
-    public function testGetClass()
+    public function testGetClass(): void
     {
         self::assertNull($this->simple->getClass());
     }
 
-    public function testGetDocComment()
+    public function testGetDocComment(): void
     {
         self::assertNull($this->simple->getDocComment());
     }
 
-    public function testGetDefault()
+    public function testGetDefault(): void
     {
         self::assertNull($this->simple->getDefault());
         self::assertEquals('', $this->empty_doc->getDefault());
     }
 
-    public function testModifiers()
+    public function testModifiers(): void
     {
         self::assertTrue($this->simple->isPrivate());
         self::assertFalse($this->simple->isProtected());
@@ -102,7 +108,7 @@ class ReflectionPropertyTest extends \PHPUnit_Framework_TestCase
         self::assertFalse($this->empty_doc->isStatic());
     }
 
-    public function testToString()
+    public function testToString(): void
     {
         self::assertEquals('private $simple;', $this->simple->__toString());
         self::assertEquals('public static $public_static;', $this->public_static->__toString());

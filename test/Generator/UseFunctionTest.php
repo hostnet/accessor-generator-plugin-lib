@@ -1,12 +1,18 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2018 Hostnet B.V.
+ */
+
 
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\UseFunction;
+use PHPUnit\Framework\TestCase;
 
-class UseFunctionTest extends \PHPUnit_Framework_TestCase
+class UseFunctionTest extends TestCase
 {
-    public function testGeneric()
+    public function testGeneric(): void
     {
         $use_function = new UseFunction();
 
@@ -17,7 +23,7 @@ class UseFunctionTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testGetCountTooManyArguments()
+    public function testGetCountTooManyArguments(): void
     {
         $use_function = new UseFunction();
 
@@ -27,7 +33,7 @@ class UseFunctionTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testSetCountTooManyArguments()
+    public function testSetCountTooManyArguments(): void
     {
         $use_function = new UseFunction();
 

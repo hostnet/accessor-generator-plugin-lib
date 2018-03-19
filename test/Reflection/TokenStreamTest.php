@@ -1,33 +1,32 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+
 namespace Hostnet\Component\AccessorGenerator\Reflection;
 
-/**
- * @covers Hostnet\Component\AccessorGenerator\Reflection\TokenStream
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
- */
-class TokenStreamTest extends \PHPUnit_Framework_TestCase
-{
+use PHPUnit\Framework\TestCase;
 
-    const SOURCE =  'tokens.php';
-    const SIZE   = 116;
+/**
+ * @covers \Hostnet\Component\AccessorGenerator\Reflection\TokenStream
+ */
+class TokenStreamTest extends TestCase
+{
+    private const SOURCE = 'tokens.php';
+    private const SIZE   = 116;
 
     /**
      * @var TokenStream
      */
     private $stream;
 
-    /**
-     * Size of the token stream $stream
-     * @var int
-     */
-    private $count;
-
     public function setUp()
     {
         $this->stream = new TokenStream(file_get_contents(__DIR__ . '/fixtures/' . self::SOURCE));
     }
 
-    public function typeProvider()
+    public function typeProvider(): array
     {
         return [
             [         0, T_OPEN_TAG                                ],
@@ -41,12 +40,8 @@ class TokenStreamTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider typeProvider
-     * @param string $source
-     * @param int $loc
-     * @param string $type
-     * @param string $exception
      */
-    public function testType($loc, $type, $exception = null)
+    public function testType(int $loc, ?string $type, string $exception = null): void
     {
         $exception && $this->expectException($exception);
         $output = $this->stream->type($loc);
@@ -64,7 +59,7 @@ class TokenStreamTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function valueProvider()
+    public function valueProvider(): array
     {
         return [
             [         0, "<?php\n"                                       ],
@@ -79,17 +74,14 @@ class TokenStreamTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider valueProvider
-     * @param int $loc
-     * @param string $value
-     * @param string $exception
      */
-    public function testValue($loc, $value, $exception = null)
+    public function testValue(int $loc, ?string $value, string $exception = null): void
     {
         $exception && $this->expectException($exception);
         self::assertEquals($value, $this->stream->value($loc));
     }
 
-    public function scanProvider()
+    public function scanProvider(): array
     {
         return [
             // Boundary Checks
@@ -112,19 +104,15 @@ class TokenStreamTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider       scanProvider
-     * @param int[]|char[] $tokens
-     * @param int          $input_loc
-     * @param int|null     $output_loc
-     * @param string       $exception
+     * @dataProvider scanProvider
      */
-    public function testScan(array $tokens, $input_loc, $output_loc, $exception = null)
+    public function testScan(array $tokens, int $input_loc, ?int $output_loc, string $exception = null): void
     {
         $exception && $this->expectException($exception);
         self::assertSame($output_loc, $this->stream->scan($input_loc, $tokens));
     }
 
-    public function nextProvider()
+    public function nextProvider(): array
     {
         return [
             // Boundary checks
@@ -145,13 +133,9 @@ class TokenStreamTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider       nextProvider
-     * @param int          $input_loc
-     * @param int|null     $output_loc
-     * @param int[]|char[] $tokens
-     * @param string       $exception
+     * @dataProvider nextProvider
      */
-    public function testNext($input_loc, $output_loc, array $tokens = null, $exception = null)
+    public function testNext(int $input_loc, ?int $output_loc, array $tokens = null, string $exception = null): void
     {
         $exception && $this->expectException($exception);
         if ($tokens === null) {
@@ -161,7 +145,7 @@ class TokenStreamTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function previousProvider()
+    public function previousProvider(): array
     {
         return [
             // Boundary checks
@@ -183,13 +167,9 @@ class TokenStreamTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider       previousProvider
-     * @param int          $input_loc
-     * @param int|null     $output_loc
-     * @param int[]|char[] $tokens
-     * @param string       $exception
+     * @dataProvider previousProvider
      */
-    public function testPrevious($input_loc, $output_loc, array $tokens = null, $exception = null)
+    public function testPrevious(int $input_loc, ?int $output_loc, array $tokens = null, string $exception = null): void
     {
         $exception && $this->expectException($exception);
         if ($tokens === null) {

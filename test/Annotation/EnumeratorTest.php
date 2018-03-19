@@ -1,11 +1,18 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2018 Hostnet B.V.
+ */
+
 namespace Hostnet\Component\AccessorGenerator\Annotation;
 
-class EnumeratorTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class EnumeratorTest extends TestCase
 {
-    public function testGetters()
+    public function testGetters(): void
     {
-        $enumerator = new Enumerator();
+        $enumerator        = new Enumerator();
         $enumerator->name  = 'Foo';
         $enumerator->value = '\\Some\\Random\\Class';
 
