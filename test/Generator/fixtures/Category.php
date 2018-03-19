@@ -51,8 +51,8 @@ class Category
 
     /**
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="children")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      * @AG\Generate
      */
-    private $parent = null;
+    private $parent;
 }

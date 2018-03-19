@@ -1,12 +1,19 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\EntityNotFoundException;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Category;
+use PHPUnit\Framework\TestCase;
 
-class CategoryTest extends \PHPUnit_Framework_TestCase
+class CategoryTest extends TestCase
 {
-    public function testCategory()
+    public function testCategory(): void
     {
         $parent = new Category();
         $node_a = new Category();
@@ -20,7 +27,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         self::assertSame($node_b, $parent->getChildren()[1]);
     }
 
-    public function testGetChildren()
+    public function testGetChildren(): void
     {
         $category = new Category();
         $children = $category->getChildren();
@@ -31,7 +38,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testGetChildrenTooManyArguments()
+    public function testGetChildrenTooManyArguments(): void
     {
         $category = new Category();
         $category->getChildren(1);
@@ -40,7 +47,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testGetChildren
      */
-    public function testAddChild()
+    public function testAddChild(): void
     {
         $category = new Category();
         $child    = new Category();
@@ -63,7 +70,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testGetChildren
      */
-    public function testAddSameChildConstructor()
+    public function testAddSameChildConstructor(): void
     {
         $category = new Category();
         $child    = new Category($category);
@@ -81,7 +88,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testAddChildTooManyArguments()
+    public function testAddChildTooManyArguments(): void
     {
         $category = new Category();
         $category->addChild($category, 2);
@@ -91,7 +98,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
      * @depends testGetChildren
      * @depends testAddChild
      */
-    public function testRemoveChild()
+    public function testRemoveChild(): void
     {
         $category = new Category();
         $child    = new Category();
@@ -108,7 +115,6 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         // Remove child, check return value and check list.
         self::assertSame($category->removeChild($child), $category);
         self::assertEquals(0, $category->getChildren()->count());
-        self::assertNull($child->getParent());
 
         // Remove not existing child, check return value. No
         // error is expected.
@@ -118,7 +124,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testRemoveChildTooManyArguments()
+    public function testRemoveChildTooManyArguments(): void
     {
         $category = new Category();
         $category->RemoveChild($category, 2);
@@ -127,7 +133,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \LogicException
      */
-    public function testAddMultipleTimes()
+    public function testAddMultipleTimes(): void
     {
         $a = new Category();
         $b = new Category();
@@ -140,13 +146,13 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testSetParentTooManyArguments()
+    public function testSetParentTooManyArguments(): void
     {
         $c = new Category();
         $c->setParent($c, 1);
     }
 
-    public function testSetParent()
+    public function testSetParent(): void
     {
         $a = new Category();
         $b = new Category();
@@ -169,7 +175,6 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         // Unset parent of b
         $b->setParent(null);
         self::assertEquals(0, $a->getChildren()->count());
-        self::assertNull($b->getParent());
 
         // Add b as child to c
         $c->addChild($b);
@@ -190,16 +195,10 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         self::assertSame($e, $d->getChildren()->first());
     }
 
-    public function testGetParentNotInitialized()
-    {
-        $c = new Category();
-        self::assertNull($c->getParent());
-    }
-
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testGetParentTooManyArguments()
+    public function testGetParentTooManyArguments(): void
     {
         $c = new Category();
         $c->getParent([]);

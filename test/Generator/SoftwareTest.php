@@ -1,4 +1,9 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Doctrine\Common\Collections\Collection;
@@ -6,10 +11,11 @@ use Hostnet\Component\AccessorGenerator\Generator\fixtures\EmptyFeature;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Feature;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\NiceFeature;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Software;
+use PHPUnit\Framework\TestCase;
 
-class SoftwareTest extends \PHPUnit_Framework_TestCase
+class SoftwareTest extends TestCase
 {
-    public function testGetFeatures()
+    public function testGetFeatures(): void
     {
         $software = new Software();
         $features = $software->getFeatures();
@@ -21,7 +27,7 @@ class SoftwareTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException BadMethodCallException
      */
-    public function testGetFeaturesTooManyArguments()
+    public function testGetFeaturesTooManyArguments(): void
     {
         $software = new Software();
         $software->getFeatures(1);
@@ -30,7 +36,7 @@ class SoftwareTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testGetFeatures
      */
-    public function testAddFeature()
+    public function testAddFeature(): void
     {
         $feature  = new Feature();
         $software = new Software();
@@ -46,7 +52,7 @@ class SoftwareTest extends \PHPUnit_Framework_TestCase
      * @depends testGetFeatures
      * @expectedException LogicException
      */
-    public function testAddFeatureToMultiple()
+    public function testAddFeatureToMultiple(): void
     {
         $f = new Feature();
         $a = new Software();
@@ -60,7 +66,7 @@ class SoftwareTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testGetFeatures
      */
-    public function testAddFeatureReference()
+    public function testAddFeatureReference(): void
     {
         $feature  = new Feature();
         $software = new Software();
@@ -84,7 +90,7 @@ class SoftwareTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException BadMethodCallException
      */
-    public function testAddFeatureTooManyArguments()
+    public function testAddFeatureTooManyArguments(): void
     {
         $feature  = new Feature();
         $software = new Software();
@@ -96,7 +102,7 @@ class SoftwareTest extends \PHPUnit_Framework_TestCase
      * @depends testGetFeatures
      * @depends testAddFeature
      */
-    public function testRemoveFeature()
+    public function testRemoveFeature(): void
     {
         $feature  = new Feature();
         $software = new Software();
@@ -121,7 +127,7 @@ class SoftwareTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testRemoveFeatureTooManyArguments()
+    public function testRemoveFeatureTooManyArguments(): void
     {
         $feature  = new Feature();
         $software = new Software();
@@ -132,7 +138,7 @@ class SoftwareTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
      */
-    public function testNonExistingPropertyWithInterface()
+    public function testNonExistingPropertyWithInterface(): void
     {
         if (PHP_VERSION_ID < 70100) {
             self::markTestSkipped('Problem does not exists below PHP7.1');
@@ -143,7 +149,7 @@ class SoftwareTest extends \PHPUnit_Framework_TestCase
         $software->addFeature($feature);
     }
 
-    public function testExistingPropertyWithInterface()
+    public function testExistingPropertyWithInterface(): void
     {
         $software = new Software();
         $feature  = new NiceFeature();

@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Reflection;
 
 class TokenStream
@@ -9,7 +14,7 @@ class TokenStream
      * @internal
      * @var int
      */
-    const TYPE = 0;
+    private const TYPE = 0;
 
     /**
      * Location of value within the PHP Token.
@@ -17,7 +22,7 @@ class TokenStream
      * @internal
      * @var int
      */
-    const VALUE = 1;
+    private const VALUE = 1;
 
     /**
      * Search direction from left to right.
@@ -25,7 +30,7 @@ class TokenStream
      * @internal
      * @var int
      */
-    const LTR = 1;
+    private const LTR = 1;
 
     /**
      * Search direction from right to left.
@@ -33,7 +38,7 @@ class TokenStream
      * @internal
      * @var int
      */
-    const RTL = -1;
+    private const RTL = -1;
 
     /**
      * PHP Token Stack.
@@ -57,7 +62,8 @@ class TokenStream
      * so we need to check every single token we inspect
      * to see if it is an array or a scalar type.
      *
-     * @param  int                   $loc token location
+     * @param int $loc token location
+     *
      * @return string|int            the char value of the token or a numeric
      *                               value corresponding with the T_ constants.
      * @throws \OutOfBoundsException for invalid token location
@@ -74,7 +80,8 @@ class TokenStream
      * so we need to check every single token we inspect
      * to see if it is an array or a scalar type.
      *
-     * @param  int $loc              token location
+     * @param int $loc token location
+     *
      * @return string                value for this token
      * @throws \OutOfBoundsException for invalid token location
      */
@@ -90,8 +97,9 @@ class TokenStream
      *
      * Does not inspect the current token.
      *
-     * @param  int   $loc
-     * @param  array $tokens          PHP tokens (T_*)
+     * @param int   $loc
+     * @param array $tokens PHP tokens (T_*)
+     *
      * @throws \OutOfBoundsException
      * @return number|NULL
      */
@@ -104,7 +112,7 @@ class TokenStream
         // this position and than this function
         // should return you with null and serve
         // as boundary check.
-        if (! isset($this->tokens[$loc + 1]) && ! isset($this->tokens[$loc])) {
+        if (!isset($this->tokens[$loc + 1]) && !isset($this->tokens[$loc])) {
             throw new \OutOfBoundsException(sprintf('Invalid start location %d given', $loc));
         }
 
@@ -130,10 +138,11 @@ class TokenStream
      *
      * Will return null if there are no tokens to skip.
      *
-     * @param  int   $loc            start location
-     * @param  array $tokens         list of tokens to skip over
+     * @param int   $loc start location
+     * @param array $tokens list of tokens to skip over
      *                               defaults to whitespace and
      *                               comments
+     *
      * @return int|null for invalid token location
      */
     public function next($loc, array $tokens = [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT])
@@ -149,10 +158,11 @@ class TokenStream
      *
      * Does not include current token.
      *
-     * @param  int  $loc             start location
-     * @param  array $tokens         list of tokens to skip over
+     * @param int   $loc start location
+     * @param array $tokens list of tokens to skip over
      *                               defaults to whitespace and
      *                               comments
+     *
      * @throws \OutOfBoundsException for invalid token location
      * @return int|null              location of the next token found
      */
@@ -166,9 +176,11 @@ class TokenStream
      *
      * @see previous
      * @see next
-     * @param  int   $loc            start location
-     * @param  array $tokens         list of tokens to skip over defaults to whitespace and comments
-     * @param  int   $direction      LTR or RTL, defaults to LTR
+     *
+     * @param int   $loc start location
+     * @param array $tokens list of tokens to skip over defaults to whitespace and comments
+     * @param int   $direction LTR or RTL, defaults to LTR
+     *
      * @throws \OutOfBoundsException for invalid token location
      * @return int|null              location of the next token found
      */
@@ -180,7 +192,7 @@ class TokenStream
         // since you do not want to check against boundary
         // conditions when iterating but use this function
         // for that purpose.
-        if (! isset($this->tokens[$loc + $direction]) && ! isset($this->tokens[$loc])) {
+        if (!isset($this->tokens[$loc + $direction]) && !isset($this->tokens[$loc])) {
             throw new \OutOfBoundsException(sprintf('Invalid start location %d given', $loc));
         }
 
@@ -191,7 +203,7 @@ class TokenStream
             $loc += $direction; //LTR = 1, RTL = -1
 
             // Check if the token can be skipped
-            if (! in_array($this->type($loc), $tokens)) {
+            if (!in_array($this->type($loc), $tokens)) {
                 return $loc;
             }
         }
@@ -206,8 +218,9 @@ class TokenStream
      * so we need to check every single token we inspect
      * to see if it is an array or a scalar type.
      *
-     * @param  int $loc token location
-     * @param  int $type self::TYPE or self::VALUE
+     * @param int $loc token location
+     * @param int $type self::TYPE or self::VALUE
+     *
      * @return int|string the value or type of the token
      */
     private function token($loc, $type)
@@ -218,13 +231,13 @@ class TokenStream
             if (is_array($this->tokens[$loc])) {
                 // Array
                 return $this->tokens[$loc][$type];
-            } else {
-                // Scalar
-                return $this->tokens[$loc];
             }
-        } else {
-            // Invalid location
-            throw new \OutOfBoundsException(sprintf('Invalid location %d given', $loc));
+
+            // Scalar
+            return $this->tokens[$loc];
         }
+
+        // Invalid location
+        throw new \OutOfBoundsException(sprintf('Invalid location %d given', $loc));
     }
 }

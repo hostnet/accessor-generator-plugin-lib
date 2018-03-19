@@ -1,4 +1,4 @@
 /**
               * Hidde
-              * @Hostnet\Component\AccessorGenerator\Annotation\Generate(get=false)
+              * @Hostnet\Component\AccessorGenerator\Annotation\Generate(get="none")
               */

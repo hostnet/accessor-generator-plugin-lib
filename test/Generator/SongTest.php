@@ -1,13 +1,19 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Doctrine\Common\Collections\Collection;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Genre;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Song;
+use PHPUnit\Framework\TestCase;
 
-class SongTest extends \PHPUnit_Framework_TestCase
+class SongTest extends TestCase
 {
-    public function testGetGenres()
+    public function testGetGenres(): void
     {
         $song   = new Song();
         $genres = $song->getGenres();
@@ -18,7 +24,7 @@ class SongTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testGetGenresTooManyArguments()
+    public function testGetGenresTooManyArguments(): void
     {
         $song = new Song();
         $song->getGenres(1);
@@ -27,7 +33,7 @@ class SongTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testGetGenres
      */
-    public function testAddGenre()
+    public function testAddGenre(): void
     {
         $radar_love = new Song();
         $help       = new Song();
@@ -64,7 +70,7 @@ class SongTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testAddGenreTooManyArguments()
+    public function testAddGenreTooManyArguments(): void
     {
         $song  = new Song();
         $genre = new Genre();
@@ -75,7 +81,7 @@ class SongTest extends \PHPUnit_Framework_TestCase
      * @depends testGetGenres
      * @depends testAddGenre
      */
-    public function testRemoveGenre()
+    public function testRemoveGenre(): void
     {
         $song  = new Song();
         $genre = new Genre();
@@ -100,7 +106,7 @@ class SongTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testRemoveGenreTooManyArguments()
+    public function testRemoveGenreTooManyArguments(): void
     {
         $song  = new Song();
         $genre = new Genre();

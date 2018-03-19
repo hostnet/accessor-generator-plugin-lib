@@ -1,24 +1,46 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Reflection;
 
 /**
  * Representation of a class property.
  * Full member of ReflectionClass.
- *
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 class ReflectionProperty
 {
-    const IS_PRIVATE   = \ReflectionProperty::IS_PRIVATE;
-    const IS_PROTECTED = \ReflectionProperty::IS_PROTECTED;
-    const IS_PUBLIC    = \ReflectionProperty::IS_PUBLIC;
-    const IS_STATIC    = \ReflectionProperty::IS_STATIC;
+    public const IS_PRIVATE   = \ReflectionProperty::IS_PRIVATE;
+    public const IS_PROTECTED = \ReflectionProperty::IS_PROTECTED;
+    public const IS_PUBLIC    = \ReflectionProperty::IS_PUBLIC;
+    public const IS_STATIC    = \ReflectionProperty::IS_STATIC;
 
-    private $modifiers   = null;
-    private $doc_comment = null;
-    private $default     = null;
-    private $class       = null;
-    private $name        = '';
+    /**
+     * @var int
+     */
+    private $modifiers;
+
+    /**
+     * @var null|string
+     */
+    private $doc_comment;
+
+    /**
+     * @var null|string
+     */
+    private $default;
+
+    /**
+     * @var ReflectionClass|null
+     */
+    private $class;
+
+    /**
+     * @var string
+     */
+    private $name;
 
     /**
      *
@@ -51,7 +73,7 @@ class ReflectionProperty
      *
      * @param int $modifiers
      */
-    private function setModifiers($modifiers)
+    private function setModifiers($modifiers): void
     {
         // Default to private.
         if ($modifiers === null) {
@@ -67,9 +89,9 @@ class ReflectionProperty
 
         // Get the number of active visibility modifiers amount all modifies.
         $active_visibility_modifiers =
-            ((bool) ($modifiers & self::IS_PRIVATE)) +
-            ((bool) ($modifiers & self::IS_PROTECTED)) +
-            ((bool) ($modifiers & self::IS_PUBLIC));
+            ((bool)($modifiers & self::IS_PRIVATE)) +
+            ((bool)($modifiers & self::IS_PROTECTED)) +
+            ((bool)($modifiers & self::IS_PUBLIC));
 
         // Not one and only one of private, protected and public is selected, throw exception.
         if ($active_visibility_modifiers !== 1) {
@@ -88,9 +110,9 @@ class ReflectionProperty
     /**
      * Return the Class or Trait that this property belongs to.
      *
-     * @return ReflectionClass
+     * @return ReflectionClass|null
      */
-    public function getClass()
+    public function getClass(): ?ReflectionClass
     {
         return $this->class;
     }
@@ -100,7 +122,7 @@ class ReflectionProperty
      *
      * @return string
      */
-    public function getDocComment()
+    public function getDocComment(): ?string
     {
         return $this->doc_comment;
     }
@@ -110,7 +132,7 @@ class ReflectionProperty
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -118,44 +140,44 @@ class ReflectionProperty
     /**
      * Returns true if this property is static, false otherwise.
      *
-     * @return boolean
+     * @return bool
      */
-    public function isStatic()
+    public function isStatic(): bool
     {
-        return (bool) ($this->modifiers & self::IS_STATIC);
+        return (bool)($this->modifiers & self::IS_STATIC);
     }
 
     /**
      * Returns true if this property is private, false otherwise. If true,
      * isProtected and isPublic will return false.
      *
-     * @return boolean
+     * @return bool
      */
-    public function isPrivate()
+    public function isPrivate(): bool
     {
-        return (bool) ($this->modifiers & self::IS_PRIVATE);
+        return (bool)($this->modifiers & self::IS_PRIVATE);
     }
 
     /**
      * Returns true if this property is protected, false otherwise.  If true,
      * isPrivate and isPublic will return false.
      *
-     * @return boolean
+     * @return bool
      */
-    public function isProtected()
+    public function isProtected(): bool
     {
-        return (bool) ($this->modifiers & self::IS_PROTECTED);
+        return (bool)($this->modifiers & self::IS_PROTECTED);
     }
 
     /**
      * Returns true if this property is public, false otherwise. If true,
      * isPrivate and isProtected will return false.
      *
-     * @return boolean
+     * @return bool
      */
-    public function isPublic()
+    public function isPublic(): bool
     {
-        return (bool) ($this->modifiers & self::IS_PUBLIC);
+        return (bool)($this->modifiers & self::IS_PUBLIC);
     }
 
     /**
@@ -167,7 +189,7 @@ class ReflectionProperty
      *
      * @return string|null
      */
-    public function getDefault()
+    public function getDefault(): ?string
     {
         return $this->default;
     }
@@ -191,7 +213,7 @@ class ReflectionProperty
         // Doc comment
         $doc = $this->getDocComment();
         if ($doc) {
-            $text .= $doc . PHP_EOL;
+            $text .= $doc.PHP_EOL;
         }
 
         // Visibility
@@ -209,12 +231,12 @@ class ReflectionProperty
         }
 
         // Name
-        $text .= '$' . $this->getName();
+        $text .= '$'.$this->getName();
 
         if ($this->getDefault()) {
-            $text .= ' = ' . $this->getDefault();
+            $text .= ' = '.$this->getDefault();
         }
 
-        return $text . ';';
+        return $text.';';
     }
 }

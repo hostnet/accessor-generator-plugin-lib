@@ -1,9 +1,16 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+
 namespace Hostnet\Component\AccessorGenerator\Annotation;
 
-class GenerateTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class GenerateTest extends TestCase
 {
-    public function testDefaults()
+    public function testDefaults(): void
     {
         $generate = new Generate();
 
@@ -21,7 +28,7 @@ class GenerateTest extends \PHPUnit_Framework_TestCase
         self::assertNull($generate->encryption_alias);
     }
 
-    public function testTypeAndStrictnessAndEncryptionAlias()
+    public function testTypeAndStrictnessAndEncryptionAlias(): void
     {
         $generate = new Generate();
 
@@ -37,7 +44,7 @@ class GenerateTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider newProvider
      */
-    public function testNew($given, $expected)
+    public function testNew($given, $expected): void
     {
         $generate = new Generate();
 
@@ -54,15 +61,13 @@ class GenerateTest extends \PHPUnit_Framework_TestCase
         self::assertSame($expected, $generate->getIs());
     }
 
-    public function newProvider()
+    public function newProvider(): array
     {
         return [
             [Generate::VISIBILITY_PUBLIC, Generate::VISIBILITY_PUBLIC],
             [Generate::VISIBILITY_PROTECTED, Generate::VISIBILITY_PROTECTED],
             [Generate::VISIBILITY_PRIVATE, Generate::VISIBILITY_PRIVATE],
             [Generate::VISIBILITY_NONE, Generate::VISIBILITY_NONE],
-            [true, Generate::VISIBILITY_PUBLIC],
-            [false, Generate::VISIBILITY_NONE]
         ];
     }
 
@@ -74,7 +79,7 @@ class GenerateTest extends \PHPUnit_Framework_TestCase
         self::assertSame($expected, Generate::getMostLimitedVisibility(... $input));
     }
 
-    public function getMostLimitedVisibilityProvider()
+    public function getMostLimitedVisibilityProvider(): array
     {
         return [[
             Generate::VISIBILITY_NONE,

@@ -1,15 +1,18 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Cart;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Customer;
+use PHPUnit\Framework\TestCase;
 
-/**
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
- */
-class CustomerTest extends \PHPUnit_Framework_TestCase
+class CustomerTest extends TestCase
 {
-    public function testSetCart()
+    public function testSetCart(): void
     {
         $cart     = new Cart();
         $customer = new Customer();
@@ -21,7 +24,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Doctrine\ORM\EntityNotFoundException
      */
-    public function testGetCartEmpty()
+    public function testGetCartEmpty(): void
     {
         $customer = new Customer();
         $customer->getCart();
@@ -30,7 +33,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException BadMethodCallException
      */
-    public function testGetCartTooManyArguments()
+    public function testGetCartTooManyArguments(): void
     {
         $customer = new Customer();
         $customer->getCart(1);
@@ -39,7 +42,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException BadMethodCallException
      */
-    public function testSetCartTooManyArguments()
+    public function testSetCartTooManyArguments(): void
     {
         $cart     = new Cart();
         $customer = new Customer();

@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Enum;
 
 /**
@@ -13,9 +18,9 @@ namespace Hostnet\Component\AccessorGenerator\Enum;
 interface EnumeratorCompatibleEntityInterface
 {
     /**
-     * @param object      $owning_entity     The instance of owning side of this entity.
-     * @param string      $name              The name of the parameter
-     * @param string|NULL $value             The value of the parameter
+     * @param object      $owning_entity The instance of owning side of this entity.
+     * @param string      $name The name of the parameter
+     * @param string|null $value The value of the parameter
      */
     public function __construct($owning_entity, string $name, ?string $value);
 
@@ -25,7 +30,7 @@ interface EnumeratorCompatibleEntityInterface
     public function getValue();
 
     /**
-     * @param  string $value
+     * @param string $value
      */
     public function setValue($value);
 }

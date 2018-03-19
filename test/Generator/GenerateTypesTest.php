@@ -1,13 +1,19 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2015-2018 Hostnet B.V.
+ */
+
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Doctrine\Common\Util\Inflector;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\GenerateTypes;
+use PHPUnit\Framework\TestCase;
 
-class GenerateTypesTest extends \PHPUnit_Framework_TestCase
+class GenerateTypesTest extends TestCase
 {
 
-    public function typeProvider()
+    public function typeProvider(): array
     {
         $date   = new \DateTime();
         $array  = [5 => 10, 6 => 11, 7 => [12 , 13]];
@@ -30,7 +36,7 @@ class GenerateTypesTest extends \PHPUnit_Framework_TestCase
         return $values;
     }
 
-    public function getTypeProvider()
+    public function getTypeProvider(): array
     {
         $values = [];
         $class  = new \ReflectionClass(GenerateTypes::class);
@@ -82,7 +88,7 @@ class GenerateTypesTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function setTypeProvider()
+    public function setTypeProvider(): array
     {
         $values = [
             ['integer',  01,                                                    ],

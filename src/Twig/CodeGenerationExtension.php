@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Twig;
 
 use Doctrine\Common\Inflector\Inflector;
@@ -25,14 +30,13 @@ use Doctrine\Common\Inflector\Inflector;
  *
  * @see Inflector::classify
  * @see Inflector::singularize
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 class CodeGenerationExtension extends \Twig_Extension
 {
     /**
      * {@inheritdoc}
      */
-    public function getTokenParsers()
+    public function getTokenParsers(): array
     {
         return [new PerLineTokenParser()];
     }
@@ -40,103 +44,134 @@ class CodeGenerationExtension extends \Twig_Extension
     /**
      * {@inheritdoc}
      */
-    public function getFilters()
+    public function getFilters(): array
     {
         return [
-            new \Twig_SimpleFilter('classify', function ($string) {
-                return Inflector::classify($string);
-            }),
-            new \Twig_SimpleFilter('singularize', function ($string) {
-                return Inflector::singularize($string);
-            }),
-            new \Twig_SimpleFilter('phptype', function ($string) {
-                if ($string === 'integer') {
-                    return 'int';
+            new \Twig_Filter(
+                'classify',
+                function ($string) {
+                    return Inflector::classify($string);
                 }
-                if ($string === 'boolean') {
-                    return 'bool';
+            ),
+            new \Twig_Filter(
+                'singularize',
+                function ($string) {
+                    return Inflector::singularize($string);
                 }
-                return $string;
-            }),
-            new \Twig_SimpleFilter('twos_complement_min', function ($int) {
-                try {
-                    return self::twosComplementMin($int);
-                } catch (\DomainException $e) {
-                    throw new \Twig_Error_Runtime($e->getMessage(), null, null, $e);
+            ),
+            new \Twig_Filter(
+                'phptype',
+                function ($string) {
+                    if ($string === 'integer') {
+                        return 'int';
+                    }
+                    if ($string === 'boolean') {
+                        return 'bool';
+                    }
+
+                    return $string;
                 }
-            }),
-            new \Twig_SimpleFilter('twos_complement_max', function ($int) {
-                try {
-                    return self::twosComplementMax($int);
-                } catch (\DomainException $e) {
-                    throw new \Twig_Error_Runtime($e->getMessage(), null, null, $e);
+            ),
+            new \Twig_Filter(
+                'twos_complement_min',
+                function ($int) {
+                    try {
+                        return self::twosComplementMin($int);
+                    } catch (\DomainException $e) {
+                        throw new \Twig_Error_Runtime($e->getMessage(), null, null, $e);
+                    }
                 }
-            }),
-            new \Twig_SimpleFilter('decimal_right_shift', function ($input, $amount) {
-                try {
-                    return self::decimalRightShift($input, $amount);
-                } catch (\InvalidArgumentException $e) {
-                    throw new \Twig_Error_Runtime($e->getMessage(), null, null, $e);
+            ),
+            new \Twig_Filter(
+                'twos_complement_max',
+                function ($int) {
+                    try {
+                        return self::twosComplementMax($int);
+                    } catch (\DomainException $e) {
+                        throw new \Twig_Error_Runtime($e->getMessage(), null, null, $e);
+                    }
                 }
-            })
+            ),
+            new \Twig_Filter(
+                'decimal_right_shift',
+                function ($input, $amount) {
+                    try {
+                        return self::decimalRightShift($input, $amount);
+                    } catch (\InvalidArgumentException $e) {
+                        throw new \Twig_Error_Runtime($e->getMessage(), null, null, $e);
+                    }
+                }
+            ),
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Hostnet Twig Code Generation Extension';
     }
 
     /**
      * @throws \DomainException
-     * @param  mixed $bits
+     *
+     * @param mixed $bits
+     *
      * @return int
      */
-    private static function twosComplementMin($bits)
+    private static function twosComplementMin($bits): int
     {
-        $bits     = intval($bits);
+        $bits     = (int)$bits;
         $max_bits = PHP_INT_SIZE << 3;
 
         if ($bits < 1) {
             throw new \DomainException('Bit size must be greater than 0');
-        } elseif ($bits > $max_bits) {
+        }
+
+        if ($bits > $max_bits) {
             $bits = $max_bits;
         }
+
         return (-1 << ($bits - 1));
     }
 
     /**
      * @throws \DomainException
-     * @param  mixed $bits
+     *
+     * @param mixed $bits
+     *
      * @return int
      */
-    private static function twosComplementMax($bits)
+    private static function twosComplementMax($bits): int
     {
-        $bits     = intval($bits);
+        $bits     = (int)$bits;
         $max_bits = PHP_INT_SIZE << 3;
 
         if ($bits < 1) {
             throw new \DomainException('Bit size must be greater than 0');
-        } elseif ($bits > $max_bits) {
+        }
+
+        if ($bits > $max_bits) {
             $bits = $max_bits;
         }
-        return (1 << ($bits - 2)) -1 + (1 << ($bits - 2));
+
+        return (1 << ($bits - 2)) - 1 + (1 << ($bits - 2));
     }
 
     /**
      * @throws \InvalidArgumentException
-     * @param  mixed $input
-     * @param  int   $amount
+     *
+     * @param mixed $input
+     * @param int   $amount
+     *
      * @return mixed|string
      */
     private static function decimalRightShift($input, $amount = 0)
     {
         // Check input, to see if it is a valid numeric string with a decimal dot and not a
         // decimal comma or any other unwanted chars.
-        if (!is_numeric($input) || !preg_match('/[0-9]*\.?[0-9]+/', $input)) {
+        if (!is_numeric($input) || !preg_match('/[0-9]*\.?[0-9]+/', (string)$input)) {
             throw new \InvalidArgumentException('Input is not a number or numeric string');
         }
 
@@ -146,20 +181,20 @@ class CodeGenerationExtension extends \Twig_Extension
         }
 
         if ($amount > 0) {
-            if (($loc = strpos($input, '.')) === false) {
-                $loc = strlen($input);
+            if (($loc = strpos((string)$input, '.')) === false) {
+                $loc = strlen((string)$input);
             } else {
-                $input = str_replace('.', '', $input);
+                $input = str_replace('.', '', (string)$input);
             }
 
             $loc -= $amount;
             if ($loc > 0) {
-                return substr($input, 0, $loc) . '.' . substr($input, $loc);
-            } else {
-                return '0.' . str_repeat('0', abs($loc)) . $input;
+                return substr((string)$input, 0, $loc).'.'.substr((string)$input, $loc);
             }
-        } else {
-            return $input;
+
+            return '0.'.str_repeat('0', abs($loc)).$input;
         }
+
+        return $input;
     }
 }

@@ -1,7 +1,11 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
-use Doctrine\Common\Annotations\DocParser;
 use Doctrine\Common\Inflector\Inflector;
 use Hostnet\Component\AccessorGenerator\Annotation\Enumerator;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\DoctrineAnnotationProcessor;
@@ -9,6 +13,7 @@ use Hostnet\Component\AccessorGenerator\AnnotationProcessor\EnumItemInformation;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\GenerateAnnotationProcessor;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformation;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformationInterface;
+use Hostnet\Component\AccessorGenerator\Collection\ImmutableCollection;
 use Hostnet\Component\AccessorGenerator\Enum\EnumeratorCompatibleEntityInterface;
 use Hostnet\Component\AccessorGenerator\Generator\Exception\ReferencedClassNotFoundException;
 use Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException;
@@ -49,22 +54,22 @@ class CodeGenerator implements CodeGeneratorInterface
     private $key_registry_class = 'KeyRegistry';
 
     /**
-     * @var \Twig_TemplateInterface
+     * @var \Twig_TemplateWrapper
      */
     private $add;
 
     /**
-     * @var \Twig_TemplateInterface
+     * @var \Twig_TemplateWrapper
      */
     private $set;
 
     /**
-     * @var \Twig_TemplateInterface
+     * @var \Twig_TemplateWrapper
      */
     private $get;
 
     /**
-     * @var \Twig_TemplateInterface
+     * @var \Twig_TemplateWrapper
      */
     private $enum_get;
 
@@ -74,17 +79,17 @@ class CodeGenerator implements CodeGeneratorInterface
     private $enum_class;
 
     /**
-     * @var \Twig_TemplateInterface
+     * @var \Twig_TemplateWrapper
      */
     private $remove;
 
     /**
-     * @var \Twig_TemplateInterface
+     * @var \Twig_TemplateWrapper
      */
     private $trait;
 
     /**
-     * @var \Twig_TemplateInterface
+     * @var \Twig_TemplateWrapper
      */
     private $keys;
 
@@ -114,50 +119,53 @@ class CodeGenerator implements CodeGeneratorInterface
      */
     public function __construct()
     {
-        $loader = new \Twig_Loader_Filesystem(__DIR__ . '/../Resources/templates');
+        $loader = new \Twig_Loader_Filesystem(__DIR__.'/../Resources/templates');
         $twig   = new \Twig_Environment($loader);
         $twig->addExtension(new CodeGenerationExtension());
 
-        $this->get        = $twig->loadTemplate('get.php.twig');
-        $this->set        = $twig->loadTemplate('set.php.twig');
-        $this->add        = $twig->loadTemplate('add.php.twig');
-        $this->remove     = $twig->loadTemplate('remove.php.twig');
-        $this->trait      = $twig->loadTemplate('trait.php.twig');
-        $this->keys       = $twig->loadTemplate('keys.php.twig');
-        $this->enum_get   = $twig->loadTemplate('enum_get.php.twig');
-        $this->enum_class = $twig->loadTemplate('enum_class.php.twig');
+        $this->get        = $twig->load('get.php.twig');
+        $this->set        = $twig->load('set.php.twig');
+        $this->add        = $twig->load('add.php.twig');
+        $this->remove     = $twig->load('remove.php.twig');
+        $this->trait      = $twig->load('trait.php.twig');
+        $this->keys       = $twig->load('keys.php.twig');
+        $this->enum_get   = $twig->load('enum_get.php.twig');
+        $this->enum_class = $twig->load('enum_class.php.twig');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function writeTraitForClass(ReflectionClass $class)
+    public function writeTraitForClass(ReflectionClass $class): bool
     {
         $data = $this->generateTraitForClass($class);
 
         if ($data) {
-            $path     = dirname($class->getFilename()) . DIRECTORY_SEPARATOR . $this->namespace;
-            $filename = $path . DIRECTORY_SEPARATOR . $class->getName() . $this->name_suffix . '.php';
+            $path     = dirname($class->getFilename()).DIRECTORY_SEPARATOR.$this->namespace;
+            $filename = $path.DIRECTORY_SEPARATOR.$class->getName().$this->name_suffix.'.php';
 
             $fs = new Filesystem();
             $fs->mkdir($path);
             $fs->dumpFile($filename, $data);
 
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function writeEnumeratorAccessorsForClass(ReflectionClass $class): array
     {
         $metadata  = $this->getMetadataForClass($class);
         $fs        = new Filesystem();
         $generated = [];
 
+        /* @var $info PropertyInformation */
         foreach ($metadata['properties'] as $info) {
-            /* @var $info PropertyInformation */
-            if (! $info->willGenerateEnumeratorAccessors()) {
+            if (!$info->willGenerateEnumeratorAccessors()) {
                 continue;
             }
 
@@ -172,14 +180,14 @@ class CodeGenerator implements CodeGeneratorInterface
 
                 $reflector   = new \ReflectionClass($enumerator->getEnumeratorClass());
                 $generated[] = $enumerator->getEnumeratorClass();
-                $path        = dirname($reflector->getFileName()) . DIRECTORY_SEPARATOR . $this->namespace;
+                $path        = dirname($reflector->getFileName()).DIRECTORY_SEPARATOR.$this->namespace;
                 $filename    = $path
-                    . DIRECTORY_SEPARATOR
-                    . $reflector->getShortName()
-                    . $this->enum_name_suffix
-                    . '.php';
+                    .DIRECTORY_SEPARATOR
+                    .$reflector->getShortName()
+                    .$this->enum_name_suffix
+                    .'.php';
 
-                if (empty($info->getType()) && ! empty($enumerator->getType())) {
+                if (empty($info->getType()) && !empty($enumerator->getType())) {
                     $info->setType($enumerator->getType());
                 }
                 $this->validateEnumEntity($info->getType());
@@ -193,14 +201,18 @@ class CodeGenerator implements CodeGeneratorInterface
     }
 
     /**
+     * @internal
+     *
+     * @param Enumerator          $enumerator
+     * @param PropertyInformation $info
+     *
+     * @return string
+     *
      * @throws \ReflectionException
      * @throws \Throwable
      * @throws ReferencedClassNotFoundException
-     * @param  Enumerator          $enumerator
-     * @param  PropertyInformation $info
-     * @return string
      */
-    public function generateEnumeratorAccessors(Enumerator $enumerator, PropertyInformation $info)
+    public function generateEnumeratorAccessors(Enumerator $enumerator, PropertyInformation $info): string
     {
         $enum_class = $enumerator->getEnumeratorClass();
         if (! class_exists($enum_class)) {
@@ -212,8 +224,8 @@ class CodeGenerator implements CodeGeneratorInterface
         }
 
         $reflector  = new \ReflectionClass($enum_class);
-        $class_name = $reflector->getShortName() . $this->enum_name_suffix;
-        $namespace  = $reflector->getNamespaceName() . '\\Generated';
+        $class_name = $reflector->getShortName().$this->enum_name_suffix;
+        $namespace  = $reflector->getNamespaceName().'\\Generated';
         $properties = [];
 
         foreach ($reflector->getReflectionConstants() as $reflection_constant) {
@@ -230,9 +242,9 @@ class CodeGenerator implements CodeGeneratorInterface
         ]);
     }
 
-    private function getMetadataForClass(ReflectionClass $class)
+    private function getMetadataForClass(ReflectionClass $class): array
     {
-        $cache_key = (string) $class->getFilename();
+        $cache_key = $class->getFilename();
         if (isset($this->metadata_cache[$cache_key])) {
             return $this->metadata_cache[$cache_key];
         }
@@ -244,7 +256,7 @@ class CodeGenerator implements CodeGeneratorInterface
             return ['properties' => [], 'imports' => []];
         }
 
-        $imports[] = $class->getNamespace() . '\\' . $class->getName();
+        $imports[] = $class->getNamespace().'\\'.$class->getName();
 
         $generate_processor = new GenerateAnnotationProcessor();
         $doctrine_processor = new DoctrineAnnotationProcessor();
@@ -253,8 +265,7 @@ class CodeGenerator implements CodeGeneratorInterface
         $this->metadata_cache[$cache_key]['properties'] = [];
 
         foreach ($properties as $property) {
-            $parser = new DocParser();
-            $info   = new PropertyInformation($property, $parser);
+            $info = new PropertyInformation($property);
             $info->registerAnnotationProcessor($generate_processor);
             $info->registerAnnotationProcessor($doctrine_processor);
             $info->processAnnotations();
@@ -272,18 +283,18 @@ class CodeGenerator implements CodeGeneratorInterface
         return $this->metadata_cache[$cache_key];
     }
 
-    private function linkEnumeratorsToAssociatedCollections(array $metadata)
+    private function linkEnumeratorsToAssociatedCollections(array $metadata): void
     {
+        /* @var $info PropertyInformation */
         foreach ($metadata['properties'] as $info) {
-            /* @var $info PropertyInformation */
             if (! $info->willGenerateEnumeratorAccessors() || ! $info->isGenerator()) {
                 continue;
             }
 
             foreach ($info->getEnumeratorsToGenerate() as $enumerator) {
                 // Ensure the name of the enumerator refers to an existing property in this class.
-                if (! isset($metadata['properties'][$enumerator->getName()])) {
-                    if (! $info->getType()) {
+                if (!isset($metadata['properties'][$enumerator->getName()])) {
+                    if (!$info->getType()) {
                         throw new \LogicException(sprintf(
                             'The name "%s" in Enumerator for "%s" does not exist as a property in the class "%s".',
                             $enumerator->getName(),
@@ -297,7 +308,7 @@ class CodeGenerator implements CodeGeneratorInterface
                 $collection = $metadata['properties'][$enumerator->getName()];
                 /* @var $collection PropertyInformation */
                 // Ensure the referenced property is a collection.
-                if (! $collection->isCollection()) {
+                if (!$collection->isCollection()) {
                     throw new \LogicException(sprintf(
                         'The property "%s" referenced in the enumerator "%s" is not a collection in the class "%s".',
                         $collection->getName(),
@@ -314,7 +325,7 @@ class CodeGenerator implements CodeGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generateTraitForClass(ReflectionClass $class)
+    public function generateTraitForClass(ReflectionClass $class): string
     {
         $code                  = '';
         $add_collection_import = false;
@@ -322,15 +333,15 @@ class CodeGenerator implements CodeGeneratorInterface
         $metadata = $this->getMetadataForClass($class);
         $imports  = $metadata['imports'];
 
+        /** @var PropertyInformation $info */
         foreach ($metadata['properties'] as $info) {
-
             // Check if we have anything to do. If not, continue to the next
             // property.
-            if (! $info->willGenerateAdd()
-                && ! $info->willGenerateGet()
-                && ! $info->willGenerateRemove()
-                && ! $info->willGenerateSet()
-                && ! $info->willGenerateEnumeratorAccessors()
+            if (!$info->willGenerateAdd()
+                && !$info->willGenerateGet()
+                && !$info->willGenerateRemove()
+                && !$info->willGenerateSet()
+                && !$info->willGenerateEnumeratorAccessors()
             ) {
                 continue;
             }
@@ -351,13 +362,11 @@ class CodeGenerator implements CodeGeneratorInterface
             // some information to generate the KeyRegistry classes afterwards.
             if ($info->getEncryptionAlias()) {
                 $dir_name = dirname($class->getFilename());
-                if (! isset($this->key_registry_data[$dir_name])) {
+                if (!isset($this->key_registry_data[$dir_name])) {
                     $this->key_registry_data[$dir_name] = [];
                 }
 
-                $keys = isset($this->encryption_aliases[$info->getEncryptionAlias()])
-                    ? $this->encryption_aliases[$info->getEncryptionAlias()]
-                    : null;
+                $keys = $this->encryption_aliases[$info->getEncryptionAlias()] ?? null;
 
                 $this->key_registry_data[$dir_name]['namespace']                         = $class->getNamespace();
                 $this->key_registry_data[$dir_name]['keys'][$info->getEncryptionAlias()] = $keys;
@@ -374,20 +383,18 @@ class CodeGenerator implements CodeGeneratorInterface
         // Add import for ImmutableCollection if we generate any functions that
         // make use of this collection wrapper.
         if ($add_collection_import) {
-            $imports[] = 'Hostnet\Component\AccessorGenerator\Collection\ImmutableCollection';
+            $imports[] = ImmutableCollection::class;
         }
 
         if ($code) {
-            $code = $this->trait->render(
-                [
-                    'namespace' => $class->getNamespace() . '\\' . $this->namespace,
-                    'name'      => $class->getName() . $this->name_suffix,
-                    'uses'      => $this->getUniqueImports($imports),
-                    'methods'   => rtrim($code),
-                    'username'  => get_current_user(),
-                    'hostname'  => gethostname(),
-                ]
-            );
+            $code = $this->trait->render([
+                'namespace' => $class->getNamespace().'\\'.$this->namespace,
+                'name'      => $class->getName().$this->name_suffix,
+                'uses'      => $this->getUniqueImports($imports),
+                'methods'   => rtrim($code),
+                'username'  => get_current_user(),
+                'hostname'  => gethostname(),
+            ]);
         }
 
         return $code;
@@ -396,7 +403,7 @@ class CodeGenerator implements CodeGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function setEncryptionAliases(array $encryption_aliases)
+    public function setEncryptionAliases(array $encryption_aliases): void
     {
         $this->encryption_aliases = $encryption_aliases;
     }
@@ -431,16 +438,16 @@ class CodeGenerator implements CodeGeneratorInterface
      */
     private static function addImportForType($type, $namespace, array &$imports)
     {
-        if (! self::isAliased($type, $imports)) {
+        if (!self::isAliased($type, $imports)) {
             $first_part = strstr($type, '\\', true);
             if ($first_part) {
                 // Sub namespace;
-                $imports[$first_part] = $namespace . '\\' . $first_part;
+                $imports[$first_part] = $namespace.'\\'.$first_part;
             } else {
                 // Inside own namespace
-                if (! self::getPlainImportIfExists($type, $imports)) {
+                if (!self::getPlainImportIfExists($type, $imports)) {
                     // Not already imported
-                    $imports[] = $namespace . '\\' . $type;
+                    $imports[] = $namespace.'\\'.$type;
                 }
             }
         }
@@ -450,8 +457,9 @@ class CodeGenerator implements CodeGeneratorInterface
      * Returns true if the given class name is in an aliased namespace, false
      * otherwise.
      *
-     * @param  string   $name
-     * @param  string[] $imports
+     * @param string   $name
+     * @param string[] $imports
+     *
      * @return bool
      */
     private static function isAliased($name, array $imports)
@@ -467,14 +475,15 @@ class CodeGenerator implements CodeGeneratorInterface
     }
 
     /**
-     * @param  string   $type
-     * @param  string[] $imports
+     * @param string   $type
+     * @param string[] $imports
+     *
      * @return string|null
      */
-    private static function getPlainImportIfExists($type, $imports)
+    private static function getPlainImportIfExists($type, $imports): ?string
     {
         foreach ($imports as $alias => $import) {
-            if (is_numeric($alias) && substr($import, -1 - strlen($type)) === '\\' . $type) {
+            if (is_numeric($alias) && substr($import, -1 - strlen($type)) === '\\'.$type) {
                 return $import;
             }
         }
@@ -483,14 +492,14 @@ class CodeGenerator implements CodeGeneratorInterface
     }
 
     /**
-     * Return the fully qualified class name based on the use statements in
-     * the current file.
+     * Return the fully qualified class name based on the use statements in the current file.
      *
-     * @param  string   $name
-     * @param  string[] $imports
+     * @param string   $name
+     * @param string[] $imports
+     *
      * @return string
      */
-    private static function fqcn($name, array $imports)
+    private static function fqcn($name, array $imports): string
     {
         // Already FQCN
         if ($name[0] === '\\') {
@@ -499,12 +508,12 @@ class CodeGenerator implements CodeGeneratorInterface
 
         // Aliased
         if (array_key_exists($name, $imports)) {
-            return '\\' . $imports[$name];
+            return '\\'.$imports[$name];
         }
 
         // Check other imports
-        if ($plain = self::getPlainImportIfExists($name, $imports)) {
-            return '\\' . $plain;
+        if (null !== ($plain = self::getPlainImportIfExists($name, $imports))) {
+            return '\\'.$plain;
         }
 
         // Not a complex type, or otherwise unknown.
@@ -514,21 +523,19 @@ class CodeGenerator implements CodeGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generateAccessors(PropertyInformationInterface $info)
+    public function generateAccessors(PropertyInformationInterface $info): string
     {
         $code = '';
 
         // Check if there is enough information to generate accessors.
         if ($info->isGenerator() && $info->getType() === null) {
-            throw new TypeUnknownException(
-                sprintf(
-                    'Property %s in class %s\%s has no type set, nor could it be inferred. %s',
-                    $info->getName(),
-                    $info->getNamespace(),
-                    $info->getClass(),
-                    'Did you forget to import Doctrine\ORM\Mapping as ORM?'
-                )
-            );
+            throw new TypeUnknownException(sprintf(
+                'Property %s in class %s\%s has no type set, nor could it be inferred. %s',
+                $info->getName(),
+                $info->getNamespace(),
+                $info->getClass(),
+                'Did you forget to import Doctrine\ORM\Mapping as ORM?'
+            ));
         }
 
         if ($info->willGenerateEnumeratorAccessors()) {
@@ -537,10 +544,10 @@ class CodeGenerator implements CodeGeneratorInterface
                 // Unhandy way to get the short name of the class since we can't use native ReflectionClass here because
                 // the composer autoload process is not finalized at this point.
                 $class_path = str_replace('\\', DIRECTORY_SEPARATOR, $enumerator->getEnumeratorClass());
-                $class_ns   = str_replace(DIRECTORY_SEPARATOR, '\\', dirname($class_path)) . '\\' . $this->namespace;
-                $class_name = $class_ns . '\\' . basename($class_path) . $this->enum_name_suffix;
+                $class_ns   = str_replace(DIRECTORY_SEPARATOR, '\\', dirname($class_path)).'\\'.$this->namespace;
+                $class_name = $class_ns.'\\'.basename($class_path).$this->enum_name_suffix;
                 $property   = $enumerator->getPropertyName() ?? Inflector::tableize(
-                    basename($class_path) . $this->enum_name_suffix
+                    basename($class_path).$this->enum_name_suffix
                 );
 
                 if (isset($generated_enumerator_accessors[$property])) {
@@ -555,7 +562,7 @@ class CodeGenerator implements CodeGeneratorInterface
                     'info'          => $info,
                     'enum_class'    => $enumerator->getEnumeratorClass(),
                     'enum_property' => $property,
-                    'add_property'  => empty($enumerator->getPropertyName())
+                    'add_property'  => empty($enumerator->getPropertyName()),
                 ]);
             }
         }
@@ -568,20 +575,18 @@ class CodeGenerator implements CodeGeneratorInterface
                 if (preg_match('/^is[_A-Z0-9]/', $info->getName())) {
                     $getter = Inflector::camelize($info->getName());
                 } else {
-                    $getter = 'is' . Inflector::classify($info->getName());
+                    $getter = 'is'.Inflector::classify($info->getName());
                 }
             } else {
-                $getter = 'get' . Inflector::classify($info->getName());
+                $getter = 'get'.Inflector::classify($info->getName());
             }
 
             // Render the get/is method.
-            $code .= $this->get->render(
-                    [
-                        'property'     => $info,
-                        'getter'       => $getter,
-                        'PHP_INT_SIZE' => PHP_INT_SIZE,
-                    ]
-                ) . PHP_EOL;
+            $code .= $this->get->render([
+                'property'     => $info,
+                'getter'       => $getter,
+                'PHP_INT_SIZE' => PHP_INT_SIZE,
+            ]).PHP_EOL;
         }
 
         // Render add/remove methods for collections and set methods for
@@ -589,21 +594,16 @@ class CodeGenerator implements CodeGeneratorInterface
         if ($info->isCollection()) {
             // Generate an add method.
             if ($info->willGenerateAdd()) {
-                $code .= $this->add->render(['property' => $info]) . PHP_EOL;
+                $code .= $this->add->render(['property' => $info]).PHP_EOL;
             }
             // Generate a remove method.
             if ($info->willGenerateRemove()) {
-                $code .= $this->remove->render(['property' => $info]) . PHP_EOL;
+                $code .= $this->remove->render(['property' => $info]).PHP_EOL;
             }
         } else {
             // No collection thus, generate a set method.
             if ($info->willGenerateSet()) {
-                $code .= $this->set->render(
-                        [
-                            'property'     => $info,
-                            'PHP_INT_SIZE' => PHP_INT_SIZE,
-                        ]
-                    ) . PHP_EOL;
+                $code .= $this->set->render(['property' => $info, 'PHP_INT_SIZE' => PHP_INT_SIZE]).PHP_EOL;
             }
         }
 
@@ -613,22 +613,22 @@ class CodeGenerator implements CodeGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function writeKeyRegistriesForPackage()
+    public function writeKeyRegistriesForPackage(): bool
     {
         foreach ($this->key_registry_data as $directory => $data) {
-            $path     = $directory . DIRECTORY_SEPARATOR . $this->namespace;
-            $filename = $path . DIRECTORY_SEPARATOR . $this->key_registry_class . '.php';
+            $path     = $directory.DIRECTORY_SEPARATOR.$this->namespace;
+            $filename = $path.DIRECTORY_SEPARATOR.$this->key_registry_class.'.php';
             $fs       = new Filesystem();
 
             // make sure they are sorted
             ksort($data['keys']);
 
             $data = $this->keys->render([
-                'namespace' => $data['namespace'] . '\\' . $this->namespace,
+                'namespace' => $data['namespace'].'\\'.$this->namespace,
                 'keys'      => $data['keys'],
                 'base_path' => getcwd(),
                 'username'  => get_current_user(),
-                'hostname'  => gethostname()
+                'hostname'  => gethostname(),
             ]);
 
             $fs->mkdir($path);
@@ -648,20 +648,18 @@ class CodeGenerator implements CodeGeneratorInterface
      * This is useful when a specific class name is imported and aliased as
      * well.
      *
-     * @param  string[] $imports
+     * @param string[] $imports
+     *
      * @return string[]
      */
-    private function getUniqueImports(array $imports)
+    private function getUniqueImports(array $imports): array
     {
-        uksort(
-            $imports,
-            function ($a, $b) use ($imports) {
-                $alias_a = is_numeric($a) ? " as $a;" : '';
-                $alias_b = is_numeric($b) ? " as $b;" : '';
+        uksort($imports, function ($a, $b) use ($imports) {
+            $alias_a = is_numeric($a) ? " as $a;" : '';
+            $alias_b = is_numeric($b) ? " as $b;" : '';
 
-                return strcmp($imports[$a] . $alias_a, $imports[$b] . $alias_b);
-            }
-        );
+            return strcmp($imports[$a].$alias_a, $imports[$b].$alias_b);
+        });
 
         $unique_imports = [];
         $next           = null;
@@ -686,10 +684,11 @@ class CodeGenerator implements CodeGeneratorInterface
      * Ensures the enity class complies to the "standard" for holding parameters.
      *
      * @param string $entity_class
+     * @throws \LogicException
      */
-    private function validateEnumEntity(string $entity_class)
+    private function validateEnumEntity(string $entity_class): void
     {
-        if (! in_array(EnumeratorCompatibleEntityInterface::class, class_implements($entity_class))) {
+        if (!in_array(EnumeratorCompatibleEntityInterface::class, class_implements($entity_class))) {
             throw new \LogicException(sprintf(
                 'The entity "%s" must implement "%s" in order to use it with enumerator accessor classes.',
                 $entity_class,

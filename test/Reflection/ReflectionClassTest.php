@@ -1,12 +1,19 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+
 namespace Hostnet\Component\AccessorGenerator\Reflection;
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass
  */
-class ReflectionClassTest extends \PHPUnit_Framework_TestCase
+class ReflectionClassTest extends TestCase
 {
-    public function fileProvider()
+    public function fileProvider(): array
     {
         return [
             [
@@ -171,17 +178,23 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
      *      ReflectionClass::getNamespace()
      *
      * @dataProvider fileProvider
-     * @param $filename
-     * @param $name
-     * @param $namespace
-     * @param array $imports
-     * @param array $properties
+     *
+     * @param string $filename
+     * @param string $name
+     * @param string $namespace
+     * @param array  $imports
+     * @param array  $properties
+     *
      * @throws Exception\ClassDefinitionNotFoundException
-     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
-     * @throws \OutOfBoundsException
+     * @throws Exception\FileException
      */
-    public function testGetters($filename, $name, $namespace, array $imports, array $properties)
-    {
+    public function testGetters(
+        string $filename,
+        string $name,
+        string $namespace,
+        array $imports,
+        array $properties
+    ): void {
         $class = new ReflectionClass(__DIR__ . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . $filename);
 
         self::assertEquals($name, $class->getName());
@@ -208,7 +221,7 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
      * @expectedExceptionMessage readable
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
      */
-    public function testFileExceptionReadable()
+    public function testFileExceptionReadable(): void
     {
         new ReflectionClass('/etc/shadow');
     }
@@ -218,7 +231,7 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
      * @expectedExceptionMessage exist
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
      */
-    public function testFileExceptionExist()
+    public function testFileExceptionExist(): void
     {
         new ReflectionClass(__DIR__ . '/fixtures/does_not_exist.php');
     }
@@ -229,7 +242,7 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
      * @throws \OutOfBoundsException
      */
-    public function testClassNotFoundException()
+    public function testClassNotFoundException(): void
     {
         $class = new ReflectionClass(__DIR__ . '/fixtures/no_class.php');
         self::assertEquals('ThisNamespace', $class->getNamespace());
@@ -242,7 +255,7 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
      * @throws \OutOfBoundsException
      */
-    public function testEmptyFileClassNotFoundException()
+    public function testEmptyFileClassNotFoundException(): void
     {
         $class = new ReflectionClass(__DIR__ . '/fixtures/empty.php');
         self::assertEquals('', $class->getNamespace());
@@ -255,14 +268,14 @@ class ReflectionClassTest extends \PHPUnit_Framework_TestCase
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
      * @throws \OutOfBoundsException
      */
-    public function testBroken()
+    public function testBroken(): void
     {
         $class = new ReflectionClass(__DIR__ . '/fixtures/broken.php');
         self::assertEquals(['ORM' => 'Doctrine\ORM\Mapping'], $class->getUseStatements());
         self::assertEquals([], $class->getUseStatements());
     }
 
-    public function testCache()
+    public function testCache(): void
     {
         $class = new ReflectionClass(__DIR__ . '/fixtures/abstract.php');
         self::assertEquals(['ORM' => 'Doctrine\ORM\Mapping'], $class->getUseStatements());

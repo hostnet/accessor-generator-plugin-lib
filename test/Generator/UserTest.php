@@ -1,12 +1,18 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Address;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\User;
+use PHPUnit\Framework\TestCase;
 
-class UserTest extends \PHPUnit_Framework_TestCase
+class UserTest extends TestCase
 {
-    public function testGetAddressEmpty()
+    public function testGetAddressEmpty(): void
     {
         $user = new User();
         self::assertNull($user->getAddress());
@@ -15,13 +21,13 @@ class UserTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testGetAddressTooManyArguments()
+    public function testGetAddressTooManyArguments(): void
     {
         $user = new User();
         $user->getAddress(1);
     }
 
-    public function testSetAddress()
+    public function testSetAddress(): void
     {
         $user    = new User();
         $address = new Address();
@@ -36,7 +42,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testSetAddressTooManyArguments()
+    public function testSetAddressTooManyArguments(): void
     {
         $user    = new User();
         $address = new Address();

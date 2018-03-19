@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
 use Hostnet\Component\AccessorGenerator\Annotation\Enumerator;
@@ -17,7 +22,7 @@ interface PropertyInformationInterface
      *
      * @return string
      */
-    public function getName();
+    public function getName(): string;
 
     /**
      * Returns the name of the class implementing this property.
@@ -29,22 +34,22 @@ interface PropertyInformationInterface
      *
      * @return string
      */
-    public function getClass();
+    public function getClass(): string;
 
     /**
      * Returns the namespace of the class implementing this property.
      *
      * @return string
      */
-    public function getNamespace();
+    public function getNamespace(): string;
 
     /**
      * Returns the default assigned value for this property for usage in
      * setters.
      *
-     * @return string
+     * @return null|string
      */
-    public function getDefault();
+    public function getDefault(): ?string;
 
     /**
      * Get the type of this property.
@@ -58,9 +63,9 @@ interface PropertyInformationInterface
      * or a class name starting with a namespace separator (\) or a capital
      * letter.
      *
-     * @return string
+     * @return null|string
      */
-    public function getType();
+    public function getType(): ?string;
 
     /**
      * Returns the type hint for this property.
@@ -73,14 +78,14 @@ interface PropertyInformationInterface
      *
      * @return string
      */
-    public function getTypeHint();
+    public function getTypeHint(): string;
 
     /**
      * Returns true if this property uses the @Generate annotation.
      *
      * @return bool
      */
-    public function isGenerator();
+    public function isGenerator(): bool;
 
     /**
      * Returns the fully qualified name of the type, including the complete
@@ -90,14 +95,14 @@ interface PropertyInformationInterface
      *
      * @return string
      */
-    public function getFullyQualifiedType();
+    public function getFullyQualifiedType(): string;
 
     /**
      * Get the encryption alias.
      *
-     * @return string
+     * @return null|string
      */
-    public function getEncryptionAlias();
+    public function getEncryptionAlias(): ?string;
 
     /**
      * Returns true if the type is a complex type, like an object or array or
@@ -105,7 +110,7 @@ interface PropertyInformationInterface
      *
      * @return bool
      */
-    public function isComplexType();
+    public function isComplexType(): bool;
 
     /**
      * Returns the maximum length for this property.
@@ -113,9 +118,9 @@ interface PropertyInformationInterface
      * This is only applicable for string types that are persisted in a
      * database. A value of 0 means the length is unrestricted.
      *
-     * @return string
+     * @return int
      */
-    public function getLength();
+    public function getLength(): int;
 
     /**
      * Returns the number of bits used for storage of the number.
@@ -125,7 +130,7 @@ interface PropertyInformationInterface
      *
      * @return int
      */
-    public function getIntegerSize();
+    public function getIntegerSize(): int;
 
     /**
      * Returns true if this property represents a fixed point number.
@@ -135,7 +140,7 @@ interface PropertyInformationInterface
      *
      * @return bool
      */
-    public function isFixedPointNumber();
+    public function isFixedPointNumber(): bool;
 
     /**
      * Returns the total amount of significant digits including those following
@@ -145,7 +150,7 @@ interface PropertyInformationInterface
      *
      * @return int
      */
-    public function getPrecision();
+    public function getPrecision(): int;
 
     /**
      * Returns the amount of digits after the decimal point. Use in combination
@@ -155,7 +160,7 @@ interface PropertyInformationInterface
      *
      * @return int
      */
-    public function getScale();
+    public function getScale(): int;
 
     /**
      * Returns the documentation part of the doc block for this property, which
@@ -163,7 +168,7 @@ interface PropertyInformationInterface
      *
      * @return string
      */
-    public function getDocumentation();
+    public function getDocumentation(): string;
 
     /**
      * Returns true if a value in this collection may only appear once.
@@ -173,7 +178,7 @@ interface PropertyInformationInterface
      *
      * @return bool|null
      */
-    public function isUnique();
+    public function isUnique(): ?bool;
 
     /**
      * Returns true if this property is nullable, thus may consist of a
@@ -183,7 +188,7 @@ interface PropertyInformationInterface
      *
      * @return bool|null
      */
-    public function isNullable();
+    public function isNullable(): ?bool;
 
     /**
      * Returns true if the property is of a collection type like array or
@@ -191,7 +196,7 @@ interface PropertyInformationInterface
      *
      * @return bool
      */
-    public function isCollection();
+    public function isCollection(): bool;
 
     /**
      * Returns the referenced property for this association on the other side
@@ -199,7 +204,7 @@ interface PropertyInformationInterface
      *
      * @return string
      */
-    public function getReferencedProperty();
+    public function getReferencedProperty(): string;
 
     /**
      * Return true if this ManyTo{One,Many} relation should be indexed by a
@@ -208,18 +213,18 @@ interface PropertyInformationInterface
      * In doctrine this behaviour is used by putting an IndexBy property on a
      * ManyToOne or ManyToMany annotation.
      *
-     * @return string|null
+     * @return null|string
      */
-    public function getIndex();
+    public function getIndex(): ?string;
 
     /**
      * Returns true whenever this property is part of a bidirectional
      * association where the referenced part is a collection; a many side of
      * the relationship.
      *
-     * @return string
+     * @return bool
      */
-    public function isReferencingCollection();
+    public function isReferencingCollection(): bool;
 
     /**
      * Returns true if generated getters will throw logic exceptions if the
@@ -229,22 +234,22 @@ interface PropertyInformationInterface
      *
      * @return bool
      */
-    public function willGenerateStrict();
+    public function willGenerateStrict(): bool;
 
     /**
      * Returns true if a getter method should be generated.
      *
      * @return bool
      */
-    public function willGenerateGet();
+    public function willGenerateGet(): bool;
 
     /**
      * Returns the string representation of method visibility, e.g. private,
      * protected or public.
      *
-     * @return string
+     * @return null|string
      */
-    public function getGetVisibility();
+    public function getGetVisibility(): ?string;
 
     /**
      * Returns true if a setter method should be generated.
@@ -253,15 +258,15 @@ interface PropertyInformationInterface
      *
      * @return bool
      */
-    public function willGenerateSet();
+    public function willGenerateSet(): bool;
 
     /**
      * Returns the string representation of method visibility, e.g. private,
      * protected or public.
      *
-     * @return string
+     * @return null|string
      */
-    public function getSetVisibility();
+    public function getSetVisibility(): ?string;
 
     /**
      * Returns true if an "add"-method should be generated.
@@ -270,29 +275,29 @@ interface PropertyInformationInterface
      *
      * @return bool
      */
-    public function willGenerateAdd();
+    public function willGenerateAdd(): bool;
 
     /**
      * Returns the string representation of method visibility, e.g. private,
      * protected or public.
      *
-     * @return string
+     * @return null|string
      */
-    public function getAddVisibility();
+    public function getAddVisibility(): ?string;
 
     /**
      * Returns a list of FQCN's to generate enumerator accessors for.
      *
      * @return Enumerator[]
      */
-    public function getEnumeratorsToGenerate();
+    public function getEnumeratorsToGenerate(): array;
 
     /**
      * Returns true if an enumerator accessor will be generated for this property.
      *
      * @return bool
      */
-    public function willGenerateEnumeratorAccessors();
+    public function willGenerateEnumeratorAccessors(): bool;
 
     /**
      * Returns true if a "remove"-method should be generated.
@@ -301,13 +306,13 @@ interface PropertyInformationInterface
      *
      * @return bool
      */
-    public function willGenerateRemove();
+    public function willGenerateRemove(): bool;
 
     /**
      * Returns the string representation of method visibility, e.g. private,
      * protected or public.
      *
-     * @return string
+     * @return null|string
      */
-    public function getRemoveVisibility();
+    public function getRemoveVisibility(): ?string;
 }

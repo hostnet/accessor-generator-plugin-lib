@@ -1,33 +1,27 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2015-2018 Hostnet B.V.
+ */
+
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Comment;
+use PHPUnit\Framework\TestCase;
 
-/**
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
- */
-class CommentTest extends \PHPUnit_Framework_TestCase
+class CommentTest extends TestCase
 {
-    public function __construct($col = null)
+    public function testGetCol(): void
     {
-        $this->col = $col;
-    }
-
-    public function testGetCol()
-    {
-        $comment = new Comment();
-        self::assertNull($comment->getCol());
-
         $comment = new Comment('test');
         self::assertEquals('test', $comment->getCol());
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
-    public function testGetColTooManyArguments()
+    public function testGetColTooManyArguments(): void
     {
         $comment = new Comment();
+
+        $this->expectException(\BadMethodCallException::class);
         $comment->getCol('yiha');
     }
 }

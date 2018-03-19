@@ -1,4 +1,9 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2017-2018 Hostnet B.V.
+ */
+
 namespace Hostnet\Component\AccessorGenerator\Twig;
 
 use Twig_ExtensionInterface;
@@ -22,7 +27,7 @@ class TestEnvironment extends \Twig_Environment
         $this->addExtension($extension);
     }
 
-    public function addExtension(Twig_ExtensionInterface $extension)
+    public function addExtension(Twig_ExtensionInterface $extension): void
     {
         if ($this->extension === $extension) {
             parent::addExtension($extension);

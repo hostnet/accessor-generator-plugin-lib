@@ -1,4 +1,6 @@
-Welcome to the Accessor Generator composer plugin.
+<p align="center"><a href="http://www.hostnet.nl" target="_blank">
+    <img width="400" src="https://www.hostnet.nl/images/hostnet.svg">
+</a></p>
 
 ## Goals
 The goal of this plugin is to provide dynamically generated get, set, add, remove
@@ -17,11 +19,12 @@ functions.
 
 ## Installation
 
-Add `hostnet/accessor-generator-plugin-lib` to your `composer.json` and run
-`composer require hostnet/accessor-generator-plugin-lib`
+**Using Composer**
 
-If you want to invoke generation after installing you can run `php composer.phar dump-autoload`.
-Add `-vv` to the dump-autoload command for more verbosity.
+* `$ composer require hostnet/accessor-generator-plugin-lib`
+* This library follows [semantic versioning](http://semver.org/) strictly.
+
+If you want to invoke generation after installing you can run `composer dump-autoload`. Feel free to add `-vv` to the command for more verbosity.
 
 ## Usage
 
@@ -64,17 +67,19 @@ the annotation.
 
 ```php
 /**
- * @AG\Generate(add=false,set=false,remove=false,get=false,is=false)
+ * @AG\Generate(add="none",set="none",remove="none",get="none",is="none")
  */
 ```
 
 `Is` is an alias for get. If your property is of type boolean an `isProperty` method is
 generated instead of a `getProperty` method. For `ORM\GeneratedValue` properties, no
-setters will be generated. **Note that the example above will generate no code at all.**
+setters will be generated.
 
 If no configuration is specified, the default behaviour for all scalar typed properties is
 that a getter and a settter method will be generated. Adders and Removers will be generated
 when the type is iterable (e.g. DoctrineCollection or array).
+
+**Note: The example above will generate no code at all, since the annotation import is missing.**
 
 ### Encryption
 

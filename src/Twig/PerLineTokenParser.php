@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Twig;
 
 /**
@@ -28,8 +33,10 @@ class PerLineTokenParser extends \Twig_TokenParser
      * Parse everything within the perline block and then restructure the
      * contents into some thing nice to build a PerLineNode out of.
      *
-     * @param  \Twig_Token         $token
+     * @param \Twig_Token $token
+     *
      * @return \Twig_Node_Print
+     * @throws \Twig_Error_Syntax
      */
     public function parse(\Twig_Token $token)
     {

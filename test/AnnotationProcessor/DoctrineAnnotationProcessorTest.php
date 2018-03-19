@@ -1,4 +1,9 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
 use Doctrine\DBAL\Types\Type;
@@ -11,11 +16,12 @@ use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OneToOne;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception\InvalidColumnSettingsException;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
+use PHPUnit\Framework\TestCase;
 
 /**
- * @covers Hostnet\Component\AccessorGenerator\AnnotationProcessor\DoctrineAnnotationProcessor
+ * @covers \Hostnet\Component\AccessorGenerator\AnnotationProcessor\DoctrineAnnotationProcessor
  */
-class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
+class DoctrineAnnotationProcessorTest extends TestCase
 {
 
     /**
@@ -48,7 +54,7 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
      * @throws \InvalidArgumentException
      * @throws \DomainException
      */
-    public function processColumnAnnotationProvider()
+    public function processColumnAnnotationProvider(): array
     {
         $property = new ReflectionProperty('test');
         $implicit = new Column();
@@ -154,7 +160,7 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function processAssociationAnnotationProvider()
+    public function processAssociationAnnotationProvider(): array
     {
         $many_to_many      = new ManyToMany();
         $many_to_one       = new ManyToOne();
@@ -246,7 +252,7 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
      * @see http://doctrine-dbal.readthedocs.org/en/latest/reference/types.html
      * @return string[][]:
      */
-    public function typeConversionDataProvider()
+    public function typeConversionDataProvider(): array
     {
         return [
             ['smallint',   'integer'],
@@ -273,23 +279,23 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
             ['int',        null,  \DomainException::class],
             ['',           null,  \DomainException::class],
             [null,         null,  \InvalidArgumentException::class],
-            [false,        false, \InvalidArgumentException::class],
-            [[],           [],    \InvalidArgumentException::class],
-            [['test'],     [],    \InvalidArgumentException::class],
         ];
     }
 
     /**
      * @dataProvider typeConversionDataProvider
-     * @param string $doctrine_type
-     * @param string $php_type
-     * @param null $exception
+     *
+     * @param string      $doctrine_type
+     * @param string      $php_type
+     * @param string|null $exception
+     *
      * @throws \DomainException
-     * @throws \Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception\InvalidColumnSettingsException
      * @throws \InvalidArgumentException
      * @throws \RangeException
+     * @throws \Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception\InvalidColumnSettingsException
+     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
      */
-    public function testTypeConversion($doctrine_type, $php_type, $exception = null)
+    public function testTypeConversion($doctrine_type, $php_type, $exception = null): void
     {
         // Set exception if we except one.
         $exception && $this->expectException($exception);
@@ -311,7 +317,7 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         self::assertSame($php_type, $this->information->getType());
     }
 
-    public function testOtherAnnotation()
+    public function testOtherAnnotation(): void
     {
         $information = clone $this->information;
         $annotation  = new \stdClass();
@@ -319,7 +325,7 @@ class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         self::assertEquals($information, $this->information);
     }
 
-    public function testGetProcessableAnnotationNamespace()
+    public function testGetProcessableAnnotationNamespace(): void
     {
         self::assertSame('Doctrine\ORM\Mapping', $this->processor->getProcessableAnnotationNamespace());
     }

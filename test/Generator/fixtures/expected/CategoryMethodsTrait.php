@@ -143,6 +143,10 @@ trait CategoryMethodsTrait
     /**
      * Sets parent
      *
+     * Generated a default null value because the doctrine column is nullable.
+     * Still require an explicit argument to set the column. If you do not like
+     * this message, specify a default value or use JoinColumn(nullable=false).
+     *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
      * @param  Category $parent

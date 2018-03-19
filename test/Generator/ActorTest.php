@@ -1,26 +1,29 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Doctrine\Common\Collections\Collection;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Actor;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie;
+use PHPUnit\Framework\TestCase;
 
-/**
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
- */
-class ActorTest extends \PHPUnit_Framework_TestCase
+class ActorTest extends TestCase
 {
 
     /**
      * @expectedException BadMethodCallException
      */
-    public function testActorGetMovieToManyArguments()
+    public function testActorGetMovieToManyArguments(): void
     {
         $actor = new Actor();
         $actor->getMovies(1);
     }
 
-    public function testActorRemoveMovieEmpty()
+    public function testActorRemoveMovieEmpty(): void
     {
         $actor = new Actor();
         $movie = new Movie();
@@ -32,14 +35,14 @@ class ActorTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException BadMethodCallException
      */
-    public function testActorAddMovieToManyArguments()
+    public function testActorAddMovieToManyArguments(): void
     {
         $actor = new Actor();
         $movie = new Movie();
         $actor->addMovie($movie, 2);
     }
 
-    public function testActorAddMovie()
+    public function testActorAddMovie(): void
     {
         $actor = new Actor();
         $movie = new Movie();
@@ -48,7 +51,7 @@ class ActorTest extends \PHPUnit_Framework_TestCase
         self::assertSame($movie, $actor->getMovies()->first());
     }
 
-    public function testActorRemoveMovie()
+    public function testActorRemoveMovie(): void
     {
         $actor = new Actor();
         $movie = new Movie();
@@ -67,14 +70,14 @@ class ActorTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException BadMethodCallException
      */
-    public function testActorRemoveMovieToManyArguments()
+    public function testActorRemoveMovieToManyArguments(): void
     {
         $actor = new Actor();
         $movie = new Movie();
         $actor->removeMovie($movie, 2);
     }
 
-    public function testActorMovie()
+    public function testActorMovie(): void
     {
         // Create object for many-to-many bi-directional association
         $actor = new Actor();

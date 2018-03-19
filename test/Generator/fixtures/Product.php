@@ -25,21 +25,21 @@ class Product
     /**
      * @ORM\ManyToOne(targetEntity="Hostnet\Component\AccessorGenerator\Generator\fixtures\Period")
      * @ORM\JoinColumn(name="looptijd_id", nullable=false)
-     * @AG\Generate(set=false)
+     * @AG\Generate(set="none")
      * @var Period
      */
     private $duration;
 
     /**
      * @ORM\Column(name="naam", type="string", length=50)
-     * @AG\Generate(set=false)
+     * @AG\Generate(set="none")
      */
     private $name;
 
     /**
      * Used in invoices and email
      * @ORM\Column(name="omschrijving_factuur", type="string", length=50)
-     * @AG\Generate(set=false)
+     * @AG\Generate(set="none")
      */
     private $description = 'empty';
 

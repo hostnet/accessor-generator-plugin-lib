@@ -1,26 +1,29 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Doctrine\Common\Collections\Collection;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Actor;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie;
+use PHPUnit\Framework\TestCase;
 
-/**
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
- */
-class MovieTest extends \PHPUnit_Framework_TestCase
+class MovieTest extends TestCase
 {
 
     /**
      * @expectedException BadMethodCallException
      */
-    public function testGetActorsToManyArguments()
+    public function testGetActorsToManyArguments(): void
     {
         $movie = new Movie();
         $movie->getActors(1);
     }
 
-    public function testRemoveActorEmpty()
+    public function testRemoveActorEmpty(): void
     {
         $actor = new Actor();
         $movie = new Movie();
@@ -32,14 +35,14 @@ class MovieTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException BadMethodCallException
      */
-    public function testAddActorToManyArguments()
+    public function testAddActorToManyArguments(): void
     {
         $actor = new Actor();
         $movie = new Movie();
         $movie->addActor($actor, 2);
     }
 
-    public function testMovieAddActor()
+    public function testMovieAddActor(): void
     {
         $actor = new Actor();
         $movie = new Movie();
@@ -52,14 +55,14 @@ class MovieTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException BadMethodCallException
      */
-    public function testActorRemoveMovieToManyArguments()
+    public function testActorRemoveMovieToManyArguments(): void
     {
         $actor = new Actor();
         $movie = new Movie();
         $movie->removeActor($actor, 2);
     }
 
-    public function testMovieActor()
+    public function testMovieActor(): void
     {
         // Create object for many-to-many bi-directional association
         $actor = new Actor();

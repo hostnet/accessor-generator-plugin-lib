@@ -1,10 +1,16 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2017-2018 Hostnet B.V.
+ */
+
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\CredentialsAgain;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated\KeyRegistry;
+use PHPUnit\Framework\TestCase;
 
-class CredentialsAgainTest extends \PHPUnit_Framework_TestCase
+class CredentialsAgainTest extends TestCase
 {
     /**
      * @var CredentialsAgain
@@ -21,15 +27,10 @@ class CredentialsAgainTest extends \PHPUnit_Framework_TestCase
         $this->credentials_again = new CredentialsAgain();
     }
 
-    public function testSetPassword()
-    {
-        $this->credentials_again->setPassword('password');
-    }
-
     /**
      * @expectedException BadMethodCallException
      */
-    public function testSetPasswordTooManyArguments()
+    public function testSetPasswordTooManyArguments(): void
     {
         $credentials_again = new CredentialsAgain();
         $credentials_again->setPassword(1, 2);
@@ -38,7 +39,7 @@ class CredentialsAgainTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testSetPasswordArray()
+    public function testSetPasswordArray(): void
     {
         $credentials = new CredentialsAgain();
         $credentials->setPassword([]);

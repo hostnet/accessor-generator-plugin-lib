@@ -1,4 +1,9 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Annotation\Enumerator;
@@ -6,13 +11,14 @@ use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformation;
 use Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
 /**
  * @covers \Hostnet\Component\AccessorGenerator\Generator\CodeGenerator
  */
-class CodeGeneratorTest extends \PHPUnit_Framework_TestCase
+class CodeGeneratorTest extends TestCase
 {
     private $generator;
 
@@ -29,14 +35,12 @@ class CodeGeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
      * @throws \DomainException
-     * @throws \Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException
-     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      * @throws \Symfony\Component\Filesystem\Exception\IOException
      * @throws \OutOfBoundsException
      */
-    public function testWriteTraitForClass()
+    public function testWriteTraitForClass(): void
     {
         $finder = new Finder();
         $files  = $finder
@@ -47,9 +51,9 @@ class CodeGeneratorTest extends \PHPUnit_Framework_TestCase
             ->getIterator();
 
         $generator = $this->getGenerator();
-        foreach ($files as $filename) {
+        foreach ($files as $file) {
             // Read class information;
-            $class = new ReflectionClass($filename);
+            $class = new ReflectionClass($file->getRealPath());
 
             // Generate the accessor methods trait.
             $generator->writeTraitForClass($class);
@@ -72,7 +76,7 @@ class CodeGeneratorTest extends \PHPUnit_Framework_TestCase
         return $this->generator;
     }
 
-    private function compareExpectedToGeneratedFiles($inverse = false)
+    private function compareExpectedToGeneratedFiles($inverse = false): void
     {
         $paths          = ['/expected', '/Generated'];
         $paths          = $inverse ? array_reverse($paths) : $paths;
@@ -104,7 +108,7 @@ class CodeGeneratorTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException
      * @throws TypeUnknownException
      */
-    public function testGenerateAccessorsTypeUnknown()
+    public function testGenerateAccessorsTypeUnknown(): void
     {
         $info = new PropertyInformation(new ReflectionProperty('phpunit'));
         $info->setIsGenerator(true); // Default for all @Generate properties.
@@ -116,7 +120,7 @@ class CodeGeneratorTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Hostnet\Component\AccessorGenerator\Generator\Exception\ReferencedClassNotFoundException
      * @expectedExceptionMessage "CodeGeneratorTest" was not generated because the enum class "\This\Does\Not\Exist"
      */
-    public function testGenerateEnumeratorClassNotFound()
+    public function testGenerateEnumeratorClassNotFound(): void
     {
         $enumerator        = new Enumerator();
         $enumerator->value = "\\This\\Does\\Not\\Exist";

@@ -1,15 +1,18 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Item;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Shipping;
+use PHPUnit\Framework\TestCase;
 
-/**
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
- */
-class ItemTest extends \PHPUnit_Framework_TestCase
+class ItemTest extends TestCase
 {
-    public function testSetShipping()
+    public function testSetShipping(): void
     {
         $item     = new Item();
         $shipping = new Shipping();
@@ -21,7 +24,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Doctrine\ORM\EntityNotFoundException
      */
-    public function testGetShippingEmpty()
+    public function testGetShippingEmpty(): void
     {
         $item = new Item();
         $item->getShipping();
@@ -30,7 +33,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException BadMethodCallException
      */
-    public function testGetShippingTooManyArguments()
+    public function testGetShippingTooManyArguments(): void
     {
         $item = new Item();
         $item->getShipping(1);
@@ -39,7 +42,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException BadMethodCallException
      */
-    public function testSetShippingTooManyArguments()
+    public function testSetShippingTooManyArguments(): void
     {
         $item     = new Item();
         $shipping = new Shipping();

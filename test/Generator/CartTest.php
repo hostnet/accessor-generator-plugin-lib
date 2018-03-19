@@ -1,15 +1,18 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Cart;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Customer;
+use PHPUnit\Framework\TestCase;
 
-/**
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
- */
-class CartTest extends \PHPUnit_Framework_TestCase
+class CartTest extends TestCase
 {
-    public function testSetCustomer()
+    public function testSetCustomer(): void
     {
         $cart     = new Cart();
         $customer = new Customer();
@@ -18,7 +21,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
         self::assertSame($customer, $cart->getCustomer());
     }
 
-    public function testGetCustomerEmpty()
+    public function testGetCustomerEmpty(): void
     {
         $cart = new Cart();
         self::assertNull($cart->getCustomer());
@@ -27,7 +30,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException BadMethodCallException
      */
-    public function testGetCustomerTooManyArguments()
+    public function testGetCustomerTooManyArguments(): void
     {
         $cart = new Cart();
         $cart->getCustomer(1);
@@ -36,7 +39,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException BadMethodCallException
      */
-    public function testSetCustomerTooManyArguments()
+    public function testSetCustomerTooManyArguments(): void
     {
         $cart     = new Cart();
         $customer = new Customer();

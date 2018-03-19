@@ -1,14 +1,20 @@
 <?php
+declare(strict_types=1);
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
 use Hostnet\Component\AccessorGenerator\Annotation\Generate;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
+use PHPUnit\Framework\TestCase;
 
 /**
- * @covers Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformation
+ * @covers \Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformation
  */
-class PropertyInformationTest extends \PHPUnit_Framework_TestCase
+class PropertyInformationTest extends TestCase
 {
     /**
      * @var PropertyInformation
@@ -42,7 +48,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
         $this->minimal_info = new PropertyInformation(new ReflectionProperty('test'));
     }
 
-    public function testProcessAnnotations()
+    public function testProcessAnnotations(): void
     {
         $processor = $this->createMock(AnnotationProcessorInterface::class);
         $processor->expects(self::atLeastOnce())->method('processAnnotation');
@@ -52,12 +58,12 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
         $this->info->processAnnotations();
     }
 
-    public function testGetDocumentation()
+    public function testGetDocumentation(): void
     {
         self::assertEquals('Hidde', $this->info->getDocumentation());
     }
 
-    public function testGetMethods()
+    public function testGetMethods(): void
     {
         self::assertEquals('test', $this->info->getName());
         self::assertNull($this->info->getDefault());
@@ -84,7 +90,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
         self::assertNull($this->info->getRemoveVisibility());
     }
 
-    public function testBasicSetMethods()
+    public function testBasicSetMethods(): void
     {
         self::assertSame($this->info, $this->info->setCollection('garbage'));
         self::assertTrue($this->info->isCollection());
@@ -135,7 +141,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
         self::assertTrue($this->info->isReferencingCollection());
     }
 
-    public function setReferencedPropertyProvider()
+    public function setReferencedPropertyProvider(): array
     {
         return [
             [1,                      \InvalidArgumentException::class],
@@ -170,7 +176,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
     }
 
 
-    public function setIntegerSizeProvider()
+    public function setIntegerSizeProvider(): array
     {
         return [
             [-1,                     \RangeException::class          ],
@@ -205,7 +211,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
         self::assertEquals($integer_size, $this->info->getIntegerSize());
     }
 
-    public function setScaleProvider()
+    public function setScaleProvider(): array
     {
         //http://dev.mysql.com/doc/refman/5.0/en/precision-math-decimal-characteristics.html
         $max = 30;
@@ -238,7 +244,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
         self::assertEquals($scale, $this->info->getScale());
     }
 
-    public function setPrecisionProvider()
+    public function setPrecisionProvider(): array
     {
         //http://dev.mysql.com/doc/refman/5.0/en/precision-math-decimal-characteristics.html
         $max = 65;
@@ -271,7 +277,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
         self::assertEquals($precision, $this->info->getPrecision());
     }
 
-    public function setLengthProvider()
+    public function setLengthProvider(): array
     {
         return [
             [-1,           \RangeException::class          ],
@@ -298,12 +304,12 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
         self::assertEquals($length, $this->info->getLength());
     }
 
-    public function setTypeProvider()
+    public function setTypeProvider(): array
     {
         return array_merge([['integer', null]], $this->setTypeHintProvider());
     }
 
-    public function setTypeHintProvider()
+    public function setTypeHintProvider(): array
     {
         return [
             ['\\Test',  null                            ],
@@ -351,7 +357,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
         self::assertEquals($type, $this->info->getTypeHint());
     }
 
-    public function setFullyQualifiedTypeProvider()
+    public function setFullyQualifiedTypeProvider(): array
     {
         return [
             ['integer', \DomainException::class         ],
@@ -380,7 +386,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
         self::assertEquals($type, $this->info->getFullyQualifiedType());
     }
 
-    public function setEncryptionProvider()
+    public function setEncryptionProvider(): array
     {
         return [
             ['alias',   null,                           ],
@@ -406,7 +412,7 @@ class PropertyInformationTest extends \PHPUnit_Framework_TestCase
         self::assertEquals('string', $this->info->getEncryptionAlias());
     }
 
-    public function testGetNamespaceEmptyClass()
+    public function testGetNamespaceEmptyClass(): void
     {
         self::assertSame('', $this->minimal_info->getNamespace());
     }
