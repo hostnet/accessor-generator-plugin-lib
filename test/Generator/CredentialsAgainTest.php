@@ -3,8 +3,9 @@ namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\CredentialsAgain;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated\KeyRegistry;
+use PHPUnit\Framework\TestCase;
 
-class CredentialsAgainTest extends \PHPUnit_Framework_TestCase
+class CredentialsAgainTest extends TestCase
 {
     /**
      * @var CredentialsAgain
@@ -24,6 +25,12 @@ class CredentialsAgainTest extends \PHPUnit_Framework_TestCase
     public function testSetPassword()
     {
         $this->credentials_again->setPassword('password');
+
+        $reflection_class    = new \ReflectionClass($this->credentials_again);
+        $reflection_property = $reflection_class->getProperty('password');
+        $reflection_property->setAccessible(true);
+
+        self::assertNotEmpty($reflection_property->getValue($this->credentials_again));
     }
 
     /**

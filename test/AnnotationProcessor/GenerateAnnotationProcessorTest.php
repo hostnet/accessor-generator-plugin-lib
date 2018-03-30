@@ -5,12 +5,13 @@ use Doctrine\ORM\Mapping\Column;
 use Hostnet\Component\AccessorGenerator\Annotation\Enumerator;
 use Hostnet\Component\AccessorGenerator\Annotation\Generate;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Hostnet\Component\AccessorGenerator\AnnotationProcessor\GenerateAnnotationProcessor
  * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
-class GenerateAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
+class GenerateAnnotationProcessorTest extends TestCase
 {
     // Some constants for better reading of the
     // parameters parsed into function.
@@ -43,8 +44,8 @@ class GenerateAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         $encryption    = new Generate();
         $enumerate     = new Generate();
 
-        $column        = new Column();
-        $enumerator    = new Enumerator();
+        $column     = new Column();
+        $enumerator = new Enumerator();
 
         $no_is->is         = 'none';
         $no_get->get       = 'none';
@@ -142,7 +143,7 @@ class GenerateAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
         $enumerator->name  = 'Foo';
         $enumerator->value = 'SomeClass';
 
-        $annotation = new Generate();
+        $annotation  = new Generate();
         $annotation2 = new Generate();
 
         $annotation->enumerators  = [$enumerator];

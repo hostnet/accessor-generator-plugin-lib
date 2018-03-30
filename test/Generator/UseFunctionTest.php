@@ -3,8 +3,9 @@
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\UseFunction;
+use PHPUnit\Framework\TestCase;
 
-class UseFunctionTest extends \PHPUnit_Framework_TestCase
+class UseFunctionTest extends TestCase
 {
     public function testGeneric()
     {

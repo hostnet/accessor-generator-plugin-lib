@@ -3,8 +3,9 @@ namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Doctrine\Common\Collections\Collection;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Node;
+use PHPUnit\Framework\TestCase;
 
-class NodeTest extends \PHPUnit_Framework_TestCase
+class NodeTest extends TestCase
 {
     public function testGetOut()
     {

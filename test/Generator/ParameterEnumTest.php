@@ -8,8 +8,9 @@ use Hostnet\Component\AccessorGenerator\Generator\fixtures\Item;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Nullable;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\OneToOneNullable;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Parameterized;
+use PHPUnit\Framework\TestCase;
 
-class ParameterEnumTest extends \PHPUnit_Framework_TestCase
+class ParameterEnumTest extends TestCase
 {
     /**
      * @var Parameterized

@@ -4,11 +4,12 @@ namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 use Hostnet\Component\AccessorGenerator\Annotation\Generate;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
+use PHPUnit\Framework\TestCase;
 
 /**
- * @covers Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformation
+ * @covers \Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformation
  */
-class PropertyInformationTest extends \PHPUnit_Framework_TestCase
+class PropertyInformationTest extends TestCase
 {
     /**
      * @var PropertyInformation

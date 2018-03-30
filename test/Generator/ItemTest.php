@@ -3,11 +3,12 @@ namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Item;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Shipping;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
-class ItemTest extends \PHPUnit_Framework_TestCase
+class ItemTest extends TestCase
 {
     public function testSetShipping()
     {

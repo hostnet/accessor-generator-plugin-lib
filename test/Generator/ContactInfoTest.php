@@ -2,11 +2,12 @@
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\ContactInfo;
+use PHPUnit\Framework\TestCase;
 
 /**
  * {@inheritDoc}
  */
-class ContactInfoTest extends \PHPUnit_Framework_TestCase
+class ContactInfoTest extends TestCase
 {
     public function testSetWrong()
     {
@@ -41,14 +42,6 @@ class ContactInfoTest extends \PHPUnit_Framework_TestCase
 
         foreach (ContactInfo::GETTERS as $modifier) {
             self::assertNotNull($alice->$modifier());
-        }
-    }
-
-    public function testNull()
-    {
-        $alice = new ContactInfo();
-        foreach (ContactInfo::GETTERS as $modifier) {
-            $alice->$modifier();
         }
     }
 

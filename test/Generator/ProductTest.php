@@ -5,8 +5,9 @@ use Doctrine\Common\Collections\Collection;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Attribute;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Period;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Product;
+use PHPUnit\Framework\TestCase;
 
-class ProductTest extends \PHPUnit_Framework_TestCase
+class ProductTest extends TestCase
 {
 
     /**

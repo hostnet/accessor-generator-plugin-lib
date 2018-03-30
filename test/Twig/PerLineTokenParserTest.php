@@ -1,11 +1,13 @@
 <?php
 namespace Hostnet\Component\AccessorGenerator\Twig;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \Hostnet\Component\AccessorGenerator\Twig\PerLineTokenParser
  * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
-class PerLineTokenParserTest extends \PHPUnit_Framework_TestCase
+class PerLineTokenParserTest extends TestCase
 {
 
     /**
