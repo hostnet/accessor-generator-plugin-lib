@@ -1,11 +1,14 @@
 <?php
 namespace Hostnet\Component\AccessorGenerator\Reflection;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass
  */
-class ReflectionClassTest extends \PHPUnit_Framework_TestCase
+class ReflectionClassTest extends TestCase
 {
+
     public function fileProvider()
     {
         return [

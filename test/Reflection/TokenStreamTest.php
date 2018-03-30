@@ -1,13 +1,14 @@
 <?php
 namespace Hostnet\Component\AccessorGenerator\Reflection;
 
+use PHPUnit\Framework\TestCase;
+
 /**
- * @covers Hostnet\Component\AccessorGenerator\Reflection\TokenStream
+ * @covers \Hostnet\Component\AccessorGenerator\Reflection\TokenStream
  * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
-class TokenStreamTest extends \PHPUnit_Framework_TestCase
+class TokenStreamTest extends TestCase
 {
-
     const SOURCE =  'tokens.php';
     const SIZE   = 116;
 
@@ -15,12 +16,6 @@ class TokenStreamTest extends \PHPUnit_Framework_TestCase
      * @var TokenStream
      */
     private $stream;
-
-    /**
-     * Size of the token stream $stream
-     * @var int
-     */
-    private $count;
 
     public function setUp()
     {

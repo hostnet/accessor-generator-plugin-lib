@@ -2,8 +2,9 @@
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Annotations;
+use PHPUnit\Framework\TestCase;
 
-class AnnotationsTest extends \PHPUnit_Framework_TestCase
+class AnnotationsTest extends TestCase
 {
     /**
      * @expectedException \BadMethodCallException

@@ -2,8 +2,9 @@
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
 use Doctrine\Common\Util\Inflector;
+use PHPUnit\Framework\TestCase;
 
-class EnumItemInformationTest extends \PHPUnit_Framework_TestCase
+class EnumItemInformationTest extends TestCase
 {
     /**
      * This is of type: array.

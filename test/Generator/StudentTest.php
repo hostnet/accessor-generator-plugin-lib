@@ -3,11 +3,12 @@ namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Student;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\StudentInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
-class StudentTest extends \PHPUnit_Framework_TestCase
+class StudentTest extends TestCase
 {
     public function testSetStudent()
     {

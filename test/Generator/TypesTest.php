@@ -3,8 +3,9 @@ namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Doctrine\Common\Util\Inflector;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Types;
+use PHPUnit\Framework\TestCase;
 
-class TypesTest extends \PHPUnit_Framework_TestCase
+class TypesTest extends TestCase
 {
 
     public function typeProvider()

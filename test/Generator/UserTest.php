@@ -3,8 +3,9 @@ namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Address;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\User;
+use PHPUnit\Framework\TestCase;
 
-class UserTest extends \PHPUnit_Framework_TestCase
+class UserTest extends TestCase
 {
     public function testGetAddressEmpty()
     {

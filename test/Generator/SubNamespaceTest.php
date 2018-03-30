@@ -2,8 +2,9 @@
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\SubNamespace;
+use PHPUnit\Framework\TestCase;
 
-class SubNamespaceTest extends \PHPUnit_Framework_TestCase
+class SubNamespaceTest extends TestCase
 {
     /**
      * @expectedException \BadMethodCallException

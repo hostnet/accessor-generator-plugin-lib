@@ -2,17 +2,13 @@
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Comment;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
-class CommentTest extends \PHPUnit_Framework_TestCase
+class CommentTest extends TestCase
 {
-    public function __construct($col = null)
-    {
-        $this->col = $col;
-    }
-
     public function testGetCol()
     {
         $comment = new Comment();

@@ -4,8 +4,9 @@ namespace Hostnet\Component\AccessorGenerator\Generator;
 use Doctrine\Common\Collections\Collection;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Genre;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Song;
+use PHPUnit\Framework\TestCase;
 
-class SongTest extends \PHPUnit_Framework_TestCase
+class SongTest extends TestCase
 {
     public function testGetGenres()
     {

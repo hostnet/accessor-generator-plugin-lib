@@ -1,7 +1,9 @@
 <?php
 namespace Hostnet\Component\AccessorGenerator\Annotation;
 
-class GenerateTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class GenerateTest extends TestCase
 {
     public function testDefaults()
     {

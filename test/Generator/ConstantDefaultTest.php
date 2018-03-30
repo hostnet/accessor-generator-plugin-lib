@@ -3,8 +3,9 @@ namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\ConstantDefault;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Weather;
+use PHPUnit\Framework\TestCase;
 
-class ConstantDefaultTest extends \PHPUnit_Framework_TestCase
+class ConstantDefaultTest extends TestCase
 {
     /**
      * @expectedException \BadMethodCallException

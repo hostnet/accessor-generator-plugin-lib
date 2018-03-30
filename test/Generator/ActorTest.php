@@ -4,11 +4,12 @@ namespace Hostnet\Component\AccessorGenerator\Generator;
 use Doctrine\Common\Collections\Collection;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Actor;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
-class ActorTest extends \PHPUnit_Framework_TestCase
+class ActorTest extends TestCase
 {
 
     /**

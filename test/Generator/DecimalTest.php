@@ -3,10 +3,10 @@ namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Doctrine\Common\Util\Inflector;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Decimal;
+use PHPUnit\Framework\TestCase;
 
-class DecimalTest extends \PHPUnit_Framework_TestCase
+class DecimalTest extends TestCase
 {
-
     private function getTestValues($scale, $precision)
     {
         $values    = [];

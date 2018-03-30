@@ -5,8 +5,9 @@ use Hostnet\Component\AccessorGenerator\Generator\fixtures\Feature;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Item;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Nullable;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\OneToOneNullable;
+use PHPUnit\Framework\TestCase;
 
-class NullableTest extends \PHPUnit_Framework_TestCase
+class NullableTest extends TestCase
 {
 
     /**
