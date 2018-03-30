@@ -13,19 +13,32 @@ use Composer\Repository\RepositoryManager;
 use Composer\Repository\WritableArrayRepository;
 use Composer\Script\ScriptEvents;
 use Hostnet\Component\AccessorGenerator\Generator\CodeGeneratorInterface;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\StreamOutput;
 
 /**
- * @covers Hostnet\Component\AccessorGenerator\Plugin
+ * @covers \Hostnet\Component\AccessorGenerator\Plugin
  * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
-class PluginTest extends \PHPUnit_Framework_TestCase
+class PluginTest extends TestCase
 {
     public function testActivate()
     {
-        // Only a smoke test.
-        $plugin = new Plugin();
-        $plugin->activate($this->getMockComposer(), new NullIO());
+        $composer = $this->getMockComposer();
+        $io       = new NullIO();
+        $plugin   = new Plugin();
+
+        $plugin->activate($composer, $io);
+
+        $reflection_class  = new \ReflectionClass($plugin);
+        $composer_property = $reflection_class->getProperty('composer');
+        $io_property       = $reflection_class->getProperty('io');
+
+        $composer_property->setAccessible(true);
+        $io_property->setAccessible(true);
+
+        self::assertSame($composer, $composer_property->getValue($plugin));
+        self::assertSame($io, $io_property->getValue($plugin));
     }
 
     public function testGetSubscribedEvents()

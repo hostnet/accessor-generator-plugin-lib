@@ -6,13 +6,14 @@ use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformation;
 use Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
 /**
  * @covers \Hostnet\Component\AccessorGenerator\Generator\CodeGenerator
  */
-class CodeGeneratorTest extends \PHPUnit_Framework_TestCase
+class CodeGeneratorTest extends TestCase
 {
     private $generator;
 
@@ -29,8 +30,6 @@ class CodeGeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
      * @throws \DomainException
-     * @throws \Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException
-     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      * @throws \Symfony\Component\Filesystem\Exception\IOException
@@ -72,7 +71,7 @@ class CodeGeneratorTest extends \PHPUnit_Framework_TestCase
         return $this->generator;
     }
 
-    private function compareExpectedToGeneratedFiles($inverse = false)
+    private function compareExpectedToGeneratedFiles($inverse = false): void
     {
         $paths          = ['/expected', '/Generated'];
         $paths          = $inverse ? array_reverse($paths) : $paths;

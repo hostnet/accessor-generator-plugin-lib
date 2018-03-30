@@ -1,12 +1,19 @@
 <?php
 namespace Hostnet\Component\AccessorGenerator\Reflection;
 
+use PHPUnit\Framework\TestCase;
+
 /**
- * @covers Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty
+ * @covers \Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty
  * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
-class ReflectionPropertyTest extends \PHPUnit_Framework_TestCase
+class ReflectionPropertyTest extends TestCase
 {
+    private $simple;
+    private $public_static;
+    private $complex;
+    private $empty_doc;
+
     public function setUp()
     {
         $this->simple = new ReflectionProperty('simple');
@@ -33,7 +40,7 @@ class ReflectionPropertyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException DomainException
+     * @expectedException \DomainException
      */
     public function testModifiersDomainNone()
     {
@@ -41,7 +48,7 @@ class ReflectionPropertyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException DomainException
+     * @expectedException \DomainException
      */
     public function testModifiersDomainTwo()
     {
@@ -49,7 +56,7 @@ class ReflectionPropertyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testInvalidType()
     {

@@ -11,11 +11,12 @@ use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OneToOne;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception\InvalidColumnSettingsException;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
+use PHPUnit\Framework\TestCase;
 
 /**
- * @covers Hostnet\Component\AccessorGenerator\AnnotationProcessor\DoctrineAnnotationProcessor
+ * @covers \Hostnet\Component\AccessorGenerator\AnnotationProcessor\DoctrineAnnotationProcessor
  */
-class DoctrineAnnotationProcessorTest extends \PHPUnit_Framework_TestCase
+class DoctrineAnnotationProcessorTest extends TestCase
 {
 
     /**

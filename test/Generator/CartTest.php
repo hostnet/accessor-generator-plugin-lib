@@ -3,11 +3,12 @@ namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Cart;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Customer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
-class CartTest extends \PHPUnit_Framework_TestCase
+class CartTest extends TestCase
 {
     public function testSetCustomer()
     {

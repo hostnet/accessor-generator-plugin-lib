@@ -1,11 +1,13 @@
 <?php
 namespace Hostnet\Component\AccessorGenerator\Annotation;
 
-class EnumeratorTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class EnumeratorTest extends TestCase
 {
     public function testGetters()
     {
-        $enumerator = new Enumerator();
+        $enumerator        = new Enumerator();
         $enumerator->name  = 'Foo';
         $enumerator->value = '\\Some\\Random\\Class';
 

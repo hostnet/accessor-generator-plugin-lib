@@ -3,8 +3,9 @@ namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Credentials;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated\KeyRegistry;
+use PHPUnit\Framework\TestCase;
 
-class CredentialsTest extends \PHPUnit_Framework_TestCase
+class CredentialsTest extends TestCase
 {
     /**
      * @var Credentials

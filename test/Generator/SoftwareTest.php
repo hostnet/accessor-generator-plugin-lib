@@ -6,8 +6,9 @@ use Hostnet\Component\AccessorGenerator\Generator\fixtures\EmptyFeature;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Feature;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\NiceFeature;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Software;
+use PHPUnit\Framework\TestCase;
 
-class SoftwareTest extends \PHPUnit_Framework_TestCase
+class SoftwareTest extends TestCase
 {
     public function testGetFeatures()
     {
