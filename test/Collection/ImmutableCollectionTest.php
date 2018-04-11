@@ -5,8 +5,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Selectable;
+use PHPUnit\Framework\TestCase;
 
-class ImmutableCollectionTest extends \PHPUnit_Framework_TestCase
+/**
+ * @covers \Hostnet\Component\AccessorGenerator\Collection\ImmutableCollection
+ */
+class ImmutableCollectionTest extends TestCase
 {
     /**
      * @var Collection|Selectable

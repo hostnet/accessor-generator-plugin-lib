@@ -6,11 +6,12 @@ use Hostnet\Component\AccessorGenerator\Generator\fixtures\Boat;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Car;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\PracticalVehicleOwner;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\VehicleInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated\PracticalVehicleOwnerMethodsTrait
  */
-class PracticalVehicleOwnerTest extends \PHPUnit_Framework_TestCase
+class PracticalVehicleOwnerTest extends TestCase
 {
     public function testAddVehicle()
     {
@@ -38,6 +39,8 @@ class PracticalVehicleOwnerTest extends \PHPUnit_Framework_TestCase
         $owner   = new PracticalVehicleOwner();
         $bicycle = new Bicycle();
         $owner->addVehicle($bicycle)->addVehicle($bicycle);
+
+        self::assertContains($bicycle, $owner->vehicles);
     }
 
     /**

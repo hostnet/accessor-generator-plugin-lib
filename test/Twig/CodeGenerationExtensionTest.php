@@ -1,11 +1,13 @@
 <?php
 namespace Hostnet\Component\AccessorGenerator\Twig;
 
+use PHPUnit\Framework\TestCase;
+
 /**
- * @covers Hostnet\Component\AccessorGenerator\Twig\CodeGenerationExtension
+ * @covers \Hostnet\Component\AccessorGenerator\Twig\CodeGenerationExtension
  * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
-class CodeGenerationExtensionTest extends \PHPUnit_Framework_TestCase
+class CodeGenerationExtensionTest extends TestCase
 {
     private $twig;
 

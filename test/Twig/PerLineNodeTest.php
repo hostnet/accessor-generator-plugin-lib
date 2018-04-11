@@ -1,16 +1,17 @@
 <?php
 namespace Hostnet\Component\AccessorGenerator\Twig;
 
+use PHPUnit\Framework\TestCase;
 use Twig_Node as Node;
 use Twig_Node_Expression_Name as Name;
 use Twig_Node_Print as PrintNode;
 use Twig_Node_Text as TextNode;
 
 /**
-* @covers \Hostnet\Component\AccessorGenerator\Twig\PerLineNode
-* @author Hidde Boomsma <hboomsma@hostnet.nl>
-*/
-class PerLineNodeTest extends \PHPUnit_Framework_TestCase
+ * @covers \Hostnet\Component\AccessorGenerator\Twig\PerLineNode
+ * @author Hidde Boomsma <hboomsma@hostnet.nl>
+ */
+class PerLineNodeTest extends TestCase
 {
     public function parseProvider()
     {
