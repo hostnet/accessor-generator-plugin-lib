@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Reflection;
 
 class TokenStream
@@ -218,13 +223,13 @@ class TokenStream
             if (is_array($this->tokens[$loc])) {
                 // Array
                 return $this->tokens[$loc][$type];
-            } else {
-                // Scalar
-                return $this->tokens[$loc];
             }
-        } else {
-            // Invalid location
-            throw new \OutOfBoundsException(sprintf('Invalid location %d given', $loc));
+
+            // Scalar
+            return $this->tokens[$loc];
         }
+
+        // Invalid location
+        throw new \OutOfBoundsException(sprintf('Invalid location %d given', $loc));
     }
 }

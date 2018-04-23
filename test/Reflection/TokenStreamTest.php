@@ -1,11 +1,15 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Reflection;
 
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Hostnet\Component\AccessorGenerator\Reflection\TokenStream
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 class TokenStreamTest extends TestCase
 {
@@ -30,7 +34,7 @@ class TokenStreamTest extends TestCase
             [        10, ';'                                       ],
             [        -1, null,         \OutOfBoundsException::class],
             [self::SIZE, null,         \OutOfBoundsException::class],
-            [        42, T_PRIVATE,                                ],
+            [        42, T_PRIVATE                                ],
         ];
     }
 
@@ -68,7 +72,7 @@ class TokenStreamTest extends TestCase
             [        10, ';'                                             ],
             [        -1, null,               \OutOfBoundsException::class],
             [self::SIZE, null,               \OutOfBoundsException::class],
-            [        42, 'private',                                      ],
+            [        42, 'private'                                      ],
         ];
     }
 
@@ -92,7 +96,7 @@ class TokenStreamTest extends TestCase
             [[],            -1, null                              ],
             [[],             0, null                              ],
             [[],    self::SIZE, null, \OutOfBoundsException::class],
-            [[], self::SIZE -1, null,                             ],
+            [[], self::SIZE -1, null                             ],
 
             // Scan does not probe current value.
             [[T_OPEN_TAG], -1, 0],
@@ -124,7 +128,7 @@ class TokenStreamTest extends TestCase
         return [
             // Boundary checks
             [           -2,        null    , [], \OutOfBoundsException::class],
-            [           -1,           0    , [],                             ],
+            [           -1,           0    , []                             ],
             [            0,           1    , []                              ],
             [   self::SIZE,        null    , [], \OutOfBoundsException::class],
             [self::SIZE - 1,       null    , []                              ],
@@ -164,8 +168,8 @@ class TokenStreamTest extends TestCase
             [             0,          null, []                              ],
             [             1,             0, []                              ],
             [self::SIZE + 1,          null, [], \OutOfBoundsException::class],
-            [    self::SIZE, self::SIZE -1, [],                             ],
-            [self::SIZE - 1, self::SIZE -2, [],                             ],
+            [    self::SIZE, self::SIZE -1, []                             ],
+            [self::SIZE - 1, self::SIZE -2, []                             ],
 
             // Scan from private keyword on line 9
             [44, 42], // Skip white space

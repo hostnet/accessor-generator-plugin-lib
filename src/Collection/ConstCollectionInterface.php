@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Collection;
 
 use ArrayAccess;
@@ -13,8 +18,6 @@ use IteratorAggregate;
  * partition are still possible because their behaviour is to return a copy
  * rather than to change the collection and return a self-reference. This
  * behaviour is the same for both mutable and immutable collections.
- *
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 interface ConstCollectionInterface extends Countable, IteratorAggregate, ArrayAccess
 {
@@ -23,14 +26,14 @@ interface ConstCollectionInterface extends Countable, IteratorAggregate, ArrayAc
      * This is an O(n) operation, where n is the size of the collection.
      *
      * @param  mixed $element The element to search for.
-     * @return boolean TRUE if the collection contains the element, FALSE otherwise.
+     * @return bool TRUE if the collection contains the element, FALSE otherwise.
      */
     public function contains($element);
 
     /**
      * Checks whether the collection is empty (contains no elements).
      *
-     * @return boolean TRUE if the collection is empty, FALSE otherwise.
+     * @return bool TRUE if the collection is empty, FALSE otherwise.
      */
     public function isEmpty();
 
@@ -38,15 +41,15 @@ interface ConstCollectionInterface extends Countable, IteratorAggregate, ArrayAc
      * Returns true if the collection contains an element with the specified
      * key/index, false otherwise.
      *
-     * @param  string|integer $key The key/index to check for.
-     * @return boolean
+     * @param  string|int $key The key/index to check for.
+     * @return bool
      */
     public function containsKey($key);
 
     /**
      * Returns the element at the specified key/index.
      *
-     * @param  string|integer $key The key/index of the element to retrieve.
+     * @param  string|int $key The key/index of the element to retrieve.
      * @return mixed
      */
     public function get($key);
@@ -117,7 +120,7 @@ interface ConstCollectionInterface extends Countable, IteratorAggregate, ArrayAc
      * Returns true if the predicate is true for at least one element, false otherwise.
      *
      * @param  Closure $predicate
-     * @return boolean
+     * @return bool
      */
     public function exists(Closure $predicate);
 
@@ -135,7 +138,7 @@ interface ConstCollectionInterface extends Countable, IteratorAggregate, ArrayAc
      * collection, false otherwise.
      *
      * @param  Closure $predicate
-     * @return boolean
+     * @return bool
      */
     public function forAll(Closure $predicate);
 

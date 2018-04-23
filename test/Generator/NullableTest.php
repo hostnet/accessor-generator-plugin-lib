@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Feature;
@@ -9,7 +14,6 @@ use PHPUnit\Framework\TestCase;
 
 class NullableTest extends TestCase
 {
-
     /**
      * @var Nullable
      */

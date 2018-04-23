@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
 use Hostnet\Component\AccessorGenerator\Annotation\Generate;
@@ -384,7 +389,7 @@ class PropertyInformationTest extends TestCase
     public function setEncryptionProvider()
     {
         return [
-            ['alias',   null,                           ],
+            ['alias',   null                           ],
             ['',        \InvalidArgumentException::class],
             [['test'],  \InvalidArgumentException::class],
             [10,        \InvalidArgumentException::class],

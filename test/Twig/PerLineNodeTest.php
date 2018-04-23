@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Twig;
 
 use PHPUnit\Framework\TestCase;
@@ -9,7 +14,6 @@ use Twig_Node_Text as TextNode;
 
 /**
  * @covers \Hostnet\Component\AccessorGenerator\Twig\PerLineNode
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 class PerLineNodeTest extends TestCase
 {
@@ -43,6 +47,6 @@ class PerLineNodeTest extends TestCase
         $node     = new PerLineNode($lines, $prefix, $postfix, 1);
         $node->compile($compiler);
 
-        self::assertStringEqualsFile(__DIR__.'/fixtures/'.$file, $compiler->getSource());
+        self::assertStringEqualsFile(__DIR__ . '/fixtures/' . $file, $compiler->getSource());
     }
 }

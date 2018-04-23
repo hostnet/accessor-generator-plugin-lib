@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Collection;
 
 use Closure;
@@ -10,8 +15,6 @@ use Doctrine\Common\Collections\Selectable;
  * Wrapper for Doctrine collections to make them immutable. Implements the
  * ConstCollectionInterface for code completion and use in type hints.
  * Implements Collection for compatibility with Doctrine.
- *
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 class ImmutableCollection implements Collection, ConstCollectionInterface, Selectable
 {
@@ -46,9 +49,9 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
     {
         if ($this->is_clone) {
             return $this->collection->add($element);
-        } else {
-            throw new \LogicException('This collection is immutable');
         }
+
+        throw new \LogicException('This collection is immutable');
     }
 
     /**
@@ -60,11 +63,11 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
      */
     public function clear()
     {
-        if ($this->is_clone) {
-            $this->collection->clear();
-        } else {
+        if (!$this->is_clone) {
             throw new \LogicException('This collection is immutable');
         }
+
+        $this->collection->clear();
     }
 
     /**
@@ -92,9 +95,9 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
     {
         if ($this->is_clone) {
             return $this->collection->remove($key);
-        } else {
-            throw new \LogicException('This collection is immutable');
         }
+
+        throw new \LogicException('This collection is immutable');
     }
 
     /**
@@ -106,9 +109,9 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
     {
         if ($this->is_clone) {
             return $this->collection->removeElement($element);
-        } else {
-            throw new \LogicException('This collection is immutable');
         }
+
+        throw new \LogicException('This collection is immutable');
     }
 
     /**
@@ -145,11 +148,11 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
 
     public function set($key, $value)
     {
-        if ($this->is_clone) {
-            $this->collection->set($key, $value);
-        } else {
+        if (!$this->is_clone) {
             throw new \LogicException('This collection is immutable');
         }
+
+        $this->collection->set($key, $value);
     }
 
     /**
@@ -295,11 +298,11 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
      */
     public function offsetSet($offset, $value)
     {
-        if ($this->is_clone) {
-            $this->collection->offsetSet($offset, $value);
-        } else {
+        if (!$this->is_clone) {
             throw new \LogicException('This collection is immutable');
         }
+
+        $this->collection->offsetSet($offset, $value);
     }
 
     /**
@@ -309,11 +312,11 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
      */
     public function offsetUnset($offset)
     {
-        if ($this->is_clone) {
-            $this->collection->offsetUnset($offset);
-        } else {
+        if (!$this->is_clone) {
             throw new \LogicException('This collection is immutable');
         }
+
+        $this->collection->offsetUnset($offset);
     }
 
     /**

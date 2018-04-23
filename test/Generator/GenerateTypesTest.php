@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2015-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Doctrine\Common\Util\Inflector;
@@ -7,7 +12,6 @@ use PHPUnit\Framework\TestCase;
 
 class GenerateTypesTest extends TestCase
 {
-
     public function typeProvider()
     {
         $date   = new \DateTime();
@@ -15,8 +19,8 @@ class GenerateTypesTest extends TestCase
         $object = new \stdClass();
 
         $values = [
-            ['integer',       2147483647,                         ],
-            ['integer',      -2147483648,                         ],
+            ['integer',       2147483647                         ],
+            ['integer',      -2147483648                         ],
             ['integer',       2147483648, \DomainException::class ],
             ['integer',      -2147483649, \DomainException::class ],
             ['float',         1000.10999                          ],
@@ -86,8 +90,8 @@ class GenerateTypesTest extends TestCase
     public function setTypeProvider()
     {
         $values = [
-            ['integer',  01,                                                    ],
-            ['integer',  0x1,                                                   ],
+            ['integer',  01                                                    ],
+            ['integer',  0x1                                                   ],
             ['integer',  '10',                  \InvalidArgumentException::class],
             ['integer',  1.2,                   \InvalidArgumentException::class],
             ['integer',  1.0,                   \InvalidArgumentException::class],
@@ -103,19 +107,19 @@ class GenerateTypesTest extends TestCase
         $class = new \ReflectionClass(GenerateTypes::class);
         foreach ($class->getProperties() as $property) {
             $setter = 'set' . Inflector::classify($property->getName());
-            if (method_exists(GenerateTypes::class, $setter)) {
-                $invalid_type = $property->getName() === 'object' ? null : new \stdClass();
-
-                // Wrong type (not needed in PHP7 for object type hints)
-                if (stripos($property->getName(), 'date') === false
-                    || PHP_VERSION_ID < 70000
-                ) {
-                    $values[] = [$property->getName(), $invalid_type, \InvalidArgumentException::class];
-                }
-
-                // Too many parameters
-                $values[] = [$property->getName(), new \DateTime(), \BadMethodCallException::class, 1];
+            if (!method_exists(GenerateTypes::class, $setter)) {
+                continue;
             }
+
+            $invalid_type = $property->getName() === 'object' ? null : new \stdClass();
+
+            // Wrong type (not needed in PHP7 for object type hints)
+            if (stripos($property->getName(), 'date') === false || PHP_VERSION_ID < 70000) {
+                $values[] = [$property->getName(), $invalid_type, \InvalidArgumentException::class];
+            }
+
+            // Too many parameters
+            $values[] = [$property->getName(), new \DateTime(), \BadMethodCallException::class, 1];
         }
 
         return array_merge($this->typeProvider(), $values);

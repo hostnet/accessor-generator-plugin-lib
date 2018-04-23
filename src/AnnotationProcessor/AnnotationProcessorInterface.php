@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
 /**
@@ -7,8 +12,6 @@ namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
  * An annotation processor gets the annotation class as $annotation and a
  * PropertyInformation object to store the knowledge extracted from the
  * annotation.
- *
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 interface AnnotationProcessorInterface
 {

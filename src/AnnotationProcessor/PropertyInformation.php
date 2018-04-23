@@ -1,4 +1,8 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
 
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
@@ -254,12 +258,14 @@ class PropertyInformation implements PropertyInformationInterface
                     $is_encrypted = true;
                 }
 
-                if ($annotation instanceof Column
-                    && isset($annotation->type)
-                    && ! in_array($annotation->type, ['string', 'text'])
+                if (!($annotation instanceof Column)
+                    || !isset($annotation->type)
+                    || in_array($annotation->type, ['string', 'text'])
                 ) {
-                    $is_string = false;
+                    continue;
                 }
+
+                $is_string = false;
             }
         }
 
@@ -308,9 +314,9 @@ class PropertyInformation implements PropertyInformationInterface
     {
         if ($this->property->getClass() !== null) {
             return $this->property->getClass()->getName();
-        } else {
-            return '';
         }
+
+        return '';
     }
 
     /**
@@ -321,9 +327,9 @@ class PropertyInformation implements PropertyInformationInterface
     {
         if ($this->property->getClass()) {
             return $this->property->getClass()->getNamespace();
-        } else {
-            return '';
         }
+
+        return '';
     }
 
     /**
@@ -376,19 +382,27 @@ class PropertyInformation implements PropertyInformationInterface
     {
         if (! is_string($type)) {
             throw new \InvalidArgumentException(sprintf('$type is not of type string but of %s', gettype($type)));
-        } elseif ('' === $type) {
+        }
+
+        if ('' === $type) {
             throw new \DomainException(sprintf('A type name may not be empty'));
-        } elseif ((int) $type) {
+        }
+
+        if ((int) $type) {
             throw new \DomainException(sprintf('A type name may not start with a number. Found %s', $type));
-        } elseif (in_array($type, static::getValidTypes(), true)) {
+        }
+
+        if (in_array($type, static::getValidTypes(), true)) {
             // Scalar.
             return $type;
-        } elseif ('\\' === $type[0] || ctype_upper($type[0])) {
+        }
+
+        if ('\\' === $type[0] || ctype_upper($type[0])) {
             // Class.
             return $type;
-        } else {
-            throw new \DomainException(sprintf('The type %s is not supported for code generation', $type));
         }
+
+        throw new \DomainException(sprintf('The type %s is not supported for code generation', $type));
     }
 
     /**
@@ -447,7 +461,7 @@ class PropertyInformation implements PropertyInformationInterface
             throw new \InvalidArgumentException(sprintf('$type is not of type string but of %s', gettype($type)));
         } elseif ('' === $type) {
             $this->fully_qualified_type = '';
-        } elseif ((int)$type) {
+        } elseif ((int) $type) {
             throw new \DomainException(sprintf('A type name may not start with a number. Found %s', $type));
         } elseif ($type[0] === '\\') {
             $this->fully_qualified_type = $type;
@@ -654,7 +668,7 @@ class PropertyInformation implements PropertyInformationInterface
     /**
      * @see PropertyInformationInterface::isComplexType()
      *
-     * @return boolean
+     * @return bool
      */
     public function isComplexType()
     {
@@ -794,15 +808,15 @@ class PropertyInformation implements PropertyInformationInterface
     /**
      * @see PropertyInformationInterface::isNullable()
      *
-     * @return boolean|null
+     * @return bool|null
      */
     public function isNullable()
     {
         if (null === $this->nullable) {
             return null;
-        } else {
-            return $this->nullable || 'null' === strtolower($this->getDefault());
         }
+
+        return $this->nullable || 'null' === strtolower($this->getDefault() ?? '');
     }
 
     /**
@@ -820,7 +834,7 @@ class PropertyInformation implements PropertyInformationInterface
     /**
      * @see PropertyInformationInterface::isUnique()
      *
-     * @return boolean
+     * @return bool
      */
     public function isUnique()
     {

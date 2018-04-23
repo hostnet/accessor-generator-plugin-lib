@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator;
 
 use Composer\Composer;
@@ -18,7 +23,6 @@ use Symfony\Component\Console\Output\StreamOutput;
 
 /**
  * @covers \Hostnet\Component\AccessorGenerator\Plugin
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 class PluginTest extends TestCase
 {
@@ -46,7 +50,7 @@ class PluginTest extends TestCase
         self::assertSame(
             [
                 ScriptEvents::PRE_AUTOLOAD_DUMP  => ['onPreAutoloadDump', 20 ],
-                ScriptEvents::POST_AUTOLOAD_DUMP => ['onPostAutoloadDump', 5 ]
+                ScriptEvents::POST_AUTOLOAD_DUMP => ['onPostAutoloadDump', 5 ],
             ],
             Plugin::getSubscribedEvents()
         );
@@ -139,9 +143,9 @@ class PluginTest extends TestCase
             'accessor-generator' => [
                 'database.table.column' => [
                     'public-key' => 'public',
-                    'private-key' => 'secret'
-                ]
-            ]
+                    'private-key' => 'secret',
+                ],
+            ],
         ]);
 
         return $composer;

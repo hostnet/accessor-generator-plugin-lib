@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator;
 
 use Composer\Composer;
@@ -82,7 +87,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     {
         return [
             ScriptEvents::PRE_AUTOLOAD_DUMP  => ['onPreAutoloadDump', 20],
-            ScriptEvents::POST_AUTOLOAD_DUMP => ['onPostAutoloadDump', 5]
+            ScriptEvents::POST_AUTOLOAD_DUMP => ['onPostAutoloadDump', 5],
         ];
     }
 
@@ -122,9 +127,11 @@ class Plugin implements PluginInterface, EventSubscriberInterface
 
         foreach ($packages as $package) {
             /* @var $package PackageInterface */
-            if (array_key_exists(self::NAME, $package->getRequires())) {
-                $this->generateTraitForPackage($package);
+            if (!array_key_exists(self::NAME, $package->getRequires())) {
+                continue;
             }
+
+            $this->generateTraitForPackage($package);
         }
     }
 
@@ -149,10 +156,12 @@ class Plugin implements PluginInterface, EventSubscriberInterface
                     }
                 }
 
-                if ($generated_enum_classes && $this->io->isVeryVerbose()) {
-                    foreach ($generated_enum_classes as $generated_enum_class) {
-                        $this->io->write("    - Generated enumerator accessor for <info>$generated_enum_class</info>");
-                    }
+                if (!$generated_enum_classes || !$this->io->isVeryVerbose()) {
+                    continue;
+                }
+
+                foreach ($generated_enum_classes as $generated_enum_class) {
+                    $this->io->write("    - Generated enumerator accessor for <info>$generated_enum_class</info>");
                 }
             }
         }
@@ -181,9 +190,11 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         }
 
         foreach ($this->getFilesAndReflectionClassesFromPackage($package) as $filename => $reflection_class) {
-            if ($this->generator->writeTraitForClass($reflection_class) && $this->io->isVeryVerbose()) {
-                $this->io->write("  - generated trait for <info>$filename</info>");
+            if (!$this->generator->writeTraitForClass($reflection_class) || !$this->io->isVeryVerbose()) {
+                continue;
             }
+
+            $this->io->write("  - generated trait for <info>$filename</info>");
         }
 
         // At the end of generating the Traits for each package we need to write the KeyRegistry classes

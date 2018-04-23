@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Twig;
 
 use Doctrine\Common\Inflector\Inflector;
@@ -25,7 +30,6 @@ use Doctrine\Common\Inflector\Inflector;
  *
  * @see Inflector::classify
  * @see Inflector::singularize
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 class CodeGenerationExtension extends \Twig_Extension
 {
@@ -78,7 +82,7 @@ class CodeGenerationExtension extends \Twig_Extension
                 } catch (\InvalidArgumentException $e) {
                     throw new \Twig_Error_Runtime($e->getMessage(), null, null, $e);
                 }
-            })
+            }),
         ];
     }
 
@@ -105,7 +109,7 @@ class CodeGenerationExtension extends \Twig_Extension
         } elseif ($bits > $max_bits) {
             $bits = $max_bits;
         }
-        return (-1 << ($bits - 1));
+        return -1 << ($bits - 1);
     }
 
     /**
@@ -136,18 +140,20 @@ class CodeGenerationExtension extends \Twig_Extension
     {
         // Check input, to see if it is a valid numeric string with a decimal dot and not a
         // decimal comma or any other unwanted chars.
-        if (!is_numeric($input) || !preg_match('/[0-9]*\.?[0-9]+/', $input)) {
+        if (!is_numeric($input) || !preg_match('/[0-9]*\.?[0-9]+/', (string) $input)) {
             throw new \InvalidArgumentException('Input is not a number or numeric string');
         }
 
+        $input = (string) $input;
+
         // Check amount to see if it is of integer type.
-        if (!is_int($amount)) {
+        if (!\is_int($amount)) {
             throw new \InvalidArgumentException('Amount must be an integer value');
         }
 
         if ($amount > 0) {
             if (($loc = strpos($input, '.')) === false) {
-                $loc = strlen($input);
+                $loc = \strlen($input);
             } else {
                 $input = str_replace('.', '', $input);
             }
@@ -155,11 +161,11 @@ class CodeGenerationExtension extends \Twig_Extension
             $loc -= $amount;
             if ($loc > 0) {
                 return substr($input, 0, $loc) . '.' . substr($input, $loc);
-            } else {
-                return '0.' . str_repeat('0', abs($loc)) . $input;
             }
-        } else {
-            return $input;
+
+            return '0.' . str_repeat('0', abs($loc)) . $input;
         }
+
+        return $input;
     }
 }

@@ -1,11 +1,14 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Reflection;
 
 /**
  * Representation of a class property.
  * Full member of ReflectionClass.
- *
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 class ReflectionProperty
 {
@@ -21,7 +24,6 @@ class ReflectionProperty
     private $name        = '';
 
     /**
-     *
      * @param string          $name
      * @param int             $modifiers
      * @param string          $default
@@ -118,7 +120,7 @@ class ReflectionProperty
     /**
      * Returns true if this property is static, false otherwise.
      *
-     * @return boolean
+     * @return bool
      */
     public function isStatic()
     {
@@ -129,7 +131,7 @@ class ReflectionProperty
      * Returns true if this property is private, false otherwise. If true,
      * isProtected and isPublic will return false.
      *
-     * @return boolean
+     * @return bool
      */
     public function isPrivate()
     {
@@ -140,7 +142,7 @@ class ReflectionProperty
      * Returns true if this property is protected, false otherwise.  If true,
      * isPrivate and isPublic will return false.
      *
-     * @return boolean
+     * @return bool
      */
     public function isProtected()
     {
@@ -151,7 +153,7 @@ class ReflectionProperty
      * Returns true if this property is public, false otherwise. If true,
      * isPrivate and isProtected will return false.
      *
-     * @return boolean
+     * @return bool
      */
     public function isPublic()
     {
