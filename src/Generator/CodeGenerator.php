@@ -441,17 +441,20 @@ class CodeGenerator implements CodeGeneratorInterface
             return;
         }
 
-        $first_part = strstr($type, '\\', true);
-        if ($first_part) {
+        if (false !== ($first_part = strstr($type, '\\', true))) {
             // Sub namespace;
             $imports[$first_part] = $namespace . '\\' . $first_part;
-        } else {
-            // Inside own namespace
-            if (! self::getPlainImportIfExists($type, $imports)) {
-                // Not already imported
-                $imports[] = $namespace . '\\' . $type;
-            }
+
+            return;
         }
+
+        // Inside own namespace
+        if (self::getPlainImportIfExists($type, $imports)) {
+            return;
+        }
+
+        // Not already imported
+        $imports[] = $namespace . '\\' . $type;
     }
 
     /**
