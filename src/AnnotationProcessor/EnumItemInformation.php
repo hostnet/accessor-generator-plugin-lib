@@ -1,4 +1,8 @@
 <?php
+/**
+ * @copyright 2018 Hostnet B.V.
+ */
+declare(strict_types=1);
 
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
@@ -51,11 +55,10 @@ class EnumItemInformation
 
         if (! array_key_exists($type, self::TYPE_MAP)) {
             throw new \InvalidArgumentException(sprintf(
-                    'The name of the constant "%s" is not prefixed with a valid type string (%s)',
-                    $constant->name,
-                    implode(', ', array_keys(self::TYPE_MAP))
-                )
-            );
+                'The name of the constant "%s" is not prefixed with a valid type string (%s)',
+                $constant->name,
+                implode(', ', array_keys(self::TYPE_MAP))
+            ));
         }
 
         $this->name         = substr($constant->name, 2);

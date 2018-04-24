@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Annotation;
 
 use PHPUnit\Framework\TestCase;
@@ -67,7 +72,7 @@ class GenerateTest extends TestCase
             [Generate::VISIBILITY_PRIVATE, Generate::VISIBILITY_PRIVATE],
             [Generate::VISIBILITY_NONE, Generate::VISIBILITY_NONE],
             [true, Generate::VISIBILITY_PUBLIC],
-            [false, Generate::VISIBILITY_NONE]
+            [false, Generate::VISIBILITY_NONE],
         ];
     }
 

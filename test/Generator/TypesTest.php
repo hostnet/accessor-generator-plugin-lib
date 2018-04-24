@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Doctrine\Common\Util\Inflector;
@@ -7,7 +12,6 @@ use PHPUnit\Framework\TestCase;
 
 class TypesTest extends TestCase
 {
-
     public function typeProvider()
     {
         $resource = fopen('data://text/plain,', 'r');
@@ -21,8 +25,8 @@ class TypesTest extends TestCase
             ['smallint',           32767                          ],
             ['smallint',           32768, \DomainException::class ],
             ['smallint',          -32769, \DomainException::class ],
-            ['integer',       2147483647,                         ],
-            ['integer',      -2147483648,                         ],
+            ['integer',       2147483647                         ],
+            ['integer',      -2147483648                         ],
             ['integer',       2147483648, \DomainException::class ],
             ['integer',      -2147483649, \DomainException::class ],
             ['bigint',       PHP_INT_MAX                          ],
@@ -113,10 +117,10 @@ class TypesTest extends TestCase
         $range_float = 1 << (PHP_INT_SIZE === 8 ? 53 : 24);
 
         $values = [
-            ['smallint', 01,                                                    ],
-            ['smallint', 0x1,                                                   ],
-            ['integer',  01,                                                    ],
-            ['integer',  0x1,                                                   ],
+            ['smallint', 01                                                    ],
+            ['smallint', 0x1                                                   ],
+            ['integer',  01                                                    ],
+            ['integer',  0x1                                                   ],
             ['integer',  '10',                  \InvalidArgumentException::class],
             ['integer',  1.2,                   \InvalidArgumentException::class],
             ['integer',  1.0,                   \InvalidArgumentException::class],
@@ -126,21 +130,21 @@ class TypesTest extends TestCase
             ['integer',  null,                  \InvalidArgumentException::class],
             ['integer',  [],                    \InvalidArgumentException::class],
             ['integer',  new \stdClass(),       \InvalidArgumentException::class],
-            ['bigint',   01,                                                    ],
-            ['bigint',   0x1,                                                   ],
+            ['bigint',   01                                                    ],
+            ['bigint',   0x1                                                   ],
             ['bigint',   1.0,                   \InvalidArgumentException::class],
             ['bigint',   $range_float - 1.0,    \InvalidArgumentException::class],
-            ['bigint',   (float)($range_float), \DomainException::class         ],
-            ['decimal',  10.10,                                                 ],
-            ['decimal',  10.100000,                                             ],
+            ['bigint',   (float) ($range_float), \DomainException::class         ],
+            ['decimal',  10.10                                                 ],
+            ['decimal',  10.100000                                             ],
             ['decimal',  '10.10',               \DomainException::class         ],
-            ['decimal',  123456789,                                             ],
+            ['decimal',  123456789                                             ],
             ['decimal',  1234567890,            \DomainException::class         ],
             ['decimal',  12345678901.0,         \DomainException::class         ],
             ['decimal',  '12345678901',         \DomainException::class         ],
             ['decimal',  '12345678a901',        \InvalidArgumentException::class],
-            ['decimal',  01,                                                    ],
-            ['decimal',  0x1,                                                   ],
+            ['decimal',  01                                                    ],
+            ['decimal',  0x1                                                   ],
             ['string',   str_repeat('a', 256),  \LengthException::class         ],
         ];
 
@@ -148,21 +152,21 @@ class TypesTest extends TestCase
         $class = new \ReflectionClass(Types::class);
         foreach ($class->getProperties() as $property) {
             $setter = 'set' . Inflector::classify($property->getName());
-            if (method_exists(Types::class, $setter)) {
-                // Too many parameters
-                $values[] = [$property->getName(), new \DateTime(), \BadMethodCallException::class, 1];
-
-                // Wrong type gives other Errors since PHP 7
-                if (stripos($property->getName(), 'date') === false
-                || PHP_MAJOR_VERSION < 7
-                ) {
-                    $error_class = \InvalidArgumentException::class;
-                } else {
-                    $error_class = \TypeError::class;
-                }
-                $invalid_type = $property->getName() === 'object' ? null : new \stdClass();
-                $values[]     = [$property->getName(), $invalid_type, $error_class];
+            if (!method_exists(Types::class, $setter)) {
+                continue;
             }
+
+            // Too many parameters
+            $values[] = [$property->getName(), new \DateTime(), \BadMethodCallException::class, 1];
+
+            // Wrong type gives other Errors since PHP 7
+            if (stripos($property->getName(), 'date') === false || PHP_MAJOR_VERSION < 7) {
+                $error_class = \InvalidArgumentException::class;
+            } else {
+                $error_class = \TypeError::class;
+            }
+            $invalid_type = $property->getName() === 'object' ? null : new \stdClass();
+            $values[]     = [$property->getName(), $invalid_type, $error_class];
         }
 
         return array_merge($this->typeProvider(), $values);

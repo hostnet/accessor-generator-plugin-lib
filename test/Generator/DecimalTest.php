@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Doctrine\Common\Util\Inflector;
@@ -16,49 +21,49 @@ class DecimalTest extends TestCase
         $on_value  = sprintf('%s.%s', str_repeat('2', $before), str_repeat('3', $scale));
 
 
-        $i = bccomp($on_value, PHP_INT_MAX, 0) <= 0;
+        $i = bccomp($on_value, (string) PHP_INT_MAX, 0) <= 0;
         $f = $precision < 30; // arbirary boundary, only fit fore the used test values
 
         //Scale outside boundary, precision outside boundary.
         $case                             = $property . ' scale outside boundary, precision outside boundary';
         $values[$case . ' (string)']      = [$scale, $precision, '4' . $on_value . '0',          $exception];
-        $f && $values[$case . ' (float)'] = [$scale, $precision, (float)('4' . $on_value . '4'), $exception];
+        $f && $values[$case . ' (float)'] = [$scale, $precision, (float) ('4' . $on_value . '4'), $exception];
 
         //Scale outside boundary, precision on boundary.
         $case                        = $property . ' scale outside boundary, precision on boundary';
-        $values[$case . ' (string)'] = [$scale, $precision, $on_value .'0', $exception];
+        $values[$case . ' (string)'] = [$scale, $precision, $on_value . '0', $exception];
 
         //Scale on boundary, precision outside boundary.
         $case                             = $property . ' scale on boundary, precision outside boundary';
         $values[$case . ' (string)']      = [$scale, $precision, '4' . $on_value,          $exception];
-        $f && $values[$case . ' (float)'] = [$scale, $precision, (float)('4' . $on_value), $exception];
-        $i && $values[$case . ' (int)']   = [$scale, $precision, (int)('4' . $on_value),   $exception];
+        $f && $values[$case . ' (float)'] = [$scale, $precision, (float) ('4' . $on_value), $exception];
+        $i && $values[$case . ' (int)']   = [$scale, $precision, (int) ('4' . $on_value),   $exception];
 
         //Scale on boundary, precision on boundary.
         $case                             = $property . ' scale on boundary, precision on boundary';
         $values[$case . ' (string)']      = [$scale, $precision, $on_value       ];
-        $f && $values[$case . ' (float)'] = [$scale, $precision, (float)$on_value];
-        $i && $values[$case . ' (int)']   = [$scale, $precision, (int)($on_value)];
+        $f && $values[$case . ' (float)'] = [$scale, $precision, (float) $on_value];
+        $i && $values[$case . ' (int)']   = [$scale, $precision, (int) ($on_value)];
 
         if ($scale > 0) {
             //Scale within boundary, precision outside boundary.
             $case                             = $property . ' scale within boundary, precision outside boundary';
             $value                            = substr($on_value, 0, -1);
             $values[$case . ' (string)']      = [$scale, $precision,  '4' . $value,         $exception];
-            $f && $values[$case . ' (float)'] = [$scale, $precision, (float)('4' . $value), $exception];
+            $f && $values[$case . ' (float)'] = [$scale, $precision, (float) ('4' . $value), $exception];
 
             //Scale within boundary, precision on boundary.
             $case                             = $property . ' scale within boundary, precision on boundary';
             $value                            = substr($on_value, 0, -1);
             $values[$case . ' (string)']      = [$scale, $precision, $value       ];
-            $f && $values[$case . ' (float)'] = [$scale, $precision, (float)$value];
+            $f && $values[$case . ' (float)'] = [$scale, $precision, (float) $value];
 
             if ($before > 0) {
                 //Scale within boundary, precision within boundary.
                 $case                             = $property . ' scale within boundary, precision within boundary';
                 $value                            = substr($on_value, 1, -1);
                 $values[$case . ' (string)']      = [$scale, $precision, $value       ];
-                $f && $values[$case . ' (float)'] = [$scale, $precision, (float)$value];
+                $f && $values[$case . ' (float)'] = [$scale, $precision, (float) $value];
             }
         }
 
@@ -66,28 +71,28 @@ class DecimalTest extends TestCase
             //Scale outside boundary, precision within boundary.
             $case                        = $property . ' scale outside boundary, precision within boundary';
             $value                       = substr($on_value, 1);
-            $values[$case . ' (string)'] = [$scale, $precision, $value .'0', $exception];
+            $values[$case . ' (string)'] = [$scale, $precision, $value . '0', $exception];
 
             //Scale on boundary, precision within boundary.
             $case                             = $property . ' scale on boundary, precision within boundary';
             $value                            = substr($on_value, 1);
             $values[$case . ' (string)']      = [$scale, $precision, $value       ];
-            $f && $values[$case . ' (float)'] = [$scale, $precision, (float)$value];
-            $values[$case . ' (int)']         = [$scale, $precision, (int)$value  ];
+            $f && $values[$case . ' (float)'] = [$scale, $precision, (float) $value];
+            $values[$case . ' (int)']         = [$scale, $precision, (int) $value  ];
         }
 
         $values[$property . ' wrong type'] = [
             $scale,
             $precision,
             new \stdClass(),
-            \InvalidArgumentException::class
+            \InvalidArgumentException::class,
         ];
 
         $values[$property . ' non numeric string'] = [
             $scale,
             $precision,
             'a',
-            \InvalidArgumentException::class
+            \InvalidArgumentException::class,
         ];
 
         $values[$property . ' too many params'] = [
@@ -95,7 +100,7 @@ class DecimalTest extends TestCase
             $precision,
             1,
             \BadMethodCallException::class,
-            1
+            1,
         ];
 
         return $values;

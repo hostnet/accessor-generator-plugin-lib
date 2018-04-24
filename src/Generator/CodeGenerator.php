@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Doctrine\Common\Annotations\DocParser;
@@ -9,6 +14,7 @@ use Hostnet\Component\AccessorGenerator\AnnotationProcessor\EnumItemInformation;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\GenerateAnnotationProcessor;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformation;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformationInterface;
+use Hostnet\Component\AccessorGenerator\Collection\ImmutableCollection;
 use Hostnet\Component\AccessorGenerator\Enum\EnumeratorCompatibleEntityInterface;
 use Hostnet\Component\AccessorGenerator\Generator\Exception\ReferencedClassNotFoundException;
 use Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException;
@@ -144,9 +150,9 @@ class CodeGenerator implements CodeGeneratorInterface
             $fs->dumpFile($filename, $data);
 
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     public function writeEnumeratorAccessorsForClass(ReflectionClass $class): array
@@ -323,7 +329,6 @@ class CodeGenerator implements CodeGeneratorInterface
         $imports  = $metadata['imports'];
 
         foreach ($metadata['properties'] as $info) {
-
             // Check if we have anything to do. If not, continue to the next
             // property.
             if (! $info->willGenerateAdd()
@@ -355,9 +360,7 @@ class CodeGenerator implements CodeGeneratorInterface
                     $this->key_registry_data[$dir_name] = [];
                 }
 
-                $keys = isset($this->encryption_aliases[$info->getEncryptionAlias()])
-                    ? $this->encryption_aliases[$info->getEncryptionAlias()]
-                    : null;
+                $keys = $this->encryption_aliases[$info->getEncryptionAlias()] ?? null;
 
                 $this->key_registry_data[$dir_name]['namespace']                         = $class->getNamespace();
                 $this->key_registry_data[$dir_name]['keys'][$info->getEncryptionAlias()] = $keys;
@@ -366,15 +369,17 @@ class CodeGenerator implements CodeGeneratorInterface
             $code .= $this->generateAccessors($info);
 
             // Detected that the ImmutableCollection is used and should be imported.
-            if ($info->willGenerateGet() && $info->isCollection()) {
-                $add_collection_import = true;
+            if (!$info->willGenerateGet() || !$info->isCollection()) {
+                continue;
             }
+
+            $add_collection_import = true;
         }
 
         // Add import for ImmutableCollection if we generate any functions that
         // make use of this collection wrapper.
-        if ($add_collection_import) {
-            $imports[] = 'Hostnet\Component\AccessorGenerator\Collection\ImmutableCollection';
+        if ($add_collection_import && !\in_array(ImmutableCollection::class, $imports, true)) {
+            $imports[] = ImmutableCollection::class;
         }
 
         if ($code) {
@@ -418,10 +423,11 @@ class CodeGenerator implements CodeGeneratorInterface
             }
         }
 
-        $default = strstr($info->getDefault(), '::', true);
-        if ($default) {
-            self::addImportForType($default, $info->getNamespace(), $imports);
+        if (false === ($default = strstr($info->getDefault(), '::', true))) {
+            return;
         }
+
+        self::addImportForType($default, $info->getNamespace(), $imports);
     }
 
     /**
@@ -431,19 +437,24 @@ class CodeGenerator implements CodeGeneratorInterface
      */
     private static function addImportForType($type, $namespace, array &$imports)
     {
-        if (! self::isAliased($type, $imports)) {
-            $first_part = strstr($type, '\\', true);
-            if ($first_part) {
-                // Sub namespace;
-                $imports[$first_part] = $namespace . '\\' . $first_part;
-            } else {
-                // Inside own namespace
-                if (! self::getPlainImportIfExists($type, $imports)) {
-                    // Not already imported
-                    $imports[] = $namespace . '\\' . $type;
-                }
-            }
+        if (self::isAliased($type, $imports)) {
+            return;
         }
+
+        if (false !== ($first_part = strstr($type, '\\', true))) {
+            // Sub namespace;
+            $imports[$first_part] = $namespace . '\\' . $first_part;
+
+            return;
+        }
+
+        // Inside own namespace
+        if (self::getPlainImportIfExists($type, $imports)) {
+            return;
+        }
+
+        // Not already imported
+        $imports[] = $namespace . '\\' . $type;
     }
 
     /**
@@ -555,7 +566,7 @@ class CodeGenerator implements CodeGeneratorInterface
                     'info'          => $info,
                     'enum_class'    => $enumerator->getEnumeratorClass(),
                     'enum_property' => $property,
-                    'add_property'  => empty($enumerator->getPropertyName())
+                    'add_property'  => empty($enumerator->getPropertyName()),
                 ]);
             }
         }
@@ -576,12 +587,12 @@ class CodeGenerator implements CodeGeneratorInterface
 
             // Render the get/is method.
             $code .= $this->get->render(
-                    [
+                [
                         'property'     => $info,
                         'getter'       => $getter,
                         'PHP_INT_SIZE' => PHP_INT_SIZE,
                     ]
-                ) . PHP_EOL;
+            ) . PHP_EOL;
         }
 
         // Render add/remove methods for collections and set methods for
@@ -599,11 +610,11 @@ class CodeGenerator implements CodeGeneratorInterface
             // No collection thus, generate a set method.
             if ($info->willGenerateSet()) {
                 $code .= $this->set->render(
-                        [
+                    [
                             'property'     => $info,
                             'PHP_INT_SIZE' => PHP_INT_SIZE,
                         ]
-                    ) . PHP_EOL;
+                ) . PHP_EOL;
             }
         }
 
@@ -628,7 +639,7 @@ class CodeGenerator implements CodeGeneratorInterface
                 'keys'      => $data['keys'],
                 'base_path' => getcwd(),
                 'username'  => get_current_user(),
-                'hostname'  => gethostname()
+                'hostname'  => gethostname(),
             ]);
 
             $fs->mkdir($path);
@@ -670,13 +681,16 @@ class CodeGenerator implements CodeGeneratorInterface
             $value = current($imports);
             $next  = next($imports);
 
-            if ($value !== $next || (is_string($key) && $key !== key($imports))) {
-                if ($key) {
-                    $unique_imports[$key] = $value;
-                } else {
-                    $unique_imports[] = $value;
-                }
+            if ($value === $next && $key === key($imports)) {
+                continue;
             }
+
+            if ($key) {
+                $unique_imports[$key] = $value;
+                continue;
+            }
+
+            $unique_imports[] = $value;
         } while ($next !== false);
 
         return $unique_imports;

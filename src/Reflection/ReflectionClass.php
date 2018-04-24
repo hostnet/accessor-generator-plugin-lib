@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Reflection;
 
 use Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException;
@@ -147,9 +152,9 @@ class ReflectionClass
         // Return the name if a class was found or throw an exception.
         if ($this->name) {
             return $this->name;
-        } else {
-            throw new ClassDefinitionNotFoundException('No class is found inside ' . $this->filename . '.');
         }
+
+        throw new ClassDefinitionNotFoundException('No class is found inside ' . $this->filename . '.');
     }
 
     /**
@@ -308,15 +313,17 @@ class ReflectionClass
                 // otherwise final private $foo would be parsed and private final $bar
                 // would not be parsed.
                 $var_loc = $tokens->next($vis_loc, [T_COMMENT, T_WHITESPACE, T_STATIC, T_FINAL]);
-                if ($tokens->type($var_loc) === T_VARIABLE) {
-                    $doc_comment = $this->parseDocComment($vis_loc);           // doc comment
-                    $modifiers   = $this->parsePropertyModifiers($vis_loc);    // public, protected, private, static
-                    $name        = substr($tokens->value($var_loc), 1);  // property name
-                    $default     = $this->parseDefaultValue($var_loc);         // default value
-                    $property    = new ReflectionProperty($name, $modifiers, $default, $doc_comment, $this);
-
-                    $this->properties[] = $property;
+                if ($tokens->type($var_loc) !== T_VARIABLE) {
+                    continue;
                 }
+
+                $doc_comment = $this->parseDocComment($vis_loc);           // doc comment
+                $modifiers   = $this->parsePropertyModifiers($vis_loc);    // public, protected, private, static
+                $name        = substr($tokens->value($var_loc), 1);  // property name
+                $default     = $this->parseDefaultValue($var_loc);         // default value
+                $property    = new ReflectionProperty($name, $modifiers, $default, $doc_comment, $this);
+
+                $this->properties[] = $property;
             }
         }
 
@@ -342,7 +349,6 @@ class ReflectionClass
     }
 
     /**
-     *
      * @param  int $loc location of the T_USE token
      * @return array|null   [string|null $alias, string $namespace]
      * @throws \OutOfBoundsException
@@ -378,7 +384,7 @@ class ReflectionClass
         $ns     = '';
 
         if (in_array($this->tokens->type($loc), [T_FUNCTION, T_CONST])) {
-            $ns .= $this->tokens->value($loc).' ';
+            $ns .= $this->tokens->value($loc) . ' ';
             $loc = $tokens->next($loc);
         }
 
@@ -413,9 +419,9 @@ class ReflectionClass
             $doc_comment = preg_replace('/^[ \t]*\*/m', ' *', $doc_comment);
 
             return $doc_comment;
-        } else {
-            return '';
         }
+
+        return '';
     }
 
     /**
@@ -594,9 +600,9 @@ class ReflectionClass
             $string = substr($tokens->value($loc), 0, -1);
             if ($type === '\'') {
                 return '\'' . implode('\' . "\n" . \'', explode("\n", $string)) . '\'';
-            } else {
-                return '"' . str_replace("\n", '\n', $string) . '"';
             }
+
+            return '"' . str_replace("\n", '\n', $string) . '"';
         }
 
         return null;

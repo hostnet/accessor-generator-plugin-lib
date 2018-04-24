@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Annotation;
 
 use Doctrine\Common\Annotations\Annotation\Enum;
@@ -13,7 +18,6 @@ use Doctrine\Common\Annotations\Annotation\Enum;
  * @Annotation
  * @Target("PROPERTY")
  * @see http://doctrine-common.readthedocs.org/en/latest/reference/annotations.html
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 class Generate
 {
@@ -286,8 +290,10 @@ class Generate
         if (null === $this->add) {
             $this->add = $visibility;
         }
-        if (null === $this->remove) {
-            $this->remove = $visibility;
+        if (null !== $this->remove) {
+            return;
         }
+
+        $this->remove = $visibility;
     }
 }

@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
 use Doctrine\Common\Util\Inflector;
@@ -46,7 +51,7 @@ class EnumItemInformationTest extends TestCase
             [self::S_TEST_CONSTANT, 'string'],
             [self::I_TEST_CONSTANT, 'int'],
             [self::F_TEST_CONSTANT, 'float'],
-            [self::B_TEST_CONSTANT, 'bool']
+            [self::B_TEST_CONSTANT, 'bool'],
         ];
     }
 
@@ -58,7 +63,7 @@ class EnumItemInformationTest extends TestCase
      */
     public function testConstants($name, $type)
     {
-        $reflector = new \ReflectionClass(EnumItemInformationTest::class);
+        $reflector = new \ReflectionClass(self::class);
         $constant  = $reflector->getReflectionConstant($name);
         $info      = new EnumItemInformation($constant);
 
@@ -67,7 +72,7 @@ class EnumItemInformationTest extends TestCase
         self::assertEquals($name, $info->getConstName());
         self::assertEquals(substr($name, 2), $info->getName());
         self::assertEquals(Inflector::classify(strtolower(substr($name, 2))), $info->getMethodName());
-        self::assertEquals(EnumItemInformationTest::class, $info->getEnumClass());
+        self::assertEquals(self::class, $info->getEnumClass());
     }
 
     /**
@@ -76,7 +81,7 @@ class EnumItemInformationTest extends TestCase
      */
     public function testBrokenConstant()
     {
-        $reflector = new \ReflectionClass(EnumItemInformationTest::class);
+        $reflector = new \ReflectionClass(self::class);
         $constant  = $reflector->getReflectionConstant('BROKEN_CONSTANT');
         new EnumItemInformation($constant);
     }

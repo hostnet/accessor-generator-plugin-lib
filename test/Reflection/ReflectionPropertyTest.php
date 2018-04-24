@@ -1,11 +1,15 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Reflection;
 
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 class ReflectionPropertyTest extends TestCase
 {

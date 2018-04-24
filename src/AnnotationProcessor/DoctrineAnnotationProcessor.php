@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
 use Doctrine\DBAL\Types\Type;
@@ -123,9 +128,11 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
         }
 
         // Set field name for index on this collection.
-        if (property_exists($annotation, 'indexBy') && $annotation->indexBy) {
-            $information->setIndex($annotation->indexBy);
+        if (!property_exists($annotation, 'indexBy') || !$annotation->indexBy) {
+            return;
         }
+
+        $information->setIndex($annotation->indexBy);
     }
 
     /**
@@ -205,27 +212,41 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
     {
         if ($type === Type::BOOLEAN) {
             return 'boolean';
-        } elseif ($type === Type::SMALLINT || $type === Type::BIGINT || $type === Type::INTEGER) {
+        }
+
+        if ($type === Type::SMALLINT || $type === Type::BIGINT || $type === Type::INTEGER) {
             return 'integer';
-        } elseif ($type === Type::FLOAT) {
+        }
+
+        if ($type === Type::FLOAT) {
             return 'float';
-        } elseif ($type === Type::TEXT || $type === Type::GUID || $type === Type::STRING || $type === Type::DECIMAL) {
+        }
+
+        if ($type === Type::TEXT || $type === Type::GUID || $type === Type::STRING || $type === Type::DECIMAL) {
             return 'string';
-        } elseif ($type === Type::BLOB /* binary will be added in doctrine 2.5 */) {
+        }
+
+        if ($type === Type::BLOB /* binary will be added in doctrine 2.5 */) {
             return 'resource';
-        } elseif (in_array(
+        }
+
+        if (in_array(
             $type,
             [Type::DATETIME, Type::DATETIMETZ, Type::DATE, Type::TIME, self::ZEROED_DATE_TIME],
             true
         )) {
             return '\\' . \DateTime::class;
-        } elseif (in_array($type, [Type::SIMPLE_ARRAY, Type::JSON_ARRAY, Type::TARRAY, self::YAML_ARRAY], true)) {
-            return 'array';
-        } elseif ($type === Type::OBJECT) {
-            return 'object';
-        } else {
-            return $type;
         }
+
+        if (in_array($type, [Type::SIMPLE_ARRAY, Type::JSON_ARRAY, Type::TARRAY, self::YAML_ARRAY], true)) {
+            return 'array';
+        }
+
+        if ($type === Type::OBJECT) {
+            return 'object';
+        }
+
+        return $type;
     }
 
     /**
@@ -245,9 +266,9 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
     {
         if (strpos($type, '\\') > 0) {
             return '\\' . $type;
-        } else {
-            return $type;
         }
+
+        return $type;
     }
 
     /**
@@ -268,12 +289,16 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
     {
         if ($type === 'bool' || $type === 'boolean') {
             return 1;
-        } elseif ($type === 'smallint') {
-            return 16;
-        } elseif ($type === 'bigint') {
-            return 64;
-        } else {
-            return 32;
         }
+
+        if ($type === 'smallint') {
+            return 16;
+        }
+
+        if ($type === 'bigint') {
+            return 64;
+        }
+
+        return 32;
     }
 }

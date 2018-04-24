@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Twig;
 
 /**
@@ -16,8 +21,6 @@ namespace Hostnet\Component\AccessorGenerator\Twig;
  *   lines:   A single node if there is only a text or a print node inside of
  *            the perline block, otherwise a Twig_Node with sub nodes of all
  *            the nodes between the prefix and/or postfix.
- *
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 class PerLineNode extends \Twig_Node
 {

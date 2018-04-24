@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Reflection;
 
 use PHPUnit\Framework\TestCase;
@@ -8,7 +13,6 @@ use PHPUnit\Framework\TestCase;
  */
 class ReflectionClassTest extends TestCase
 {
-
     public function fileProvider()
     {
         return [
@@ -149,10 +153,10 @@ class ReflectionClassTest extends TestCase
                 'UseFunction',
                 'ThisNamespace',
                 [
-                    'const ThisNamespace\HELLO',
+                    0        => 'const ThisNamespace\HELLO',
+                    1        => 'function sprintf',
                     'kaboom' => 'function ThisNamespace\destory',
                     'HALLO'  => 'const ThisNamespace\HELLO',
-                    'function sprintf',
                 ],
                 [],
             ],
@@ -199,7 +203,7 @@ class ReflectionClassTest extends TestCase
         array_walk(
             $reflected_properties,
             function (&$item) {
-                $item = (string)$item;
+                $item = (string) $item;
             }
         );
 

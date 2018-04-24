@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Doctrine\Common\Collections\Collection;
@@ -6,12 +11,8 @@ use Hostnet\Component\AccessorGenerator\Generator\fixtures\Actor;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
- */
 class ActorTest extends TestCase
 {
-
     /**
      * @expectedException BadMethodCallException
      */

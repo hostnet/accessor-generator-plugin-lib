@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
 use Doctrine\DBAL\Types\Type;
@@ -18,7 +23,6 @@ use PHPUnit\Framework\TestCase;
  */
 class DoctrineAnnotationProcessorTest extends TestCase
 {
-
     /**
      * @var PropertyInformation
      */

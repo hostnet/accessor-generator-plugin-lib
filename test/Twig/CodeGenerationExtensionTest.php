@@ -1,11 +1,15 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Twig;
 
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Hostnet\Component\AccessorGenerator\Twig\CodeGenerationExtension
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 class CodeGenerationExtensionTest extends TestCase
 {
@@ -19,7 +23,7 @@ class CodeGenerationExtensionTest extends TestCase
      * @param array $data
      * @param string $dataName
      */
-    public function __construct($name = null, array $data = array(), $data_name = '')
+    public function __construct($name = null, array $data = [], $data_name = '')
     {
         // Call Parent constructor
         parent::__construct($name, $data, $data_name);

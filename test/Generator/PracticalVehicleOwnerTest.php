@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2016-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Bicycle;
@@ -29,7 +34,6 @@ class PracticalVehicleOwnerTest extends TestCase
      */
     public function testAddWrongVehicle()
     {
-
         $owner = new PracticalVehicleOwner();
         $owner->addVehicle($this->prophesize(VehicleInterface::class)->reveal());
     }

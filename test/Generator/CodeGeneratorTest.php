@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Annotation\Enumerator;
@@ -46,9 +51,9 @@ class CodeGeneratorTest extends TestCase
             ->getIterator();
 
         $generator = $this->getGenerator();
-        foreach ($files as $filename) {
+        foreach ($files as $file) {
             // Read class information;
-            $class = new ReflectionClass($filename);
+            $class = new ReflectionClass($file->getRealPath());
 
             // Generate the accessor methods trait.
             $generator->writeTraitForClass($class);

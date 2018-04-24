@@ -1,12 +1,14 @@
 <?php
+/**
+ * @copyright 2015-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Comment;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
- */
 class CommentTest extends TestCase
 {
     public function testGetCol()

@@ -1,4 +1,9 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
+
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
 use Doctrine\ORM\Mapping\Column;
@@ -9,7 +14,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Hostnet\Component\AccessorGenerator\AnnotationProcessor\GenerateAnnotationProcessor
- * @author Hidde Boomsma <hboomsma@hostnet.nl>
  */
 class GenerateAnnotationProcessorTest extends TestCase
 {
@@ -99,7 +103,7 @@ class GenerateAnnotationProcessorTest extends TestCase
                 self::NO_ADD,
                 self::NO_REMOVE,
                 null,
-                'database.table.column'
+                'database.table.column',
             ],
         ];
     }
@@ -131,10 +135,12 @@ class GenerateAnnotationProcessorTest extends TestCase
         self::assertSame($encryption, $information->getEncryptionAlias());
 
         // If $set, is false we wil not generate a add method and remove method.
-        if ($set === false) {
-            self::assertFalse($information->willGenerateAdd());
-            self::assertFalse($information->willGenerateRemove());
+        if ($set !== false) {
+            return;
         }
+
+        self::assertFalse($information->willGenerateAdd());
+        self::assertFalse($information->willGenerateRemove());
     }
 
     public function testEnumeratorVisibilities()
