@@ -238,7 +238,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
             return '\\' . \DateTime::class;
         }
 
-        if (in_array($type, [Type::SIMPLE_ARRAY, Type::JSON_ARRAY, Type::TARRAY, self::YAML_ARRAY], true)) {
+        if (in_array($type, [Type::SIMPLE_ARRAY, Type::JSON_ARRAY, Type::JSON, Type::TARRAY, self::YAML_ARRAY], true)) {
             return 'array';
         }
 

@@ -271,6 +271,7 @@ class DoctrineAnnotationProcessorTest extends TestCase
             [DoctrineAnnotationProcessor::ZEROED_DATE_TIME, '\\DateTime'],
             ['array',      'array'],
             ['json_array', 'array'],
+            ['json',       'array'],
             ['object',     'object'],
             ['double',     null,  \DomainException::class],
             ['bool',       null,  \DomainException::class],
