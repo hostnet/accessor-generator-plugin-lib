@@ -19,7 +19,7 @@ trait StudentMethodsTrait
      *
      * @return StudentInterface
      */
-    public function getStudent()
+    public function getStudent(): StudentInterface
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(

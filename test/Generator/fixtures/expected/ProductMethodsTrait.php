@@ -18,7 +18,7 @@ trait ProductMethodsTrait
      *
      * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -56,7 +56,7 @@ trait ProductMethodsTrait
      *
      * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Period
      */
-    public function getDuration()
+    public function getDuration(): \Hostnet\Component\AccessorGenerator\Generator\fixtures\Period
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -82,7 +82,7 @@ trait ProductMethodsTrait
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -114,7 +114,7 @@ trait ProductMethodsTrait
      *
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -146,7 +146,7 @@ trait ProductMethodsTrait
      *
      * @return string
      */
-    public function getSystemName()
+    public function getSystemName(): string
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -218,7 +218,7 @@ trait ProductMethodsTrait
      *
      * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Attribute[]|ImmutableCollection
      */
-    public function getAttributes()
+    public function getAttributes(): iterable
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(

@@ -21,7 +21,7 @@ trait UseFunctionMethodsTrait
      *
      * @return string
      */
-    public function getCount()
+    public function getCount(): string
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(

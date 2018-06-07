@@ -177,9 +177,9 @@ class ProductTest extends TestCase
     public function testGetDuration()
     {
         $duration = new Period();
-        $duration = new \ReflectionProperty(Product::class, 'duration');
-        $duration->setAccessible(true);
-        $duration->setValue($this->product, $duration);
+        $property = new \ReflectionProperty(Product::class, 'duration');
+        $property->setAccessible(true);
+        $property->setValue($this->product, $duration);
 
         self::assertSame($duration, $this->product->getDuration());
     }

@@ -14,9 +14,9 @@ trait CommentMethodsTrait
      *
      * @throws \BadMethodCallException
      *
-     * @return string
+     * @return string|null
      */
-    public function getCol()
+    public function getCol(): ?string
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(

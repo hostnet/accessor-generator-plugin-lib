@@ -17,7 +17,7 @@ trait TypesMethodsTrait
      *
      * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -49,7 +49,7 @@ trait TypesMethodsTrait
      *
      * @return int
      */
-    public function getSmallint()
+    public function getSmallint(): int
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -134,7 +134,7 @@ trait TypesMethodsTrait
      *
      * @return int
      */
-    public function getInteger()
+    public function getInteger(): int
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -219,7 +219,7 @@ trait TypesMethodsTrait
      *
      * @return int
      */
-    public function getBigint()
+    public function getBigint(): int
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -312,7 +312,7 @@ trait TypesMethodsTrait
      *
      * @return string
      */
-    public function getDecimal()
+    public function getDecimal(): string
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -421,7 +421,7 @@ trait TypesMethodsTrait
      *
      * @return float
      */
-    public function getFloat()
+    public function getFloat(): float
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -484,7 +484,7 @@ trait TypesMethodsTrait
      *
      * @return string
      */
-    public function getString()
+    public function getString(): string
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -557,7 +557,7 @@ trait TypesMethodsTrait
      *
      * @return string
      */
-    public function getText()
+    public function getText(): string
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -625,7 +625,7 @@ trait TypesMethodsTrait
      *
      * @return string
      */
-    public function getGuid()
+    public function getGuid(): string
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -756,7 +756,7 @@ trait TypesMethodsTrait
      *
      * @return bool
      */
-    public function isBoolean()
+    public function isBoolean(): bool
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -819,7 +819,7 @@ trait TypesMethodsTrait
      *
      * @return bool
      */
-    public function isThisBoolean()
+    public function isThisBoolean(): bool
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -882,7 +882,7 @@ trait TypesMethodsTrait
      *
      * @return \DateTime
      */
-    public function getDate()
+    public function getDate(): \DateTime
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -938,7 +938,7 @@ trait TypesMethodsTrait
      *
      * @return \DateTime
      */
-    public function getDatetime()
+    public function getDatetime(): \DateTime
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -994,7 +994,7 @@ trait TypesMethodsTrait
      *
      * @return array
      */
-    public function getArray()
+    public function getArray(): array
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -1057,7 +1057,7 @@ trait TypesMethodsTrait
      *
      * @return array
      */
-    public function getJsonArray()
+    public function getJsonArray(): array
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -1120,7 +1120,7 @@ trait TypesMethodsTrait
      *
      * @return object
      */
-    public function getObject()
+    public function getObject(): object
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(

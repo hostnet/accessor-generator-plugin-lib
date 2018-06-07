@@ -17,7 +17,7 @@ trait CredentialsMethodsTrait
      *
      * @return string
      */
-    public function getPassword()
+    public function getPassword(): string
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(

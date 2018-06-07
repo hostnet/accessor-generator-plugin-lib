@@ -53,9 +53,8 @@ class TypesTest extends TestCase
 
     public function getTypeProvider()
     {
-        $values = [['id', 0]];
-
-        $class = new \ReflectionClass(Types::class);
+        $values = [['id', '0']];
+        $class  = new \ReflectionClass(Types::class);
 
         foreach ($class->getProperties() as $property) {
             $values[] = [$property->getName(), null, \BadMethodCallException::class, 1];
@@ -64,7 +63,6 @@ class TypesTest extends TestCase
         foreach ($class->getProperties() as $property) {
             $values[] = [$property->getName(), null, \LogicException::class];
         }
-
         return array_merge($this->typeProvider(), $values);
     }
 

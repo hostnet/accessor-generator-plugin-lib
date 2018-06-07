@@ -20,7 +20,7 @@ trait SubNamespaceMethodsTrait
      *
      * @return string
      */
-    public function getAsterix()
+    public function getAsterix(): string
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(

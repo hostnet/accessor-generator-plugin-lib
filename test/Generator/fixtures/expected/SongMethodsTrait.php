@@ -18,7 +18,7 @@ trait SongMethodsTrait
      *
      * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Genre[]|ImmutableCollection
      */
-    public function getGenres()
+    public function getGenres(): iterable
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(

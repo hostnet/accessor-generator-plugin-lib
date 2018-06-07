@@ -19,7 +19,7 @@ trait ItemMethodsTrait
      *
      * @return Shipping
      */
-    public function getShipping()
+    public function getShipping(): Shipping
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
