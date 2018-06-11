@@ -1120,7 +1120,7 @@ trait TypesMethodsTrait
      *
      * @return object
      */
-    public function getObject(): object
+    public function getObject()
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
