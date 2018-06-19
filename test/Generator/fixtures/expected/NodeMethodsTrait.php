@@ -17,7 +17,7 @@ trait NodeMethodsTrait
      *
      * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Node[]|ImmutableCollection
      */
-    public function getOut()
+    public function getOut(): iterable
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(

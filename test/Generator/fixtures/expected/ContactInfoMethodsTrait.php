@@ -17,7 +17,7 @@ trait ContactInfoMethodsTrait
      *
      * @return string|null
      */
-    private function getAddressLine()
+    private function getAddressLine(): ?string
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -78,7 +78,7 @@ trait ContactInfoMethodsTrait
      *
      * @return string|null
      */
-    public function getName()
+    public function getName(): ?string
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -139,7 +139,7 @@ trait ContactInfoMethodsTrait
      *
      * @return bool|null
      */
-    protected function isDeleted()
+    protected function isDeleted(): ?bool
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -195,7 +195,7 @@ trait ContactInfoMethodsTrait
      *
      * @return bool|null
      */
-    private function isSpendsLotsOfMoney()
+    private function isSpendsLotsOfMoney(): ?bool
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -251,7 +251,7 @@ trait ContactInfoMethodsTrait
      *
      * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\ContactInfo[]|ImmutableCollection
      */
-    public function getReferencedContacts()
+    public function getReferencedContacts(): iterable
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -360,7 +360,7 @@ trait ContactInfoMethodsTrait
      *
      * @return ContactInfo|null
      */
-    public function getReferrer()
+    public function getReferrer(): ?ContactInfo
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -431,7 +431,7 @@ trait ContactInfoMethodsTrait
      *
      * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\ContactInfo[]|ImmutableCollection
      */
-    public function getFriends()
+    public function getFriends(): iterable
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -540,7 +540,7 @@ trait ContactInfoMethodsTrait
      *
      * @return ContactInfo|null
      */
-    public function getFriendedBy()
+    public function getFriendedBy(): ?ContactInfo
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(

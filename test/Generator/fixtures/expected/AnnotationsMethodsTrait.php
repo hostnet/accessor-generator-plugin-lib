@@ -17,7 +17,7 @@ trait AnnotationsMethodsTrait
      *
      * @return \DateTime
      */
-    public function getStupid()
+    public function getStupid(): \DateTime
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(

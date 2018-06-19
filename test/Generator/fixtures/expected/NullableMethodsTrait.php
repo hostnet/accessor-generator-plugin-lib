@@ -93,9 +93,9 @@ trait NullableMethodsTrait
      *
      * @throws \BadMethodCallException
      *
-     * @return int
+     * @return int|null
      */
-    public function getInt()
+    public function getInt(): ?int
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -279,9 +279,9 @@ trait NullableMethodsTrait
      *
      * @throws \BadMethodCallException
      *
-     * @return string
+     * @return string|null
      */
-    public function getString()
+    public function getString(): ?string
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -345,9 +345,9 @@ trait NullableMethodsTrait
      *
      * @throws \BadMethodCallException
      *
-     * @return OneToOneNullable
+     * @return OneToOneNullable|null
      */
-    public function getOnlyOne()
+    public function getOnlyOne(): ?OneToOneNullable
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -400,9 +400,9 @@ trait NullableMethodsTrait
      *
      * @throws \BadMethodCallException
      *
-     * @return Item
+     * @return Item|null
      */
-    public function getUnidirectionalOneToOne()
+    public function getUnidirectionalOneToOne(): ?Item
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(

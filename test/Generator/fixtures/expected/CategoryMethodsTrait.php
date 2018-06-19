@@ -17,7 +17,7 @@ trait CategoryMethodsTrait
      *
      * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Category[]|ImmutableCollection
      */
-    public function getChildren()
+    public function getChildren(): iterable
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -124,9 +124,9 @@ trait CategoryMethodsTrait
      *
      * @throws \BadMethodCallException
      *
-     * @return Category
+     * @return Category|null
      */
-    public function getParent()
+    public function getParent(): ?Category
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(

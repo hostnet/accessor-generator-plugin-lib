@@ -19,7 +19,7 @@ trait CleanCarsMethodsTrait
      *
      * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Car[]|ImmutableCollection
      */
-    public function getCars()
+    public function getCars(): iterable
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(

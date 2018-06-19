@@ -18,7 +18,7 @@ trait ParameterMethodsTrait
      *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -61,7 +61,7 @@ trait ParameterMethodsTrait
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -90,9 +90,9 @@ trait ParameterMethodsTrait
      *
      * @throws \BadMethodCallException
      *
-     * @return string
+     * @return string|null
      */
-    public function getValue()
+    public function getValue(): ?string
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(

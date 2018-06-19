@@ -16,7 +16,7 @@ trait GenerateTypesMethodsTrait
      *
      * @return int
      */
-    public function getInteger()
+    public function getInteger(): int
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -101,7 +101,7 @@ trait GenerateTypesMethodsTrait
      *
      * @return float
      */
-    public function getFloat()
+    public function getFloat(): float
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -164,7 +164,7 @@ trait GenerateTypesMethodsTrait
      *
      * @return string
      */
-    public function getString()
+    public function getString(): string
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -232,7 +232,7 @@ trait GenerateTypesMethodsTrait
      *
      * @return bool
      */
-    public function isBoolean()
+    public function isBoolean(): bool
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -295,7 +295,7 @@ trait GenerateTypesMethodsTrait
      *
      * @return bool
      */
-    public function isThisBoolean()
+    public function isThisBoolean(): bool
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -358,7 +358,7 @@ trait GenerateTypesMethodsTrait
      *
      * @return \DateTime
      */
-    public function getDatetime()
+    public function getDatetime(): \DateTime
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
@@ -414,7 +414,7 @@ trait GenerateTypesMethodsTrait
      *
      * @return array
      */
-    public function getArray()
+    public function getArray(): array
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(

@@ -18,7 +18,7 @@ trait CartMethodsTrait
      *
      * @return Client|null
      */
-    public function getCustomer()
+    public function getCustomer(): ?Client
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(

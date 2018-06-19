@@ -19,7 +19,7 @@ trait CustomerMethodsTrait
      *
      * @return Cart
      */
-    public function getCart()
+    public function getCart(): Cart
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(

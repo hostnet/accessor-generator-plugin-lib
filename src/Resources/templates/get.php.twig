@@ -18,10 +18,14 @@
  {% if property.collection -%}
  * @return {{ property.fullyQualifiedType }}[]|ImmutableCollection
  {% else -%}
- * @return {{ (property.isComplexType ? property.typeHint : property.type) | phptype }}{{ not property.willGenerateStrict ? '|null' }}
+ * @return {{ (property.isComplexType ? property.typeHint : property.type) | phptype }}{{ property.isNullable or not property.willGenerateStrict ? '|null' }}
  {% endif -%}
  */
-{{ property.getGetVisibility() }} function {{ getter }}()
+{{ property.getGetVisibility() }} function {{ getter }}(){% if property.type != 'resource' and property.type != 'object' %}: {% if property.collection -%} iterable
+{% else -%}{{ property.isNullable or not property.willGenerateStrict ? '?' }}{{ (property.isComplexType ? property.typeHint : property.type) | phptype }}
+{% endif %}{% else %}
+
+{% endif %}
 {
     if (func_num_args() > 0) {
         throw new \BadMethodCallException(

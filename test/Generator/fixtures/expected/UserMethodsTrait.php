@@ -15,9 +15,9 @@ trait UserMethodsTrait
      *
      * @throws \BadMethodCallException
      *
-     * @return Address
+     * @return Address|null
      */
-    public function getAddress()
+    public function getAddress(): ?Address
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(

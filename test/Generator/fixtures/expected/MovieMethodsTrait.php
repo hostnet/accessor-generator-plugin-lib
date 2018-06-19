@@ -18,7 +18,7 @@ trait MovieMethodsTrait
      *
      * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\Actor[]|ImmutableCollection
      */
-    public function getA()
+    public function getA(): iterable
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(

@@ -19,7 +19,7 @@ trait SoftwareMethodsTrait
      *
      * @return \Hostnet\Component\AccessorGenerator\Generator\fixtures\FeatureInterface[]|ImmutableCollection
      */
-    public function getFeatures()
+    public function getFeatures(): iterable
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(

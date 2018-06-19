@@ -18,7 +18,7 @@ trait ConstantDefaultMethodsTrait
      *
      * @return int
      */
-    public function getWeather()
+    public function getWeather(): int
     {
         if (func_num_args() > 0) {
             throw new \BadMethodCallException(
