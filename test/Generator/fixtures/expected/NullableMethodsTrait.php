@@ -13,6 +13,112 @@ use Hostnet\Component\AccessorGenerator\Generator\fixtures\OneToOneNullable;
 trait NullableMethodsTrait
 {
     /**
+     * Gets zeroed_datetime
+     *
+     * @throws \BadMethodCallException
+     *
+     * @return \DateTime|null
+     */
+    public function getZeroedDatetime(): ?\DateTime
+    {
+        if (func_num_args() > 0) {
+            throw new \BadMethodCallException(
+                sprintf(
+                    'getZeroedDatetime() has no arguments but %d given.',
+                    func_num_args()
+                )
+            );
+        }
+
+        if ($this->zeroed_datetime === null) {
+            return null;
+        }
+
+        return $this->zeroed_datetime;
+    }
+
+    /**
+     * Sets zeroed_datetime
+     *
+     * Generated a default null value because the doctrine column is nullable.
+     * Still require an explicit argument to set the column. If you do not like
+     * this message, specify a default value or use JoinColumn(nullable=false).
+     *
+     * @throws \BadMethodCallException if the number of arguments is not correct
+     *
+     * @param  \DateTime $zeroed_datetime
+     * @return $this|Nullable
+     */
+    public function setZeroedDatetime(\DateTime $zeroed_datetime = null)
+    {
+        if (func_num_args() > 1) {
+            throw new \BadMethodCallException(
+                sprintf(
+                    'setZeroedDatetime() has one optional argument but %d given.',
+                    func_num_args()
+                )
+            );
+        }
+
+        $this->zeroed_datetime = $zeroed_datetime;
+
+        return $this;
+    }
+
+    /**
+     * Gets zeroed_date
+     *
+     * @throws \BadMethodCallException
+     *
+     * @return \DateTime|null
+     */
+    public function getZeroedDate(): ?\DateTime
+    {
+        if (func_num_args() > 0) {
+            throw new \BadMethodCallException(
+                sprintf(
+                    'getZeroedDate() has no arguments but %d given.',
+                    func_num_args()
+                )
+            );
+        }
+
+        if ($this->zeroed_date === null) {
+            return null;
+        }
+
+        return $this->zeroed_date;
+    }
+
+    /**
+     * Sets zeroed_date
+     *
+     * Generated a default null value because the doctrine column is nullable.
+     * Still require an explicit argument to set the column. If you do not like
+     * this message, specify a default value or use JoinColumn(nullable=false).
+     *
+     * @throws \BadMethodCallException if the number of arguments is not correct
+     *
+     * @param  \DateTime $zeroed_date
+     * @return $this|Nullable
+     */
+    public function setZeroedDate(\DateTime $zeroed_date = null)
+    {
+        if (func_num_args() > 1) {
+            throw new \BadMethodCallException(
+                sprintf(
+                    'setZeroedDate() has one optional argument but %d given.',
+                    func_num_args()
+                )
+            );
+        }
+
+        $this->zeroed_date = $zeroed_date;
+
+        return $this;
+    }
+
+    /**
      * Sets datetime_default
      *
      * @throws \BadMethodCallException if the number of arguments is not correct

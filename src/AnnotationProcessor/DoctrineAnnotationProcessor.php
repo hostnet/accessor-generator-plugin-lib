@@ -24,8 +24,10 @@ use Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception\InvalidCol
  */
 class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
 {
-    const ZEROED_DATE_TIME = 'zeroeddatetime';
-    const YAML_ARRAY       = 'yaml_array';
+    private const ZEROED_DATE_TIME = 'zeroeddatetime';
+    private const ZEROED_DATE      = 'zeroeddate';
+    private const YAML_ARRAY       = 'yaml_array';
+    private const NULLABLE_TYPES   = [self::ZEROED_DATE, self::ZEROED_DATE_TIME];
 
     /**
      * Process annotations of type:
@@ -105,7 +107,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * @throws \DomainException
      * @throws \InvalidArgumentException
      *
-     * @param mixed               $annotation with annotation Annotation
+     * @param mixed $annotation with annotation Annotation
      * @param PropertyInformation $information
      */
     private function processBidirectional($annotation, PropertyInformation $information)
@@ -150,7 +152,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
      * @throws \OutOfBoundsException
      */
-    protected function processColumn(Column $column, PropertyInformation $information)
+    protected function processColumn(Column $column, PropertyInformation $information): void
     {
         $information->setType($this->transformType($column->type));
         $information->setFixedPointNumber(strtolower($column->type) === Type::DECIMAL);
@@ -158,7 +160,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
         $information->setPrecision($column->precision);
         $information->setScale($column->scale);
         $information->setUnique($column->unique !== false);
-        $information->setNullable($column->nullable !== false);
+        $information->setNullable($column->nullable !== false || \in_array($column->type, self::NULLABLE_TYPES, true));
         $information->setIntegerSize($this->getIntegerSizeForType($column->type));
 
         if ($information->isFixedPointNumber()
@@ -182,7 +184,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
     /**
      * Process a JoinColumn Annotation, extract nullable.
      *
-     * @param JoinColumn          $join_column
+     * @param JoinColumn $join_column
      * @param PropertyInformation $information
      */
     private function processJoinColumn(JoinColumn $join_column, PropertyInformation $information)
@@ -230,15 +232,26 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
             return 'resource';
         }
 
-        if (in_array(
+        if (\in_array(
             $type,
-            [Type::DATETIME, Type::DATETIMETZ, Type::DATE, Type::TIME, self::ZEROED_DATE_TIME],
+            [
+                Type::DATETIME,
+                Type::DATETIMETZ,
+                Type::DATE,
+                Type::TIME,
+                self::ZEROED_DATE_TIME,
+                self::ZEROED_DATE,
+            ],
             true
         )) {
             return '\\' . \DateTime::class;
         }
 
-        if (in_array($type, [Type::SIMPLE_ARRAY, Type::JSON_ARRAY, Type::JSON, Type::TARRAY, self::YAML_ARRAY], true)) {
+        if (\in_array(
+            $type,
+            [Type::SIMPLE_ARRAY, Type::JSON_ARRAY, Type::JSON, Type::TARRAY, self::YAML_ARRAY],
+            true
+        )) {
             return 'array';
         }
 
