@@ -235,7 +235,7 @@ class TypesTest extends TestCase
         $types = new Types();
 
         $types->setDecimal('1E+8');
-        self::assertEquals('100000000', $types->getDecimal());
+        self::assertEquals('100000000.0', $types->getDecimal());
 
         $types->setDecimal('1.0000000005E+8', true);
         self::assertEquals('100000000.1', $types->getDecimal());
