@@ -108,7 +108,7 @@ class DoctrineAnnotationProcessorTest extends TestCase
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
      * @throws \OutOfBoundsException
      */
-    public function testProcessColumnAnnotation(Column $column, PropertyInformationInterface $output, $exception)
+    public function testProcessColumnAnnotation(Column $column, PropertyInformationInterface $output, $exception): void
     {
         // Set if an explosion is needed.
         $exception && $this->expectException($exception);
@@ -206,7 +206,7 @@ class DoctrineAnnotationProcessorTest extends TestCase
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
      * @throws \OutOfBoundsException
      */
-    public function testAssociationAnnotations($annotation)
+    public function testAssociationAnnotations($annotation): void
     {
         // Set up dependencies.
         $this->processor->processAnnotation($annotation, $this->information);
@@ -222,7 +222,6 @@ class DoctrineAnnotationProcessorTest extends TestCase
         if ($annotation instanceof ManyToMany
             || $annotation instanceof ManyToOne
             || $annotation instanceof OneToMany
-            || $annotation instanceof ManyToMany
         ) {
             $type = $annotation->targetEntity;
             self::assertEquals($type, $this->information->getType());
@@ -251,37 +250,38 @@ class DoctrineAnnotationProcessorTest extends TestCase
      * @see http://doctrine-dbal.readthedocs.org/en/latest/reference/types.html
      * @return string[][]:
      */
-    public function typeConversionDataProvider()
+    public function typeConversionDataProvider(): array
     {
         return [
-            ['smallint',   'integer'],
-            ['integer',    'integer'],
-            ['bigint',     'integer'],
-            ['decimal',    'string'],
-            ['float',      'float'],
-            ['string',     'string'],
-            ['text',       'string'],
-            ['guid',       'string'],
-            ['blob',       'resource'],
-            ['boolean',    'boolean'],
-            ['date',       '\\DateTime'],
-            ['time',       '\\DateTime'],
-            ['datetime',   '\\DateTime'],
-            ['datetimetz', '\\DateTime'],
-            [DoctrineAnnotationProcessor::ZEROED_DATE_TIME, '\\DateTime'],
-            ['array',      'array'],
-            ['json_array', 'array'],
-            ['json',       'array'],
-            ['object',     'object'],
-            ['double',     null,  \DomainException::class],
-            ['bool',       null,  \DomainException::class],
-            ['binary',     null,  \DomainException::class],
-            ['int',        null,  \DomainException::class],
-            ['',           null,  \DomainException::class],
-            [null,         null,  \InvalidArgumentException::class],
-            [false,        false, \InvalidArgumentException::class],
-            [[],           [],    \InvalidArgumentException::class],
-            [['test'],     [],    \InvalidArgumentException::class],
+            ['smallint',       'integer'],
+            ['integer',        'integer'],
+            ['bigint',         'integer'],
+            ['decimal',        'string'],
+            ['float',          'float'],
+            ['string',         'string'],
+            ['text',           'string'],
+            ['guid',           'string'],
+            ['blob',           'resource'],
+            ['boolean',        'boolean'],
+            ['date',           '\\DateTime'],
+            ['time',           '\\DateTime'],
+            ['datetime',       '\\DateTime'],
+            ['datetimetz',     '\\DateTime'],
+            ['zeroeddatetime', '\\DateTime'],
+            ['zeroeddate',     '\\DateTime'],
+            ['array',          'array'],
+            ['json_array',     'array'],
+            ['json',           'array'],
+            ['object',         'object'],
+            ['double',         null,  \DomainException::class],
+            ['bool',           null,  \DomainException::class],
+            ['binary',         null,  \DomainException::class],
+            ['int',            null,  \DomainException::class],
+            ['',               null,  \DomainException::class],
+            [null,             null,  \InvalidArgumentException::class],
+            [false,            false, \InvalidArgumentException::class],
+            [[],               [],    \InvalidArgumentException::class],
+            [['test'],         [],    \InvalidArgumentException::class],
         ];
     }
 
@@ -294,14 +294,15 @@ class DoctrineAnnotationProcessorTest extends TestCase
      * @throws \Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception\InvalidColumnSettingsException
      * @throws \InvalidArgumentException
      * @throws \RangeException
+     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
      */
-    public function testTypeConversion($doctrine_type, $php_type, $exception = null)
+    public function testTypeConversion($doctrine_type, $php_type, $exception = ''): void
     {
         // Set exception if we except one.
         $exception && $this->expectException($exception);
 
         // Check if we have an association or a scalar db type.
-        if (is_string($doctrine_type)
+        if (\is_string($doctrine_type)
             && $doctrine_type
             && (ctype_upper($doctrine_type[0]) || $doctrine_type[0] === '\\')
         ) {
@@ -317,7 +318,11 @@ class DoctrineAnnotationProcessorTest extends TestCase
         self::assertSame($php_type, $this->information->getType());
     }
 
-    public function testOtherAnnotation()
+    /**
+     * @throws InvalidColumnSettingsException
+     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
+     */
+    public function testOtherAnnotation(): void
     {
         $information = clone $this->information;
         $annotation  = new \stdClass();
@@ -325,7 +330,7 @@ class DoctrineAnnotationProcessorTest extends TestCase
         self::assertEquals($information, $this->information);
     }
 
-    public function testGetProcessableAnnotationNamespace()
+    public function testGetProcessableAnnotationNamespace(): void
     {
         self::assertSame('Doctrine\ORM\Mapping', $this->processor->getProcessableAnnotationNamespace());
     }

@@ -18,6 +18,18 @@ class Nullable
     private $id;
 
     /**
+     * @ORM\Column(type="zeroeddatetime")
+     * @AG\Generate
+     */
+    private $zeroed_datetime;
+
+    /**
+     * @ORM\Column(type="zeroeddate")
+     * @AG\Generate
+     */
+    private $zeroed_date;
+
+    /**
      * @ORM\Column(type="datetime")
      * @AG\Generate(get=false)
      */
