@@ -179,21 +179,21 @@ class PropertyInformationTest extends TestCase
     public function setIntegerSizeProvider()
     {
         return [
-            [-1,                     \RangeException::class          ],
-            [0,                      \RangeException::class          ],
-            [1,                      null                            ],
-            [0b100,                  null                            ],
-            [010,                    null                            ],
-            [0x8,                    null                            ],
-            [32,                     null                            ],
-            [PHP_INT_SIZE << 3,      null                            ],
-            [(PHP_INT_SIZE << 3)+ 1, \RangeException::class          ],
-            [[],                     \InvalidArgumentException::class],
-            ['',                     \InvalidArgumentException::class],
-            [null,                   \InvalidArgumentException::class],
-            [false,                  \InvalidArgumentException::class],
-            ['16',                   \InvalidArgumentException::class],
-            [1.5,                    \InvalidArgumentException::class],
+            [-1,                      \RangeException::class          ],
+            [0,                       \RangeException::class          ],
+            [1,                       null                            ],
+            [0b100,                   null                            ],
+            [010,                     null                            ],
+            [0x8,                     null                            ],
+            [32,                      null                            ],
+            [PHP_INT_SIZE << 3,       null                            ],
+            [(PHP_INT_SIZE << 3) + 1, \RangeException::class          ],
+            [[],                      \InvalidArgumentException::class],
+            ['',                      \InvalidArgumentException::class],
+            [null,                    \InvalidArgumentException::class],
+            [false,                   \InvalidArgumentException::class],
+            ['16',                    \InvalidArgumentException::class],
+            [1.5,                     \InvalidArgumentException::class],
         ];
     }
 

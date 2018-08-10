@@ -127,7 +127,7 @@ class CodeGenerationExtension extends \Twig_Extension
         } elseif ($bits > $max_bits) {
             $bits = $max_bits;
         }
-        return (1 << ($bits - 2)) -1 + (1 << ($bits - 2));
+        return (1 << ($bits - 2)) - 1 + (1 << ($bits - 2));
     }
 
     /**

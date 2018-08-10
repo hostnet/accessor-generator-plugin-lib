@@ -15,7 +15,7 @@
     },
     "require-dev": {
         "composer/composer":  "^1.0.0",
-        "hostnet/phpcs-tool": "^4.0.8",
+        "hostnet/phpcs-tool": "^8.1.0",
         "phpunit/phpunit":    "^7.0.0"
     },
     "minimum-stability": "stable",

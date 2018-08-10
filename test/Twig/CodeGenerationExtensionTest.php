@@ -116,8 +116,8 @@ class CodeGenerationExtensionTest extends TestCase
             [                -10, null           , \Twig_Error_Runtime::class],
             [                  0, null           , \Twig_Error_Runtime::class],
             [                 16, -32768                                     ],
-            [  PHP_INT_SIZE << 3, -PHP_INT_MAX -1                            ],
-            [  PHP_INT_SIZE << 4, -PHP_INT_MAX -1                            ],
+            [  PHP_INT_SIZE << 3, -PHP_INT_MAX - 1                           ],
+            [  PHP_INT_SIZE << 4, -PHP_INT_MAX - 1                           ],
         ];
     }
 

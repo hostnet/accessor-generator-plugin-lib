@@ -162,7 +162,7 @@ class CodeGenerator implements CodeGeneratorInterface
         $generated = [];
 
         foreach ($metadata['properties'] as $info) {
-            /* @var $info PropertyInformation */
+            /** @var $info PropertyInformation */
             if (! $info->willGenerateEnumeratorAccessors()) {
                 continue;
             }
@@ -281,7 +281,7 @@ class CodeGenerator implements CodeGeneratorInterface
     private function linkEnumeratorsToAssociatedCollections(array $metadata)
     {
         foreach ($metadata['properties'] as $info) {
-            /* @var $info PropertyInformation */
+            /** @var $info PropertyInformation */
             if (! $info->willGenerateEnumeratorAccessors() || ! $info->isGenerator()) {
                 continue;
             }
@@ -301,7 +301,7 @@ class CodeGenerator implements CodeGeneratorInterface
                 }
 
                 $collection = $metadata['properties'][$enumerator->getName()];
-                /* @var $collection PropertyInformation */
+                /** @var $collection PropertyInformation */
                 // Ensure the referenced property is a collection.
                 if (! $collection->isCollection()) {
                     throw new \LogicException(sprintf(

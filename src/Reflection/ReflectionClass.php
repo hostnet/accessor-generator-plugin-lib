@@ -496,7 +496,7 @@ class ReflectionClass
                 $default = $this->parseNamespace($loc);
                 $loc     = $tokens->next($loc, [T_WHITESPACE, T_COMMENT, T_STRING, T_NS_SEPARATOR]);
                 if ($tokens->type($loc) == T_PAAMAYIM_NEKUDOTAYIM) {
-                    $loc     = $tokens->next($loc);
+                    $loc      = $tokens->next($loc);
                     $default .= '::' . $tokens->value($loc);
                 }
             } elseif (in_array($type, [T_ARRAY, '['])) {
