@@ -19,11 +19,11 @@ trait CredentialsMethodsTrait
      */
     public function getPassword(): string
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getPassword() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -68,18 +68,18 @@ trait CredentialsMethodsTrait
      */
     public function setPassword($password)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() != 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setPassword() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
 
         if ($password === null
-            || is_scalar($password)
-            || is_callable([$password, '__toString'])
+            || \is_scalar($password)
+            || \is_callable([$password, '__toString'])
         ) {
             $password = (string)$password;
         } else {

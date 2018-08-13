@@ -21,11 +21,11 @@ trait ItemMethodsTrait
      */
     public function getShipping(): Shipping
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getShipping() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -48,11 +48,11 @@ trait ItemMethodsTrait
      */
     public function setShipping(Shipping $shipping)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() != 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setShipping() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }

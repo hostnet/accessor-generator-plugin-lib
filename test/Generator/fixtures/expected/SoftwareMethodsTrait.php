@@ -21,11 +21,11 @@ trait SoftwareMethodsTrait
      */
     public function getFeatures(): iterable
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getFeatures() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -50,11 +50,11 @@ trait SoftwareMethodsTrait
      */
     public function addFeature(FeatureInterface $feature)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() != 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'addFeatures() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -102,11 +102,11 @@ trait SoftwareMethodsTrait
      */
     public function removeFeature(FeatureInterface $feature)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() != 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'removeFeatures() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }

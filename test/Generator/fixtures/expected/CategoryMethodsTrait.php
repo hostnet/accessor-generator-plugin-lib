@@ -19,11 +19,11 @@ trait CategoryMethodsTrait
      */
     public function getChildren(): iterable
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getChildren() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -48,11 +48,11 @@ trait CategoryMethodsTrait
      */
     public function addChild(Category $child)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() != 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'addChildren() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -96,11 +96,11 @@ trait CategoryMethodsTrait
      */
     public function removeChild(Category $child)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() != 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'removeChildren() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -130,11 +130,11 @@ trait CategoryMethodsTrait
      */
     public function getParent(): ?Category
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getParent() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -153,11 +153,11 @@ trait CategoryMethodsTrait
      */
     public function setParent(Category $parent = null)
     {
-        if (func_num_args() > 1) {
+        if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setParent() has one optional argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }

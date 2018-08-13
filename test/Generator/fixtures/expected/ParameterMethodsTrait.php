@@ -20,11 +20,11 @@ trait ParameterMethodsTrait
      */
     public function getId(): int
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getId() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -63,11 +63,11 @@ trait ParameterMethodsTrait
      */
     public function getName(): string
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getName() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -94,11 +94,11 @@ trait ParameterMethodsTrait
      */
     public function getValue(): ?string
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getValue() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -126,11 +126,11 @@ trait ParameterMethodsTrait
      */
     public function setValue($value = null)
     {
-        if (func_num_args() > 1) {
+        if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setValue() has one optional argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -141,8 +141,8 @@ trait ParameterMethodsTrait
         }
 
         if ($value === null
-            || is_scalar($value)
-            || is_callable([$value, '__toString'])
+            || \is_scalar($value)
+            || \is_callable([$value, '__toString'])
         ) {
             $value = (string)$value;
         } else {

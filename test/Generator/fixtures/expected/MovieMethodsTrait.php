@@ -20,11 +20,11 @@ trait MovieMethodsTrait
      */
     public function getA(): iterable
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getA() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -48,11 +48,11 @@ trait MovieMethodsTrait
      */
     public function addA(Actor $a)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() != 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'addA() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -104,11 +104,11 @@ trait MovieMethodsTrait
      */
     public function removeA(Actor $a)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() != 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'removeA() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }

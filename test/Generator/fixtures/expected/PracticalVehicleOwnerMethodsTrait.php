@@ -23,11 +23,11 @@ trait PracticalVehicleOwnerMethodsTrait
      */
     public function addVehicle(\Hostnet\Component\AccessorGenerator\Generator\fixtures\VehicleInterface $vehicle)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() != 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'addVehicles() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }

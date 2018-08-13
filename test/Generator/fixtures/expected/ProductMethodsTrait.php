@@ -20,11 +20,11 @@ trait ProductMethodsTrait
      */
     public function getId(): ?int
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getId() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -58,11 +58,11 @@ trait ProductMethodsTrait
      */
     public function getDuration(): \Hostnet\Component\AccessorGenerator\Generator\fixtures\Period
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getDuration() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -84,11 +84,11 @@ trait ProductMethodsTrait
      */
     public function getName(): string
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getName() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -116,11 +116,11 @@ trait ProductMethodsTrait
      */
     public function getDescription(): string
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getDescription() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -148,11 +148,11 @@ trait ProductMethodsTrait
      */
     public function getSystemName(): string
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getSystemName() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -183,18 +183,18 @@ trait ProductMethodsTrait
      */
     public function setSystemName($system_name = '')
     {
-        if (func_num_args() > 1) {
+        if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setSystemName() has one optional argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
 
         if ($system_name === null
-            || is_scalar($system_name)
-            || is_callable([$system_name, '__toString'])
+            || \is_scalar($system_name)
+            || \is_callable([$system_name, '__toString'])
         ) {
             $system_name = (string)$system_name;
         } else {
@@ -221,11 +221,11 @@ trait ProductMethodsTrait
      */
     public function getAttributes(): iterable
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getAttributes() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -250,11 +250,11 @@ trait ProductMethodsTrait
      */
     public function addAttribute(Attribute $attribute)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() != 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'addAttributes() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -305,11 +305,11 @@ trait ProductMethodsTrait
      */
     public function removeAttribute(Attribute $attribute)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() != 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'removeAttributes() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }

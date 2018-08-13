@@ -20,11 +20,11 @@ trait ConstantDefaultMethodsTrait
      */
     public function getWeather(): int
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getWeather() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -66,16 +66,16 @@ trait ConstantDefaultMethodsTrait
      */
     public function setWeather($weather = Weather::SUN)
     {
-        if (func_num_args() > 1) {
+        if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setWeather() has one optional argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
 
-        if (!is_int($weather)) {
+        if (!\is_int($weather)) {
             throw new \InvalidArgumentException(
                 'Parameter weather must be integer.'
             );

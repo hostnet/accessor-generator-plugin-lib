@@ -19,11 +19,11 @@ trait ActorMethodsTrait
      */
     public function getMovies(): iterable
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getMovies() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -47,11 +47,11 @@ trait ActorMethodsTrait
      */
     public function addMovie(\Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie $movie)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() != 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'addMovies() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -103,11 +103,11 @@ trait ActorMethodsTrait
      */
     public function removeMovie(\Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie $movie)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() != 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'removeMovies() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }

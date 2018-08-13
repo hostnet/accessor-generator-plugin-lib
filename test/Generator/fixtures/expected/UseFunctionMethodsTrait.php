@@ -23,11 +23,11 @@ trait UseFunctionMethodsTrait
      */
     public function getCount(): string
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getCount() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -57,18 +57,18 @@ trait UseFunctionMethodsTrait
      */
     public function setCount($count)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() != 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setCount() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
 
         if ($count === null
-            || is_scalar($count)
-            || is_callable([$count, '__toString'])
+            || \is_scalar($count)
+            || \is_callable([$count, '__toString'])
         ) {
             $count = (string)$count;
         } else {

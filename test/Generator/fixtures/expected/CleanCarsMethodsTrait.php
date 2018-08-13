@@ -21,11 +21,11 @@ trait CleanCarsMethodsTrait
      */
     public function getCars(): iterable
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getCars() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -49,11 +49,11 @@ trait CleanCarsMethodsTrait
      */
     public function addCar(Car $car)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() != 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'addCars() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -81,11 +81,11 @@ trait CleanCarsMethodsTrait
      */
     public function removeCar(Car $car)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() != 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'removeCars() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }

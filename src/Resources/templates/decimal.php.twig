@@ -1,5 +1,5 @@
 {% set parameter = '$' ~ property.name %}
-if (!is_int({{ parameter }}) && !is_string({{ parameter }}) && !is_float({{ parameter }})) {
+if (!\is_int({{ parameter }}) && !\is_string({{ parameter }}) && !\is_float({{ parameter }})) {
     throw new \InvalidArgumentException(
         sprintf(
             'Invalid type (%s) given. Only int, float and a numeric string are allowed.',
@@ -12,7 +12,7 @@ $result           = [];
 $scientific_float = false;
 if (preg_match('/^([\-+]?[0-9]+\.?([0-9]*))[Ee]([\-+]?[0-9]+)$/', {{ parameter }}, $result)) {
     $scale = max(strlen($result[2]) - $result[3], {{ property.scale }});
-    if (is_float({{ parameter }})) {
+    if (\is_float({{ parameter }})) {
         $scientific_float = true;
     }
     {{ parameter }} = bcmul($result[1], bcpow(10, $result[3], $scale), $scale);
@@ -33,7 +33,7 @@ if (strlen($before) > {{ property.precision - property.scale}}) {
     );
 }
 
-if ($round || is_float({{ parameter }}) || $scientific_float || strlen($after) <= {{ property.scale }}) {
+if ($round || \is_float({{ parameter }}) || $scientific_float || strlen($after) <= {{ property.scale }}) {
     if (substr($after, {{ property.scale }}, 1) >= 5) {
         if ($minus) {
             {{ parameter }} = bcsub({{ parameter }}, '{{ ('1' | decimal_right_shift(property.scale ))}}', {{ property.scale }});

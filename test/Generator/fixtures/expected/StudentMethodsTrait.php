@@ -21,11 +21,11 @@ trait StudentMethodsTrait
      */
     public function getStudent(): StudentInterface
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getStudent() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -48,11 +48,11 @@ trait StudentMethodsTrait
      */
     public function setStudent(StudentInterface $student)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() != 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setStudent() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }

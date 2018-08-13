@@ -22,11 +22,11 @@ trait SubNamespaceMethodsTrait
      */
     public function getAsterix(): string
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getAsterix() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -56,18 +56,18 @@ trait SubNamespaceMethodsTrait
      */
     public function setAsterix($asterix = Comic\Asterix::class)
     {
-        if (func_num_args() > 1) {
+        if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setAsterix() has one optional argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
 
         if ($asterix === null
-            || is_scalar($asterix)
-            || is_callable([$asterix, '__toString'])
+            || \is_scalar($asterix)
+            || \is_callable([$asterix, '__toString'])
         ) {
             $asterix = (string)$asterix;
         } else {
@@ -93,18 +93,18 @@ trait SubNamespaceMethodsTrait
      */
     public function setSuperNamespace($super_namespace = Plugin::NAME)
     {
-        if (func_num_args() > 1) {
+        if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setSuperNamespace() has one optional argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
 
         if ($super_namespace === null
-            || is_scalar($super_namespace)
-            || is_callable([$super_namespace, '__toString'])
+            || \is_scalar($super_namespace)
+            || \is_callable([$super_namespace, '__toString'])
         ) {
             $super_namespace = (string)$super_namespace;
         } else {

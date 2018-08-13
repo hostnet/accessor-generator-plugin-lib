@@ -19,11 +19,11 @@ trait AnnotationsMethodsTrait
      */
     public function getStupid(): \DateTime
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getStupid() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -52,11 +52,11 @@ trait AnnotationsMethodsTrait
      */
     public function setStupid(\DateTime $stupid)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() != 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setStupid() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }

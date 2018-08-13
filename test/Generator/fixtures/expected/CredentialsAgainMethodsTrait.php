@@ -21,18 +21,18 @@ trait CredentialsAgainMethodsTrait
      */
     public function setPassword($password)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() != 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setPassword() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
 
         if ($password === null
-            || is_scalar($password)
-            || is_callable([$password, '__toString'])
+            || \is_scalar($password)
+            || \is_callable([$password, '__toString'])
         ) {
             $password = (string)$password;
         } else {

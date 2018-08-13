@@ -21,11 +21,11 @@ trait NullableMethodsTrait
      */
     public function getZeroedDatetime(): ?\DateTime
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getZeroedDatetime() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -52,11 +52,11 @@ trait NullableMethodsTrait
      */
     public function setZeroedDatetime(\DateTime $zeroed_datetime = null)
     {
-        if (func_num_args() > 1) {
+        if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setZeroedDatetime() has one optional argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -75,11 +75,11 @@ trait NullableMethodsTrait
      */
     public function getZeroedDate(): ?\DateTime
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getZeroedDate() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -106,11 +106,11 @@ trait NullableMethodsTrait
      */
     public function setZeroedDate(\DateTime $zeroed_date = null)
     {
-        if (func_num_args() > 1) {
+        if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setZeroedDate() has one optional argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -131,11 +131,11 @@ trait NullableMethodsTrait
      */
     public function setDatetimeDefault(\DateTime $datetime_default = null)
     {
-        if (func_num_args() > 1) {
+        if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setDatetimeDefault() has one optional argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -160,11 +160,11 @@ trait NullableMethodsTrait
      */
     public function setDatetimeNullable(\DateTime $datetime_nullable = null)
     {
-        if (func_num_args() > 1) {
+        if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setDatetimeNullable() has one optional argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -185,11 +185,11 @@ trait NullableMethodsTrait
      */
     public function setDatetimeBoth(\DateTime $datetime_both = null)
     {
-        if (func_num_args() > 1) {
+        if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setDatetimeBoth() has one optional argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -208,11 +208,11 @@ trait NullableMethodsTrait
      */
     public function getInt(): ?int
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getInt() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -248,11 +248,11 @@ trait NullableMethodsTrait
      */
     public function setInt($int = null)
     {
-        if (func_num_args() > 1) {
+        if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setInt() has one optional argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -262,7 +262,7 @@ trait NullableMethodsTrait
             return $this;
         }
 
-        if (!is_int($int)) {
+        if (!\is_int($int)) {
             throw new \InvalidArgumentException(
                 'Parameter int must be integer.'
             );
@@ -296,11 +296,11 @@ trait NullableMethodsTrait
      */
     public function setIntDifferent($int_different = 2)
     {
-        if (func_num_args() > 1) {
+        if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setIntDifferent() has one optional argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -310,7 +310,7 @@ trait NullableMethodsTrait
             return $this;
         }
 
-        if (!is_int($int_different)) {
+        if (!\is_int($int_different)) {
             throw new \InvalidArgumentException(
                 'Parameter int_different must be integer.'
             );
@@ -346,11 +346,11 @@ trait NullableMethodsTrait
      */
     public function setFeature(Feature $feature = null)
     {
-        if (func_num_args() > 1) {
+        if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setFeature() has one optional argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -375,11 +375,11 @@ trait NullableMethodsTrait
      */
     public function setAnOtherFeature(Feature $an_other_feature = null)
     {
-        if (func_num_args() > 1) {
+        if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setAnOtherFeature() has one optional argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -398,11 +398,11 @@ trait NullableMethodsTrait
      */
     public function getString(): ?string
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getString() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -426,11 +426,11 @@ trait NullableMethodsTrait
      */
     public function setString($string = null)
     {
-        if (func_num_args() > 1) {
+        if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setString() has one optional argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -441,8 +441,8 @@ trait NullableMethodsTrait
         }
 
         if ($string === null
-            || is_scalar($string)
-            || is_callable([$string, '__toString'])
+            || \is_scalar($string)
+            || \is_callable([$string, '__toString'])
         ) {
             $string = (string)$string;
         } else {
@@ -465,11 +465,11 @@ trait NullableMethodsTrait
      */
     public function getOnlyOne(): ?OneToOneNullable
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getOnlyOne() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -488,11 +488,11 @@ trait NullableMethodsTrait
      */
     public function setOnlyOne(OneToOneNullable $only_one = null)
     {
-        if (func_num_args() > 1) {
+        if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setOnlyOne() has one optional argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -521,11 +521,11 @@ trait NullableMethodsTrait
      */
     public function getUnidirectionalOneToOne(): ?Item
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getUnidirectionalOneToOne() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -544,11 +544,11 @@ trait NullableMethodsTrait
      */
     public function setUnidirectionalOneToOne(Item $unidirectional_one_to_one = null)
     {
-        if (func_num_args() > 1) {
+        if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setUnidirectionalOneToOne() has one optional argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
