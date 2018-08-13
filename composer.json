@@ -6,6 +6,7 @@
     "require": {
         "php":                  ">=7.1",
         "ext-bcmath":           "*",
+        "ext-json":             "*",
         "composer-plugin-api":  "^1.0",
         "doctrine/annotations": "~1.2",
         "doctrine/common":      "~2.4",
