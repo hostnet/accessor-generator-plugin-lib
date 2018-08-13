@@ -42,7 +42,8 @@ trait CategoryMethodsTrait
      * @throws \LogicException         if a member was added that already exists within the collection.
      * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
      *
-     * @param  Category $child
+     * @param Category $child
+     *
      * @return $this|Category
      */
     public function addChild(Category $child)
@@ -89,7 +90,8 @@ trait CategoryMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  Category $child
+     * @param Category $child
+     *
      * @return $this|Category
      */
     public function removeChild(Category $child)
@@ -145,7 +147,8 @@ trait CategoryMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  Category $parent
+     * @param Category $parent
+     *
      * @return $this|Category
      */
     public function setParent(Category $parent = null)

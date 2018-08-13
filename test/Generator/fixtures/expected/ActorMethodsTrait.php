@@ -41,7 +41,8 @@ trait ActorMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct.
      * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
      *
-     * @param  \Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie $movie
+     * @param \Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie $movie
+     *
      * @return $this|Actor
      */
     public function addMovie(\Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie $movie)
@@ -96,7 +97,8 @@ trait ActorMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  \Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie $movie
+     * @param \Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie $movie
+     *
      * @return $this|Actor
      */
     public function removeMovie(\Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie $movie)

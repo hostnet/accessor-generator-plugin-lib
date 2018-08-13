@@ -44,7 +44,8 @@ trait SoftwareMethodsTrait
      * @throws \LogicException         if a member was added that already exists within the collection.
      * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
      *
-     * @param  FeatureInterface $feature
+     * @param FeatureInterface $feature
+     *
      * @return $this|Software
      */
     public function addFeature(FeatureInterface $feature)
@@ -95,7 +96,8 @@ trait SoftwareMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  FeatureInterface $feature
+     * @param FeatureInterface $feature
+     *
      * @return $this|Software
      */
     public function removeFeature(FeatureInterface $feature)

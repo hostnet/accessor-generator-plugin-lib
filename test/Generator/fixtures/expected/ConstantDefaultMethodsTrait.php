@@ -60,7 +60,8 @@ trait ConstantDefaultMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      * @throws \DomainException if the integer value is outside of the domain on this machine
      *
-     * @param  int $weather
+     * @param int $weather
+     *
      * @return $this|ConstantDefault
      */
     public function setWeather($weather = Weather::SUN)

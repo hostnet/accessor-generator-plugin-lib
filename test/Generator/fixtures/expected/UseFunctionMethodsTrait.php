@@ -51,7 +51,8 @@ trait UseFunctionMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  string $count
+     * @param string $count
+     *
      * @return $this|UseFunction
      */
     public function setCount($count)

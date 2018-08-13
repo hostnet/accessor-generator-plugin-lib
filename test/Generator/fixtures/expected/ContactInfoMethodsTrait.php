@@ -41,7 +41,8 @@ trait ContactInfoMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  string $address_line
+     * @param string $address_line
+     *
      * @return $this|ContactInfo
      */
     public function setAddressLine($address_line)
@@ -102,7 +103,8 @@ trait ContactInfoMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return $this|ContactInfo
      */
     private function setName($name)
@@ -163,7 +165,8 @@ trait ContactInfoMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  bool $deleted
+     * @param bool $deleted
+     *
      * @return $this|ContactInfo
      */
     public function setDeleted($deleted)
@@ -219,7 +222,8 @@ trait ContactInfoMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  bool $spends_lots_of_money
+     * @param bool $spends_lots_of_money
+     *
      * @return $this|ContactInfo
      */
     protected function setSpendsLotsOfMoney($spends_lots_of_money)
@@ -276,7 +280,8 @@ trait ContactInfoMethodsTrait
      * @throws \LogicException         if a member was added that already exists within the collection.
      * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
      *
-     * @param  ContactInfo $referenced_contact
+     * @param ContactInfo $referenced_contact
+     *
      * @return $this|ContactInfo
      */
     private function addReferencedContact(ContactInfo $referenced_contact)
@@ -323,7 +328,8 @@ trait ContactInfoMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  ContactInfo $referenced_contact
+     * @param ContactInfo $referenced_contact
+     *
      * @return $this|ContactInfo
      */
     private function removeReferencedContact(ContactInfo $referenced_contact)
@@ -383,7 +389,8 @@ trait ContactInfoMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  ContactInfo $referrer
+     * @param ContactInfo $referrer
+     *
      * @return $this|ContactInfo
      */
     protected function setReferrer(ContactInfo $referrer = null)
@@ -456,7 +463,8 @@ trait ContactInfoMethodsTrait
      * @throws \LogicException         if a member was added that already exists within the collection.
      * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
      *
-     * @param  ContactInfo $friend
+     * @param ContactInfo $friend
+     *
      * @return $this|ContactInfo
      */
     private function addFriend(ContactInfo $friend)
@@ -503,7 +511,8 @@ trait ContactInfoMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  ContactInfo $friend
+     * @param ContactInfo $friend
+     *
      * @return $this|ContactInfo
      */
     protected function removeFriend(ContactInfo $friend)
@@ -563,7 +572,8 @@ trait ContactInfoMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  ContactInfo $friended_by
+     * @param ContactInfo $friended_by
+     *
      * @return $this|ContactInfo
      */
     private function setFriendedBy(ContactInfo $friended_by = null)

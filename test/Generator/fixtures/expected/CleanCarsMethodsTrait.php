@@ -43,7 +43,8 @@ trait CleanCarsMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct.
      * @throws \LogicException         if a member was added that already exists within the collection.
      *
-     * @param  Car $car
+     * @param Car $car
+     *
      * @return $this|CleanCars
      */
     public function addCar(Car $car)
@@ -74,7 +75,8 @@ trait CleanCarsMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  Car $car
+     * @param Car $car
+     *
      * @return $this|CleanCars
      */
     public function removeCar(Car $car)

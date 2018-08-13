@@ -41,7 +41,8 @@ trait SongMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct.
      *
-     * @param  Genre $genre
+     * @param Genre $genre
+     *
      * @return $this|Song
      */
     public function addGenre(Genre $genre)
@@ -72,7 +73,8 @@ trait SongMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  Genre $genre
+     * @param Genre $genre
+     *
      * @return $this|Song
      */
     public function removeGenre(Genre $genre)

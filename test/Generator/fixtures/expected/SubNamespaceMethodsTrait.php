@@ -50,7 +50,8 @@ trait SubNamespaceMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  string $asterix
+     * @param string $asterix
+     *
      * @return $this|SubNamespace
      */
     public function setAsterix($asterix = Comic\Asterix::class)
@@ -86,7 +87,8 @@ trait SubNamespaceMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  string $super_namespace
+     * @param string $super_namespace
+     *
      * @return $this|SubNamespace
      */
     public function setSuperNamespace($super_namespace = Plugin::NAME)

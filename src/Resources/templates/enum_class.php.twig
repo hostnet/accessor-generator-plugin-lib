@@ -59,7 +59,8 @@ class {{ class_name }}
     /**
      * Sets the value for the parameter {{ info.name }}.
      *
-     * @param  {{ info.typeHint }} $value
+     * @param {{ info.typeHint }} $value
+     *
      * @return {{ class_name }}
      */
     public function set{{ info.methodName }}({{ info.typeHint }} $value): {{ class_name }}
@@ -120,6 +121,7 @@ class {{ class_name }}
      * Removes the parameter {{ info.name }} from the collection.
      *
      * @throws \LogicException if the parameter does not exist.
+     *
      * @return {{ class_name }}
      */
     public function remove{{ info.methodName }}(): {{ class_name }}
@@ -141,6 +143,7 @@ class {{ class_name }}
      * Nullifies the data for the parameter {{ info.name }}.
      *
      * @throws \LogicException if the parameter does not exist or was never initialized.
+     *
      * @return {{ class_name }}
      */
     public function clear{{ info.methodName }}(): {{ class_name }}

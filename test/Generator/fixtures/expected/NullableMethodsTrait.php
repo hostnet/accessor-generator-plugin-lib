@@ -46,7 +46,8 @@ trait NullableMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  \DateTime $zeroed_datetime
+     * @param \DateTime $zeroed_datetime
+     *
      * @return $this|Nullable
      */
     public function setZeroedDatetime(\DateTime $zeroed_datetime = null)
@@ -99,7 +100,8 @@ trait NullableMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  \DateTime $zeroed_date
+     * @param \DateTime $zeroed_date
+     *
      * @return $this|Nullable
      */
     public function setZeroedDate(\DateTime $zeroed_date = null)
@@ -123,7 +125,8 @@ trait NullableMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  \DateTime $datetime_default
+     * @param \DateTime $datetime_default
+     *
      * @return $this|Nullable
      */
     public function setDatetimeDefault(\DateTime $datetime_default = null)
@@ -151,7 +154,8 @@ trait NullableMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  \DateTime $datetime_nullable
+     * @param \DateTime $datetime_nullable
+     *
      * @return $this|Nullable
      */
     public function setDatetimeNullable(\DateTime $datetime_nullable = null)
@@ -175,7 +179,8 @@ trait NullableMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  \DateTime $datetime_both
+     * @param \DateTime $datetime_both
+     *
      * @return $this|Nullable
      */
     public function setDatetimeBoth(\DateTime $datetime_both = null)
@@ -237,7 +242,8 @@ trait NullableMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      * @throws \DomainException if the integer value is outside of the domain on this machine
      *
-     * @param  int $int
+     * @param int $int
+     *
      * @return $this|Nullable
      */
     public function setInt($int = null)
@@ -284,7 +290,8 @@ trait NullableMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      * @throws \DomainException if the integer value is outside of the domain on this machine
      *
-     * @param  int $int_different
+     * @param int $int_different
+     *
      * @return $this|Nullable
      */
     public function setIntDifferent($int_different = 2)
@@ -333,7 +340,8 @@ trait NullableMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  Feature $feature
+     * @param Feature $feature
+     *
      * @return $this|Nullable
      */
     public function setFeature(Feature $feature = null)
@@ -361,7 +369,8 @@ trait NullableMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  Feature $an_other_feature
+     * @param Feature $an_other_feature
+     *
      * @return $this|Nullable
      */
     public function setAnOtherFeature(Feature $an_other_feature = null)
@@ -411,7 +420,8 @@ trait NullableMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  string $string
+     * @param string $string
+     *
      * @return $this|Nullable
      */
     public function setString($string = null)
@@ -472,7 +482,8 @@ trait NullableMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  OneToOneNullable $only_one
+     * @param OneToOneNullable $only_one
+     *
      * @return $this|Nullable
      */
     public function setOnlyOne(OneToOneNullable $only_one = null)
@@ -527,7 +538,8 @@ trait NullableMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  Item $unidirectional_one_to_one
+     * @param Item $unidirectional_one_to_one
+     *
      * @return $this|Nullable
      */
     public function setUnidirectionalOneToOne(Item $unidirectional_one_to_one = null)

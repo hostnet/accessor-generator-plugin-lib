@@ -42,7 +42,8 @@ trait StudentMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  StudentInterface $student
+     * @param StudentInterface $student
+     *
      * @return $this|Student
      */
     public function setStudent(StudentInterface $student)

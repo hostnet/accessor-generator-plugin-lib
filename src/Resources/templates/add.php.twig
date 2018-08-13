@@ -15,7 +15,8 @@
  * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
  {% endif -%}
  *
- * @param  {{ property.typeHint}} ${{ property.name | singularize }}
+ * @param {{ property.typeHint}} ${{ property.name | singularize }}
+ *
  * @return $this|{{ property.class }}
  */
 {{ property.getAddVisibility() }} function add{{ property.name | singularize | classify }}({{ property.typeHint }} ${{ property.name | singularize }})

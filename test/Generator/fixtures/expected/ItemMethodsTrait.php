@@ -42,7 +42,8 @@ trait ItemMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  Shipping $shipping
+     * @param Shipping $shipping
+     *
      * @return $this|Item
      */
     public function setShipping(Shipping $shipping)

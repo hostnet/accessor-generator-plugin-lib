@@ -91,7 +91,8 @@ trait TypesMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      * @throws \DomainException if the integer value is outside of the domain on this machine
      *
-     * @param  int $smallint
+     * @param int $smallint
+     *
      * @return $this|Types
      */
     public function setSmallint($smallint)
@@ -176,7 +177,8 @@ trait TypesMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      * @throws \DomainException if the integer value is outside of the domain on this machine
      *
-     * @param  int $integer
+     * @param int $integer
+     *
      * @return $this|Types
      */
     public function setInteger($integer)
@@ -265,7 +267,8 @@ trait TypesMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      * @throws \DomainException if the integer value is outside of the domain on this machine
      *
-     * @param  int $bigint
+     * @param int $bigint
+     *
      * @return $this|Types
      */
     public function setBigint($bigint)
@@ -342,8 +345,9 @@ trait TypesMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  string $decimal
-     * @param  bool $round round the number fit in the precision and scale (round away from zero)
+     * @param string $decimal
+     * @param bool $round round the number fit in the precision and scale (round away from zero)
+     *
      * @return $this|Types
      */
     public function setDecimal($decimal, $round = false)
@@ -451,7 +455,8 @@ trait TypesMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  float $float
+     * @param float $float
+     *
      * @return $this|Types
      */
     public function setFloat($float)
@@ -515,7 +520,8 @@ trait TypesMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      * @throws \LengthException if the length of the value is to long
      *
-     * @param  string $string
+     * @param string $string
+     *
      * @return $this|Types
      */
     public function setString($string)
@@ -587,7 +593,8 @@ trait TypesMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  string $text
+     * @param string $text
+     *
      * @return $this|Types
      */
     public function setText($text)
@@ -655,7 +662,8 @@ trait TypesMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  string $guid
+     * @param string $guid
+     *
      * @return $this|Types
      */
     public function setGuid($guid)
@@ -723,7 +731,8 @@ trait TypesMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  resource $blob
+     * @param resource $blob
+     *
      * @return $this|Types
      */
     public function setBlob($blob)
@@ -786,7 +795,8 @@ trait TypesMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  bool $boolean
+     * @param bool $boolean
+     *
      * @return $this|Types
      */
     public function setBoolean($boolean)
@@ -849,7 +859,8 @@ trait TypesMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  bool $is_this_boolean
+     * @param bool $is_this_boolean
+     *
      * @return $this|Types
      */
     public function setIsThisBoolean($is_this_boolean)
@@ -911,7 +922,8 @@ trait TypesMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  \DateTime $date
+     * @param \DateTime $date
+     *
      * @return $this|Types
      */
     public function setDate(\DateTime $date)
@@ -967,7 +979,8 @@ trait TypesMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  \DateTime $datetime
+     * @param \DateTime $datetime
+     *
      * @return $this|Types
      */
     public function setDatetime(\DateTime $datetime)
@@ -1024,7 +1037,8 @@ trait TypesMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  array $array
+     * @param array $array
+     *
      * @return $this|Types
      */
     public function setArray($array)
@@ -1087,7 +1101,8 @@ trait TypesMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  array $json_array
+     * @param array $json_array
+     *
      * @return $this|Types
      */
     public function setJsonArray($json_array)
@@ -1150,7 +1165,8 @@ trait TypesMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  object $object
+     * @param object $object
+     *
      * @return $this|Types
      */
     public function setObject($object)

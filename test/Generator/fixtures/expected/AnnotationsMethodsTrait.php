@@ -46,7 +46,8 @@ trait AnnotationsMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  \DateTime $stupid
+     * @param \DateTime $stupid
+     *
      * @return $this|Annotations
      */
     public function setStupid(\DateTime $stupid)

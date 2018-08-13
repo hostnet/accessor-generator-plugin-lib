@@ -42,7 +42,8 @@ trait CustomerMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  Cart $cart
+     * @param Cart $cart
+     *
      * @return $this|Customer
      */
     public function setCart(Cart $cart)

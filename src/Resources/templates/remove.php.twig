@@ -9,7 +9,8 @@
  *
  * @throws \BadMethodCallException if the number of arguments is not correct
  *
- * @param  {{ property.typeHint }} ${{ property.name | singularize }}
+ * @param {{ property.typeHint }} ${{ property.name | singularize }}
+ *
  * @return $this|{{ property.class }}
  */
 {{ property.getRemoveVisibility() }} function remove{{ property.name | singularize | classify }}({{ property.typeHint }} ${{ property.name | singularize }})

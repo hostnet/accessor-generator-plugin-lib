@@ -41,7 +41,8 @@ trait NodeMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct.
      * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
      *
-     * @param  Node $out
+     * @param Node $out
+     *
      * @return $this|Node
      */
     public function addOut(Node $out)
@@ -96,7 +97,8 @@ trait NodeMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  Node $out
+     * @param Node $out
+     *
      * @return $this|Node
      */
     public function removeOut(Node $out)

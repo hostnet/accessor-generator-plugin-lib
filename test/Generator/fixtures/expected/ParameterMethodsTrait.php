@@ -120,7 +120,8 @@ trait ParameterMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  string $value
+     * @param string $value
+     *
      * @return $this|Parameter
      */
     public function setValue($value = null)

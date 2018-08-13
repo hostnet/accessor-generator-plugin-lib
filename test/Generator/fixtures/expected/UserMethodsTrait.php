@@ -36,7 +36,8 @@ trait UserMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  Address $address
+     * @param Address $address
+     *
      * @return $this|User
      */
     public function setAddress(Address $address = null)

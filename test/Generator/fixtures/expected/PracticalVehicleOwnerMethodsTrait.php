@@ -17,7 +17,8 @@ trait PracticalVehicleOwnerMethodsTrait
      * @throws \LogicException         if a member was added that already exists within the collection.
      * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
      *
-     * @param  \Hostnet\Component\AccessorGenerator\Generator\fixtures\VehicleInterface $vehicle
+     * @param \Hostnet\Component\AccessorGenerator\Generator\fixtures\VehicleInterface $vehicle
+     *
      * @return $this|PracticalVehicleOwner
      */
     public function addVehicle(\Hostnet\Component\AccessorGenerator\Generator\fixtures\VehicleInterface $vehicle)

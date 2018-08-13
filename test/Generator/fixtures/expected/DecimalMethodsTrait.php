@@ -15,8 +15,9 @@ trait DecimalMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  string $decimal_0_10
-     * @param  bool $round round the number fit in the precision and scale (round away from zero)
+     * @param string $decimal_0_10
+     * @param bool $round round the number fit in the precision and scale (round away from zero)
+     *
      * @return $this|Decimal
      */
     public function setDecimal010($decimal_0_10, $round = false)
@@ -92,8 +93,9 @@ trait DecimalMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  string $decimal_1_10
-     * @param  bool $round round the number fit in the precision and scale (round away from zero)
+     * @param string $decimal_1_10
+     * @param bool $round round the number fit in the precision and scale (round away from zero)
+     *
      * @return $this|Decimal
      */
     public function setDecimal110($decimal_1_10, $round = false)
@@ -169,8 +171,9 @@ trait DecimalMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  string $decimal_5_10
-     * @param  bool $round round the number fit in the precision and scale (round away from zero)
+     * @param string $decimal_5_10
+     * @param bool $round round the number fit in the precision and scale (round away from zero)
+     *
      * @return $this|Decimal
      */
     public function setDecimal510($decimal_5_10, $round = false)
@@ -246,8 +249,9 @@ trait DecimalMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  string $decimal_10_10
-     * @param  bool $round round the number fit in the precision and scale (round away from zero)
+     * @param string $decimal_10_10
+     * @param bool $round round the number fit in the precision and scale (round away from zero)
+     *
      * @return $this|Decimal
      */
     public function setDecimal1010($decimal_10_10, $round = false)
@@ -323,8 +327,9 @@ trait DecimalMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  string $decimal_18_20
-     * @param  bool $round round the number fit in the precision and scale (round away from zero)
+     * @param string $decimal_18_20
+     * @param bool $round round the number fit in the precision and scale (round away from zero)
+     *
      * @return $this|Decimal
      */
     public function setDecimal1820($decimal_18_20, $round = false)
@@ -400,8 +405,9 @@ trait DecimalMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  string $decimal_19_20
-     * @param  bool $round round the number fit in the precision and scale (round away from zero)
+     * @param string $decimal_19_20
+     * @param bool $round round the number fit in the precision and scale (round away from zero)
+     *
      * @return $this|Decimal
      */
     public function setDecimal1920($decimal_19_20 = '1.2345678901234567890', $round = false)
@@ -477,8 +483,9 @@ trait DecimalMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  string $decimal_30_65
-     * @param  bool $round round the number fit in the precision and scale (round away from zero)
+     * @param string $decimal_30_65
+     * @param bool $round round the number fit in the precision and scale (round away from zero)
+     *
      * @return $this|Decimal
      */
     public function setDecimal3065($decimal_30_65, $round = false)

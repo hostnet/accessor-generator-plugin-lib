@@ -58,7 +58,8 @@ trait GenerateTypesMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      * @throws \DomainException if the integer value is outside of the domain on this machine
      *
-     * @param  int $integer
+     * @param int $integer
+     *
      * @return $this|GenerateTypes
      */
     public function setInteger($integer)
@@ -131,7 +132,8 @@ trait GenerateTypesMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  float $float
+     * @param float $float
+     *
      * @return $this|GenerateTypes
      */
     public function setFloat($float)
@@ -194,7 +196,8 @@ trait GenerateTypesMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  string $string
+     * @param string $string
+     *
      * @return $this|GenerateTypes
      */
     public function setString($string)
@@ -262,7 +265,8 @@ trait GenerateTypesMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  bool $boolean
+     * @param bool $boolean
+     *
      * @return $this|GenerateTypes
      */
     public function setBoolean($boolean)
@@ -325,7 +329,8 @@ trait GenerateTypesMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  bool $is_this_boolean
+     * @param bool $is_this_boolean
+     *
      * @return $this|GenerateTypes
      */
     public function setIsThisBoolean($is_this_boolean)
@@ -387,7 +392,8 @@ trait GenerateTypesMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  \DateTime $datetime
+     * @param \DateTime $datetime
+     *
      * @return $this|GenerateTypes
      */
     public function setDatetime(\DateTime $datetime)
@@ -444,7 +450,8 @@ trait GenerateTypesMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  array $array
+     * @param array $array
+     *
      * @return $this|GenerateTypes
      */
     public function setArray($array)
@@ -507,7 +514,8 @@ trait GenerateTypesMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  object $object
+     * @param object $object
+     *
      * @return $this|GenerateTypes
      */
     public function setObject($object)

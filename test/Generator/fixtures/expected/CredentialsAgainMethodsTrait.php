@@ -15,7 +15,8 @@ trait CredentialsAgainMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  string $password
+     * @param string $password
+     *
      * @return $this|CredentialsAgain
      */
     public function setPassword($password)

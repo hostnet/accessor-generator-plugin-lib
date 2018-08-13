@@ -177,7 +177,8 @@ trait ProductMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      * @throws \LengthException if the length of the value is to long
      *
-     * @param  string $system_name
+     * @param string $system_name
+     *
      * @return $this|Product
      */
     public function setSystemName($system_name = '')
@@ -243,7 +244,8 @@ trait ProductMethodsTrait
      * @throws \LogicException         if a member was added that already exists within the collection.
      * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
      *
-     * @param  Attribute $attribute
+     * @param Attribute $attribute
+     *
      * @return $this|Product
      */
     public function addAttribute(Attribute $attribute)
@@ -297,7 +299,8 @@ trait ProductMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  Attribute $attribute
+     * @param Attribute $attribute
+     *
      * @return $this|Product
      */
     public function removeAttribute(Attribute $attribute)
