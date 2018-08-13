@@ -56,7 +56,7 @@ trait CredentialsAgainMethodsTrait
         $iv             = bin2hex($iv);
         $sealed_data    = bin2hex($sealed_data);
 
-        $this->password = sprintf('%d,%d,%s%s%s', strlen($env_key), strlen($iv), $env_key, $iv, $sealed_data);
+        $this->password = sprintf('%d,%d,%s%s%s', \strlen($env_key), \strlen($iv), $env_key, $iv, $sealed_data);
 
         return $this;
     }

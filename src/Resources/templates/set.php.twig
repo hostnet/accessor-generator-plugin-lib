@@ -120,7 +120,7 @@
 {% endif %}
 {% if property.length %}
 
-    if (strlen(${{ property.name }}) > {{ property.length }}) {
+    if (\strlen(${{ property.name }}) > {{ property.length }}) {
         throw new \LengthException('Parameter \'${{ property.name }}\' should not be longer than {{ property.length }} characters.');
     }
 {% endif %}
@@ -171,7 +171,7 @@
     $iv             = bin2hex($iv);
     $sealed_data    = bin2hex($sealed_data);
 
-    $this->{{ property.name }} = sprintf('%d,%d,%s%s%s', strlen($env_key), strlen($iv), $env_key, $iv, $sealed_data);
+    $this->{{ property.name }} = sprintf('%d,%d,%s%s%s', \strlen($env_key), \strlen($iv), $env_key, $iv, $sealed_data);
 {% else %}
     $this->{{ property.name }} = ${{ property.name }};
 {% endif %}

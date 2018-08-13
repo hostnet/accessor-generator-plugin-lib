@@ -43,7 +43,7 @@ trait DecimalMethodsTrait
         $result           = [];
         $scientific_float = false;
         if (preg_match('/^([\-+]?[0-9]+\.?([0-9]*))[Ee]([\-+]?[0-9]+)$/', $decimal_0_10, $result)) {
-            $scale = max(strlen($result[2]) - $result[3], 0);
+            $scale = max(\strlen($result[2]) - $result[3], 0);
             if (\is_float($decimal_0_10)) {
                 $scientific_float = true;
             }
@@ -58,14 +58,14 @@ trait DecimalMethodsTrait
         $before = isset($result[2]) ? ltrim($result[2], '0') : '';
         $after  = isset($result[3]) ? $result[3] : '';
 
-        if (strlen($before) > 10) {
+        if (\strlen($before) > 10) {
             throw new \DomainException(
                 'More than 10 digit(s) ' .
                 'before the decimal point given while only 10 is/are allowed'
             );
         }
 
-        if ($round || \is_float($decimal_0_10) || $scientific_float || strlen($after) <= 0) {
+        if ($round || \is_float($decimal_0_10) || $scientific_float || \strlen($after) <= 0) {
             if (substr($after, 0, 1) >= 5) {
                 if ($minus) {
                     $decimal_0_10 = bcsub($decimal_0_10, '1', 0);
@@ -121,7 +121,7 @@ trait DecimalMethodsTrait
         $result           = [];
         $scientific_float = false;
         if (preg_match('/^([\-+]?[0-9]+\.?([0-9]*))[Ee]([\-+]?[0-9]+)$/', $decimal_1_10, $result)) {
-            $scale = max(strlen($result[2]) - $result[3], 1);
+            $scale = max(\strlen($result[2]) - $result[3], 1);
             if (\is_float($decimal_1_10)) {
                 $scientific_float = true;
             }
@@ -136,14 +136,14 @@ trait DecimalMethodsTrait
         $before = isset($result[2]) ? ltrim($result[2], '0') : '';
         $after  = isset($result[3]) ? $result[3] : '';
 
-        if (strlen($before) > 9) {
+        if (\strlen($before) > 9) {
             throw new \DomainException(
                 'More than 9 digit(s) ' .
                 'before the decimal point given while only 9 is/are allowed'
             );
         }
 
-        if ($round || \is_float($decimal_1_10) || $scientific_float || strlen($after) <= 1) {
+        if ($round || \is_float($decimal_1_10) || $scientific_float || \strlen($after) <= 1) {
             if (substr($after, 1, 1) >= 5) {
                 if ($minus) {
                     $decimal_1_10 = bcsub($decimal_1_10, '0.1', 1);
@@ -199,7 +199,7 @@ trait DecimalMethodsTrait
         $result           = [];
         $scientific_float = false;
         if (preg_match('/^([\-+]?[0-9]+\.?([0-9]*))[Ee]([\-+]?[0-9]+)$/', $decimal_5_10, $result)) {
-            $scale = max(strlen($result[2]) - $result[3], 5);
+            $scale = max(\strlen($result[2]) - $result[3], 5);
             if (\is_float($decimal_5_10)) {
                 $scientific_float = true;
             }
@@ -214,14 +214,14 @@ trait DecimalMethodsTrait
         $before = isset($result[2]) ? ltrim($result[2], '0') : '';
         $after  = isset($result[3]) ? $result[3] : '';
 
-        if (strlen($before) > 5) {
+        if (\strlen($before) > 5) {
             throw new \DomainException(
                 'More than 5 digit(s) ' .
                 'before the decimal point given while only 5 is/are allowed'
             );
         }
 
-        if ($round || \is_float($decimal_5_10) || $scientific_float || strlen($after) <= 5) {
+        if ($round || \is_float($decimal_5_10) || $scientific_float || \strlen($after) <= 5) {
             if (substr($after, 5, 1) >= 5) {
                 if ($minus) {
                     $decimal_5_10 = bcsub($decimal_5_10, '0.00001', 5);
@@ -277,7 +277,7 @@ trait DecimalMethodsTrait
         $result           = [];
         $scientific_float = false;
         if (preg_match('/^([\-+]?[0-9]+\.?([0-9]*))[Ee]([\-+]?[0-9]+)$/', $decimal_10_10, $result)) {
-            $scale = max(strlen($result[2]) - $result[3], 10);
+            $scale = max(\strlen($result[2]) - $result[3], 10);
             if (\is_float($decimal_10_10)) {
                 $scientific_float = true;
             }
@@ -292,14 +292,14 @@ trait DecimalMethodsTrait
         $before = isset($result[2]) ? ltrim($result[2], '0') : '';
         $after  = isset($result[3]) ? $result[3] : '';
 
-        if (strlen($before) > 0) {
+        if (\strlen($before) > 0) {
             throw new \DomainException(
                 'More than 0 digit(s) ' .
                 'before the decimal point given while only 0 is/are allowed'
             );
         }
 
-        if ($round || \is_float($decimal_10_10) || $scientific_float || strlen($after) <= 10) {
+        if ($round || \is_float($decimal_10_10) || $scientific_float || \strlen($after) <= 10) {
             if (substr($after, 10, 1) >= 5) {
                 if ($minus) {
                     $decimal_10_10 = bcsub($decimal_10_10, '0.0000000001', 10);
@@ -355,7 +355,7 @@ trait DecimalMethodsTrait
         $result           = [];
         $scientific_float = false;
         if (preg_match('/^([\-+]?[0-9]+\.?([0-9]*))[Ee]([\-+]?[0-9]+)$/', $decimal_18_20, $result)) {
-            $scale = max(strlen($result[2]) - $result[3], 18);
+            $scale = max(\strlen($result[2]) - $result[3], 18);
             if (\is_float($decimal_18_20)) {
                 $scientific_float = true;
             }
@@ -370,14 +370,14 @@ trait DecimalMethodsTrait
         $before = isset($result[2]) ? ltrim($result[2], '0') : '';
         $after  = isset($result[3]) ? $result[3] : '';
 
-        if (strlen($before) > 2) {
+        if (\strlen($before) > 2) {
             throw new \DomainException(
                 'More than 2 digit(s) ' .
                 'before the decimal point given while only 2 is/are allowed'
             );
         }
 
-        if ($round || \is_float($decimal_18_20) || $scientific_float || strlen($after) <= 18) {
+        if ($round || \is_float($decimal_18_20) || $scientific_float || \strlen($after) <= 18) {
             if (substr($after, 18, 1) >= 5) {
                 if ($minus) {
                     $decimal_18_20 = bcsub($decimal_18_20, '0.000000000000000001', 18);
@@ -433,7 +433,7 @@ trait DecimalMethodsTrait
         $result           = [];
         $scientific_float = false;
         if (preg_match('/^([\-+]?[0-9]+\.?([0-9]*))[Ee]([\-+]?[0-9]+)$/', $decimal_19_20, $result)) {
-            $scale = max(strlen($result[2]) - $result[3], 19);
+            $scale = max(\strlen($result[2]) - $result[3], 19);
             if (\is_float($decimal_19_20)) {
                 $scientific_float = true;
             }
@@ -448,14 +448,14 @@ trait DecimalMethodsTrait
         $before = isset($result[2]) ? ltrim($result[2], '0') : '';
         $after  = isset($result[3]) ? $result[3] : '';
 
-        if (strlen($before) > 1) {
+        if (\strlen($before) > 1) {
             throw new \DomainException(
                 'More than 1 digit(s) ' .
                 'before the decimal point given while only 1 is/are allowed'
             );
         }
 
-        if ($round || \is_float($decimal_19_20) || $scientific_float || strlen($after) <= 19) {
+        if ($round || \is_float($decimal_19_20) || $scientific_float || \strlen($after) <= 19) {
             if (substr($after, 19, 1) >= 5) {
                 if ($minus) {
                     $decimal_19_20 = bcsub($decimal_19_20, '0.0000000000000000001', 19);
@@ -511,7 +511,7 @@ trait DecimalMethodsTrait
         $result           = [];
         $scientific_float = false;
         if (preg_match('/^([\-+]?[0-9]+\.?([0-9]*))[Ee]([\-+]?[0-9]+)$/', $decimal_30_65, $result)) {
-            $scale = max(strlen($result[2]) - $result[3], 30);
+            $scale = max(\strlen($result[2]) - $result[3], 30);
             if (\is_float($decimal_30_65)) {
                 $scientific_float = true;
             }
@@ -526,14 +526,14 @@ trait DecimalMethodsTrait
         $before = isset($result[2]) ? ltrim($result[2], '0') : '';
         $after  = isset($result[3]) ? $result[3] : '';
 
-        if (strlen($before) > 35) {
+        if (\strlen($before) > 35) {
             throw new \DomainException(
                 'More than 35 digit(s) ' .
                 'before the decimal point given while only 35 is/are allowed'
             );
         }
 
-        if ($round || \is_float($decimal_30_65) || $scientific_float || strlen($after) <= 30) {
+        if ($round || \is_float($decimal_30_65) || $scientific_float || \strlen($after) <= 30) {
             if (substr($after, 30, 1) >= 5) {
                 if ($minus) {
                     $decimal_30_65 = bcsub($decimal_30_65, '0.000000000000000000000000000001', 30);

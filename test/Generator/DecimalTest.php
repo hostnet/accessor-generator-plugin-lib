@@ -145,7 +145,7 @@ class DecimalTest extends TestCase
 
         // Add expected trailing zeroes
         if (($pos = strpos($value, '.')) !== false) {
-            $value .= str_repeat('0', $scale - (strlen(ltrim($value, '+-')) - $pos - 1));
+            $value .= str_repeat('0', $scale - (\strlen(ltrim($value, '+-')) - $pos - 1));
         } elseif ($scale > 0) {
             $value .= '.' . str_repeat('0', $scale);
         }

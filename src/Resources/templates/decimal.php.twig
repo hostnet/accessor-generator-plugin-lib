@@ -11,7 +11,7 @@ if (!\is_int({{ parameter }}) && !\is_string({{ parameter }}) && !\is_float({{ p
 $result           = [];
 $scientific_float = false;
 if (preg_match('/^([\-+]?[0-9]+\.?([0-9]*))[Ee]([\-+]?[0-9]+)$/', {{ parameter }}, $result)) {
-    $scale = max(strlen($result[2]) - $result[3], {{ property.scale }});
+    $scale = max(\strlen($result[2]) - $result[3], {{ property.scale }});
     if (\is_float({{ parameter }})) {
         $scientific_float = true;
     }
@@ -26,14 +26,14 @@ $minus  = isset($result[1]) ? $result[1] === '-': false;
 $before = isset($result[2]) ? ltrim($result[2], '0') : '';
 $after  = isset($result[3]) ? $result[3] : '';
 
-if (strlen($before) > {{ property.precision - property.scale}}) {
+if (\strlen($before) > {{ property.precision - property.scale}}) {
     throw new \DomainException(
         'More than {{ property.precision - property.scale}} digit(s) ' .
         'before the decimal point given while only {{ property.precision - property.scale}} is/are allowed'
     );
 }
 
-if ($round || \is_float({{ parameter }}) || $scientific_float || strlen($after) <= {{ property.scale }}) {
+if ($round || \is_float({{ parameter }}) || $scientific_float || \strlen($after) <= {{ property.scale }}) {
     if (substr($after, {{ property.scale }}, 1) >= 5) {
         if ($minus) {
             {{ parameter }} = bcsub({{ parameter }}, '{{ ('1' | decimal_right_shift(property.scale ))}}', {{ property.scale }});

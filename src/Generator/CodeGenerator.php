@@ -483,7 +483,7 @@ class CodeGenerator implements CodeGeneratorInterface
     private static function getPlainImportIfExists($type, $imports): ?string
     {
         foreach ($imports as $alias => $import) {
-            if (is_numeric($alias) && substr($import, -1 - strlen($type)) === '\\' . $type) {
+            if (is_numeric($alias) && substr($import, -1 - \strlen($type)) === '\\' . $type) {
                 return $import;
             }
         }

@@ -203,7 +203,7 @@ trait ProductMethodsTrait
             );
         }
 
-        if (strlen($system_name) > 50) {
+        if (\strlen($system_name) > 50) {
             throw new \LengthException('Parameter \'$system_name\' should not be longer than 50 characters.');
         }
 

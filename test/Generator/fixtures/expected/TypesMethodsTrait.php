@@ -373,7 +373,7 @@ trait TypesMethodsTrait
         $result           = [];
         $scientific_float = false;
         if (preg_match('/^([\-+]?[0-9]+\.?([0-9]*))[Ee]([\-+]?[0-9]+)$/', $decimal, $result)) {
-            $scale = max(strlen($result[2]) - $result[3], 1);
+            $scale = max(\strlen($result[2]) - $result[3], 1);
             if (\is_float($decimal)) {
                 $scientific_float = true;
             }
@@ -388,14 +388,14 @@ trait TypesMethodsTrait
         $before = isset($result[2]) ? ltrim($result[2], '0') : '';
         $after  = isset($result[3]) ? $result[3] : '';
 
-        if (strlen($before) > 9) {
+        if (\strlen($before) > 9) {
             throw new \DomainException(
                 'More than 9 digit(s) ' .
                 'before the decimal point given while only 9 is/are allowed'
             );
         }
 
-        if ($round || \is_float($decimal) || $scientific_float || strlen($after) <= 1) {
+        if ($round || \is_float($decimal) || $scientific_float || \strlen($after) <= 1) {
             if (substr($after, 1, 1) >= 5) {
                 if ($minus) {
                     $decimal = bcsub($decimal, '0.1', 1);
@@ -546,7 +546,7 @@ trait TypesMethodsTrait
             );
         }
 
-        if (strlen($string) > 255) {
+        if (\strlen($string) > 255) {
             throw new \LengthException('Parameter \'$string\' should not be longer than 255 characters.');
         }
 
