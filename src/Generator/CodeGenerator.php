@@ -201,8 +201,8 @@ class CodeGenerator implements CodeGeneratorInterface
      * @throws \ReflectionException
      * @throws \Throwable
      * @throws ReferencedClassNotFoundException
-     * @param  Enumerator          $enumerator
-     * @param  PropertyInformation $info
+     * @param Enumerator          $enumerator
+     * @param PropertyInformation $info
      * @return string
      */
     public function generateEnumeratorAccessors(Enumerator $enumerator, PropertyInformation $info): string

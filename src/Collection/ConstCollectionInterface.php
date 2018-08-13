@@ -22,7 +22,8 @@ interface ConstCollectionInterface extends \Countable, \IteratorAggregate, \Arra
      * Checks whether an element is contained in the collection.
      * This is an O(n) operation, where n is the size of the collection.
      *
-     * @param  mixed $element The element to search for.
+     * @param mixed $element The element to search for.
+     *
      * @return bool TRUE if the collection contains the element, FALSE otherwise.
      */
     public function contains($element): bool;
@@ -38,7 +39,8 @@ interface ConstCollectionInterface extends \Countable, \IteratorAggregate, \Arra
      * Returns true if the collection contains an element with the specified
      * key/index, false otherwise.
      *
-     * @param  string|int $key The key/index to check for.
+     * @param string|int $key The key/index to check for.
+     *
      * @return bool
      */
     public function containsKey($key): bool;
@@ -46,7 +48,8 @@ interface ConstCollectionInterface extends \Countable, \IteratorAggregate, \Arra
     /**
      * Returns the element at the specified key/index.
      *
-     * @param  string|int $key The key/index of the element to retrieve.
+     * @param string|int $key The key/index of the element to retrieve.
+     *
      * @return mixed
      */
     public function get($key);

@@ -42,6 +42,7 @@ class PerLineTokenParserTest extends TestCase
      * Flattens all \Twig_nodes in a tree.
      *
      * @param \Twig_Node $node
+     *
      * @return \Generator
      */
     private function iterateAllNodes(\Twig_Node $node)

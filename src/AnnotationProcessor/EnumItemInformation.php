@@ -46,9 +46,6 @@ class EnumItemInformation
      */
     private $const_name;
 
-    /**
-     * @param \ReflectionClassConstant $constant
-     */
     public function __construct(\ReflectionClassConstant $constant)
     {
         $type = substr($constant->name, 0, 2);
@@ -69,49 +66,31 @@ class EnumItemInformation
         $this->method_name = Inflector::classify(strtolower($this->name));
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
     public function getTypeHint(): string
     {
         return $this->type_hint;
     }
 
-    /**
-     * @return string
-     */
     public function getDocBlock(): string
     {
         return $this->doc_block;
     }
 
-    /**
-     * @return string
-     */
     public function getMethodName(): string
     {
         return $this->method_name;
     }
 
-    /**
-     * @return string
-     */
     public function getEnumClass(): string
     {
         return $this->enum_class;
     }
 
-    /**
-     * @return string
-     */
     public function getConstName(): string
     {
         return $this->const_name;

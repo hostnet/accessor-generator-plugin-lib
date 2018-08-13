@@ -79,7 +79,7 @@ class GenerateAnnotationProcessor implements AnnotationProcessorInterface
     }
 
     /**
-     * @see AnnotationProcessorInterface::getProcessableAnnotations()
+     * {@inheritdoc}
      */
     public function getProcessableAnnotationNamespace(): string
     {

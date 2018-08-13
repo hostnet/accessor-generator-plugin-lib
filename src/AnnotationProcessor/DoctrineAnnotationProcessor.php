@@ -45,8 +45,9 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * @throws \InvalidArgumentException
      * @throws \DomainException
      *
-     * @param  mixed $annotation object of a class annotated with @annotation
-     * @param  PropertyInformation $information
+     * @param mixed $annotation object of a class annotated with @annotation
+     * @param PropertyInformation $information
+     *
      * @return void
      */
 
@@ -102,8 +103,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
     }
 
     /**
-     * Return referenced entity if we have a bidirectional
-     * doctrine association.
+     * Return referenced entity if we have a bidirectional doctrine association.
      *
      * @throws \DomainException
      * @throws \InvalidArgumentException
@@ -274,7 +274,8 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * is no namespace separator in the class name, Doctrine assumes the class
      * is in the current namespace and is left as-is.
      *
-     * @param  string $type
+     * @param string $type
+     *
      * @return string
      */
     private function transformComplexType($type): string
@@ -297,7 +298,8 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      *
      * @see http://doctrine-dbal.readthedocs.org/en/latest/reference/types.html
      *
-     * @param  string $type
+     * @param string $type
+     *
      * @return int
      */
     private function getIntegerSizeForType(string $type): int

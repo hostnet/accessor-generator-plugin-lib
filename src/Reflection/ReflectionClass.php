@@ -82,7 +82,7 @@ class ReflectionClass
      * implementation of ReflectionClass assumes that the class contains
      * invalid PHP due to missing implementations from an interface.
      *
-     * @param  string $filename valid readable filename
+     * @param string $filename valid readable filename
      * @throws FileException
      */
     public function __construct($filename)
@@ -349,7 +349,7 @@ class ReflectionClass
     }
 
     /**
-     * @param  int $loc location of the T_USE token
+     * @param int $loc location of the T_USE token
      * @return array|null   [string|null $alias, string $namespace]
      * @throws \OutOfBoundsException
      */
@@ -374,7 +374,7 @@ class ReflectionClass
     /**
      * Parse the namespace and return as string
      *
-     * @param  int $loc location of the first namespace token (T_STRING)
+     * @param int $loc location of the first namespace token (T_STRING)
      *                  and not the T_NAMESPACE, T_AS or T_USE.
      * @return string
      */
@@ -401,7 +401,7 @@ class ReflectionClass
      * stripped of leading whitespaces. Returns an empty string if no doc-
      * comment or an empty doc comment was found.
      *
-     * @param  int $loc location of the visibility modifier or T_CLASS
+     * @param int $loc location of the visibility modifier or T_CLASS
      * @return string      the contents of the doc comment
      */
     private function parseDocComment($loc)
@@ -433,7 +433,7 @@ class ReflectionClass
      * scan for T_FINAL.
      *
      * @see \ReflectionProperty
-     * @param  int $loc location of the visibility modifier
+     * @param int $loc location of the visibility modifier
      * @return int
      */
     private function parsePropertyModifiers($loc)
@@ -475,8 +475,8 @@ class ReflectionClass
      * This way we can keep those and this also enables us to parse a default
      * value of null.
      *
-     * @param  int $loc location of the property name (T_STRING)
-     * @return null|string Null if there is no default value, string otherwise
+     * @param int $loc location of the property name (T_STRING)
+     * @return string|null Null if there is no default value, string otherwise
      */
     private function parseDefaultValue($loc)
     {
@@ -516,7 +516,7 @@ class ReflectionClass
      * whole content of the array definition is stripped from comments and
      * excessive whitespaces.
      *
-     * @param  int $loc location of the token stream where the array starts.
+     * @param int $loc location of the token stream where the array starts.
      *                  This should point to a T_ARRAY or [ token.
      * @return string   code representation of the parsed array without any
      *                  comments or excessive whitespace.
@@ -566,7 +566,7 @@ class ReflectionClass
      * Returns tokens found within an array definition PSR conforming
      * whitespace to make the code more readable.
      *
-     * @param  int $loc location in the token stream
+     * @param int $loc location in the token stream
      * @return string code with PSR spacing for array notation
      */
     private function arrayWhitespace($loc)
@@ -587,7 +587,7 @@ class ReflectionClass
      * Parse heredoc and nowdoc into a concatenated string representation to be
      * useful for default values and inline assignment.
      *
-     * @param  int $loc
+     * @param int $loc
      * @return string|null
      */
     private function parseHereNowDocConcat($loc)

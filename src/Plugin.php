@@ -108,8 +108,6 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      * annotation set on at least one property.
      *
      * @throws \DomainException
-     * @throws \Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException
-     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
      * @throws \InvalidArgumentException
      * @throws \LogicException
@@ -244,7 +242,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      * @throws \InvalidArgumentException
      *
      * @param PackageInterface $package
-     * @return \Iterator
+     * @return \Iterator|\SplFileInfo[]
      */
     private function getFilesForPackage(PackageInterface $package)
     {

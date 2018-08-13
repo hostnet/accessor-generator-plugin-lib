@@ -18,8 +18,8 @@ interface AnnotationProcessorInterface
     /**
      * processAnnotations
      *
-     * @param  object              $annotation  class annotated with @annotation
-     * @param  PropertyInformation $information location to store new
+     * @param object              $annotation  class annotated with @annotation
+     * @param PropertyInformation $information location to store new
      *                                          information about the property
      * @return void
      */

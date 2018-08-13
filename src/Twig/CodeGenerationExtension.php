@@ -96,7 +96,7 @@ class CodeGenerationExtension extends \Twig_Extension
 
     /**
      * @throws \DomainException
-     * @param  mixed $bits
+     * @param mixed $bits
      * @return int
      */
     private static function twosComplementMin($bits): int
@@ -114,7 +114,7 @@ class CodeGenerationExtension extends \Twig_Extension
 
     /**
      * @throws \DomainException
-     * @param  mixed $bits
+     * @param mixed $bits
      * @return int
      */
     private static function twosComplementMax($bits): int
@@ -132,8 +132,8 @@ class CodeGenerationExtension extends \Twig_Extension
 
     /**
      * @throws \InvalidArgumentException
-     * @param  mixed $input
-     * @param  int   $amount
+     * @param mixed $input
+     * @param int   $amount
      * @return mixed|string
      */
     private static function decimalRightShift($input, $amount = 0)

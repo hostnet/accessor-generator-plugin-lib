@@ -171,9 +171,9 @@ class TokenStream
      *
      * @see previous
      * @see next
-     * @param  int   $loc            start location
-     * @param  array $tokens         list of tokens to skip over defaults to whitespace and comments
-     * @param  int   $direction      LTR or RTL, defaults to LTR
+     * @param int   $loc            start location
+     * @param array $tokens         list of tokens to skip over defaults to whitespace and comments
+     * @param int   $direction      LTR or RTL, defaults to LTR
      * @throws \OutOfBoundsException for invalid token location
      * @return int|null              location of the next token found
      */
@@ -211,8 +211,8 @@ class TokenStream
      * so we need to check every single token we inspect
      * to see if it is an array or a scalar type.
      *
-     * @param  int $loc token location
-     * @param  int $type self::TYPE or self::VALUE
+     * @param int $loc token location
+     * @param int $type self::TYPE or self::VALUE
      * @return int|string the value or type of the token
      */
     private function token($loc, $type)
