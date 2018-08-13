@@ -48,7 +48,7 @@ trait ItemMethodsTrait
      */
     public function setShipping(Shipping $shipping)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setShipping() has one argument but %d given.',

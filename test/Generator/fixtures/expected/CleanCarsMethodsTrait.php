@@ -49,7 +49,7 @@ trait CleanCarsMethodsTrait
      */
     public function addCar(Car $car)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'addCars() has one argument but %d given.',
@@ -81,7 +81,7 @@ trait CleanCarsMethodsTrait
      */
     public function removeCar(Car $car)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'removeCars() has one argument but %d given.',

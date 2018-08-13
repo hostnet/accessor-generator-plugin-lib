@@ -48,7 +48,7 @@ trait MovieMethodsTrait
      */
     public function addA(Actor $a)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'addA() has one argument but %d given.',
@@ -104,7 +104,7 @@ trait MovieMethodsTrait
      */
     public function removeA(Actor $a)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'removeA() has one argument but %d given.',

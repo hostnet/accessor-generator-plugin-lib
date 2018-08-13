@@ -97,7 +97,7 @@ trait TypesMethodsTrait
      */
     public function setSmallint($smallint)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setSmallint() has one argument but %d given.',
@@ -183,7 +183,7 @@ trait TypesMethodsTrait
      */
     public function setInteger($integer)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setInteger() has one argument but %d given.',
@@ -273,7 +273,7 @@ trait TypesMethodsTrait
      */
     public function setBigint($bigint)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setBigint() has one argument but %d given.',
@@ -461,7 +461,7 @@ trait TypesMethodsTrait
      */
     public function setFloat($float)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setFloat() has one argument but %d given.',
@@ -526,7 +526,7 @@ trait TypesMethodsTrait
      */
     public function setString($string)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setString() has one argument but %d given.',
@@ -599,7 +599,7 @@ trait TypesMethodsTrait
      */
     public function setText($text)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setText() has one argument but %d given.',
@@ -668,7 +668,7 @@ trait TypesMethodsTrait
      */
     public function setGuid($guid)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setGuid() has one argument but %d given.',
@@ -737,7 +737,7 @@ trait TypesMethodsTrait
      */
     public function setBlob($blob)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setBlob() has one argument but %d given.',
@@ -801,7 +801,7 @@ trait TypesMethodsTrait
      */
     public function setBoolean($boolean)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setBoolean() has one argument but %d given.',
@@ -865,7 +865,7 @@ trait TypesMethodsTrait
      */
     public function setIsThisBoolean($is_this_boolean)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setIsThisBoolean() has one argument but %d given.',
@@ -928,7 +928,7 @@ trait TypesMethodsTrait
      */
     public function setDate(\DateTime $date)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setDate() has one argument but %d given.',
@@ -985,7 +985,7 @@ trait TypesMethodsTrait
      */
     public function setDatetime(\DateTime $datetime)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setDatetime() has one argument but %d given.',
@@ -1043,7 +1043,7 @@ trait TypesMethodsTrait
      */
     public function setArray($array)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setArray() has one argument but %d given.',
@@ -1107,7 +1107,7 @@ trait TypesMethodsTrait
      */
     public function setJsonArray($json_array)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setJsonArray() has one argument but %d given.',
@@ -1171,7 +1171,7 @@ trait TypesMethodsTrait
      */
     public function setObject($object)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setObject() has one argument but %d given.',

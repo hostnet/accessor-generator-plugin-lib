@@ -48,7 +48,7 @@ trait CategoryMethodsTrait
      */
     public function addChild(Category $child)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'addChildren() has one argument but %d given.',
@@ -96,7 +96,7 @@ trait CategoryMethodsTrait
      */
     public function removeChild(Category $child)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'removeChildren() has one argument but %d given.',

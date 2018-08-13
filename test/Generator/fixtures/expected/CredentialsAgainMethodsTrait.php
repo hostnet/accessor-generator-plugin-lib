@@ -21,7 +21,7 @@ trait CredentialsAgainMethodsTrait
      */
     public function setPassword($password)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setPassword() has one argument but %d given.',

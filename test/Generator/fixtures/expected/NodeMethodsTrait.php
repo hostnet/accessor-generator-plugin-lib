@@ -47,7 +47,7 @@ trait NodeMethodsTrait
      */
     public function addOut(Node $out)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'addOut() has one argument but %d given.',
@@ -103,7 +103,7 @@ trait NodeMethodsTrait
      */
     public function removeOut(Node $out)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'removeOut() has one argument but %d given.',

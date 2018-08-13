@@ -48,7 +48,7 @@ trait StudentMethodsTrait
      */
     public function setStudent(StudentInterface $student)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setStudent() has one argument but %d given.',

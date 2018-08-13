@@ -43,7 +43,7 @@ trait CartMethodsTrait
      */
     public function setCustomer(Client $customer)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setCustomer() has one argument but %d given.',

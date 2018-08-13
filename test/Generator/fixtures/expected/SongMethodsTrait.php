@@ -47,7 +47,7 @@ trait SongMethodsTrait
      */
     public function addGenre(Genre $genre)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'addGenres() has one argument but %d given.',
@@ -79,7 +79,7 @@ trait SongMethodsTrait
      */
     public function removeGenre(Genre $genre)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'removeGenres() has one argument but %d given.',

@@ -69,7 +69,7 @@
         );
     }
 {% else %}
-    if (\func_num_args() != 1) {
+    if (\func_num_args() !== 1) {
         throw new \BadMethodCallException(
             sprintf(
                 'set{{ property.name | classify }}() has one argument but %d given.',

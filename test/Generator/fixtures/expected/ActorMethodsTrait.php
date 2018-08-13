@@ -47,7 +47,7 @@ trait ActorMethodsTrait
      */
     public function addMovie(\Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie $movie)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'addMovies() has one argument but %d given.',
@@ -103,7 +103,7 @@ trait ActorMethodsTrait
      */
     public function removeMovie(\Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie $movie)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'removeMovies() has one argument but %d given.',

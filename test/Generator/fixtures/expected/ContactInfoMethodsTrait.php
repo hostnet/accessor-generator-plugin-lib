@@ -47,7 +47,7 @@ trait ContactInfoMethodsTrait
      */
     public function setAddressLine($address_line)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setAddressLine() has one argument but %d given.',
@@ -109,7 +109,7 @@ trait ContactInfoMethodsTrait
      */
     private function setName($name)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setName() has one argument but %d given.',
@@ -171,7 +171,7 @@ trait ContactInfoMethodsTrait
      */
     public function setDeleted($deleted)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setDeleted() has one argument but %d given.',
@@ -228,7 +228,7 @@ trait ContactInfoMethodsTrait
      */
     protected function setSpendsLotsOfMoney($spends_lots_of_money)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setSpendsLotsOfMoney() has one argument but %d given.',
@@ -286,7 +286,7 @@ trait ContactInfoMethodsTrait
      */
     private function addReferencedContact(ContactInfo $referenced_contact)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'addReferencedContacts() has one argument but %d given.',
@@ -334,7 +334,7 @@ trait ContactInfoMethodsTrait
      */
     private function removeReferencedContact(ContactInfo $referenced_contact)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'removeReferencedContacts() has one argument but %d given.',
@@ -469,7 +469,7 @@ trait ContactInfoMethodsTrait
      */
     private function addFriend(ContactInfo $friend)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'addFriends() has one argument but %d given.',
@@ -517,7 +517,7 @@ trait ContactInfoMethodsTrait
      */
     protected function removeFriend(ContactInfo $friend)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'removeFriends() has one argument but %d given.',

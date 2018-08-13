@@ -57,7 +57,7 @@ trait UseFunctionMethodsTrait
      */
     public function setCount($count)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setCount() has one argument but %d given.',

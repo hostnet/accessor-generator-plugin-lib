@@ -52,7 +52,7 @@ trait AnnotationsMethodsTrait
      */
     public function setStupid(\DateTime $stupid)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setStupid() has one argument but %d given.',

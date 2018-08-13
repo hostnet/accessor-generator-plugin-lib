@@ -50,7 +50,7 @@ trait SoftwareMethodsTrait
      */
     public function addFeature(FeatureInterface $feature)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'addFeatures() has one argument but %d given.',
@@ -102,7 +102,7 @@ trait SoftwareMethodsTrait
      */
     public function removeFeature(FeatureInterface $feature)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'removeFeatures() has one argument but %d given.',

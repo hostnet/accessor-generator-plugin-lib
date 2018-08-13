@@ -250,7 +250,7 @@ trait ProductMethodsTrait
      */
     public function addAttribute(Attribute $attribute)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'addAttributes() has one argument but %d given.',
@@ -305,7 +305,7 @@ trait ProductMethodsTrait
      */
     public function removeAttribute(Attribute $attribute)
     {
-        if (\func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'removeAttributes() has one argument but %d given.',
