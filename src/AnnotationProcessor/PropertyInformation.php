@@ -251,14 +251,18 @@ class PropertyInformation implements PropertyInformationInterface
         // this would let the DocParser explode with an Exception, while
         // the goal is to ignore other annotations besides the one explicitly
         // loaded.
-        $without_foreign_annotations = array_filter($imports, function ($import) use ($namespaces) {
-            foreach ($namespaces as $namespace) {
-                if (stripos($namespace, $import) === 0) {
-                    return true;
+        $without_foreign_annotations = array_filter(
+            $imports,
+            function ($import) use ($namespaces) {
+                foreach ($namespaces as $namespace) {
+                    if (stripos($namespace, $import) === 0) {
+                        return true;
+                    }
                 }
+
+                return false;
             }
-            return false;
-        });
+        );
 
         $this->parser->setImports($without_foreign_annotations);
         $this->parser->setIgnoreNotImportedAnnotations(true);
@@ -272,9 +276,7 @@ class PropertyInformation implements PropertyInformationInterface
             foreach ($annotations as $annotation) {
                 $processor->processAnnotation($annotation, $this);
 
-                if ($annotation instanceof Generate
-                    && isset($annotation->encryption_alias)
-                ) {
+                if ($annotation instanceof Generate && isset($annotation->encryption_alias)) {
                     $is_encrypted = true;
                 }
 
@@ -289,7 +291,7 @@ class PropertyInformation implements PropertyInformationInterface
             }
         }
 
-        if ($is_encrypted && ! $is_string) {
+        if ($is_encrypted && !$is_string) {
             throw new \RuntimeException(sprintf(
                 'Property %s in class %s\%s has an encryption_alias set, but is not declared as column type \'string\'',
                 $this->getName(),
@@ -439,6 +441,7 @@ class PropertyInformation implements PropertyInformationInterface
     {
         $this->type = $this->validateType($type);
         $this->type_hint || $this->type_hint = $this->type;
+
         return $this;
     }
 
@@ -463,6 +466,7 @@ class PropertyInformation implements PropertyInformationInterface
     public function setTypeHint(string $type_hint): self
     {
         $this->type_hint = $this->validateType($type_hint);
+
         return $this;
     }
 
@@ -562,6 +566,7 @@ class PropertyInformation implements PropertyInformationInterface
         }
 
         $this->length = $length;
+
         return $this;
     }
 
@@ -597,6 +602,7 @@ class PropertyInformation implements PropertyInformationInterface
 
         // Assign.
         $this->integer_size = $integer_size;
+
         return $this;
     }
 
@@ -830,6 +836,7 @@ class PropertyInformation implements PropertyInformationInterface
     public function setNullable(bool $nullable): self
     {
         $this->nullable = $nullable;
+
         return $this;
     }
 
@@ -853,6 +860,7 @@ class PropertyInformation implements PropertyInformationInterface
     public function setUnique(bool $unique): self
     {
         $this->unique = $unique;
+
         return $this;
     }
 
@@ -876,6 +884,7 @@ class PropertyInformation implements PropertyInformationInterface
     public function setGenerateStrict(bool $generate_strict): self
     {
         $this->generate_strict = $generate_strict;
+
         return $this;
     }
 
@@ -897,6 +906,7 @@ class PropertyInformation implements PropertyInformationInterface
     public function limitMaximumGetVisibility(string $visibility): self
     {
         $this->generate_get = Generate::getMostLimitedVisibility($this->generate_get, $visibility);
+
         return $this;
     }
 
@@ -930,6 +940,7 @@ class PropertyInformation implements PropertyInformationInterface
     public function setIndex(?string $index = null): self
     {
         $this->index = $index;
+
         return $this;
     }
 
@@ -941,6 +952,7 @@ class PropertyInformation implements PropertyInformationInterface
     public function limitMaximumSetVisibility(string $visibility): self
     {
         $this->generate_set = Generate::getMostLimitedVisibility($this->generate_set, $visibility);
+
         return $this;
     }
 
@@ -962,6 +974,7 @@ class PropertyInformation implements PropertyInformationInterface
     public function limitMaximumAddVisibility(string $visibility): self
     {
         $this->generate_add = Generate::getMostLimitedVisibility($this->generate_add, $visibility);
+
         return $this;
     }
 
@@ -983,6 +996,7 @@ class PropertyInformation implements PropertyInformationInterface
     public function limitMaximumRemoveVisibility($visibility): self
     {
         $this->generate_remove = Generate::getMostLimitedVisibility($this->generate_remove, $visibility);
+
         return $this;
     }
 

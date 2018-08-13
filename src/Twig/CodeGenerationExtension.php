@@ -106,9 +106,12 @@ class CodeGenerationExtension extends \Twig_Extension
 
         if ($bits < 1) {
             throw new \DomainException('Bit size must be greater than 0');
-        } elseif ($bits > $max_bits) {
+        }
+
+        if ($bits > $max_bits) {
             $bits = $max_bits;
         }
+
         return -1 << ($bits - 1);
     }
 
@@ -124,9 +127,12 @@ class CodeGenerationExtension extends \Twig_Extension
 
         if ($bits < 1) {
             throw new \DomainException('Bit size must be greater than 0');
-        } elseif ($bits > $max_bits) {
+        }
+
+        if ($bits > $max_bits) {
             $bits = $max_bits;
         }
+
         return (1 << ($bits - 2)) - 1 + (1 << ($bits - 2));
     }
 

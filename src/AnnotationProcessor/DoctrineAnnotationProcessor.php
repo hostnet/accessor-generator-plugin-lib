@@ -236,14 +236,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
 
         if (\in_array(
             $type,
-            [
-                Type::DATETIME,
-                Type::DATETIMETZ,
-                Type::DATE,
-                Type::TIME,
-                self::ZEROED_DATE_TIME,
-                self::ZEROED_DATE,
-            ],
+            [Type::DATETIME, Type::DATETIMETZ, Type::DATE, Type::TIME, self::ZEROED_DATE_TIME, self::ZEROED_DATE],
             true
         )) {
             return '\\' . \DateTime::class;

@@ -48,12 +48,9 @@ class PerLineTokenParser extends \Twig_TokenParser
         $stream->expect(\Twig_Token::BLOCK_END_TYPE);
 
         // sub-parse everything until we reach the endperline tag.
-        $body = $this->parser->subparse(
-            function (\Twig_Token $token) {
-                return $token->test('endperline');
-            },
-            true
-        );
+        $body = $this->parser->subparse(function (\Twig_Token $token) {
+            return $token->test('endperline');
+        }, true);
 
         // make sure our closing tag is also closed neatly and advance the
         // stream to allow continuation of parsing.

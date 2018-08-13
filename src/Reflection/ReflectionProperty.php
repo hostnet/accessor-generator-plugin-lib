@@ -74,13 +74,11 @@ class ReflectionProperty
 
         // Not one and only one of private, protected and public is selected, throw exception.
         if ($active_visibility_modifiers !== 1) {
-            throw new \DomainException(
-                sprintf(
-                    '$modifiers (%s) has not ONE of IS_PRIVATE, IS_PROTECTED or IS_PUBLIC set, but found %s.',
-                    $modifiers,
-                    $active_visibility_modifiers
-                )
-            );
+            throw new \DomainException(sprintf(
+                '$modifiers (%s) has not ONE of IS_PRIVATE, IS_PROTECTED or IS_PUBLIC set, but found %s.',
+                $modifiers,
+                $active_visibility_modifiers
+            ));
         }
 
         $this->modifiers = $modifiers;

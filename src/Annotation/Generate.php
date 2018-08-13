@@ -277,12 +277,15 @@ class Generate
         if (null === $this->get) {
             $this->get = $visibility;
         }
+
         if (null === $this->set) {
             $this->set = $visibility;
         }
+
         if (null === $this->add) {
             $this->add = $visibility;
         }
+
         if (null !== $this->remove) {
             return;
         }
