@@ -22,12 +22,12 @@ class ParameterEnumTest extends TestCase
      */
     private $entity;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->entity = new Parameterized();
     }
 
-    public function testGetter()
+    public function testGetter(): void
     {
         $obj = $this->entity->getParams();
         self::assertInstanceOf(ParamNameEnum::class, $obj);
@@ -38,12 +38,12 @@ class ParameterEnumTest extends TestCase
      * @expectedException \LogicException
      * @expectedExceptionMessage Parameter "A_SOME_ARRAY" does not exist or has never been initialized.
      */
-    public function testGetterUndefinedParameter()
+    public function testGetterUndefinedParameter(): void
     {
         $this->entity->getParams()->getSomeArray();
     }
 
-    public function methodsProvider()
+    public function methodsProvider(): array
     {
         return [
             ['SomeArray', [1, 2, 3], [4, 5, 6], 'Parameter "A_SOME_ARRAY" does not exist'],
@@ -62,7 +62,7 @@ class ParameterEnumTest extends TestCase
      * @param mixed  $value2
      * @param string $exception_message_not_exists
      */
-    public function testMethods($name, $value1, $value2, $exception_message_not_exists)
+    public function testMethods($name, $value1, $value2, $exception_message_not_exists): void
     {
         $get    = 'get' . $name;
         $set    = 'set' . $name;
@@ -93,7 +93,7 @@ class ParameterEnumTest extends TestCase
         $object->$get();
     }
 
-    public function testArray()
+    public function testArray(): void
     {
         self::assertFalse($this->entity->getParams()->hasSomeArray());
 

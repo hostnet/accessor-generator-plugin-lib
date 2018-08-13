@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 class UseFunctionTest extends TestCase
 {
-    public function testGeneric()
+    public function testGeneric(): void
     {
         $use_function = new UseFunction();
 
@@ -22,7 +22,7 @@ class UseFunctionTest extends TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testGetCountTooManyArguments()
+    public function testGetCountTooManyArguments(): void
     {
         $use_function = new UseFunction();
 
@@ -32,7 +32,7 @@ class UseFunctionTest extends TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testSetCountTooManyArguments()
+    public function testSetCountTooManyArguments(): void
     {
         $use_function = new UseFunction();
 

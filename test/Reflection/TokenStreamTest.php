@@ -21,12 +21,12 @@ class TokenStreamTest extends TestCase
      */
     private $stream;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->stream = new TokenStream(file_get_contents(__DIR__ . '/fixtures/' . self::SOURCE));
     }
 
-    public function typeProvider()
+    public function typeProvider(): array
     {
         return [
             [         0, T_OPEN_TAG                                ],
@@ -45,7 +45,7 @@ class TokenStreamTest extends TestCase
      * @param string $type
      * @param string $exception
      */
-    public function testType($loc, $type, $exception = null)
+    public function testType($loc, $type, $exception = null): void
     {
         $exception && $this->expectException($exception);
         $output = $this->stream->type($loc);
@@ -63,7 +63,7 @@ class TokenStreamTest extends TestCase
         );
     }
 
-    public function valueProvider()
+    public function valueProvider(): array
     {
         return [
             [         0, "<?php\n"                                       ],
@@ -82,13 +82,13 @@ class TokenStreamTest extends TestCase
      * @param string $value
      * @param string $exception
      */
-    public function testValue($loc, $value, $exception = null)
+    public function testValue($loc, $value, $exception = null): void
     {
         $exception && $this->expectException($exception);
         self::assertEquals($value, $this->stream->value($loc));
     }
 
-    public function scanProvider()
+    public function scanProvider(): array
     {
         return [
             // Boundary Checks
@@ -117,13 +117,13 @@ class TokenStreamTest extends TestCase
      * @param int|null     $output_loc
      * @param string       $exception
      */
-    public function testScan(array $tokens, $input_loc, $output_loc, $exception = null)
+    public function testScan(array $tokens, $input_loc, $output_loc, $exception = null): void
     {
         $exception && $this->expectException($exception);
         self::assertSame($output_loc, $this->stream->scan($input_loc, $tokens));
     }
 
-    public function nextProvider()
+    public function nextProvider(): array
     {
         return [
             // Boundary checks
@@ -150,7 +150,7 @@ class TokenStreamTest extends TestCase
      * @param int[]|char[] $tokens
      * @param string       $exception
      */
-    public function testNext($input_loc, $output_loc, array $tokens = null, $exception = null)
+    public function testNext($input_loc, $output_loc, array $tokens = null, $exception = null): void
     {
         $exception && $this->expectException($exception);
         if ($tokens === null) {
@@ -160,7 +160,7 @@ class TokenStreamTest extends TestCase
         }
     }
 
-    public function previousProvider()
+    public function previousProvider(): array
     {
         return [
             // Boundary checks
@@ -188,7 +188,7 @@ class TokenStreamTest extends TestCase
      * @param int[]|char[] $tokens
      * @param string       $exception
      */
-    public function testPrevious($input_loc, $output_loc, array $tokens = null, $exception = null)
+    public function testPrevious($input_loc, $output_loc, array $tokens = null, $exception = null): void
     {
         $exception && $this->expectException($exception);
         if ($tokens === null) {

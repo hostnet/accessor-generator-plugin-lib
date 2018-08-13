@@ -47,7 +47,7 @@ class CodeGenerationExtensionTest extends TestCase
     /**
      * Test if the name of the Twig extension is the nice one we thought of.
      */
-    public function testGetName()
+    public function testGetName(): void
     {
         $cge = new CodeGenerationExtension();
         self::assertEquals('Hostnet Twig Code Generation Extension', $cge->getName());
@@ -56,7 +56,7 @@ class CodeGenerationExtensionTest extends TestCase
     /**
      * Check that we register the PerLine token parser and no others.
      */
-    public function testGetTokenParsers()
+    public function testGetTokenParsers(): void
     {
         $cge     = new CodeGenerationExtension();
         $parsers = $cge->getTokenParsers();
@@ -70,7 +70,7 @@ class CodeGenerationExtensionTest extends TestCase
      * ordered as an array of string tuples.
      * @return string[][]
      */
-    public function classifyProvider()
+    public function classifyProvider(): array
     {
         return [
             ['test_string', 'TestString'],
@@ -85,12 +85,12 @@ class CodeGenerationExtensionTest extends TestCase
     /**
      * @dataProvider classifyProvider
      */
-    public function testClassify($input, $output)
+    public function testClassify($input, $output): void
     {
         self::assertEquals($output, $this->twig->render('classify', ['data' => $input]));
     }
 
-    public function twosComplementMaxProvider()
+    public function twosComplementMaxProvider(): array
     {
         return [
             [                -10, null           , \Twig_Error_Runtime::class],
@@ -104,13 +104,13 @@ class CodeGenerationExtensionTest extends TestCase
     /**
      * @dataProvider twosComplementMinProvider
      */
-    public function testTwosComplementMin($input, $output, $exception = null)
+    public function testTwosComplementMin($input, $output, $exception = null): void
     {
         $exception && $this->expectException($exception);
         self::assertEquals($output, $this->twig->render('twos_complement_min', ['data' => $input]));
     }
 
-    public function twosComplementMinProvider()
+    public function twosComplementMinProvider(): array
     {
         return [
             [                -10, null           , \Twig_Error_Runtime::class],
@@ -124,7 +124,7 @@ class CodeGenerationExtensionTest extends TestCase
     /**
      * @dataProvider twosComplementMaxProvider
      */
-    public function testTwosComplementMax($input, $output, $exception = null)
+    public function testTwosComplementMax($input, $output, $exception = null): void
     {
         $exception && $this->expectException($exception);
         self::assertEquals($output, $this->twig->render('twos_complement_max', ['data' => $input]));
@@ -185,12 +185,12 @@ class CodeGenerationExtensionTest extends TestCase
     /**
      * @dataProvider singularizeProvider
      */
-    public function testSingularize($singular, $plural)
+    public function testSingularize($singular, $plural): void
     {
         self::assertEquals($singular, $this->twig->render('singularize', ['data' => $plural]));
     }
 
-    public function perLineProvider()
+    public function perLineProvider(): array
     {
         return [
             ['perline_stars', "Line 1\nLine 2\nLine 3", " * Line 1 *\n * Line 2 *\n * Line 3 *\n"],
@@ -202,12 +202,12 @@ class CodeGenerationExtensionTest extends TestCase
     /**
      * @dataProvider perLineProvider
      */
-    public function testPerLine($template, $input, $output)
+    public function testPerLine($template, $input, $output): void
     {
         self::assertEquals($output, $this->twig->render($template, ['data' => $input]));
     }
 
-    public function decimalRightShiftProvider()
+    public function decimalRightShiftProvider(): array
     {
         return [
             [  10,  0, 10           ],
@@ -225,7 +225,7 @@ class CodeGenerationExtensionTest extends TestCase
     /**
      * @dataProvider decimalRightShiftProvider
      */
-    public function testDecimalRightShift($input, $amount, $output, $exception = null)
+    public function testDecimalRightShift($input, $amount, $output, $exception = null): void
     {
         $exception && $this->expectException($exception);
         self::assertEquals(

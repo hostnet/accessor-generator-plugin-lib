@@ -14,7 +14,7 @@ class TokenStream
      * @internal
      * @var int
      */
-    const TYPE = 0;
+    private const TYPE = 0;
 
     /**
      * Location of value within the PHP Token.
@@ -22,7 +22,7 @@ class TokenStream
      * @internal
      * @var int
      */
-    const VALUE = 1;
+    private const VALUE = 1;
 
     /**
      * Search direction from left to right.
@@ -30,7 +30,7 @@ class TokenStream
      * @internal
      * @var int
      */
-    const LTR = 1;
+    private const LTR = 1;
 
     /**
      * Search direction from right to left.
@@ -38,14 +38,14 @@ class TokenStream
      * @internal
      * @var int
      */
-    const RTL = -1;
+    private const RTL = -1;
 
     /**
      * PHP Token Stack.
      *
      * @var array
      */
-    private $tokens = [];
+    private $tokens;
 
     /**
      * @param string $source
@@ -62,7 +62,7 @@ class TokenStream
      * so we need to check every single token we inspect
      * to see if it is an array or a scalar type.
      *
-     * @param  int                   $loc token location
+     * @param int                   $loc token location
      * @return string|int            the char value of the token or a numeric
      *                               value corresponding with the T_ constants.
      * @throws \OutOfBoundsException for invalid token location
@@ -79,11 +79,11 @@ class TokenStream
      * so we need to check every single token we inspect
      * to see if it is an array or a scalar type.
      *
-     * @param  int $loc              token location
+     * @param int $loc              token location
      * @return string                value for this token
      * @throws \OutOfBoundsException for invalid token location
      */
-    public function value($loc)
+    public function value($loc): string
     {
         return $this->token($loc, self::VALUE);
     }
@@ -95,8 +95,8 @@ class TokenStream
      *
      * Does not inspect the current token.
      *
-     * @param  int   $loc
-     * @param  array $tokens          PHP tokens (T_*)
+     * @param int   $loc
+     * @param array $tokens          PHP tokens (T_*)
      * @throws \OutOfBoundsException
      * @return number|NULL
      */
@@ -117,7 +117,7 @@ class TokenStream
         while (++$loc < count($this->tokens)) {
             // Inspect token.
             $type = $this->type($loc);
-            if (in_array($type, $tokens)) {
+            if (\in_array($type, $tokens)) {
                 // return the location where we found $token.
                 return $loc;
             }
@@ -135,13 +135,13 @@ class TokenStream
      *
      * Will return null if there are no tokens to skip.
      *
-     * @param  int   $loc            start location
-     * @param  array $tokens         list of tokens to skip over
+     * @param int   $loc            start location
+     * @param array $tokens         list of tokens to skip over
      *                               defaults to whitespace and
      *                               comments
      * @return int|null for invalid token location
      */
-    public function next($loc, array $tokens = [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT])
+    public function next($loc, array $tokens = [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT]): ?int
     {
         return $this->skip($loc, $tokens, self::LTR);
     }
@@ -154,14 +154,14 @@ class TokenStream
      *
      * Does not include current token.
      *
-     * @param  int  $loc             start location
-     * @param  array $tokens         list of tokens to skip over
+     * @param int  $loc             start location
+     * @param array $tokens         list of tokens to skip over
      *                               defaults to whitespace and
      *                               comments
      * @throws \OutOfBoundsException for invalid token location
      * @return int|null              location of the next token found
      */
-    public function previous($loc, array $tokens = [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT])
+    public function previous($loc, array $tokens = [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT]): ?int
     {
         return $this->skip($loc, $tokens, self::RTL);
     }
@@ -177,7 +177,7 @@ class TokenStream
      * @throws \OutOfBoundsException for invalid token location
      * @return int|null              location of the next token found
      */
-    private function skip($loc, array $tokens, $direction)
+    private function skip($loc, array $tokens, $direction): ?int
     {
         // Check validity of start position
         // The first and last position of the stream

@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
  */
 class GenerateTest extends TestCase
 {
-    public function testDefaults()
+    public function testDefaults(): void
     {
         $generate = new Generate();
 
@@ -31,7 +31,7 @@ class GenerateTest extends TestCase
         self::assertNull($generate->encryption_alias);
     }
 
-    public function testTypeAndStrictnessAndEncryptionAlias()
+    public function testTypeAndStrictnessAndEncryptionAlias(): void
     {
         $generate = new Generate();
 
@@ -47,7 +47,7 @@ class GenerateTest extends TestCase
     /**
      * @dataProvider newProvider
      */
-    public function testNew($given, $expected)
+    public function testNew($given, $expected): void
     {
         $generate = new Generate();
 
@@ -64,7 +64,7 @@ class GenerateTest extends TestCase
         self::assertSame($expected, $generate->getIs());
     }
 
-    public function newProvider()
+    public function newProvider(): array
     {
         return [
             [Generate::VISIBILITY_PUBLIC, Generate::VISIBILITY_PUBLIC],
@@ -79,12 +79,12 @@ class GenerateTest extends TestCase
     /**
      * @dataProvider getMostLimitedVisibilityProvider
      */
-    public function testGetMostLimitedVisibility($expected, array $input)
+    public function testGetMostLimitedVisibility($expected, array $input): void
     {
         self::assertSame($expected, Generate::getMostLimitedVisibility(... $input));
     }
 
-    public function getMostLimitedVisibilityProvider()
+    public function getMostLimitedVisibilityProvider(): array
     {
         return [[
             Generate::VISIBILITY_NONE,

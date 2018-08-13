@@ -58,7 +58,7 @@ class GenerateTypesTest extends TestCase
      * @param mixed $extra_parameter
      * @dataProvider getTypeProvider
      */
-    public function testGetType($type, $value, $exception = null, $extra_parameter = null)
+    public function testGetType($type, $value, $exception = null, $extra_parameter = null): void
     {
         $exception && $this->expectException($exception);
 
@@ -132,7 +132,7 @@ class GenerateTypesTest extends TestCase
      * @param mixed $extra_parameter
      * @dataProvider setTypeProvider
      */
-    public function testSetType($type, $value, $exception = null, $extra_parameter = null)
+    public function testSetType($type, $value, $exception = null, $extra_parameter = null): void
     {
         $exception && $this->expectException($exception);
         $types = new GenerateTypes();

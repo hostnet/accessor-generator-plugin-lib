@@ -126,7 +126,7 @@ class DecimalTest extends TestCase
      * @param mixed $extra_parameter
      * @dataProvider setProvider
      */
-    public function testSet($scale, $precision, $value, $exception = null, $extra_parameter = null)
+    public function testSet($scale, $precision, $value, $exception = null, $extra_parameter = null): void
     {
         $exception && $this->expectException($exception);
         $decimal = new Decimal();
@@ -219,7 +219,7 @@ class DecimalTest extends TestCase
    /**
     * @dataProvider roundProvider
     */
-    public function testRound($field, $value_in, $value_out)
+    public function testRound($field, $value_in, $value_out): void
     {
         $decimal = new Decimal();
         $setter  = 'set' . Inflector::classify($field);

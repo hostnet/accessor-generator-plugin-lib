@@ -44,7 +44,7 @@ class EnumItemInformationTest extends TestCase
      */
     public const BROKEN_CONSTANT = 'BROKEN_CONSTANT';
 
-    public function constantProvider()
+    public function constantProvider(): array
     {
         return [
             [self::A_TEST_CONSTANT, 'int'],
@@ -61,7 +61,7 @@ class EnumItemInformationTest extends TestCase
      * @param string $name
      * @param string $type
      */
-    public function testConstants($name, $type)
+    public function testConstants($name, $type): void
     {
         $reflector = new \ReflectionClass(self::class);
         $constant  = $reflector->getReflectionConstant($name);
@@ -79,7 +79,7 @@ class EnumItemInformationTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The name of the constant "BROKEN_CONSTANT" is not prefixed with a valid type string
      */
-    public function testBrokenConstant()
+    public function testBrokenConstant(): void
     {
         $reflector = new \ReflectionClass(self::class);
         $constant  = $reflector->getReflectionConstant('BROKEN_CONSTANT');

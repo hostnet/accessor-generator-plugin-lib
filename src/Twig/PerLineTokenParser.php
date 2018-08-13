@@ -22,7 +22,7 @@ class PerLineTokenParser extends \Twig_TokenParser
     /**
      * @see Twig_TokenParserInterface::getTag()
      */
-    public function getTag()
+    public function getTag(): string
     {
         return 'perline';
     }
@@ -33,10 +33,13 @@ class PerLineTokenParser extends \Twig_TokenParser
      * Parse everything within the perline block and then restructure the
      * contents into some thing nice to build a PerLineNode out of.
      *
-     * @param  \Twig_Token         $token
-     * @return \Twig_Node_Print
+     * @param \Twig_Token $token
+     *
+     * @throws \Twig_Error_Syntax
+     *
+     * @return PerLineNode
      */
-    public function parse(\Twig_Token $token)
+    public function parse(\Twig_Token $token): PerLineNode
     {
         $stream = $this->parser->getStream();
 
@@ -64,8 +67,12 @@ class PerLineTokenParser extends \Twig_TokenParser
      * Parse the body into a prefix, postfix and all the
      * other twig nodes that will compile into multiple
      * lines.
+     *
+     * @param \Twig_Node $body
+     *
+     * @return PerLineNode
      */
-    private function parseBody(\Twig_Node $body)
+    private function parseBody(\Twig_Node $body): PerLineNode
     {
         $prefix  = '';                       // Text before the (possibly) multi line expression
         $postfix = '';                       // Text before the (possibly) multi line expression
@@ -75,7 +82,7 @@ class PerLineTokenParser extends \Twig_TokenParser
         // only useful content of the perline tags, so we return only the body
         // tag. This is the case when the perline tags could be removed without
         // an effect in the generated code.
-        if (count($body) == 0) {
+        if (count($body) === 0) {
             return new PerLineNode($body, '', '', $lineno, $this->getTag());
         }
 
@@ -101,7 +108,7 @@ class PerLineTokenParser extends \Twig_TokenParser
         // After we ditched the prefix and postfix there could only be one node
         // left, ready to be returned and used directly. If there are multiple
         // we wrap those in a Twig Node.
-        if (count($nodes) == 1) {
+        if (count($nodes) === 1) {
             $nodes = current($nodes);
         } else {
             $nodes = new \Twig_Node($nodes);

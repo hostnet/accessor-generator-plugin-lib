@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 
 class SongTest extends TestCase
 {
-    public function testGetGenres()
+    public function testGetGenres(): void
     {
         $song   = new Song();
         $genres = $song->getGenres();
@@ -24,7 +24,7 @@ class SongTest extends TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testGetGenresTooManyArguments()
+    public function testGetGenresTooManyArguments(): void
     {
         $song = new Song();
         $song->getGenres(1);
@@ -33,7 +33,7 @@ class SongTest extends TestCase
     /**
      * @depends testGetGenres
      */
-    public function testAddGenre()
+    public function testAddGenre(): void
     {
         $radar_love = new Song();
         $help       = new Song();
@@ -70,7 +70,7 @@ class SongTest extends TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testAddGenreTooManyArguments()
+    public function testAddGenreTooManyArguments(): void
     {
         $song  = new Song();
         $genre = new Genre();
@@ -81,7 +81,7 @@ class SongTest extends TestCase
      * @depends testGetGenres
      * @depends testAddGenre
      */
-    public function testRemoveGenre()
+    public function testRemoveGenre(): void
     {
         $song  = new Song();
         $genre = new Genre();
@@ -106,7 +106,7 @@ class SongTest extends TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testRemoveGenreTooManyArguments()
+    public function testRemoveGenreTooManyArguments(): void
     {
         $song  = new Song();
         $genre = new Genre();

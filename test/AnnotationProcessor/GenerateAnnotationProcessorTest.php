@@ -118,7 +118,7 @@ class GenerateAnnotationProcessorTest extends TestCase
      * @param string $type
      * @param string $encryption
      */
-    public function testProcessAnnotation($annotation, $get, $set, $add, $remove, $type, $encryption)
+    public function testProcessAnnotation($annotation, $get, $set, $add, $remove, $type, $encryption): void
     {
         // Set up dependencies.
         $property    = new ReflectionProperty('test');
@@ -143,7 +143,7 @@ class GenerateAnnotationProcessorTest extends TestCase
         self::assertFalse($information->willGenerateRemove());
     }
 
-    public function testEnumeratorVisibilities()
+    public function testEnumeratorVisibilities(): void
     {
         $enumerator        = new Enumerator();
         $enumerator->name  = 'Foo';
@@ -172,7 +172,7 @@ class GenerateAnnotationProcessorTest extends TestCase
         self::assertFalse($information->willGenerateRemove());
     }
 
-    public function testGetProcessableAnnotationNamespace()
+    public function testGetProcessableAnnotationNamespace(): void
     {
         self::assertSame(
             'Hostnet\Component\AccessorGenerator\Annotation',

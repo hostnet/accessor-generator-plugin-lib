@@ -26,28 +26,28 @@ class Generate
      *
      * @var string
      */
-    const VISIBILITY_NONE = 'none';
+    public const VISIBILITY_NONE = 'none';
 
     /**
      * A public method should be generated.
      *
      * @var string
      */
-    const VISIBILITY_PUBLIC = 'public';
+    public const VISIBILITY_PUBLIC = 'public';
 
     /**
      * A protected method should be generated.
      *
      * @var string
      */
-    const VISIBILITY_PROTECTED = 'protected';
+    public const VISIBILITY_PROTECTED = 'protected';
 
     /**
      * A private method should be generated.
      *
      * @var string
      */
-    const VISIBILITY_PRIVATE = 'private';
+    public const VISIBILITY_PRIVATE = 'private';
 
     /**
      * Will generate a getter of the given visibility.
@@ -151,7 +151,7 @@ class Generate
     public $encryption_alias;
 
     /**
-     * @return string
+     * @return string|bool|null
      */
     public function getGet()
     {
@@ -159,7 +159,7 @@ class Generate
     }
 
     /**
-     * @return string
+     * @return string|bool|null
      */
     public function getSet()
     {
@@ -167,7 +167,7 @@ class Generate
     }
 
     /**
-     * @return string
+     * @return string|bool|null
      */
     public function getAdd()
     {
@@ -175,7 +175,7 @@ class Generate
     }
 
     /**
-     * @return string
+     * @return string|bool|null
      */
     public function getRemove()
     {
@@ -183,41 +183,32 @@ class Generate
     }
 
     /**
-     * @return string
+     * @return string|bool|null
      */
     public function getIs()
     {
         return $this->castToSupportedValue($this->is);
     }
 
-    /**
-     * @return string|null
-     */
-    public function getType()
+    public function getType(): ?string
     {
         return $this->type;
     }
 
-    /**
-     * @return bool
-     */
-    public function isStrict()
+    public function isStrict(): bool
     {
         return $this->strict;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getEncryptionAlias()
+    public function getEncryptionAlias(): ?string
     {
         return $this->encryption_alias;
     }
 
     /**
-     * @return string[]
+     * @return Enumerator[]
      */
-    public function getEnumerators()
+    public function getEnumerators(): array
     {
         return $this->enumerators;
     }
@@ -225,8 +216,9 @@ class Generate
     /**
      * Cast legacy values to their string representative.
      *
-     * @param bool $value
-     * @return string
+     * @param mixed $value
+     *
+     * @return string|null
      */
     private function castToSupportedValue($value)
     {
@@ -259,9 +251,10 @@ class Generate
      *  - public
      *
      * @param array ...$requirements
+     *
      * @return string
      */
-    public static function getMostLimitedVisibility(...$requirements)
+    public static function getMostLimitedVisibility(...$requirements): string
     {
         foreach ([self::VISIBILITY_NONE, self::VISIBILITY_PRIVATE, self::VISIBILITY_PROTECTED] as $search_string) {
             foreach ($requirements as $requirement) {
@@ -279,7 +272,7 @@ class Generate
      *
      * @param string $visibility
      */
-    public function setDefaultVisibility(string $visibility)
+    public function setDefaultVisibility(string $visibility): void
     {
         if (null === $this->get) {
             $this->get = $visibility;

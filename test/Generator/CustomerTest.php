@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 class CustomerTest extends TestCase
 {
-    public function testSetCart()
+    public function testSetCart(): void
     {
         $cart     = new Cart();
         $customer = new Customer();
@@ -24,7 +24,7 @@ class CustomerTest extends TestCase
     /**
      * @expectedException \Doctrine\ORM\EntityNotFoundException
      */
-    public function testGetCartEmpty()
+    public function testGetCartEmpty(): void
     {
         $customer = new Customer();
         $customer->getCart();
@@ -33,7 +33,7 @@ class CustomerTest extends TestCase
     /**
      * @expectedException BadMethodCallException
      */
-    public function testGetCartTooManyArguments()
+    public function testGetCartTooManyArguments(): void
     {
         $customer = new Customer();
         $customer->getCart(1);
@@ -42,7 +42,7 @@ class CustomerTest extends TestCase
     /**
      * @expectedException BadMethodCallException
      */
-    public function testSetCartTooManyArguments()
+    public function testSetCartTooManyArguments(): void
     {
         $cart     = new Cart();
         $customer = new Customer();

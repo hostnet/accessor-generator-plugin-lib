@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ContactInfoTest extends TestCase
 {
-    public function testSetWrong()
+    public function testSetWrong(): void
     {
         $alice = new ContactInfo();
         foreach ([
@@ -33,7 +33,7 @@ class ContactInfoTest extends TestCase
         }
     }
 
-    public function testSet()
+    public function testSet(): void
     {
         $alice = new ContactInfo();
         self::assertSame($alice, $alice->setAddressLine(''));
@@ -50,7 +50,7 @@ class ContactInfoTest extends TestCase
         }
     }
 
-    public function testRemove()
+    public function testRemove(): void
     {
         $alice = new ContactInfo();
         $bob   = new ContactInfo();
@@ -65,7 +65,7 @@ class ContactInfoTest extends TestCase
         }
     }
 
-    public function testAddTwice()
+    public function testAddTwice(): void
     {
         $alice = new ContactInfo();
         $bob   = new ContactInfo();
@@ -83,7 +83,7 @@ class ContactInfoTest extends TestCase
         }
     }
 
-    public function testGarbage()
+    public function testGarbage(): void
     {
         $info = new ContactInfo();
 
@@ -99,7 +99,7 @@ class ContactInfoTest extends TestCase
         }
     }
 
-    public function testGetAll()
+    public function testGetAll(): void
     {
         $info = new ContactInfo();
         $all  = $info->getAll();

@@ -49,7 +49,8 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * @param  PropertyInformation $information
      * @return void
      */
-    public function processAnnotation($annotation, PropertyInformation $information)
+
+    public function processAnnotation($annotation, PropertyInformation $information): void
     {
         // Process scalar value (db-wise) columns.
         if ($annotation instanceof Column) {
@@ -93,9 +94,9 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
     }
 
     /**
-     * @see AnnotationProcessorInterface::getProcessableAnnotations()
+     * {@inheritdoc}
      */
-    public function getProcessableAnnotationNamespace()
+    public function getProcessableAnnotationNamespace(): string
     {
         return 'Doctrine\ORM\Mapping';
     }
@@ -110,7 +111,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * @param mixed $annotation with annotation Annotation
      * @param PropertyInformation $information
      */
-    private function processBidirectional($annotation, PropertyInformation $information)
+    private function processBidirectional($annotation, PropertyInformation $information): void
     {
         // Parse the mappedBy and inversedBy columns, there is no nice interface
         // on them so we have to check for existence of the property.
@@ -187,7 +188,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * @param JoinColumn $join_column
      * @param PropertyInformation $information
      */
-    private function processJoinColumn(JoinColumn $join_column, PropertyInformation $information)
+    private function processJoinColumn(JoinColumn $join_column, PropertyInformation $information): void
     {
         $information->setNullable($join_column->nullable);
         $information->setUnique($join_column->unique);
@@ -207,8 +208,9 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * @see http://php.net/manual/en/function.gettype.php (double vs float)
      * @see http://doctrine-dbal.readthedocs.org/en/latest/reference/types.html
      *
-     * @param  string $type
-     * @return string A valid PHP type
+     * @param mixed $type
+     *
+     * @return mixed A valid PHP type
      */
     private function transformType($type)
     {
@@ -275,7 +277,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * @param  string $type
      * @return string
      */
-    private function transformComplexType($type)
+    private function transformComplexType($type): string
     {
         if (strpos($type, '\\') > 0) {
             return '\\' . $type;
@@ -298,7 +300,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * @param  string $type
      * @return int
      */
-    private function getIntegerSizeForType($type)
+    private function getIntegerSizeForType(string $type): int
     {
         if ($type === 'bool' || $type === 'boolean') {
             return 1;

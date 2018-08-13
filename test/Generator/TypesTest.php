@@ -73,7 +73,7 @@ class TypesTest extends TestCase
      * @param mixed $extra_parameter
      * @dataProvider getTypeProvider
      */
-    public function testGetType($type, $value, $exception = null, $extra_parameter = null)
+    public function testGetType($type, $value, $exception = null, $extra_parameter = null): void
     {
         $exception && $this->expectException($exception);
 
@@ -177,7 +177,7 @@ class TypesTest extends TestCase
      * @param mixed $extra_parameter
      * @dataProvider setTypeProvider
      */
-    public function testSetType($type, $value, $exception = null, $extra_parameter = null)
+    public function testSetType($type, $value, $exception = null, $extra_parameter = null): void
     {
         $exception && $this->expectException($exception);
         $types = new Types();
@@ -215,7 +215,7 @@ class TypesTest extends TestCase
     /**
      * @expectedException DomainException
      */
-    public function testSetDecimalTooBig()
+    public function testSetDecimalTooBig(): void
     {
         $types = new Types();
         $types->setDecimal('1E+10');
@@ -224,13 +224,13 @@ class TypesTest extends TestCase
     /**
      * @expectedException DomainException
      */
-    public function testSetDecimalTooSmall()
+    public function testSetDecimalTooSmall(): void
     {
         $types = new Types();
         $types->setDecimal('+10E-2');
     }
 
-    public function testSetDecimal()
+    public function testSetDecimal(): void
     {
         $types = new Types();
 

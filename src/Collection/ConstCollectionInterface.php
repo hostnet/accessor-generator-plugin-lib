@@ -6,10 +6,7 @@ declare(strict_types=1);
 
 namespace Hostnet\Component\AccessorGenerator\Collection;
 
-use ArrayAccess;
-use Closure;
-use Countable;
-use IteratorAggregate;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * Constant Collection/Array/OrderedMap interface.
@@ -19,7 +16,7 @@ use IteratorAggregate;
  * rather than to change the collection and return a self-reference. This
  * behaviour is the same for both mutable and immutable collections.
  */
-interface ConstCollectionInterface extends Countable, IteratorAggregate, ArrayAccess
+interface ConstCollectionInterface extends \Countable, \IteratorAggregate, \ArrayAccess
 {
     /**
      * Checks whether an element is contained in the collection.
@@ -28,14 +25,14 @@ interface ConstCollectionInterface extends Countable, IteratorAggregate, ArrayAc
      * @param  mixed $element The element to search for.
      * @return bool TRUE if the collection contains the element, FALSE otherwise.
      */
-    public function contains($element);
+    public function contains($element): bool;
 
     /**
      * Checks whether the collection is empty (contains no elements).
      *
      * @return bool TRUE if the collection is empty, FALSE otherwise.
      */
-    public function isEmpty();
+    public function isEmpty(): bool;
 
     /**
      * Returns true if the collection contains an element with the specified
@@ -44,7 +41,7 @@ interface ConstCollectionInterface extends Countable, IteratorAggregate, ArrayAc
      * @param  string|int $key The key/index to check for.
      * @return bool
      */
-    public function containsKey($key);
+    public function containsKey($key): bool;
 
     /**
      * Returns the element at the specified key/index.
@@ -60,7 +57,7 @@ interface ConstCollectionInterface extends Countable, IteratorAggregate, ArrayAc
      *
      * @return string[]
      */
-    public function getKeys();
+    public function getKeys(): array;
 
     /**
      * Returns the values of all elements in the collection, in the order they
@@ -68,7 +65,7 @@ interface ConstCollectionInterface extends Countable, IteratorAggregate, ArrayAc
      *
      * @return mixed[]
      */
-    public function getValues();
+    public function getValues(): array;
 
     /**
      * Returns a native PHP array representation of the collection. The array
@@ -76,7 +73,7 @@ interface ConstCollectionInterface extends Countable, IteratorAggregate, ArrayAc
      *
      * @return array
      */
-    public function toArray();
+    public function toArray(): array;
 
     /**
      * Sets the internal iterator to the first element in the collection and
@@ -119,37 +116,41 @@ interface ConstCollectionInterface extends Countable, IteratorAggregate, ArrayAc
     /**
      * Returns true if the predicate is true for at least one element, false otherwise.
      *
-     * @param  Closure $predicate
+     * @param \Closure $predicate
+     *
      * @return bool
      */
-    public function exists(Closure $predicate);
+    public function exists(\Closure $predicate): bool;
 
     /**
      * Returns all the elements of this collection that satisfy the given predicate.
      * The order of the elements is preserved.
      *
-     * @param  Closure $predicate
-     * @return ConstCollectionInterface
+     * @param \Closure $predicate
+     *
+     * @return Collection
      */
-    public function filter(Closure $predicate);
+    public function filter(\Closure $predicate): Collection;
 
     /**
      * Returns true if the given predicate is satisfied by all elements in this
      * collection, false otherwise.
      *
-     * @param  Closure $predicate
+     * @param \Closure $predicate
+     *
      * @return bool
      */
-    public function forAll(Closure $predicate);
+    public function forAll(\Closure $predicate): bool;
 
     /**
      * Applies the given function to each element in the collection and returns
      * a new collection with the elements returned by the function.
      *
-     * @param  Closure $func
-     * @return ConstCollectionInterface
+     * @param \Closure $func
+     *
+     * @return Collection
      */
-    public function map(Closure $func);
+    public function map(\Closure $func): Collection;
 
     /**
      * Partitions this collection in two collections according to a predicate.
@@ -159,10 +160,11 @@ interface ConstCollectionInterface extends Countable, IteratorAggregate, ArrayAc
      * the predicate returned TRUE, the second returned element contains the
      * collection of elements where the predicate returned FALSE.
      *
-     * @param  Closure $predicate
-     * @return ConstCollectionInterface[]
+     * @param \Closure $predicate
+     *
+     * @return Collection[]
      */
-    public function partition(Closure $predicate);
+    public function partition(\Closure $predicate): array;
 
     /**
      * Returns the index/key of a given element or false if the requested
@@ -170,7 +172,8 @@ interface ConstCollectionInterface extends Countable, IteratorAggregate, ArrayAc
      * that means not only the value but also the type must match. For objects
      * this means reference equality.
      *
-     * @param  mixed $element The element to search for.
+     * @param mixed $element The element to search for.
+     *
      * @return int|string|bool
      */
     public function indexOf($element);
@@ -186,9 +189,10 @@ interface ConstCollectionInterface extends Countable, IteratorAggregate, ArrayAc
      * return the selected slice and NOT change the elements contained in the
      * collection slice is called on.
      *
-     * @param  int      $offset
-     * @param  int|null $length
+     * @param int $offset
+     * @param int|null $length
+     *
      * @return mixed[]
      */
-    public function slice($offset, $length = null);
+    public function slice($offset, $length = null): array;
 }

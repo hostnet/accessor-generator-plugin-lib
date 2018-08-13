@@ -26,7 +26,7 @@ use Symfony\Component\Console\Output\StreamOutput;
  */
 class PluginTest extends TestCase
 {
-    public function testActivate()
+    public function testActivate(): void
     {
         $composer = $this->getMockComposer();
         $io       = new NullIO();
@@ -45,7 +45,7 @@ class PluginTest extends TestCase
         self::assertSame($io, $io_property->getValue($plugin));
     }
 
-    public function testGetSubscribedEvents()
+    public function testGetSubscribedEvents(): void
     {
         self::assertSame(
             [
@@ -56,7 +56,7 @@ class PluginTest extends TestCase
         );
     }
 
-    public function testOnPreAutoloadDump()
+    public function testOnPreAutoloadDump(): void
     {
         // Effectively change installation dir of root package.
         chdir(__DIR__ . '/fixtures/root');
@@ -74,7 +74,7 @@ class PluginTest extends TestCase
         $plugin->onPreAutoloadDump();
     }
 
-    public function testOnPostAutoloadDump()
+    public function testOnPostAutoloadDump(): void
     {
         // Effectively change installation dir of root package.
         chdir(__DIR__ . '/fixtures/root');

@@ -22,7 +22,7 @@ class GenerateAnnotationProcessor implements AnnotationProcessorInterface
      * @param object              $annotation
      * @param PropertyInformation $info
      */
-    public function processAnnotation($annotation, PropertyInformation $info)
+    public function processAnnotation($annotation, PropertyInformation $info): void
     {
         // Standalone Enumerator annotation.
         if ($annotation instanceof Enumerator) {
@@ -81,7 +81,7 @@ class GenerateAnnotationProcessor implements AnnotationProcessorInterface
     /**
      * @see AnnotationProcessorInterface::getProcessableAnnotations()
      */
-    public function getProcessableAnnotationNamespace()
+    public function getProcessableAnnotationNamespace(): string
     {
         return 'Hostnet\Component\AccessorGenerator\Annotation';
     }
