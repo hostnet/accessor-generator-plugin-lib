@@ -740,7 +740,7 @@ class PropertyInformation implements PropertyInformationInterface
      *
      * @return int
      */
-    public function getPrecision()
+    public function getPrecision(): int
     {
         return $this->precision;
     }
@@ -753,29 +753,21 @@ class PropertyInformation implements PropertyInformationInterface
      *
      * @see http://dev.mysql.com/doc/refman/5.7/en/precision-math-decimal-characteristics.html
      *
-     * @throws \InvalidArgumentException
      * @throws \RangeException It has a range of 1 to 65.
      *
      * @param int $precision
      *
      * @return PropertyInformation
      */
-    public function setPrecision($precision): self
+    public function setPrecision(int $precision): self
     {
-        // Check type.
-        if (!\is_int($precision)) {
-            throw new \InvalidArgumentException(
-                sprintf('Precision is not an integer but of type %s.', gettype($precision))
-            );
-        }
-
         // Check range.
         if ($precision < 0 || $precision > 65) {
-            throw new \RangeException(
-                sprintf('Precision %d, should be in interval [1,65]', $precision)
-            );
+            throw new \RangeException(sprintf('Precision %d, should be in interval [1,65]', $precision));
         }
+
         $this->precision = $precision;
+
         return $this;
     }
 
@@ -796,26 +788,21 @@ class PropertyInformation implements PropertyInformationInterface
      *
      * @see http://dev.mysql.com/doc/refman/5.7/en/precision-math-decimal-characteristics.html
      *
-     * @throws \InvalidArgumentException
      * @throws \RangeException
      *
      * @param int $scale
      *
      * @return PropertyInformation
      */
-    public function setScale($scale): self
+    public function setScale(int $scale): self
     {
-        // Check type.
-        if (!\is_int($scale)) {
-            throw new \InvalidArgumentException(sprintf('Scale is not an integer but of type "%s".', gettype($scale)));
-        }
-
         // Check range.
         if ($scale < 0 || $scale > 30) {
             throw new \RangeException(sprintf('Scale "%d", should be in interval [0,30]', $scale));
         }
 
         $this->scale = $scale;
+
         return $this;
     }
 

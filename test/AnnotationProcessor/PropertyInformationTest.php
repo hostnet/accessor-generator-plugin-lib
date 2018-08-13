@@ -171,7 +171,6 @@ class PropertyInformationTest extends TestCase
      * @dataProvider setIntegerSizeProvider
      * @param string $integer_size
      * @param string $exception
-     * @throws \InvalidArgumentException
      * @throws \RangeException
      */
     public function testSetIntegerSize($integer_size, $exception): void
@@ -193,10 +192,6 @@ class PropertyInformationTest extends TestCase
             [01,       null                            ],
             [$max,     null                            ],
             [$max + 1, \RangeException::class          ],
-            [[],       \InvalidArgumentException::class],
-            ['10',     \InvalidArgumentException::class],
-            ['10',     \InvalidArgumentException::class],
-            [1.0,      \InvalidArgumentException::class],
         ];
     }
 
@@ -226,10 +221,6 @@ class PropertyInformationTest extends TestCase
             [01,       null                            ],
             [$max,     null                            ],
             [$max + 1, \RangeException::class          ],
-            [[],       \InvalidArgumentException::class],
-            ['10',     \InvalidArgumentException::class],
-            ['10',     \InvalidArgumentException::class],
-            [1.0,      \InvalidArgumentException::class],
         ];
     }
 
@@ -237,7 +228,6 @@ class PropertyInformationTest extends TestCase
      * @dataProvider setPrecisionProvider
      * @param string $precision
      * @param string $exception
-     * @throws \InvalidArgumentException
      * @throws \RangeException
      */
     public function testSetPrecision($precision, $exception): void
