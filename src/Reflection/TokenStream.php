@@ -11,7 +11,6 @@ class TokenStream
     /**
      * Location of type within the PHP Token.
      *
-     * @internal
      * @var int
      */
     private const TYPE = 0;
@@ -19,7 +18,6 @@ class TokenStream
     /**
      * Location of value within the PHP Token.
      *
-     * @internal
      * @var int
      */
     private const VALUE = 1;
@@ -27,7 +25,6 @@ class TokenStream
     /**
      * Search direction from left to right.
      *
-     * @internal
      * @var int
      */
     private const LTR = 1;
@@ -35,7 +32,6 @@ class TokenStream
     /**
      * Search direction from right to left.
      *
-     * @internal
      * @var int
      */
     private const RTL = -1;

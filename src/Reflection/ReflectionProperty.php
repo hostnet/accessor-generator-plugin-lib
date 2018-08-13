@@ -36,7 +36,7 @@ class ReflectionProperty
 
     public function __construct(
         string $name,
-        int $modifiers = null,
+        ?int $modifiers = null,
         ?string $default = null,
         ?string $doc_comment = null,
         ?ReflectionClass $class = null
