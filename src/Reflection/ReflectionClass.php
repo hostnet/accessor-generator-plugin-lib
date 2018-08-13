@@ -39,7 +39,7 @@ class ReflectionClass
      *
      * @var string
      */
-    private $name = null;
+    private $name;
 
     /**
      * Parsed name of the namespace.
@@ -47,21 +47,21 @@ class ReflectionClass
      *
      * @var string
      */
-    private $namespace = null;
+    private $namespace;
 
     /**
      * All the properties declared within the class inside the parsed file.
      *
      * @var ReflectionProperty[]
      */
-    private $properties = null;
+    private $properties;
 
     /**
      * A list of all imports (use statements).
      *
      * @var string[]
      */
-    private $use_statements = null;
+    private $use_statements;
 
     /**
      * Location where the class name is found. Used to prevent duplicate code
@@ -69,7 +69,7 @@ class ReflectionClass
      *
      * @var int
      */
-    private $class_location = null;
+    private $class_location;
 
     /**
      * @var \ReflectionClassConstant[]

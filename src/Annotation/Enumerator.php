@@ -13,22 +13,30 @@ class Enumerator
 {
     /**
      * References the Enum class for the parameter collection.
+     *
+     * @var string
      */
     public $value;
 
     /**
      * References the name of the property that holds the parameter collection.
+     *
+     * @var string
      */
     public $name;
 
     /**
      * References the property to assign the enum accessor to.
+     *
+     * @var string
      */
     public $property;
 
     /**
      * Specifies the parameter entity that is used to instantiate new parameter instances.
      * This information is only required if the Enumerator annotation is used outside the Generator annotation.
+     *
+     * @var string
      */
     public $type;
 

@@ -12,6 +12,9 @@ namespace Hostnet\Component\AccessorGenerator\Reflection;
  */
 class ReflectionProperty
 {
+    /**
+     * @var int|null
+     */
     private $modifiers;
 
     /**
