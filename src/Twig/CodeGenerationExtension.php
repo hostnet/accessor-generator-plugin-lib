@@ -101,7 +101,7 @@ class CodeGenerationExtension extends \Twig_Extension
      */
     private static function twosComplementMin($bits): int
     {
-        $bits     = intval($bits);
+        $bits     = (int) $bits;
         $max_bits = PHP_INT_SIZE << 3;
 
         if ($bits < 1) {
@@ -119,7 +119,7 @@ class CodeGenerationExtension extends \Twig_Extension
      */
     private static function twosComplementMax($bits): int
     {
-        $bits     = intval($bits);
+        $bits     = (int) $bits;
         $max_bits = PHP_INT_SIZE << 3;
 
         if ($bits < 1) {
