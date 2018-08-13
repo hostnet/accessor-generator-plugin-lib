@@ -222,7 +222,7 @@ class Generate
      */
     private function castToSupportedValue($value)
     {
-        if ((bool) $value === $value) {
+        if (true === \is_bool($value)) {
             @trigger_error(
                 'Using a boolean for the visibility is deprecated. Use none, private, protected or public instead.',
                 E_USER_DEPRECATED

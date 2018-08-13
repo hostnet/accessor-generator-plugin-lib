@@ -280,7 +280,7 @@ class PropertyInformation implements PropertyInformationInterface
 
                 if (!($annotation instanceof Column)
                     || !isset($annotation->type)
-                    || in_array($annotation->type, ['string', 'text'])
+                    || \in_array($annotation->type, ['string', 'text'])
                 ) {
                     continue;
                 }
@@ -409,7 +409,7 @@ class PropertyInformation implements PropertyInformationInterface
             throw new \DomainException(sprintf('A type name may not start with a number. Found %s', $type));
         }
 
-        if (in_array($type, static::getValidTypes(), true)) {
+        if (\in_array($type, static::getValidTypes(), true)) {
             // Scalar.
             return $type;
         }
@@ -677,7 +677,7 @@ class PropertyInformation implements PropertyInformationInterface
      */
     public function isComplexType(): bool
     {
-        return $this->type && !in_array($this->type, self::getValidTypes(), true);
+        return $this->type && !\in_array($this->type, self::getValidTypes(), true);
     }
 
     /**
@@ -763,7 +763,7 @@ class PropertyInformation implements PropertyInformationInterface
     public function setPrecision($precision): self
     {
         // Check type.
-        if (!is_int($precision)) {
+        if (!\is_int($precision)) {
             throw new \InvalidArgumentException(
                 sprintf('Precision is not an integer but of type %s.', gettype($precision))
             );
@@ -806,7 +806,7 @@ class PropertyInformation implements PropertyInformationInterface
     public function setScale($scale): self
     {
         // Check type.
-        if (!is_int($scale)) {
+        if (!\is_int($scale)) {
             throw new \InvalidArgumentException(sprintf('Scale is not an integer but of type "%s".', gettype($scale)));
         }
 

@@ -196,7 +196,7 @@ class TokenStream
             $loc += $direction; //LTR = 1, RTL = -1
 
             // Check if the token can be skipped
-            if (! in_array($this->type($loc), $tokens)) {
+            if (false === \in_array($this->type($loc), $tokens)) {
                 return $loc;
             }
         }
@@ -220,7 +220,7 @@ class TokenStream
         // Check if the token exists
         if (isset($this->tokens[$loc])) {
             // Check if the token is array or scalar
-            if (is_array($this->tokens[$loc])) {
+            if (\is_array($this->tokens[$loc])) {
                 // Array
                 return $this->tokens[$loc][$type];
             }

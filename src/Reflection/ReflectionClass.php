@@ -383,12 +383,12 @@ class ReflectionClass
         $tokens = $this->getTokenStream();
         $ns     = '';
 
-        if (in_array($this->tokens->type($loc), [T_FUNCTION, T_CONST])) {
+        if (\in_array($this->tokens->type($loc), [T_FUNCTION, T_CONST])) {
             $ns .= $this->tokens->value($loc) . ' ';
             $loc = $tokens->next($loc);
         }
 
-        while (in_array($tokens->type($loc), [T_NS_SEPARATOR, T_STRING])) {
+        while (\in_array($tokens->type($loc), [T_NS_SEPARATOR, T_STRING])) {
             $ns .= $tokens->value($loc);
             $loc = $tokens->next($loc);
         }
@@ -488,10 +488,10 @@ class ReflectionClass
             $loc  = $tokens->next($loc);
             $type = $tokens->type($loc);
 
-            if (in_array($type, [T_DNUMBER, T_LNUMBER, T_CONSTANT_ENCAPSED_STRING])) {
+            if (\in_array($type, [T_DNUMBER, T_LNUMBER, T_CONSTANT_ENCAPSED_STRING])) {
                 // Easy numbers and strings.
                 $default = $tokens->value($loc);
-            } elseif (in_array($type, [T_STRING, T_NS_SEPARATOR])) {
+            } elseif (\in_array($type, [T_STRING, T_NS_SEPARATOR])) {
                 // Constants, definitions and null
                 $default = $this->parseNamespace($loc);
                 $loc     = $tokens->next($loc, [T_WHITESPACE, T_COMMENT, T_STRING, T_NS_SEPARATOR]);
@@ -499,7 +499,7 @@ class ReflectionClass
                     $loc      = $tokens->next($loc);
                     $default .= '::' . $tokens->value($loc);
                 }
-            } elseif (in_array($type, [T_ARRAY, '['])) {
+            } elseif (\in_array($type, [T_ARRAY, '['])) {
                 // Array types, both old array() and shorthand [] notation.
                 $default = $this->parseArrayDefinition($loc);
             } elseif ($type === T_START_HEREDOC) {
