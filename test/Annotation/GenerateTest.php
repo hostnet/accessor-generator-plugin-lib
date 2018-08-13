@@ -71,8 +71,6 @@ class GenerateTest extends TestCase
             [Generate::VISIBILITY_PROTECTED, Generate::VISIBILITY_PROTECTED],
             [Generate::VISIBILITY_PRIVATE, Generate::VISIBILITY_PRIVATE],
             [Generate::VISIBILITY_NONE, Generate::VISIBILITY_NONE],
-            [true, Generate::VISIBILITY_PUBLIC],
-            [false, Generate::VISIBILITY_NONE],
         ];
     }
 

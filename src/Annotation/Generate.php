@@ -53,9 +53,10 @@ class Generate
      * Will generate a getter of the given visibility.
      *
      * Default: public.
-     * True and false are available, though deprecated.
      *
-     * @Enum({"public", "protected", "private", "none", true, false})
+     * @Enum({"public", "protected", "private", "none"})
+     *
+     * @var string
      */
     public $get;
 
@@ -67,9 +68,10 @@ class Generate
      * be individually controlled by setting the add / remove properties.
      *
      * Default: public.
-     * True and false are available, though deprecated.
      *
-     * @Enum({"public", "protected", "private", "none", true, false})
+     * @Enum({"public", "protected", "private", "none"})
+     *
+     * @var string
      */
     public $set;
 
@@ -78,9 +80,10 @@ class Generate
      * relation. Might already be disabled with the set property.
      *
      * Default: public.
-     * True and false are available, though deprecated.
      *
-     * @Enum({"public", "protected", "private", "none", true, false})
+     * @Enum({"public", "protected", "private", "none"})
+     *
+     * @var string
      */
     public $add;
 
@@ -89,9 +92,10 @@ class Generate
      * relation. Might already be disabled with the set property.
      *
      * Default: public.
-     * True and false are available, though deprecated.
      *
-     * @Enum({"public", "protected", "private", "none", true, false})
+     * @Enum({"public", "protected", "private", "none"})
+     *
+     * @var string
      */
     public $remove;
 
@@ -100,9 +104,10 @@ class Generate
      * with the get property.
      *
      * Default: public.
-     * True and false are available, though deprecated.
      *
-     * @Enum({"public", "protected", "private", "none", true, false})
+     * @Enum({"public", "protected", "private", "none"})
+     *
+     * @var string
      */
     public $is = self::VISIBILITY_PUBLIC;
 
@@ -118,6 +123,8 @@ class Generate
      * return type of the getter.
      *
      * Insert the fully qualified class name here.
+     *
+     * @var string
      */
     public $type;
 
@@ -147,47 +154,34 @@ class Generate
      * Determine if the property should be stored encrypted.
      *
      * Insert the unique name that's used to map the key files to the property.
+     *
+     * @var string
      */
     public $encryption_alias;
 
-    /**
-     * @return string|bool|null
-     */
-    public function getGet()
+    public function getGet(): ?string
     {
-        return $this->castToSupportedValue($this->get);
+        return $this->get;
     }
 
-    /**
-     * @return string|bool|null
-     */
-    public function getSet()
+    public function getSet(): ?string
     {
-        return $this->castToSupportedValue($this->set);
+        return $this->set;
     }
 
-    /**
-     * @return string|bool|null
-     */
-    public function getAdd()
+    public function getAdd(): ?string
     {
-        return $this->castToSupportedValue($this->add);
+        return $this->add;
     }
 
-    /**
-     * @return string|bool|null
-     */
-    public function getRemove()
+    public function getRemove(): ?string
     {
-        return $this->castToSupportedValue($this->remove);
+        return $this->remove;
     }
 
-    /**
-     * @return string|bool|null
-     */
-    public function getIs()
+    public function getIs(): ?string
     {
-        return $this->castToSupportedValue($this->is);
+        return $this->is;
     }
 
     public function getType(): ?string
@@ -211,33 +205,6 @@ class Generate
     public function getEnumerators(): array
     {
         return $this->enumerators;
-    }
-
-    /**
-     * Cast legacy values to their string representative.
-     *
-     * @param mixed $value
-     *
-     * @return string|null
-     */
-    private function castToSupportedValue($value)
-    {
-        if (true === \is_bool($value)) {
-            @trigger_error(
-                'Using a boolean for the visibility is deprecated. Use none, private, protected or public instead.',
-                E_USER_DEPRECATED
-            );
-        }
-
-        if ($value === true) {
-            return self::VISIBILITY_PUBLIC;
-        }
-
-        if ($value === false) {
-            return self::VISIBILITY_NONE;
-        }
-
-        return $value;
     }
 
     /**
