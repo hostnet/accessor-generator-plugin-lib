@@ -5,6 +5,7 @@
     "type":              "composer-plugin",
     "require": {
         "php":                  ">=7.1",
+        "ext-bcmath":           "*",
         "composer-plugin-api":  "^1.0",
         "doctrine/annotations": "~1.2",
         "doctrine/common":      "~2.4",
