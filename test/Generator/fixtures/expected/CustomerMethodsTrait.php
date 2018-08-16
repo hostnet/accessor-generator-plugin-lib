@@ -21,11 +21,11 @@ trait CustomerMethodsTrait
      */
     public function getCart(): Cart
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getCart() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -42,16 +42,17 @@ trait CustomerMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  Cart $cart
+     * @param Cart $cart
+     *
      * @return $this|Customer
      */
     public function setCart(Cart $cart)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setCart() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }

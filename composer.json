@@ -5,6 +5,8 @@
     "type":              "composer-plugin",
     "require": {
         "php":                  ">=7.1",
+        "ext-bcmath":           "*",
+        "ext-json":             "*",
         "composer-plugin-api":  "^1.0",
         "doctrine/annotations": "~1.2",
         "doctrine/common":      "~2.4",
@@ -15,7 +17,7 @@
     },
     "require-dev": {
         "composer/composer":  "^1.0.0",
-        "hostnet/phpcs-tool": "^4.0.8",
+        "hostnet/phpcs-tool": "^8.1.0",
         "phpunit/phpunit":    "^7.0.0"
     },
     "minimum-stability": "stable",

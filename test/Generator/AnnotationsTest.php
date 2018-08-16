@@ -14,7 +14,7 @@ class AnnotationsTest extends TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testGetStupidTooManyArguments()
+    public function testGetStupidTooManyArguments(): void
     {
         $annotations = new Annotations();
         $annotations->getStupid(1);
@@ -23,7 +23,7 @@ class AnnotationsTest extends TestCase
     /**
      * @expectedException \LogicException
      */
-    public function testGetStupidEmpty()
+    public function testGetStupidEmpty(): void
     {
         $annotations = new Annotations();
         $property    = new \ReflectionProperty($annotations, 'stupid');
@@ -35,13 +35,13 @@ class AnnotationsTest extends TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testSetStupidTooManyArguments()
+    public function testSetStupidTooManyArguments(): void
     {
         $annotations = new Annotations();
         $annotations->setStupid(new \DateTime(), 2);
     }
 
-    public function testSetStupid()
+    public function testSetStupid(): void
     {
         $annotations = new Annotations();
         $date        = new \DateTime();

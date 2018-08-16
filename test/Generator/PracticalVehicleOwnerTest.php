@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PracticalVehicleOwnerTest extends TestCase
 {
-    public function testAddVehicle()
+    public function testAddVehicle(): void
     {
         $boat = new Boat();
         $car  = new Car();
@@ -32,13 +32,13 @@ class PracticalVehicleOwnerTest extends TestCase
     /**
      * @expectedException \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
      */
-    public function testAddWrongVehicle()
+    public function testAddWrongVehicle(): void
     {
         $owner = new PracticalVehicleOwner();
         $owner->addVehicle($this->prophesize(VehicleInterface::class)->reveal());
     }
 
-    public function testAddCustomVehicle()
+    public function testAddCustomVehicle(): void
     {
         $owner   = new PracticalVehicleOwner();
         $bicycle = new Bicycle();
@@ -50,7 +50,7 @@ class PracticalVehicleOwnerTest extends TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testAddVehicleTooManyArguments()
+    public function testAddVehicleTooManyArguments(): void
     {
         $car   = new Car();
         $owner = new PracticalVehicleOwner();
@@ -60,7 +60,7 @@ class PracticalVehicleOwnerTest extends TestCase
     /**
      * @expectedException \LogicException
      */
-    public function testAddVehicleToMultipleOwners()
+    public function testAddVehicleToMultipleOwners(): void
     {
         $owner = new PracticalVehicleOwner();
         $thief = new PracticalVehicleOwner();

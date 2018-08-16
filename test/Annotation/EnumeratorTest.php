@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
  */
 class EnumeratorTest extends TestCase
 {
-    public function testGetters()
+    public function testGetters(): void
     {
         $enumerator        = new Enumerator();
         $enumerator->name  = 'Foo';

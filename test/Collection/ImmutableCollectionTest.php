@@ -32,14 +32,14 @@ class ImmutableCollectionTest extends TestCase
      */
     private $clone_immutable_collection;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->collection                 = new ArrayCollection([1, 'a' => 1, 2, 'c' => 3, 5, 8, 13]);
         $this->immutable_collection       = new ImmutableCollection($this->collection);
         $this->clone_immutable_collection = clone $this->immutable_collection;
     }
 
-    public function testCompatibility()
+    public function testCompatibility(): void
     {
         $col = $this->collection;
         $imm = $this->immutable_collection;
@@ -78,7 +78,7 @@ class ImmutableCollectionTest extends TestCase
     /**
      * @expectedException \LogicException
      */
-    public function testAdd()
+    public function testAdd(): void
     {
         $this->immutable_collection->add(0);
     }
@@ -86,7 +86,7 @@ class ImmutableCollectionTest extends TestCase
     /**
      * @expectedException \LogicException
      */
-    public function testClear()
+    public function testClear(): void
     {
         $this->immutable_collection->clear();
     }
@@ -94,7 +94,7 @@ class ImmutableCollectionTest extends TestCase
     /**
      * @expectedException \LogicException
      */
-    public function testRemove()
+    public function testRemove(): void
     {
         $this->immutable_collection->remove(0);
     }
@@ -102,7 +102,7 @@ class ImmutableCollectionTest extends TestCase
     /**
      * @expectedException \LogicException
      */
-    public function testRemoveElement()
+    public function testRemoveElement(): void
     {
         $this->immutable_collection->removeElement(0);
     }
@@ -110,7 +110,7 @@ class ImmutableCollectionTest extends TestCase
     /**
      * @expectedException \LogicException
      */
-    public function testSet()
+    public function testSet(): void
     {
         $this->immutable_collection->set(0, 0);
     }
@@ -118,7 +118,7 @@ class ImmutableCollectionTest extends TestCase
     /**
      * @expectedException \LogicException
      */
-    public function testOffsetSet()
+    public function testOffsetSet(): void
     {
         $this->immutable_collection[0] = 0;
     }
@@ -126,31 +126,31 @@ class ImmutableCollectionTest extends TestCase
     /**
      * @expectedException \LogicException
      */
-    public function testOffsetUnset()
+    public function testOffsetUnset(): void
     {
         unset($this->immutable_collection[0]);
     }
 
-    public function testCloneAdd()
+    public function testCloneAdd(): void
     {
         $this->clone_immutable_collection->add('an item');
         self::assertContains('an item', $this->clone_immutable_collection);
     }
 
-    public function testCloneClear()
+    public function testCloneClear(): void
     {
         $this->clone_immutable_collection->clear();
         self::assertEmpty($this->clone_immutable_collection);
     }
 
-    public function testCloneRemove()
+    public function testCloneRemove(): void
     {
         $this->clone_immutable_collection->remove(0);
         self::assertArrayNotHasKey(0, $this->clone_immutable_collection);
         self::assertContains(1, $this->clone_immutable_collection);
     }
 
-    public function testCloneRemoveElement()
+    public function testCloneRemoveElement(): void
     {
         // Remove fist element with value 1.
         $this->clone_immutable_collection->removeElement(1);
@@ -163,25 +163,25 @@ class ImmutableCollectionTest extends TestCase
         self::assertNotContains(1, $this->clone_immutable_collection);
     }
 
-    public function testCloneSet()
+    public function testCloneSet(): void
     {
         $this->clone_immutable_collection->set(0, 0);
         self::assertEquals(0, $this->clone_immutable_collection[0]);
     }
 
-    public function testCloneOffsetSet()
+    public function testCloneOffsetSet(): void
     {
         $this->clone_immutable_collection[0] = 0;
         self::assertEquals(0, $this->clone_immutable_collection[0]);
     }
 
-    public function testCloneOffsetUnset()
+    public function testCloneOffsetUnset(): void
     {
         unset($this->clone_immutable_collection[0]);
         self::assertArrayNotHasKey(0, $this->clone_immutable_collection);
     }
 
-    public function testExists()
+    public function testExists(): void
     {
         $exists = function ($key, $value) {
             return is_string($key) && is_numeric($value);
@@ -196,7 +196,7 @@ class ImmutableCollectionTest extends TestCase
         self::assertTrue($imm);
     }
 
-    public function testFilter()
+    public function testFilter(): void
     {
         $filter = function ($value) {
             return is_string($value);
@@ -211,7 +211,7 @@ class ImmutableCollectionTest extends TestCase
         self::assertEquals(0, $imm->count());
     }
 
-    public function testForAll()
+    public function testForAll(): void
     {
         $for_all = function ($key, $value) {
             return is_numeric($value) && is_numeric($key);
@@ -226,7 +226,7 @@ class ImmutableCollectionTest extends TestCase
         self::assertFalse($imm);
     }
 
-    public function testMap()
+    public function testMap(): void
     {
         $before = $this->immutable_collection->toArray();
         $map    = function ($value) {
@@ -240,7 +240,7 @@ class ImmutableCollectionTest extends TestCase
         self::assertEquals($before, $this->immutable_collection->toArray());
     }
 
-    public function testPartition()
+    public function testPartition(): void
     {
         $before    = $this->immutable_collection->toArray();
         $partition = function ($key, $value) {
@@ -256,7 +256,7 @@ class ImmutableCollectionTest extends TestCase
         self::assertEquals($before, $this->immutable_collection->toArray());
     }
 
-    public function testMatching()
+    public function testMatching(): void
     {
         $criteria = (new Criteria());
         $before   = $this->immutable_collection->toArray();

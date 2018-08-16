@@ -40,7 +40,7 @@ class CodeGeneratorTest extends TestCase
      * @throws \Symfony\Component\Filesystem\Exception\IOException
      * @throws \OutOfBoundsException
      */
-    public function testWriteTraitForClass()
+    public function testWriteTraitForClass(): void
     {
         $finder = new Finder();
         $files  = $finder
@@ -108,7 +108,7 @@ class CodeGeneratorTest extends TestCase
      * @expectedException \Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException
      * @throws TypeUnknownException
      */
-    public function testGenerateAccessorsTypeUnknown()
+    public function testGenerateAccessorsTypeUnknown(): void
     {
         $info = new PropertyInformation(new ReflectionProperty('phpunit'));
         $info->setIsGenerator(true); // Default for all @Generate properties.
@@ -120,7 +120,7 @@ class CodeGeneratorTest extends TestCase
      * @expectedException \Hostnet\Component\AccessorGenerator\Generator\Exception\ReferencedClassNotFoundException
      * @expectedExceptionMessage "CodeGeneratorTest" was not generated because the enum class "\This\Does\Not\Exist"
      */
-    public function testGenerateEnumeratorClassNotFound()
+    public function testGenerateEnumeratorClassNotFound(): void
     {
         $enumerator        = new Enumerator();
         $enumerator->value = "\\This\\Does\\Not\\Exist";

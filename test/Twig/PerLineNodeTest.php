@@ -41,7 +41,7 @@ class PerLineNodeTest extends TestCase
      * @param string $file filename of file inside of fixtures directory to
      *                     use as refernce output.
      */
-    public function testParse(Node $lines, $prefix, $postfix, $file)
+    public function testParse(Node $lines, $prefix, $postfix, $file): void
     {
         $compiler = new \Twig_Compiler(new \Twig_Environment(new \Twig_Loader_Array()));
         $node     = new PerLineNode($lines, $prefix, $postfix, 1);

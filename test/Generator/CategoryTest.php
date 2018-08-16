@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 class CategoryTest extends TestCase
 {
-    public function testCategory()
+    public function testCategory(): void
     {
         $parent = new Category();
         $node_a = new Category();
@@ -26,7 +26,7 @@ class CategoryTest extends TestCase
         self::assertSame($node_b, $parent->getChildren()[1]);
     }
 
-    public function testGetChildren()
+    public function testGetChildren(): void
     {
         $category = new Category();
         $children = $category->getChildren();
@@ -37,7 +37,7 @@ class CategoryTest extends TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testGetChildrenTooManyArguments()
+    public function testGetChildrenTooManyArguments(): void
     {
         $category = new Category();
         $category->getChildren(1);
@@ -46,7 +46,7 @@ class CategoryTest extends TestCase
     /**
      * @depends testGetChildren
      */
-    public function testAddChild()
+    public function testAddChild(): void
     {
         $category = new Category();
         $child    = new Category();
@@ -69,7 +69,7 @@ class CategoryTest extends TestCase
     /**
      * @depends testGetChildren
      */
-    public function testAddSameChildConstructor()
+    public function testAddSameChildConstructor(): void
     {
         $category = new Category();
         $child    = new Category($category);
@@ -87,7 +87,7 @@ class CategoryTest extends TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testAddChildTooManyArguments()
+    public function testAddChildTooManyArguments(): void
     {
         $category = new Category();
         $category->addChild($category, 2);
@@ -97,7 +97,7 @@ class CategoryTest extends TestCase
      * @depends testGetChildren
      * @depends testAddChild
      */
-    public function testRemoveChild()
+    public function testRemoveChild(): void
     {
         $category = new Category();
         $child    = new Category();
@@ -124,7 +124,7 @@ class CategoryTest extends TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testRemoveChildTooManyArguments()
+    public function testRemoveChildTooManyArguments(): void
     {
         $category = new Category();
         $category->RemoveChild($category, 2);
@@ -133,7 +133,7 @@ class CategoryTest extends TestCase
     /**
      * @expectedException \LogicException
      */
-    public function testAddMultipleTimes()
+    public function testAddMultipleTimes(): void
     {
         $a = new Category();
         $b = new Category();
@@ -146,13 +146,13 @@ class CategoryTest extends TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testSetParentTooManyArguments()
+    public function testSetParentTooManyArguments(): void
     {
         $c = new Category();
         $c->setParent($c, 1);
     }
 
-    public function testSetParent()
+    public function testSetParent(): void
     {
         $a = new Category();
         $b = new Category();
@@ -196,7 +196,7 @@ class CategoryTest extends TestCase
         self::assertSame($e, $d->getChildren()->first());
     }
 
-    public function testGetParentNotInitialized()
+    public function testGetParentNotInitialized(): void
     {
         $c = new Category();
         self::assertNull($c->getParent());
@@ -205,7 +205,7 @@ class CategoryTest extends TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testGetParentTooManyArguments()
+    public function testGetParentTooManyArguments(): void
     {
         $c = new Category();
         $c->getParent([]);

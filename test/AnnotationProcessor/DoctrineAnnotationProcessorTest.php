@@ -33,13 +33,8 @@ class DoctrineAnnotationProcessorTest extends TestCase
      */
     private $processor;
 
-    /**
-     * Initialize processor and
-     * @see PHPUnit_Framework_TestCase::setUp()
-     */
-    public function setUp()
+    protected function setUp(): void
     {
-        // Set up dependencies.
         $this->information = new PropertyInformation(new ReflectionProperty('test'));
         $this->processor   = new DoctrineAnnotationProcessor();
     }
@@ -278,10 +273,6 @@ class DoctrineAnnotationProcessorTest extends TestCase
             ['binary',         null,  \DomainException::class],
             ['int',            null,  \DomainException::class],
             ['',               null,  \DomainException::class],
-            [null,             null,  \InvalidArgumentException::class],
-            [false,            false, \InvalidArgumentException::class],
-            [[],               [],    \InvalidArgumentException::class],
-            [['test'],         [],    \InvalidArgumentException::class],
         ];
     }
 

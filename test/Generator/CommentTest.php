@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 class CommentTest extends TestCase
 {
-    public function testGetCol()
+    public function testGetCol(): void
     {
         $comment = new Comment();
         self::assertNull($comment->getCol());
@@ -23,7 +23,7 @@ class CommentTest extends TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testGetColTooManyArguments()
+    public function testGetColTooManyArguments(): void
     {
         $comment = new Comment();
         $comment->getCol('yiha');

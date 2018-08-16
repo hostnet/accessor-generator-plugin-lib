@@ -29,7 +29,7 @@ class PropertyInformationTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $class = $this->getMockBuilder(ReflectionClass::class)->disableOriginalConstructor()->getMock();
         $class->expects(self::any())->method('getNamespace')->willReturn('');
@@ -38,7 +38,7 @@ class PropertyInformationTest extends TestCase
 
         $property = new ReflectionProperty(
             'test',
-            ReflectionProperty::IS_PRIVATE,
+            \ReflectionProperty::IS_PRIVATE,
             null,
             file_get_contents(__DIR__ . '/fixtures/doc_block.txt'),
             $class
@@ -48,7 +48,7 @@ class PropertyInformationTest extends TestCase
         $this->minimal_info = new PropertyInformation(new ReflectionProperty('test'));
     }
 
-    public function testProcessAnnotations()
+    public function testProcessAnnotations(): void
     {
         $processor = $this->createMock(AnnotationProcessorInterface::class);
         $processor->expects(self::atLeastOnce())->method('processAnnotation');
@@ -58,12 +58,12 @@ class PropertyInformationTest extends TestCase
         $this->info->processAnnotations();
     }
 
-    public function testGetDocumentation()
+    public function testGetDocumentation(): void
     {
         self::assertEquals('Hidde', $this->info->getDocumentation());
     }
 
-    public function testGetMethods()
+    public function testGetMethods(): void
     {
         self::assertEquals('test', $this->info->getName());
         self::assertNull($this->info->getDefault());
@@ -90,20 +90,8 @@ class PropertyInformationTest extends TestCase
         self::assertNull($this->info->getRemoveVisibility());
     }
 
-    public function testBasicSetMethods()
+    public function testBasicSetMethods(): void
     {
-        self::assertSame($this->info, $this->info->setCollection('garbage'));
-        self::assertTrue($this->info->isCollection());
-
-        self::assertSame($this->info, $this->info->setFixedPointNumber('garbage'));
-        self::assertTrue($this->info->isFixedPointNumber());
-
-        self::assertSame($this->info, $this->info->setNullable('garbage'));
-        self::assertTrue($this->info->isNullable());
-
-        self::assertSame($this->info, $this->info->setUnique('garbage'));
-        self::assertTrue($this->info->isUnique());
-
         self::assertFalse($this->info->willGenerateAdd());
         self::assertSame($this->info, $this->info->limitMaximumAddVisibility(Generate::VISIBILITY_PROTECTED));
         self::assertTrue($this->info->willGenerateAdd());
@@ -131,9 +119,6 @@ class PropertyInformationTest extends TestCase
         self::assertSame($this->info, $this->info->setGenerateStrict(false));
         self::assertFalse($this->info->willGenerateStrict());
 
-        self::assertSame($this->info, $this->info->setGenerateStrict('garbage'));
-        self::assertTrue($this->info->willGenerateStrict());
-
         self::assertSame($this->info, $this->info->setIndex('garbage'));
         self::assertSame('garbage', $this->info->getIndex());
 
@@ -141,18 +126,9 @@ class PropertyInformationTest extends TestCase
         self::assertTrue($this->info->isReferencingCollection());
     }
 
-    public function setReferencedPropertyProvider()
+    public function setReferencedPropertyProvider(): array
     {
         return [
-            [1,                      \InvalidArgumentException::class],
-            [0b100,                  \InvalidArgumentException::class],
-            [010,                    \InvalidArgumentException::class],
-            [0x8,                    \InvalidArgumentException::class],
-            [32,                     \InvalidArgumentException::class],
-            [[],                     \InvalidArgumentException::class],
-            [null,                   \InvalidArgumentException::class],
-            [false,                  \InvalidArgumentException::class],
-            [1.5,                    \InvalidArgumentException::class],
             ['16',                   \DomainException::class         ],
             ['\Object',              \DomainException::class         ],
             ['',                     null                            ],
@@ -168,7 +144,7 @@ class PropertyInformationTest extends TestCase
      * @throws \DomainException
      * @throws \InvalidArgumentException
      */
-    public function testSetReferencedProperty($referenced_property, $exception)
+    public function testSetReferencedProperty($referenced_property, $exception): void
     {
         $exception && $this->expectException($exception);
         self::assertSame($this->info, $this->info->setReferencedProperty($referenced_property));
@@ -176,24 +152,18 @@ class PropertyInformationTest extends TestCase
     }
 
 
-    public function setIntegerSizeProvider()
+    public function setIntegerSizeProvider(): array
     {
         return [
-            [-1,                     \RangeException::class          ],
-            [0,                      \RangeException::class          ],
-            [1,                      null                            ],
-            [0b100,                  null                            ],
-            [010,                    null                            ],
-            [0x8,                    null                            ],
-            [32,                     null                            ],
-            [PHP_INT_SIZE << 3,      null                            ],
-            [(PHP_INT_SIZE << 3)+ 1, \RangeException::class          ],
-            [[],                     \InvalidArgumentException::class],
-            ['',                     \InvalidArgumentException::class],
-            [null,                   \InvalidArgumentException::class],
-            [false,                  \InvalidArgumentException::class],
-            ['16',                   \InvalidArgumentException::class],
-            [1.5,                    \InvalidArgumentException::class],
+            [-1,                      \RangeException::class          ],
+            [0,                       \RangeException::class          ],
+            [1,                       null                            ],
+            [0b100,                   null                            ],
+            [010,                     null                            ],
+            [0x8,                     null                            ],
+            [32,                      null                            ],
+            [PHP_INT_SIZE << 3,       null                            ],
+            [(PHP_INT_SIZE << 3) + 1, \RangeException::class          ],
         ];
     }
 
@@ -201,17 +171,16 @@ class PropertyInformationTest extends TestCase
      * @dataProvider setIntegerSizeProvider
      * @param string $integer_size
      * @param string $exception
-     * @throws \InvalidArgumentException
      * @throws \RangeException
      */
-    public function testSetIntegerSize($integer_size, $exception)
+    public function testSetIntegerSize($integer_size, $exception): void
     {
         $exception && $this->expectException($exception);
         self::assertSame($this->info, $this->info->setIntegerSize($integer_size));
         self::assertEquals($integer_size, $this->info->getIntegerSize());
     }
 
-    public function setScaleProvider()
+    public function setScaleProvider(): array
     {
         //http://dev.mysql.com/doc/refman/5.0/en/precision-math-decimal-characteristics.html
         $max = 30;
@@ -223,10 +192,6 @@ class PropertyInformationTest extends TestCase
             [01,       null                            ],
             [$max,     null                            ],
             [$max + 1, \RangeException::class          ],
-            [[],       \InvalidArgumentException::class],
-            ['10',     \InvalidArgumentException::class],
-            ['10',     \InvalidArgumentException::class],
-            [1.0,      \InvalidArgumentException::class],
         ];
     }
 
@@ -237,7 +202,7 @@ class PropertyInformationTest extends TestCase
      * @throws \InvalidArgumentException
      * @throws \RangeException
      */
-    public function testSetScale($scale, $exception)
+    public function testSetScale($scale, $exception): void
     {
         $exception && $this->expectException($exception);
         self::assertSame($this->info, $this->info->setScale($scale));
@@ -256,10 +221,6 @@ class PropertyInformationTest extends TestCase
             [01,       null                            ],
             [$max,     null                            ],
             [$max + 1, \RangeException::class          ],
-            [[],       \InvalidArgumentException::class],
-            ['10',     \InvalidArgumentException::class],
-            ['10',     \InvalidArgumentException::class],
-            [1.0,      \InvalidArgumentException::class],
         ];
     }
 
@@ -267,25 +228,21 @@ class PropertyInformationTest extends TestCase
      * @dataProvider setPrecisionProvider
      * @param string $precision
      * @param string $exception
-     * @throws \InvalidArgumentException
      * @throws \RangeException
      */
-    public function testSetPrecision($precision, $exception)
+    public function testSetPrecision($precision, $exception): void
     {
         $exception && $this->expectException($exception);
         self::assertSame($this->info, $this->info->setPrecision($precision));
         self::assertEquals($precision, $this->info->getPrecision());
     }
 
-    public function setLengthProvider()
+    public function setLengthProvider(): array
     {
         return [
             [-1,           \RangeException::class          ],
             [0,            null                            ],
             [PHP_INT_SIZE, null                            ],
-            [null,         \InvalidArgumentException::class],
-            [1.0,          \InvalidArgumentException::class],
-            ['10',         \InvalidArgumentException::class],
             [0xFF,         null                            ],
         ];
     }
@@ -297,7 +254,7 @@ class PropertyInformationTest extends TestCase
      * @throws \InvalidArgumentException
      * @throws \RangeException
      */
-    public function testSetLength($length, $exception)
+    public function testSetLength($length, $exception): void
     {
         $exception && $this->expectException($exception);
         self::assertSame($this->info, $this->info->setLength($length));
@@ -309,7 +266,7 @@ class PropertyInformationTest extends TestCase
         return array_merge([['integer', null]], $this->setTypeHintProvider());
     }
 
-    public function setTypeHintProvider()
+    public function setTypeHintProvider(): array
     {
         return [
             ['\\Test',  null                            ],
@@ -318,8 +275,6 @@ class PropertyInformationTest extends TestCase
             ['10',      \DomainException::class         ],
             ['1A',      \DomainException::class         ],
             ['',        \DomainException::class         ],
-            [['test'],  \InvalidArgumentException::class],
-            [10,        \InvalidArgumentException::class],
         ];
     }
 
@@ -330,7 +285,7 @@ class PropertyInformationTest extends TestCase
      * @throws \DomainException
      * @throws \InvalidArgumentException
      */
-    public function testSetType($type, $exception)
+    public function testSetType($type, $exception): void
     {
         $exception && $this->expectException($exception);
         self::assertSame($this->info, $this->info->setType($type));
@@ -350,14 +305,14 @@ class PropertyInformationTest extends TestCase
      * @throws \DomainException
      * @throws \InvalidArgumentException
      */
-    public function testSetTypeHint($type, $exception)
+    public function testSetTypeHint($type, $exception): void
     {
         $exception && $this->expectException($exception);
         self::assertSame($this->info, $this->info->setTypeHint($type));
         self::assertEquals($type, $this->info->getTypeHint());
     }
 
-    public function setFullyQualifiedTypeProvider()
+    public function setFullyQualifiedTypeProvider(): array
     {
         return [
             ['integer', \DomainException::class         ],
@@ -367,8 +322,6 @@ class PropertyInformationTest extends TestCase
             ['10',      \DomainException::class         ],
             ['1A',      \DomainException::class         ],
             ['',        null                            ],
-            [['test'],  \InvalidArgumentException::class],
-            [10,        \InvalidArgumentException::class],
         ];
     }
 
@@ -379,20 +332,17 @@ class PropertyInformationTest extends TestCase
      * @throws \DomainException
      * @throws \InvalidArgumentException
      */
-    public function testSetFullyQualifiedType($type, $exception)
+    public function testSetFullyQualifiedType($type, $exception): void
     {
         $exception && $this->expectException($exception);
         self::assertSame($this->info, $this->info->setFullyQualifiedType($type));
         self::assertEquals($type, $this->info->getFullyQualifiedType());
     }
 
-    public function setEncryptionProvider()
+    public function setEncryptionProvider(): array
     {
         return [
             ['alias',   null                           ],
-            ['',        \InvalidArgumentException::class],
-            [['test'],  \InvalidArgumentException::class],
-            [10,        \InvalidArgumentException::class],
         ];
     }
 
@@ -402,7 +352,7 @@ class PropertyInformationTest extends TestCase
      * @param string $exception
      * @throws \InvalidArgumentException
      */
-    public function testSetEncryption($encryption_alias, $exception)
+    public function testSetEncryption($encryption_alias, $exception): void
     {
         $exception && $this->expectException($exception);
         self::assertSame($this->info, $this->info->setEncryptionAlias($encryption_alias));
@@ -412,7 +362,7 @@ class PropertyInformationTest extends TestCase
         self::assertEquals('string', $this->info->getEncryptionAlias());
     }
 
-    public function testGetNamespaceEmptyClass()
+    public function testGetNamespaceEmptyClass(): void
     {
         self::assertSame('', $this->minimal_info->getNamespace());
     }

@@ -19,11 +19,11 @@ trait NodeMethodsTrait
      */
     public function getOut(): iterable
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getOut() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -41,16 +41,17 @@ trait NodeMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct.
      * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
      *
-     * @param  Node $out
+     * @param Node $out
+     *
      * @return $this|Node
      */
     public function addOut(Node $out)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'addOut() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -96,16 +97,17 @@ trait NodeMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  Node $out
+     * @param Node $out
+     *
      * @return $this|Node
      */
     public function removeOut(Node $out)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'removeOut() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }

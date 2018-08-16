@@ -36,7 +36,7 @@ class CodeGenerationExtension extends \Twig_Extension
     /**
      * {@inheritdoc}
      */
-    public function getTokenParsers()
+    public function getTokenParsers(): array
     {
         return [new PerLineTokenParser()];
     }
@@ -44,7 +44,7 @@ class CodeGenerationExtension extends \Twig_Extension
     /**
      * {@inheritdoc}
      */
-    public function getFilters()
+    public function getFilters(): array
     {
         return [
             new \Twig_SimpleFilter('classify', function ($string) {
@@ -89,51 +89,57 @@ class CodeGenerationExtension extends \Twig_Extension
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Hostnet Twig Code Generation Extension';
     }
 
     /**
      * @throws \DomainException
-     * @param  mixed $bits
+     * @param mixed $bits
      * @return int
      */
-    private static function twosComplementMin($bits)
+    private static function twosComplementMin($bits): int
     {
-        $bits     = intval($bits);
+        $bits     = (int) $bits;
         $max_bits = PHP_INT_SIZE << 3;
 
         if ($bits < 1) {
             throw new \DomainException('Bit size must be greater than 0');
-        } elseif ($bits > $max_bits) {
+        }
+
+        if ($bits > $max_bits) {
             $bits = $max_bits;
         }
+
         return -1 << ($bits - 1);
     }
 
     /**
      * @throws \DomainException
-     * @param  mixed $bits
+     * @param mixed $bits
      * @return int
      */
-    private static function twosComplementMax($bits)
+    private static function twosComplementMax($bits): int
     {
-        $bits     = intval($bits);
+        $bits     = (int) $bits;
         $max_bits = PHP_INT_SIZE << 3;
 
         if ($bits < 1) {
             throw new \DomainException('Bit size must be greater than 0');
-        } elseif ($bits > $max_bits) {
+        }
+
+        if ($bits > $max_bits) {
             $bits = $max_bits;
         }
-        return (1 << ($bits - 2)) -1 + (1 << ($bits - 2));
+
+        return (1 << ($bits - 2)) - 1 + (1 << ($bits - 2));
     }
 
     /**
      * @throws \InvalidArgumentException
-     * @param  mixed $input
-     * @param  int   $amount
+     * @param mixed $input
+     * @param int   $amount
      * @return mixed|string
      */
     private static function decimalRightShift($input, $amount = 0)

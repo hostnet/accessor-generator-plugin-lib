@@ -16,13 +16,13 @@ class MovieTest extends TestCase
     /**
      * @expectedException BadMethodCallException
      */
-    public function testGetActorsToManyArguments()
+    public function testGetActorsToManyArguments(): void
     {
         $movie = new Movie();
         $movie->getActors(1);
     }
 
-    public function testRemoveActorEmpty()
+    public function testRemoveActorEmpty(): void
     {
         $actor = new Actor();
         $movie = new Movie();
@@ -34,14 +34,14 @@ class MovieTest extends TestCase
     /**
      * @expectedException BadMethodCallException
      */
-    public function testAddActorToManyArguments()
+    public function testAddActorToManyArguments(): void
     {
         $actor = new Actor();
         $movie = new Movie();
         $movie->addActor($actor, 2);
     }
 
-    public function testMovieAddActor()
+    public function testMovieAddActor(): void
     {
         $actor = new Actor();
         $movie = new Movie();
@@ -54,14 +54,14 @@ class MovieTest extends TestCase
     /**
      * @expectedException BadMethodCallException
      */
-    public function testActorRemoveMovieToManyArguments()
+    public function testActorRemoveMovieToManyArguments(): void
     {
         $actor = new Actor();
         $movie = new Movie();
         $movie->removeActor($actor, 2);
     }
 
-    public function testMovieActor()
+    public function testMovieActor(): void
     {
         // Create object for many-to-many bi-directional association
         $actor = new Actor();

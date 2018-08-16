@@ -17,7 +17,7 @@ class CredentialsTest extends TestCase
      */
     private $credentials;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         KeyRegistry::addPublicKeyPath(
             'database.table.column',
@@ -31,7 +31,7 @@ class CredentialsTest extends TestCase
         $this->credentials = new Credentials();
     }
 
-    public function testPassword()
+    public function testPassword(): void
     {
         // change the keys.
         $this->credentials->setPassword('password');
@@ -56,7 +56,7 @@ class CredentialsTest extends TestCase
     /**
      * @expectedException BadMethodCallException
      */
-    public function testGetPasswordTooManyArguments()
+    public function testGetPasswordTooManyArguments(): void
     {
         $credentials = new Credentials();
         $credentials->getPassword('pass');
@@ -65,7 +65,7 @@ class CredentialsTest extends TestCase
     /**
      * @expectedException BadMethodCallException
      */
-    public function testSetPasswordTooManyArguments()
+    public function testSetPasswordTooManyArguments(): void
     {
         $credentials = new Credentials();
         $credentials->setPassword(1, 2);
@@ -74,7 +74,7 @@ class CredentialsTest extends TestCase
     /**
      * @expectedException \LogicException
      */
-    public function testGetPasswordEmpty()
+    public function testGetPasswordEmpty(): void
     {
         $credentials = new Credentials();
         $property    = new \ReflectionProperty($credentials, 'password');
@@ -86,7 +86,7 @@ class CredentialsTest extends TestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testSetPasswordArray()
+    public function testSetPasswordArray(): void
     {
         $credentials = new Credentials();
         $credentials->setPassword([]);

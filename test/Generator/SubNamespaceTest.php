@@ -14,7 +14,7 @@ class SubNamespaceTest extends TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testGetAsterixTooManyArguments()
+    public function testGetAsterixTooManyArguments(): void
     {
         $subnamespace = new SubNamespace();
         $subnamespace->getAsterix(1);
@@ -23,7 +23,7 @@ class SubNamespaceTest extends TestCase
     /**
      * @expectedException \LogicException
      */
-    public function testGetAsterixEmpty()
+    public function testGetAsterixEmpty(): void
     {
         $subnamespace = new SubNamespace();
         $property     = new \ReflectionProperty($subnamespace, 'asterix');
@@ -35,7 +35,7 @@ class SubNamespaceTest extends TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testSetAsterixTooManyArguments()
+    public function testSetAsterixTooManyArguments(): void
     {
         $subnamespace = new SubNamespace();
         $subnamespace->setAsterix('1', 2);
@@ -44,13 +44,13 @@ class SubNamespaceTest extends TestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testSetAsterixInvalidArgument()
+    public function testSetAsterixInvalidArgument(): void
     {
         $subnamespace = new SubNamespace();
         $subnamespace->setAsterix([]);
     }
 
-    public function testSetAsterix()
+    public function testSetAsterix(): void
     {
         $subnamespace = new SubNamespace();
         self::assertSame($subnamespace, $subnamespace->setAsterix('panoramix'));
@@ -60,7 +60,7 @@ class SubNamespaceTest extends TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testSetSuperNamespaceTooManyArguments()
+    public function testSetSuperNamespaceTooManyArguments(): void
     {
         $subnamespace = new SubNamespace();
         $subnamespace->setSuperNamespace('1', 2);
@@ -69,13 +69,13 @@ class SubNamespaceTest extends TestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testSetSuperNamespaceInvalidArgument()
+    public function testSetSuperNamespaceInvalidArgument(): void
     {
         $subnamespace = new SubNamespace();
         $subnamespace->setSuperNamespace([]);
     }
 
-    public function testSetSuperNamespace()
+    public function testSetSuperNamespace(): void
     {
         $subnamespace = new SubNamespace();
         self::assertSame($subnamespace, $subnamespace->setSuperNamespace('panoramix'));

@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 class NodeTest extends TestCase
 {
-    public function testGetOut()
+    public function testGetOut(): void
     {
         $node     = new Node();
         $children = $node->getOut();
@@ -23,7 +23,7 @@ class NodeTest extends TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testGetOutTooManyArguments()
+    public function testGetOutTooManyArguments(): void
     {
         $node = new Node();
         $node->getOut(1);
@@ -32,7 +32,7 @@ class NodeTest extends TestCase
     /**
      * @depends testGetOut
      */
-    public function testAddOut()
+    public function testAddOut(): void
     {
         $a = new Node();
         $b = new Node();
@@ -80,7 +80,7 @@ class NodeTest extends TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testAddOutTooManyArguments()
+    public function testAddOutTooManyArguments(): void
     {
         $node = new Node();
         $node->addOut($node, 2);
@@ -90,7 +90,7 @@ class NodeTest extends TestCase
      * @depends testGetOut
      * @depends testAddOut
      */
-    public function testRemoveOut()
+    public function testRemoveOut(): void
     {
         $node  = new Node();
         $child = new Node();
@@ -115,7 +115,7 @@ class NodeTest extends TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testRemoveOutTooManyArguments()
+    public function testRemoveOutTooManyArguments(): void
     {
         $node = new Node();
         $node->RemoveOut($node, 2);

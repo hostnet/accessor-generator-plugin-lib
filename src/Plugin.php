@@ -37,7 +37,7 @@ use Symfony\Component\Finder\Finder;
  */
 class Plugin implements PluginInterface, EventSubscriberInterface
 {
-    const NAME = 'hostnet/accessor-generator-plugin-lib';
+    public const NAME = 'hostnet/accessor-generator-plugin-lib';
 
     /**
      * @var Composer
@@ -83,7 +83,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             ScriptEvents::PRE_AUTOLOAD_DUMP  => ['onPreAutoloadDump', 20],
@@ -94,7 +94,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public function activate(Composer $composer, IOInterface $io)
+    public function activate(Composer $composer, IOInterface $io): void
     {
         $this->composer = $composer;
         $this->io       = $io;
@@ -108,15 +108,13 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      * annotation set on at least one property.
      *
      * @throws \DomainException
-     * @throws \Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException
-     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
      * @throws \InvalidArgumentException
      * @throws \LogicException
      * @throws \RuntimeException
      * @throws \Symfony\Component\Filesystem\Exception\IOException
      */
-    public function onPreAutoloadDump()
+    public function onPreAutoloadDump(): void
     {
         $local_repository = $this->composer->getRepositoryManager()->getLocalRepository();
         $packages         = $local_repository->getPackages();
@@ -126,7 +124,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         isset($extra['accessor-generator']) && $this->generator->setEncryptionAliases($extra['accessor-generator']);
 
         foreach ($packages as $package) {
-            /* @var $package PackageInterface */
+            /** @var $package PackageInterface */
             if (!array_key_exists(self::NAME, $package->getRequires())) {
                 continue;
             }
@@ -135,14 +133,14 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         }
     }
 
-    public function onPostAutoloadDump()
+    public function onPostAutoloadDump(): void
     {
         $local_repository = $this->composer->getRepositoryManager()->getLocalRepository();
         $packages         = $local_repository->getPackages();
         $packages[]       = $this->composer->getPackage();
 
         foreach ($packages as $package) {
-            /* @var $package PackageInterface */
+            /** @var $package PackageInterface */
             if (! array_key_exists(self::NAME, $package->getRequires())) {
                 continue;
             }
@@ -183,7 +181,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      *
      * @param PackageInterface $package
      */
-    private function generateTraitForPackage(PackageInterface $package)
+    private function generateTraitForPackage(PackageInterface $package): void
     {
         if ($this->io->isVerbose()) {
             $this->io->write('Generating metadata for <info>' . $package->getPrettyName() . '</info>');
@@ -244,7 +242,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      * @throws \InvalidArgumentException
      *
      * @param PackageInterface $package
-     * @return \Iterator
+     * @return \Iterator|\SplFileInfo[]
      */
     private function getFilesForPackage(PackageInterface $package)
     {

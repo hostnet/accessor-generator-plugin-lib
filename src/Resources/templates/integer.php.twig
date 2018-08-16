@@ -1,5 +1,5 @@
 {% if property.integerSize >= PHP_INT_SIZE * 8 %}
-if (is_float({{ var | raw }})
+if (\is_float({{ var | raw }})
     && ({{ var | raw }} >= {{ 2 ** (PHP_INT_SIZE == 8 ? 53 : 24) -}}
     || {{ var | raw }} <= -{{ 2 ** (PHP_INT_SIZE == 8 ? 53 : 24) }})
 ) {
@@ -14,7 +14,7 @@ if (is_float({{ var | raw }})
     );
 }
 {% if not skip_check_type %}
-if (!is_int({{ var | raw }})) {
+if (!\is_int({{ var | raw }})) {
     throw new \InvalidArgumentException(
         'Parameter {{ property.name }} must be integer.'
     );
@@ -22,7 +22,7 @@ if (!is_int({{ var | raw }})) {
 {% endif %}
 {% else %}
 {% if not skip_check_type %}
-if (!is_int({{ var | raw }})) {
+if (!\is_int({{ var | raw }})) {
     throw new \InvalidArgumentException(
         'Parameter {{ property.name }} must be integer.'
     );

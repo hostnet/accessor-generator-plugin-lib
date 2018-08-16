@@ -17,7 +17,7 @@ class CredentialsAgainTest extends TestCase
      */
     private $credentials_again;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         KeyRegistry::addPublicKeyPath(
             'database.table.column_again',
@@ -27,7 +27,7 @@ class CredentialsAgainTest extends TestCase
         $this->credentials_again = new CredentialsAgain();
     }
 
-    public function testSetPassword()
+    public function testSetPassword(): void
     {
         $this->credentials_again->setPassword('password');
 
@@ -41,7 +41,7 @@ class CredentialsAgainTest extends TestCase
     /**
      * @expectedException BadMethodCallException
      */
-    public function testSetPasswordTooManyArguments()
+    public function testSetPasswordTooManyArguments(): void
     {
         $credentials_again = new CredentialsAgain();
         $credentials_again->setPassword(1, 2);
@@ -50,7 +50,7 @@ class CredentialsAgainTest extends TestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testSetPasswordArray()
+    public function testSetPasswordArray(): void
     {
         $credentials = new CredentialsAgain();
         $credentials->setPassword([]);

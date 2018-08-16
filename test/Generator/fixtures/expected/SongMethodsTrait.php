@@ -20,11 +20,11 @@ trait SongMethodsTrait
      */
     public function getGenres(): iterable
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getGenres() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -41,16 +41,17 @@ trait SongMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct.
      *
-     * @param  Genre $genre
+     * @param Genre $genre
+     *
      * @return $this|Song
      */
     public function addGenre(Genre $genre)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'addGenres() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -72,16 +73,17 @@ trait SongMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  Genre $genre
+     * @param Genre $genre
+     *
      * @return $this|Song
      */
     public function removeGenre(Genre $genre)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'removeGenres() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }

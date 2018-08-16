@@ -6,8 +6,6 @@ declare(strict_types=1);
 
 namespace Hostnet\Component\AccessorGenerator\Annotation;
 
-use Doctrine\Common\Annotations\Annotation\Enum;
-
 /**
  * @Annotation(target={"ANNOTATION", "PROPERTY"})
  */
@@ -42,34 +40,22 @@ class Enumerator
      */
     public $type;
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * @return string
-     */
-    public function getEnumeratorClass()
+    public function getEnumeratorClass(): ?string
     {
         return $this->value;
     }
 
-    /**
-     * @return string
-     */
-    public function getPropertyName()
+    public function getPropertyName(): ?string
     {
         return $this->property;
     }
 
-    /**
-     * @return string
-     */
-    public function getType()
+    public function getType(): ?string
     {
         return $this->type;
     }

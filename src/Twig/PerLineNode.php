@@ -50,7 +50,7 @@ class PerLineNode extends \Twig_Node
      *
      * @param \Twig_Compiler $compiler
      */
-    private function compileComplex(\Twig_Compiler $compiler)
+    private function compileComplex(\Twig_Compiler $compiler): void
     {
         $prefix  = $this->getAttribute('prefix');
         $postfix = $this->getAttribute('postfix');
@@ -104,7 +104,7 @@ class PerLineNode extends \Twig_Node
      *
      * @param \Twig_Compiler $compiler A Twig_Compiler instance
      */
-    public function compile(\Twig_Compiler $compiler)
+    public function compile(\Twig_Compiler $compiler): void
     {
         // Echo line information into the generated code
         $compiler->addDebugInfo($this);

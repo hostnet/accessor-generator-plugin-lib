@@ -24,10 +24,11 @@
  * @throws \LengthException if the length of the value is to long
  {% endif -%}
  *
- * @param  {{ property.typeHint | phptype }} ${{ property.name }}
+ * @param {{ property.typeHint | phptype }} ${{ property.name }}
  {% if property.isFixedPointNumber -%}
- * @param  bool $round round the number fit in the precision and scale (round away from zero)
+ * @param bool $round round the number fit in the precision and scale (round away from zero)
  {% endif -%}
+ *
  * @return $this|{{ property.class }}
  */
 {{ property.getSetVisibility() }} function set{{ property.name | classify }}(
@@ -41,38 +42,38 @@
 )
 {
 {% if property.default and property.isFixedPointNumber %}
-    if (func_num_args() > 2) {
+    if (\func_num_args() > 2) {
         throw new \BadMethodCallException(
             sprintf(
                 'set{{ property.name | classify }}() has two optional arguments but %d given.',
-                func_num_args()
+                \func_num_args()
             )
         );
     }
 {% elseif property.default or property.isNullable %}
-    if (func_num_args() > 1) {
+    if (\func_num_args() > 1) {
         throw new \BadMethodCallException(
             sprintf(
                 'set{{ property.name | classify }}() has one optional argument but %d given.',
-                func_num_args()
+                \func_num_args()
             )
         );
     }
 {% elseif property.isFixedPointNumber %}
-    if (func_num_args() > 2) {
+    if (\func_num_args() > 2) {
         throw new \BadMethodCallException(
             sprintf(
                 'set{{ property.name | classify }}() has one mandatory and one optional argument but %d given.',
-                func_num_args()
+                \func_num_args()
             )
         );
     }
 {% else %}
-    if (func_num_args() != 1) {
+    if (\func_num_args() !== 1) {
         throw new \BadMethodCallException(
             sprintf(
                 'set{{ property.name | classify }}() has one argument but %d given.',
-                func_num_args()
+                \func_num_args()
             )
         );
     }
@@ -99,8 +100,8 @@
 {% elseif property.type == 'string' %}
 
     if (${{ property.name }} === null
-        || is_scalar(${{ property.name }})
-        || is_callable([${{ property.name }}, '__toString'])
+        || \is_scalar(${{ property.name }})
+        || \is_callable([${{ property.name }}, '__toString'])
     ) {
         ${{ property.name }} = (string)${{ property.name }};
     } else {
@@ -110,7 +111,7 @@
     }
 {% else %}
 
-    if (!is_{{ property.type == 'boolean' ? 'bool' : property.type }}(${{ property.name }})) {
+    if (!\is_{{ property.type == 'boolean' ? 'bool' : property.type }}(${{ property.name }})) {
         throw new \InvalidArgumentException(
             'Parameter {{ property.name }} must be {{ property.type }}.'
         );
@@ -119,7 +120,7 @@
 {% endif %}
 {% if property.length %}
 
-    if (strlen(${{ property.name }}) > {{ property.length }}) {
+    if (\strlen(${{ property.name }}) > {{ property.length }}) {
         throw new \LengthException('Parameter \'${{ property.name }}\' should not be longer than {{ property.length }} characters.');
     }
 {% endif %}
@@ -170,7 +171,7 @@
     $iv             = bin2hex($iv);
     $sealed_data    = bin2hex($sealed_data);
 
-    $this->{{ property.name }} = sprintf('%d,%d,%s%s%s', strlen($env_key), strlen($iv), $env_key, $iv, $sealed_data);
+    $this->{{ property.name }} = sprintf('%d,%d,%s%s%s', \strlen($env_key), \strlen($iv), $env_key, $iv, $sealed_data);
 {% else %}
     $this->{{ property.name }} = ${{ property.name }};
 {% endif %}
