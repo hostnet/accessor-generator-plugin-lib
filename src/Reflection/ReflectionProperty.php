@@ -28,7 +28,7 @@ class ReflectionProperty
     private $default;
 
     /**
-     * @var ReflectionClass
+     * @var ReflectionClass|null
      */
     private $class;
 
@@ -90,9 +90,9 @@ class ReflectionProperty
     /**
      * Return the Class or Trait that this property belongs to.
      *
-     * @return ReflectionClass
+     * @return ReflectionClass|null
      */
-    public function getClass()
+    public function getClass(): ?ReflectionClass
     {
         return $this->class;
     }
