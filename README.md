@@ -64,7 +64,7 @@ the annotation.
 
 ```php
 /**
- * @AG\Generate(add=false,set=false,remove=false,get=false,is=false)
+ * @AG\Generate(add="none",set="none",remove="none",get="none",is="none")
  */
 ```
 
