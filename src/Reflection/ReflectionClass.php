@@ -384,12 +384,12 @@ class ReflectionClass
         $ns     = '';
 
         if (\in_array($this->tokens->type($loc), [T_FUNCTION, T_CONST])) {
-            $ns  .= $this->tokens->value($loc) . ' ';
+            $ns .= $this->tokens->value($loc) . ' ';
             $loc = $tokens->next($loc);
         }
 
         while (\in_array($tokens->type($loc), [T_NS_SEPARATOR, T_STRING])) {
-            $ns  .= $tokens->value($loc);
+            $ns .= $tokens->value($loc);
             $loc = $tokens->next($loc);
         }
 
@@ -500,7 +500,7 @@ class ReflectionClass
                 $default = $this->parseNamespace($loc);
                 $loc     = $tokens->next($loc, [T_WHITESPACE, T_COMMENT, T_STRING, T_NS_SEPARATOR]);
                 if ($tokens->type($loc) === T_PAAMAYIM_NEKUDOTAYIM) {
-                    $loc     = $tokens->next($loc);
+                    $loc      = $tokens->next($loc);
                     $default .= '::' . $tokens->value($loc);
                 }
             } elseif (\in_array($type, [T_ARRAY, '['])) {

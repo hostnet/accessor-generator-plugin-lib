@@ -79,7 +79,6 @@ class PerLineTokenParserTest extends TestCase
             }
         }
 
-
         // check if we get a valid node back (of type PerLineNode)
         self::assertInstanceOf(PerLineNode::class, $per_line);
 
