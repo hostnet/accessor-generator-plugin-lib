@@ -20,7 +20,6 @@ class DecimalTest extends TestCase
         $before    = $precision - $scale;
         $on_value  = sprintf('%s.%s', str_repeat('2', $before), str_repeat('3', $scale));
 
-
         $i = bccomp($on_value, (string) PHP_INT_MAX, 0) <= 0;
         $f = $precision < 30; // arbirary boundary, only fit fore the used test values
 

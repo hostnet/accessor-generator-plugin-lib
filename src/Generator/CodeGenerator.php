@@ -258,7 +258,7 @@ class CodeGenerator implements CodeGeneratorInterface
         $this->metadata_cache[$cache_key]['properties'] = [];
 
         foreach ($properties as $property) {
-            $info   = new PropertyInformation($property);
+            $info = new PropertyInformation($property);
             $info->registerAnnotationProcessor($generate_processor);
             $info->registerAnnotationProcessor($doctrine_processor);
             $info->processAnnotations();

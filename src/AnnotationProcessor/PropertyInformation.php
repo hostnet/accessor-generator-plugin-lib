@@ -439,7 +439,7 @@ class PropertyInformation implements PropertyInformationInterface
      */
     public function setType(?string $type): self
     {
-        $this->type = $this->validateType($type);
+        $this->type                          = $this->validateType($type);
         $this->type_hint || $this->type_hint = $this->type;
 
         return $this;
@@ -486,7 +486,6 @@ class PropertyInformation implements PropertyInformationInterface
             $this->fully_qualified_type = '';
 
             return $this;
-
         }
 
         if ($type[0] === '\\') {
