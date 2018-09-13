@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 class CartTest extends TestCase
 {
-    public function testSetCustomer()
+    public function testSetCustomer(): void
     {
         $cart     = new Cart();
         $customer = new Customer();
@@ -21,7 +21,7 @@ class CartTest extends TestCase
         self::assertSame($customer, $cart->getCustomer());
     }
 
-    public function testGetCustomerEmpty()
+    public function testGetCustomerEmpty(): void
     {
         $cart = new Cart();
         self::assertNull($cart->getCustomer());
@@ -30,7 +30,7 @@ class CartTest extends TestCase
     /**
      * @expectedException BadMethodCallException
      */
-    public function testGetCustomerTooManyArguments()
+    public function testGetCustomerTooManyArguments(): void
     {
         $cart = new Cart();
         $cart->getCustomer(1);
@@ -39,7 +39,7 @@ class CartTest extends TestCase
     /**
      * @expectedException BadMethodCallException
      */
-    public function testSetCustomerTooManyArguments()
+    public function testSetCustomerTooManyArguments(): void
     {
         $cart     = new Cart();
         $customer = new Customer();

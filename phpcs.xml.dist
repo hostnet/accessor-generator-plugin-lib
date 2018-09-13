@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <ruleset name="accessor-generator Coding Standard">
-  <description>Accessor-gnerator coding standard extending the Hostnet standard by excluding the fixtues folders</description>
-  <exclude-pattern>*/fixtures/*</exclude-pattern>
-  <rule ref="Hostnet"/>
+    <description>Accessor-generator coding standard extending the Hostnet standard by excluding the fixtures folders
+    </description>
+    <exclude-pattern>*/fixtures/*</exclude-pattern>
+    <rule ref="Hostnet"/>
 </ruleset>

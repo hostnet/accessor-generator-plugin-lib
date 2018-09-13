@@ -18,19 +18,19 @@ namespace Hostnet\Component\AccessorGenerator\Enum;
 interface EnumeratorCompatibleEntityInterface
 {
     /**
-     * @param object      $owning_entity     The instance of owning side of this entity.
-     * @param string      $name              The name of the parameter
-     * @param string|NULL $value             The value of the parameter
+     * @param object $owning_entity The instance of owning side of this entity.
+     * @param string $name The name of the parameter
+     * @param string|null $value The value of the parameter
      */
     public function __construct($owning_entity, string $name, ?string $value);
 
     /**
      * @return string
      */
-    public function getValue();
+    public function getValue(): ?string;
 
     /**
-     * @param  string $value
+     * @param string $value
      */
     public function setValue($value);
 }

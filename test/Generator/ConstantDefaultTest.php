@@ -15,7 +15,7 @@ class ConstantDefaultTest extends TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testGetWeatherTooManyArguments()
+    public function testGetWeatherTooManyArguments(): void
     {
         $constant_default = new ConstantDefault();
         $constant_default->getWeather(1);
@@ -24,7 +24,7 @@ class ConstantDefaultTest extends TestCase
     /**
      * @expectedException \LogicException
      */
-    public function testGetWeatherEmpty()
+    public function testGetWeatherEmpty(): void
     {
         $constant_default = new ConstantDefault();
         $property         = new \ReflectionProperty($constant_default, 'weather');
@@ -36,7 +36,7 @@ class ConstantDefaultTest extends TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testSetWeatherTooManyArguments()
+    public function testSetWeatherTooManyArguments(): void
     {
         $constant_default = new ConstantDefault();
         $constant_default->setWeather(1, 2);
@@ -45,7 +45,7 @@ class ConstantDefaultTest extends TestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testSetWeatherInvalidArgument()
+    public function testSetWeatherInvalidArgument(): void
     {
         $constant_default = new ConstantDefault();
         $constant_default->setWeather('1');
@@ -54,7 +54,7 @@ class ConstantDefaultTest extends TestCase
     /**
      * @expectedException \DomainException
      */
-    public function testSetWeatherInvalidDomain()
+    public function testSetWeatherInvalidDomain(): void
     {
         if (PHP_INT_SIZE < 8) {
             $this->markTestSkipped('only valid for a 64bit system');
@@ -67,7 +67,7 @@ class ConstantDefaultTest extends TestCase
     /**
      * @expectedException \DomainException
      */
-    public function testGetWeatherInvalidDomain()
+    public function testGetWeatherInvalidDomain(): void
     {
         $constant_default = new ConstantDefault();
         $property         = new \ReflectionProperty($constant_default, 'weather');
@@ -77,7 +77,7 @@ class ConstantDefaultTest extends TestCase
     }
 
 
-    public function testSetWeather()
+    public function testSetWeather(): void
     {
         $constant_default = new ConstantDefault();
         self::assertSame($constant_default, $constant_default->setWeather(Weather::RAIN));

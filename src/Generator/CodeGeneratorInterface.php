@@ -31,7 +31,7 @@ interface CodeGeneratorInterface
     /**
      * Writes one or more enumerator accessors.
      *
-     * @param  ReflectionClass $class
+     * @param ReflectionClass $class
      * @return bool
      */
     public function writeEnumeratorAccessorsForClass(ReflectionClass $class);
@@ -43,7 +43,7 @@ interface CodeGeneratorInterface
      *
      * Returns an empty string if no code generation was needed nor done.
      *
-     * @param  ReflectionClass $class
+     * @param ReflectionClass $class
      * @return string
      */
     public function generateTraitForClass(ReflectionClass $class);
@@ -53,7 +53,7 @@ interface CodeGeneratorInterface
      * {$info}. The output will consist of generated code for the accessors
      * separated with line-breaks.
      *
-     * @param  PropertyInformationInterface $info
+     * @param PropertyInformationInterface $info
      * @return string
      */
     public function generateAccessors(PropertyInformationInterface $info);

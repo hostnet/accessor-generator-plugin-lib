@@ -21,11 +21,11 @@ trait SoftwareMethodsTrait
      */
     public function getFeatures(): iterable
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getFeatures() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -44,16 +44,17 @@ trait SoftwareMethodsTrait
      * @throws \LogicException         if a member was added that already exists within the collection.
      * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
      *
-     * @param  FeatureInterface $feature
+     * @param FeatureInterface $feature
+     *
      * @return $this|Software
      */
     public function addFeature(FeatureInterface $feature)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'addFeatures() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -95,16 +96,17 @@ trait SoftwareMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  FeatureInterface $feature
+     * @param FeatureInterface $feature
+     *
      * @return $this|Software
      */
     public function removeFeature(FeatureInterface $feature)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'removeFeatures() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }

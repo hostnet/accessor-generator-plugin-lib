@@ -17,16 +17,17 @@ trait PracticalVehicleOwnerMethodsTrait
      * @throws \LogicException         if a member was added that already exists within the collection.
      * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
      *
-     * @param  \Hostnet\Component\AccessorGenerator\Generator\fixtures\VehicleInterface $vehicle
+     * @param \Hostnet\Component\AccessorGenerator\Generator\fixtures\VehicleInterface $vehicle
+     *
      * @return $this|PracticalVehicleOwner
      */
     public function addVehicle(\Hostnet\Component\AccessorGenerator\Generator\fixtures\VehicleInterface $vehicle)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'addVehicles() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }

@@ -19,11 +19,11 @@ trait ContactInfoMethodsTrait
      */
     private function getAddressLine(): ?string
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getAddressLine() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -41,23 +41,24 @@ trait ContactInfoMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  string $address_line
+     * @param string $address_line
+     *
      * @return $this|ContactInfo
      */
     public function setAddressLine($address_line)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setAddressLine() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
 
         if ($address_line === null
-            || is_scalar($address_line)
-            || is_callable([$address_line, '__toString'])
+            || \is_scalar($address_line)
+            || \is_callable([$address_line, '__toString'])
         ) {
             $address_line = (string)$address_line;
         } else {
@@ -80,11 +81,11 @@ trait ContactInfoMethodsTrait
      */
     public function getName(): ?string
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getName() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -102,23 +103,24 @@ trait ContactInfoMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return $this|ContactInfo
      */
     private function setName($name)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setName() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
 
         if ($name === null
-            || is_scalar($name)
-            || is_callable([$name, '__toString'])
+            || \is_scalar($name)
+            || \is_callable([$name, '__toString'])
         ) {
             $name = (string)$name;
         } else {
@@ -141,11 +143,11 @@ trait ContactInfoMethodsTrait
      */
     protected function isDeleted(): ?bool
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'isDeleted() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -163,21 +165,22 @@ trait ContactInfoMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  bool $deleted
+     * @param bool $deleted
+     *
      * @return $this|ContactInfo
      */
     public function setDeleted($deleted)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setDeleted() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
 
-        if (!is_bool($deleted)) {
+        if (!\is_bool($deleted)) {
             throw new \InvalidArgumentException(
                 'Parameter deleted must be boolean.'
             );
@@ -197,11 +200,11 @@ trait ContactInfoMethodsTrait
      */
     private function isSpendsLotsOfMoney(): ?bool
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'isSpendsLotsOfMoney() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -219,21 +222,22 @@ trait ContactInfoMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  bool $spends_lots_of_money
+     * @param bool $spends_lots_of_money
+     *
      * @return $this|ContactInfo
      */
     protected function setSpendsLotsOfMoney($spends_lots_of_money)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setSpendsLotsOfMoney() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
 
-        if (!is_bool($spends_lots_of_money)) {
+        if (!\is_bool($spends_lots_of_money)) {
             throw new \InvalidArgumentException(
                 'Parameter spends_lots_of_money must be boolean.'
             );
@@ -253,11 +257,11 @@ trait ContactInfoMethodsTrait
      */
     public function getReferencedContacts(): iterable
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getReferencedContacts() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -276,16 +280,17 @@ trait ContactInfoMethodsTrait
      * @throws \LogicException         if a member was added that already exists within the collection.
      * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
      *
-     * @param  ContactInfo $referenced_contact
+     * @param ContactInfo $referenced_contact
+     *
      * @return $this|ContactInfo
      */
     private function addReferencedContact(ContactInfo $referenced_contact)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'addReferencedContacts() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -323,16 +328,17 @@ trait ContactInfoMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  ContactInfo $referenced_contact
+     * @param ContactInfo $referenced_contact
+     *
      * @return $this|ContactInfo
      */
     private function removeReferencedContact(ContactInfo $referenced_contact)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'removeReferencedContacts() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -362,11 +368,11 @@ trait ContactInfoMethodsTrait
      */
     public function getReferrer(): ?ContactInfo
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getReferrer() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -383,16 +389,17 @@ trait ContactInfoMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  ContactInfo $referrer
+     * @param ContactInfo $referrer
+     *
      * @return $this|ContactInfo
      */
     protected function setReferrer(ContactInfo $referrer = null)
     {
-        if (func_num_args() > 1) {
+        if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setReferrer() has one optional argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -433,11 +440,11 @@ trait ContactInfoMethodsTrait
      */
     public function getFriends(): iterable
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getFriends() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -456,16 +463,17 @@ trait ContactInfoMethodsTrait
      * @throws \LogicException         if a member was added that already exists within the collection.
      * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
      *
-     * @param  ContactInfo $friend
+     * @param ContactInfo $friend
+     *
      * @return $this|ContactInfo
      */
     private function addFriend(ContactInfo $friend)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'addFriends() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -503,16 +511,17 @@ trait ContactInfoMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  ContactInfo $friend
+     * @param ContactInfo $friend
+     *
      * @return $this|ContactInfo
      */
     protected function removeFriend(ContactInfo $friend)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'removeFriends() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -542,11 +551,11 @@ trait ContactInfoMethodsTrait
      */
     public function getFriendedBy(): ?ContactInfo
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getFriendedBy() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -563,16 +572,17 @@ trait ContactInfoMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  ContactInfo $friended_by
+     * @param ContactInfo $friended_by
+     *
      * @return $this|ContactInfo
      */
     private function setFriendedBy(ContactInfo $friended_by = null)
     {
-        if (func_num_args() > 1) {
+        if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setFriendedBy() has one optional argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }

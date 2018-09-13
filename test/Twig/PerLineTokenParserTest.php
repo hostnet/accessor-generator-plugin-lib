@@ -16,7 +16,7 @@ class PerLineTokenParserTest extends TestCase
     /**
      * Our class should parse {% perline %} tags
      */
-    public function testGetTag()
+    public function testGetTag(): void
     {
         self::assertEquals('perline', (new PerLineTokenParser())->getTag());
     }
@@ -42,6 +42,7 @@ class PerLineTokenParserTest extends TestCase
      * Flattens all \Twig_nodes in a tree.
      *
      * @param \Twig_Node $node
+     *
      * @return \Generator
      */
     private function iterateAllNodes(\Twig_Node $node)
@@ -63,7 +64,7 @@ class PerLineTokenParserTest extends TestCase
      * @param string $prefix expected prefix (output)
      * @param string $postfix expected postfix (output)
      */
-    public function testParse($template, \Twig_Node $lines, $prefix, $postfix)
+    public function testParse($template, \Twig_Node $lines, $prefix, $postfix): void
     {
         // Setup a token stream and feed it into our token parser.
         $twig = new TestEnvironment(new CodeGenerationExtension());

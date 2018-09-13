@@ -18,11 +18,11 @@ trait GenerateTypesMethodsTrait
      */
     public function getInteger(): int
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getInteger() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -58,21 +58,22 @@ trait GenerateTypesMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      * @throws \DomainException if the integer value is outside of the domain on this machine
      *
-     * @param  int $integer
+     * @param int $integer
+     *
      * @return $this|GenerateTypes
      */
     public function setInteger($integer)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setInteger() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
 
-        if (!is_int($integer)) {
+        if (!\is_int($integer)) {
             throw new \InvalidArgumentException(
                 'Parameter integer must be integer.'
             );
@@ -103,11 +104,11 @@ trait GenerateTypesMethodsTrait
      */
     public function getFloat(): float
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getFloat() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -131,21 +132,22 @@ trait GenerateTypesMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  float $float
+     * @param float $float
+     *
      * @return $this|GenerateTypes
      */
     public function setFloat($float)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setFloat() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
 
-        if (!is_float($float)) {
+        if (!\is_float($float)) {
             throw new \InvalidArgumentException(
                 'Parameter float must be float.'
             );
@@ -166,11 +168,11 @@ trait GenerateTypesMethodsTrait
      */
     public function getString(): string
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getString() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -194,23 +196,24 @@ trait GenerateTypesMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  string $string
+     * @param string $string
+     *
      * @return $this|GenerateTypes
      */
     public function setString($string)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setString() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
 
         if ($string === null
-            || is_scalar($string)
-            || is_callable([$string, '__toString'])
+            || \is_scalar($string)
+            || \is_callable([$string, '__toString'])
         ) {
             $string = (string)$string;
         } else {
@@ -234,11 +237,11 @@ trait GenerateTypesMethodsTrait
      */
     public function isBoolean(): bool
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'isBoolean() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -262,21 +265,22 @@ trait GenerateTypesMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  bool $boolean
+     * @param bool $boolean
+     *
      * @return $this|GenerateTypes
      */
     public function setBoolean($boolean)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setBoolean() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
 
-        if (!is_bool($boolean)) {
+        if (!\is_bool($boolean)) {
             throw new \InvalidArgumentException(
                 'Parameter boolean must be boolean.'
             );
@@ -297,11 +301,11 @@ trait GenerateTypesMethodsTrait
      */
     public function isThisBoolean(): bool
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'isThisBoolean() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -325,21 +329,22 @@ trait GenerateTypesMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  bool $is_this_boolean
+     * @param bool $is_this_boolean
+     *
      * @return $this|GenerateTypes
      */
     public function setIsThisBoolean($is_this_boolean)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setIsThisBoolean() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
 
-        if (!is_bool($is_this_boolean)) {
+        if (!\is_bool($is_this_boolean)) {
             throw new \InvalidArgumentException(
                 'Parameter is_this_boolean must be boolean.'
             );
@@ -360,11 +365,11 @@ trait GenerateTypesMethodsTrait
      */
     public function getDatetime(): \DateTime
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getDatetime() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -387,16 +392,17 @@ trait GenerateTypesMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
-     * @param  \DateTime $datetime
+     * @param \DateTime $datetime
+     *
      * @return $this|GenerateTypes
      */
     public function setDatetime(\DateTime $datetime)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setDatetime() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -416,11 +422,11 @@ trait GenerateTypesMethodsTrait
      */
     public function getArray(): array
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getArray() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -444,21 +450,22 @@ trait GenerateTypesMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  array $array
+     * @param array $array
+     *
      * @return $this|GenerateTypes
      */
     public function setArray($array)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setArray() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
 
-        if (!is_array($array)) {
+        if (!\is_array($array)) {
             throw new \InvalidArgumentException(
                 'Parameter array must be array.'
             );
@@ -479,11 +486,11 @@ trait GenerateTypesMethodsTrait
      */
     public function getObject()
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getObject() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
@@ -507,21 +514,22 @@ trait GenerateTypesMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      * @throws \InvalidArgumentException if value is not of the right type
      *
-     * @param  object $object
+     * @param object $object
+     *
      * @return $this|GenerateTypes
      */
     public function setObject($object)
     {
-        if (func_num_args() != 1) {
+        if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
                 sprintf(
                     'setObject() has one argument but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }
 
-        if (!is_object($object)) {
+        if (!\is_object($object)) {
             throw new \InvalidArgumentException(
                 'Parameter object must be object.'
             );

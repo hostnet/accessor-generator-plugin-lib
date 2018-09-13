@@ -100,7 +100,7 @@ interface PropertyInformationInterface
     /**
      * Get the encryption alias.
      *
-     * @return string
+     * @return string|null
      */
     public function getEncryptionAlias();
 
@@ -118,7 +118,7 @@ interface PropertyInformationInterface
      * This is only applicable for string types that are persisted in a
      * database. A value of 0 means the length is unrestricted.
      *
-     * @return string
+     * @return int
      */
     public function getLength();
 
@@ -168,7 +168,7 @@ interface PropertyInformationInterface
      *
      * @return string
      */
-    public function getDocumentation();
+    public function getDocumentation(): string;
 
     /**
      * Returns true if a value in this collection may only appear once.

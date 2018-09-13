@@ -26,36 +26,37 @@ class Generate
      *
      * @var string
      */
-    const VISIBILITY_NONE = 'none';
+    public const VISIBILITY_NONE = 'none';
 
     /**
      * A public method should be generated.
      *
      * @var string
      */
-    const VISIBILITY_PUBLIC = 'public';
+    public const VISIBILITY_PUBLIC = 'public';
 
     /**
      * A protected method should be generated.
      *
      * @var string
      */
-    const VISIBILITY_PROTECTED = 'protected';
+    public const VISIBILITY_PROTECTED = 'protected';
 
     /**
      * A private method should be generated.
      *
      * @var string
      */
-    const VISIBILITY_PRIVATE = 'private';
+    public const VISIBILITY_PRIVATE = 'private';
 
     /**
      * Will generate a getter of the given visibility.
      *
      * Default: public.
-     * True and false are available, though deprecated.
      *
-     * @Enum({"public", "protected", "private", "none", true, false})
+     * @Enum({"public", "protected", "private", "none"})
+     *
+     * @var string
      */
     public $get;
 
@@ -67,9 +68,10 @@ class Generate
      * be individually controlled by setting the add / remove properties.
      *
      * Default: public.
-     * True and false are available, though deprecated.
      *
-     * @Enum({"public", "protected", "private", "none", true, false})
+     * @Enum({"public", "protected", "private", "none"})
+     *
+     * @var string
      */
     public $set;
 
@@ -78,9 +80,10 @@ class Generate
      * relation. Might already be disabled with the set property.
      *
      * Default: public.
-     * True and false are available, though deprecated.
      *
-     * @Enum({"public", "protected", "private", "none", true, false})
+     * @Enum({"public", "protected", "private", "none"})
+     *
+     * @var string
      */
     public $add;
 
@@ -89,9 +92,10 @@ class Generate
      * relation. Might already be disabled with the set property.
      *
      * Default: public.
-     * True and false are available, though deprecated.
      *
-     * @Enum({"public", "protected", "private", "none", true, false})
+     * @Enum({"public", "protected", "private", "none"})
+     *
+     * @var string
      */
     public $remove;
 
@@ -100,9 +104,10 @@ class Generate
      * with the get property.
      *
      * Default: public.
-     * True and false are available, though deprecated.
      *
-     * @Enum({"public", "protected", "private", "none", true, false})
+     * @Enum({"public", "protected", "private", "none"})
+     *
+     * @var string
      */
     public $is = self::VISIBILITY_PUBLIC;
 
@@ -118,6 +123,8 @@ class Generate
      * return type of the getter.
      *
      * Insert the fully qualified class name here.
+     *
+     * @var string
      */
     public $type;
 
@@ -147,105 +154,57 @@ class Generate
      * Determine if the property should be stored encrypted.
      *
      * Insert the unique name that's used to map the key files to the property.
+     *
+     * @var string
      */
     public $encryption_alias;
 
-    /**
-     * @return string
-     */
-    public function getGet()
+    public function getGet(): ?string
     {
-        return $this->castToSupportedValue($this->get);
+        return $this->get;
     }
 
-    /**
-     * @return string
-     */
-    public function getSet()
+    public function getSet(): ?string
     {
-        return $this->castToSupportedValue($this->set);
+        return $this->set;
     }
 
-    /**
-     * @return string
-     */
-    public function getAdd()
+    public function getAdd(): ?string
     {
-        return $this->castToSupportedValue($this->add);
+        return $this->add;
     }
 
-    /**
-     * @return string
-     */
-    public function getRemove()
+    public function getRemove(): ?string
     {
-        return $this->castToSupportedValue($this->remove);
+        return $this->remove;
     }
 
-    /**
-     * @return string
-     */
-    public function getIs()
+    public function getIs(): ?string
     {
-        return $this->castToSupportedValue($this->is);
+        return $this->is;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getType()
+    public function getType(): ?string
     {
         return $this->type;
     }
 
-    /**
-     * @return bool
-     */
-    public function isStrict()
+    public function isStrict(): bool
     {
         return $this->strict;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getEncryptionAlias()
+    public function getEncryptionAlias(): ?string
     {
         return $this->encryption_alias;
     }
 
     /**
-     * @return string[]
+     * @return Enumerator[]
      */
-    public function getEnumerators()
+    public function getEnumerators(): array
     {
         return $this->enumerators;
-    }
-
-    /**
-     * Cast legacy values to their string representative.
-     *
-     * @param bool $value
-     * @return string
-     */
-    private function castToSupportedValue($value)
-    {
-        if ((bool) $value === $value) {
-            @trigger_error(
-                'Using a boolean for the visibility is deprecated. Use none, private, protected or public instead.',
-                E_USER_DEPRECATED
-            );
-        }
-
-        if ($value === true) {
-            return self::VISIBILITY_PUBLIC;
-        }
-
-        if ($value === false) {
-            return self::VISIBILITY_NONE;
-        }
-
-        return $value;
     }
 
     /**
@@ -259,9 +218,10 @@ class Generate
      *  - public
      *
      * @param array ...$requirements
+     *
      * @return string
      */
-    public static function getMostLimitedVisibility(...$requirements)
+    public static function getMostLimitedVisibility(...$requirements): string
     {
         foreach ([self::VISIBILITY_NONE, self::VISIBILITY_PRIVATE, self::VISIBILITY_PROTECTED] as $search_string) {
             foreach ($requirements as $requirement) {
@@ -279,17 +239,20 @@ class Generate
      *
      * @param string $visibility
      */
-    public function setDefaultVisibility(string $visibility)
+    public function setDefaultVisibility(string $visibility): void
     {
         if (null === $this->get) {
             $this->get = $visibility;
         }
+
         if (null === $this->set) {
             $this->set = $visibility;
         }
+
         if (null === $this->add) {
             $this->add = $visibility;
         }
+
         if (null !== $this->remove) {
             return;
         }

@@ -18,11 +18,11 @@ trait CommentMethodsTrait
      */
     public function getCol(): ?string
     {
-        if (func_num_args() > 0) {
+        if (\func_num_args() > 0) {
             throw new \BadMethodCallException(
                 sprintf(
                     'getCol() has no arguments but %d given.',
-                    func_num_args()
+                    \func_num_args()
                 )
             );
         }

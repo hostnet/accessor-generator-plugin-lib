@@ -27,11 +27,11 @@
 
 {% endif %}
 {
-    if (func_num_args() > 0) {
+    if (\func_num_args() > 0) {
         throw new \BadMethodCallException(
             sprintf(
                 '{{ getter }}() has no arguments but %d given.',
-                func_num_args()
+                \func_num_args()
             )
         );
     }

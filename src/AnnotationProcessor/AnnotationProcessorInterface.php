@@ -18,21 +18,21 @@ interface AnnotationProcessorInterface
     /**
      * processAnnotations
      *
-     * @param  object              $annotation  class annotated with @annotation
-     * @param  PropertyInformation $information location to store new
+     * @param object              $annotation  class annotated with @annotation
+     * @param PropertyInformation $information location to store new
      *                                          information about the property
      * @return void
      */
-    public function processAnnotation($annotation, PropertyInformation $information);
+    public function processAnnotation($annotation, PropertyInformation $information): void;
 
     /**
      * Get the namespace of the annotations that will be parsed by this
      * annotation parser.
      *
-     * This list can be used to feed it into a doc parser to only parse
+     * This value can be used to feed it into a doc parser to only parse
      * the annotations that will actually be used.
      *
-     * @return string[]
+     * @return string
      */
-    public function getProcessableAnnotationNamespace();
+    public function getProcessableAnnotationNamespace(): string;
 }

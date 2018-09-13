@@ -24,8 +24,10 @@ use Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception\InvalidCol
  */
 class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
 {
-    const ZEROED_DATE_TIME = 'zeroeddatetime';
-    const YAML_ARRAY       = 'yaml_array';
+    private const ZEROED_DATE_TIME = 'zeroeddatetime';
+    private const ZEROED_DATE      = 'zeroeddate';
+    private const YAML_ARRAY       = 'yaml_array';
+    private const NULLABLE_TYPES   = [self::ZEROED_DATE, self::ZEROED_DATE_TIME];
 
     /**
      * Process annotations of type:
@@ -43,11 +45,13 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * @throws \InvalidArgumentException
      * @throws \DomainException
      *
-     * @param  mixed $annotation object of a class annotated with @annotation
-     * @param  PropertyInformation $information
+     * @param mixed $annotation object of a class annotated with @annotation
+     * @param PropertyInformation $information
+     *
      * @return void
      */
-    public function processAnnotation($annotation, PropertyInformation $information)
+
+    public function processAnnotation($annotation, PropertyInformation $information): void
     {
         // Process scalar value (db-wise) columns.
         if ($annotation instanceof Column) {
@@ -91,24 +95,23 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
     }
 
     /**
-     * @see AnnotationProcessorInterface::getProcessableAnnotations()
+     * {@inheritdoc}
      */
-    public function getProcessableAnnotationNamespace()
+    public function getProcessableAnnotationNamespace(): string
     {
         return 'Doctrine\ORM\Mapping';
     }
 
     /**
-     * Return referenced entity if we have a bidirectional
-     * doctrine association.
+     * Return referenced entity if we have a bidirectional doctrine association.
      *
      * @throws \DomainException
      * @throws \InvalidArgumentException
      *
-     * @param mixed               $annotation with annotation Annotation
+     * @param mixed $annotation with annotation Annotation
      * @param PropertyInformation $information
      */
-    private function processBidirectional($annotation, PropertyInformation $information)
+    private function processBidirectional($annotation, PropertyInformation $information): void
     {
         // Parse the mappedBy and inversedBy columns, there is no nice interface
         // on them so we have to check for existence of the property.
@@ -150,7 +153,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
      * @throws \OutOfBoundsException
      */
-    protected function processColumn(Column $column, PropertyInformation $information)
+    protected function processColumn(Column $column, PropertyInformation $information): void
     {
         $information->setType($this->transformType($column->type));
         $information->setFixedPointNumber(strtolower($column->type) === Type::DECIMAL);
@@ -158,7 +161,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
         $information->setPrecision($column->precision);
         $information->setScale($column->scale);
         $information->setUnique($column->unique !== false);
-        $information->setNullable($column->nullable !== false);
+        $information->setNullable($column->nullable !== false || \in_array($column->type, self::NULLABLE_TYPES, true));
         $information->setIntegerSize($this->getIntegerSizeForType($column->type));
 
         if ($information->isFixedPointNumber()
@@ -182,10 +185,10 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
     /**
      * Process a JoinColumn Annotation, extract nullable.
      *
-     * @param JoinColumn          $join_column
+     * @param JoinColumn $join_column
      * @param PropertyInformation $information
      */
-    private function processJoinColumn(JoinColumn $join_column, PropertyInformation $information)
+    private function processJoinColumn(JoinColumn $join_column, PropertyInformation $information): void
     {
         $information->setNullable($join_column->nullable);
         $information->setUnique($join_column->unique);
@@ -205,8 +208,9 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * @see http://php.net/manual/en/function.gettype.php (double vs float)
      * @see http://doctrine-dbal.readthedocs.org/en/latest/reference/types.html
      *
-     * @param  string $type
-     * @return string A valid PHP type
+     * @param mixed $type
+     *
+     * @return mixed A valid PHP type
      */
     private function transformType($type)
     {
@@ -230,15 +234,19 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
             return 'resource';
         }
 
-        if (in_array(
+        if (\in_array(
             $type,
-            [Type::DATETIME, Type::DATETIMETZ, Type::DATE, Type::TIME, self::ZEROED_DATE_TIME],
+            [Type::DATETIME, Type::DATETIMETZ, Type::DATE, Type::TIME, self::ZEROED_DATE_TIME, self::ZEROED_DATE],
             true
         )) {
             return '\\' . \DateTime::class;
         }
 
-        if (in_array($type, [Type::SIMPLE_ARRAY, Type::JSON_ARRAY, Type::JSON, Type::TARRAY, self::YAML_ARRAY], true)) {
+        if (\in_array(
+            $type,
+            [Type::SIMPLE_ARRAY, Type::JSON_ARRAY, Type::JSON, Type::TARRAY, self::YAML_ARRAY],
+            true
+        )) {
             return 'array';
         }
 
@@ -259,10 +267,11 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * is no namespace separator in the class name, Doctrine assumes the class
      * is in the current namespace and is left as-is.
      *
-     * @param  string $type
+     * @param string $type
+     *
      * @return string
      */
-    private function transformComplexType($type)
+    private function transformComplexType($type): string
     {
         if (strpos($type, '\\') > 0) {
             return '\\' . $type;
@@ -282,10 +291,11 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      *
      * @see http://doctrine-dbal.readthedocs.org/en/latest/reference/types.html
      *
-     * @param  string $type
+     * @param string $type
+     *
      * @return int
      */
-    private function getIntegerSizeForType($type)
+    private function getIntegerSizeForType(string $type): int
     {
         if ($type === 'bool' || $type === 'boolean') {
             return 1;

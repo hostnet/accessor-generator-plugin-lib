@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 class StudentTest extends TestCase
 {
-    public function testSetStudent()
+    public function testSetStudent(): void
     {
         $stefan = new Student();
         $nico   = new Student();
@@ -28,7 +28,7 @@ class StudentTest extends TestCase
     /**
      * @expectedException \Doctrine\ORM\EntityNotFoundException
      */
-    public function testGetStudentEmpty()
+    public function testGetStudentEmpty(): void
     {
         $nico = new Student();
         $nico->getStudent();
@@ -37,7 +37,7 @@ class StudentTest extends TestCase
     /**
      * @expectedException BadMethodCallException
      */
-    public function testGetStudentTooManyArguments()
+    public function testGetStudentTooManyArguments(): void
     {
         $nico = new Student();
         $nico->getStudent(1);
@@ -46,7 +46,7 @@ class StudentTest extends TestCase
     /**
      * @expectedException BadMethodCallException
      */
-    public function testSetStudentTooManyArguments()
+    public function testSetStudentTooManyArguments(): void
     {
         $stefan = new Student();
         $nico   = new Student();

@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 class UserTest extends TestCase
 {
-    public function testGetAddressEmpty()
+    public function testGetAddressEmpty(): void
     {
         $user = new User();
         self::assertNull($user->getAddress());
@@ -21,13 +21,13 @@ class UserTest extends TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testGetAddressTooManyArguments()
+    public function testGetAddressTooManyArguments(): void
     {
         $user = new User();
         $user->getAddress(1);
     }
 
-    public function testSetAddress()
+    public function testSetAddress(): void
     {
         $user    = new User();
         $address = new Address();
@@ -42,7 +42,7 @@ class UserTest extends TestCase
     /**
      * @expectedException \BadMethodCallException
      */
-    public function testSetAddressTooManyArguments()
+    public function testSetAddressTooManyArguments(): void
     {
         $user    = new User();
         $address = new Address();

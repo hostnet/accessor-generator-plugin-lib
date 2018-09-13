@@ -18,20 +18,32 @@ class Nullable
     private $id;
 
     /**
+     * @ORM\Column(type="zeroeddatetime")
+     * @AG\Generate
+     */
+    private $zeroed_datetime;
+
+    /**
+     * @ORM\Column(type="zeroeddate")
+     * @AG\Generate
+     */
+    private $zeroed_date;
+
+    /**
      * @ORM\Column(type="datetime")
-     * @AG\Generate(get=false)
+     * @AG\Generate(get="none")
      */
     private $datetime_default = null;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @AG\Generate(get=false)
+     * @AG\Generate(get="none")
      */
     private $datetime_nullable;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @AG\Generate(get=false)
+     * @AG\Generate(get="none")
      */
     private $datetime_both = null;
 
@@ -43,20 +55,20 @@ class Nullable
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @AG\Generate(get=false)
+     * @AG\Generate(get="none")
      */
     private $int_different = 2;
 
     /**
      * @ORM\ManyToOne(targetEntity="Feature")
      * @ORM\JoinColumn(nullable=true)
-     * @AG\Generate(get=false)
+     * @AG\Generate(get="none")
      */
     private $feature;
 
     /**
      * @ORM\ManyToOne(targetEntity="Feature")
-     * @AG\Generate(get=false)
+     * @AG\Generate(get="none")
      */
     private $an_other_feature;
 

@@ -12,30 +12,37 @@ namespace Hostnet\Component\AccessorGenerator\Reflection;
  */
 class ReflectionProperty
 {
-    const IS_PRIVATE   = \ReflectionProperty::IS_PRIVATE;
-    const IS_PROTECTED = \ReflectionProperty::IS_PROTECTED;
-    const IS_PUBLIC    = \ReflectionProperty::IS_PUBLIC;
-    const IS_STATIC    = \ReflectionProperty::IS_STATIC;
-
-    private $modifiers   = null;
-    private $doc_comment = null;
-    private $default     = null;
-    private $class       = null;
-    private $name        = '';
+    /**
+     * @var int|null
+     */
+    private $modifiers;
 
     /**
-     * @param string          $name
-     * @param int             $modifiers
-     * @param string          $default
-     * @param string          $doc_comment
-     * @param ReflectionClass $class
+     * @var string|null
      */
+    private $doc_comment;
+
+    /**
+     * @var string|null
+     */
+    private $default;
+
+    /**
+     * @var ReflectionClass|null
+     */
+    private $class;
+
+    /**
+     * @var string
+     */
+    private $name;
+
     public function __construct(
-        $name,
-        $modifiers = null,
-        $default = null,
-        $doc_comment = null,
-        ReflectionClass $class = null
+        string $name,
+        ?int $modifiers = null,
+        ?string $default = null,
+        ?string $doc_comment = null,
+        ?ReflectionClass $class = null
     ) {
         $this->name        = $name;
         $this->default     = $default;
@@ -51,37 +58,30 @@ class ReflectionProperty
      * @throws \InvalidArgumentException
      * @throws \DomainException
      *
-     * @param int $modifiers
+     * @param int|null $modifiers
      */
-    private function setModifiers($modifiers)
+    private function setModifiers(?int $modifiers): void
     {
         // Default to private.
         if ($modifiers === null) {
-            $this->modifiers = self::IS_PRIVATE;
+            $this->modifiers = \ReflectionProperty::IS_PRIVATE;
 
             return;
         }
 
-        // Invalid type used for modifiers.
-        if (!is_int($modifiers)) {
-            throw new \InvalidArgumentException(sprintf('$modifiers (%s) is not a valid bit.', $modifiers));
-        }
-
         // Get the number of active visibility modifiers amount all modifies.
         $active_visibility_modifiers =
-            ((bool) ($modifiers & self::IS_PRIVATE)) +
-            ((bool) ($modifiers & self::IS_PROTECTED)) +
-            ((bool) ($modifiers & self::IS_PUBLIC));
+            ((bool) ($modifiers & \ReflectionProperty::IS_PRIVATE)) +
+            ((bool) ($modifiers & \ReflectionProperty::IS_PROTECTED)) +
+            ((bool) ($modifiers & \ReflectionProperty::IS_PUBLIC));
 
         // Not one and only one of private, protected and public is selected, throw exception.
         if ($active_visibility_modifiers !== 1) {
-            throw new \DomainException(
-                sprintf(
-                    '$modifiers (%s) has not ONE of IS_PRIVATE, IS_PROTECTED or IS_PUBLIC set, but found %s.',
-                    $modifiers,
-                    $active_visibility_modifiers
-                )
-            );
+            throw new \DomainException(sprintf(
+                '$modifiers (%s) has not ONE of IS_PRIVATE, IS_PROTECTED or IS_PUBLIC set, but found %s.',
+                $modifiers,
+                $active_visibility_modifiers
+            ));
         }
 
         $this->modifiers = $modifiers;
@@ -90,9 +90,9 @@ class ReflectionProperty
     /**
      * Return the Class or Trait that this property belongs to.
      *
-     * @return ReflectionClass
+     * @return ReflectionClass|null
      */
-    public function getClass()
+    public function getClass(): ?ReflectionClass
     {
         return $this->class;
     }
@@ -100,9 +100,9 @@ class ReflectionProperty
     /**
      * Get the raw doc_comment as string.
      *
-     * @return string
+     * @return string|null
      */
-    public function getDocComment()
+    public function getDocComment(): ?string
     {
         return $this->doc_comment;
     }
@@ -112,7 +112,7 @@ class ReflectionProperty
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -122,9 +122,9 @@ class ReflectionProperty
      *
      * @return bool
      */
-    public function isStatic()
+    public function isStatic(): bool
     {
-        return (bool) ($this->modifiers & self::IS_STATIC);
+        return (bool) ($this->modifiers & \ReflectionProperty::IS_STATIC);
     }
 
     /**
@@ -133,9 +133,9 @@ class ReflectionProperty
      *
      * @return bool
      */
-    public function isPrivate()
+    public function isPrivate(): bool
     {
-        return (bool) ($this->modifiers & self::IS_PRIVATE);
+        return (bool) ($this->modifiers & \ReflectionProperty::IS_PRIVATE);
     }
 
     /**
@@ -144,9 +144,9 @@ class ReflectionProperty
      *
      * @return bool
      */
-    public function isProtected()
+    public function isProtected(): bool
     {
-        return (bool) ($this->modifiers & self::IS_PROTECTED);
+        return (bool) ($this->modifiers & \ReflectionProperty::IS_PROTECTED);
     }
 
     /**
@@ -155,9 +155,9 @@ class ReflectionProperty
      *
      * @return bool
      */
-    public function isPublic()
+    public function isPublic(): bool
     {
-        return (bool) ($this->modifiers & self::IS_PUBLIC);
+        return (bool) ($this->modifiers & \ReflectionProperty::IS_PUBLIC);
     }
 
     /**
@@ -169,7 +169,7 @@ class ReflectionProperty
      *
      * @return string|null
      */
-    public function getDefault()
+    public function getDefault(): ?string
     {
         return $this->default;
     }

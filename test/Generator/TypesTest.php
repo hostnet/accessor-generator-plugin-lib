@@ -25,12 +25,12 @@ class TypesTest extends TestCase
             ['smallint',           32767                          ],
             ['smallint',           32768, \DomainException::class ],
             ['smallint',          -32769, \DomainException::class ],
-            ['integer',       2147483647                         ],
-            ['integer',      -2147483648                         ],
+            ['integer',       2147483647                          ],
+            ['integer',      -2147483648                          ],
             ['integer',       2147483648, \DomainException::class ],
             ['integer',      -2147483649, \DomainException::class ],
             ['bigint',       PHP_INT_MAX                          ],
-            ['bigint',   -PHP_INT_MAX -1                          ],
+            ['bigint',   -PHP_INT_MAX - 1                         ],
             ['bigint',   PHP_INT_MAX + 1,  \DomainException::class],
             ['bigint',  -PHP_INT_MAX - 2,  \DomainException::class],
             ['decimal',         '1000.1'                          ],
@@ -73,7 +73,7 @@ class TypesTest extends TestCase
      * @param mixed $extra_parameter
      * @dataProvider getTypeProvider
      */
-    public function testGetType($type, $value, $exception = null, $extra_parameter = null)
+    public function testGetType($type, $value, $exception = null, $extra_parameter = null): void
     {
         $exception && $this->expectException($exception);
 
@@ -177,7 +177,7 @@ class TypesTest extends TestCase
      * @param mixed $extra_parameter
      * @dataProvider setTypeProvider
      */
-    public function testSetType($type, $value, $exception = null, $extra_parameter = null)
+    public function testSetType($type, $value, $exception = null, $extra_parameter = null): void
     {
         $exception && $this->expectException($exception);
         $types = new Types();
@@ -215,7 +215,7 @@ class TypesTest extends TestCase
     /**
      * @expectedException DomainException
      */
-    public function testSetDecimalTooBig()
+    public function testSetDecimalTooBig(): void
     {
         $types = new Types();
         $types->setDecimal('1E+10');
@@ -224,18 +224,18 @@ class TypesTest extends TestCase
     /**
      * @expectedException DomainException
      */
-    public function testSetDecimalTooSmall()
+    public function testSetDecimalTooSmall(): void
     {
         $types = new Types();
         $types->setDecimal('+10E-2');
     }
 
-    public function testSetDecimal()
+    public function testSetDecimal(): void
     {
         $types = new Types();
 
         $types->setDecimal('1E+8');
-        self::assertEquals('100000000', $types->getDecimal());
+        self::assertEquals('100000000.0', $types->getDecimal());
 
         $types->setDecimal('1.0000000005E+8', true);
         self::assertEquals('100000000.1', $types->getDecimal());
