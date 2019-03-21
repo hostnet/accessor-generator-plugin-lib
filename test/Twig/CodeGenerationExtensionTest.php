@@ -7,6 +7,9 @@ declare(strict_types=1);
 namespace Hostnet\Component\AccessorGenerator\Twig;
 
 use PHPUnit\Framework\TestCase;
+use Twig\Environment;
+use Twig\Error\RuntimeError;
+use Twig\Loader\ArrayLoader;
 
 /**
  * @covers \Hostnet\Component\AccessorGenerator\Twig\CodeGenerationExtension
@@ -29,7 +32,7 @@ class CodeGenerationExtensionTest extends TestCase
         parent::__construct($name, $data, $data_name);
 
         // Create some very simple templates to test the filters
-        $loader = new \Twig_Loader_Array([
+        $loader = new ArrayLoader([
             'classify'            => '{{ data | classify }}',
             'singularize'         => '{{ data | singularize }}',
             'twos_complement_min' => '{{ data | twos_complement_min }}',
@@ -40,7 +43,7 @@ class CodeGenerationExtensionTest extends TestCase
             'decimal_right_shift' => '{{ data | decimal_right_shift(amount) }}',
         ]);
 
-        $this->twig = new \Twig_Environment($loader);
+        $this->twig = new Environment($loader);
         $this->twig->addExtension(new CodeGenerationExtension());
     }
 
@@ -93,11 +96,11 @@ class CodeGenerationExtensionTest extends TestCase
     public function twosComplementMaxProvider(): array
     {
         return [
-            [                -10, null           , \Twig_Error_Runtime::class],
-            [                  0, null           , \Twig_Error_Runtime::class],
-            [                 16, 32767                                      ],
-            [  PHP_INT_SIZE << 3, PHP_INT_MAX                                ],
-            [  PHP_INT_SIZE << 4, PHP_INT_MAX                                ],
+            [                -10, null           , RuntimeError::class],
+            [                  0, null           , RuntimeError::class],
+            [                 16, 32767                               ],
+            [  PHP_INT_SIZE << 3, PHP_INT_MAX                         ],
+            [  PHP_INT_SIZE << 4, PHP_INT_MAX                         ],
         ];
     }
 
@@ -113,11 +116,11 @@ class CodeGenerationExtensionTest extends TestCase
     public function twosComplementMinProvider(): array
     {
         return [
-            [                -10, null           , \Twig_Error_Runtime::class],
-            [                  0, null           , \Twig_Error_Runtime::class],
-            [                 16, -32768                                     ],
-            [  PHP_INT_SIZE << 3, -PHP_INT_MAX - 1                           ],
-            [  PHP_INT_SIZE << 4, -PHP_INT_MAX - 1                           ],
+            [                -10, null           , RuntimeError::class],
+            [                  0, null           , RuntimeError::class],
+            [                 16, -32768                              ],
+            [  PHP_INT_SIZE << 3, -PHP_INT_MAX - 1                    ],
+            [  PHP_INT_SIZE << 4, -PHP_INT_MAX - 1                    ],
         ];
     }
 
@@ -216,9 +219,9 @@ class CodeGenerationExtensionTest extends TestCase
             [   1, 10,   .0000000001],
             [1000,  4,   .1         ],
             ['1.0', 2, '0.010'      ],
-            [ 'a', null, null, \Twig_Error_Runtime::class],
-            [ [],  null, null, \Twig_Error_Runtime::class],
-            [ 1,   [],   null, \Twig_Error_Runtime::class],
+            [ 'a', null, null, RuntimeError::class],
+            [ [],  null, null, RuntimeError::class],
+            [ 1,   [],   null, RuntimeError::class],
         ];
     }
 

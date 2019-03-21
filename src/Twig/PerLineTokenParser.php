@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Hostnet\Component\AccessorGenerator\Twig;
 
+use Twig\Error\SyntaxError;
 use Twig\Node\Node;
 use Twig\Node\TextNode;
 use Twig\Token;
@@ -40,7 +41,7 @@ class PerLineTokenParser extends AbstractTokenParser
      *
      * @param Token $token
      *
-     * @throws \Twig_Error_Syntax
+     * @throws SyntaxError
      *
      * @return PerLineNode
      */

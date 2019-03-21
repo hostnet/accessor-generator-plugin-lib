@@ -21,6 +21,9 @@ use Hostnet\Component\AccessorGenerator\Generator\Exception\ReferencedClassNotFo
 use Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
 use Symfony\Component\Finder\Finder;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
  * Plugin that will generate accessor methods in traits and puts them
@@ -65,9 +68,9 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      *
      * @param CodeGeneratorInterface $generator
      * @throws \InvalidArgumentException
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Syntax
-     * @throws \Twig_Error_Runtime
+     * @throws LoaderError
+     * @throws SyntaxError
+     * @throws RuntimeError
      */
     public function __construct(CodeGeneratorInterface $generator = null)
     {
