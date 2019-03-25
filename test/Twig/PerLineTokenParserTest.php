@@ -7,6 +7,11 @@ declare(strict_types=1);
 namespace Hostnet\Component\AccessorGenerator\Twig;
 
 use PHPUnit\Framework\TestCase;
+use Twig\Node\Expression\NameExpression;
+use Twig\Node\Node;
+use Twig\Node\PrintNode;
+use Twig\Node\TextNode;
+use Twig\Source;
 
 /**
  * @covers \Hostnet\Component\AccessorGenerator\Twig\PerLineTokenParser
@@ -23,15 +28,15 @@ class PerLineTokenParserTest extends TestCase
 
     public function parseProvider()
     {
-        $simple_lines  = new \Twig_Node_Print(new \Twig_Node_Expression_Name('data', 1), 1);
-        $complex_lines = new \Twig_Node([
-            new \Twig_Node_Print(new \Twig_Node_Expression_Name('data', 1), 1),
-            new \Twig_Node_Text('/* infix */', 1),
-            new \Twig_Node_Print(new \Twig_Node_Expression_Name('data', 1), 1),
+        $simple_lines  = new PrintNode(new NameExpression('data', 1), 1);
+        $complex_lines = new Node([
+            new PrintNode(new NameExpression('data', 1), 1),
+            new TextNode('/* infix */', 1),
+            new PrintNode(new NameExpression('data', 1), 1),
         ]);
 
         return [
-            ["{% perline %}\nCONTENTS\n{% endperline %}", new \Twig_Node_Text('CONTENTS', 2), '', ''],
+            ["{% perline %}\nCONTENTS\n{% endperline %}", new TextNode('CONTENTS', 2), '', ''],
             ["  {% perline %}\n  * {{ data }} //POST\n  {% endperline %}", $simple_lines, '  * ', ' //POST'],
             ["{% perline %}\n{{ data }} //POST\n{% endperline %}", $simple_lines, '', ' //POST'],
             ["  {% perline %}\n  {{ data }}/* infix */{{ data }}{% endperline %}", $complex_lines, '  ', ''],
@@ -39,13 +44,13 @@ class PerLineTokenParserTest extends TestCase
     }
 
     /**
-     * Flattens all \Twig_nodes in a tree.
+     * Flattens all Nodes in a tree.
      *
-     * @param \Twig_Node $node
+     * @param Node $node
      *
      * @return \Generator
      */
-    private function iterateAllNodes(\Twig_Node $node)
+    private function iterateAllNodes(Node $node)
     {
         yield $node;
 
@@ -60,20 +65,20 @@ class PerLineTokenParserTest extends TestCase
      *
      * @dataProvider parseProvider
      * @param string $template template contents to tokeninze (input)
-     * @param \Twig_Node $lines expected internal nodes to be returned (output)
+     * @param Node   $lines expected internal nodes to be returned (output)
      * @param string $prefix expected prefix (output)
      * @param string $postfix expected postfix (output)
      */
-    public function testParse($template, \Twig_Node $lines, $prefix, $postfix): void
+    public function testParse($template, Node $lines, $prefix, $postfix): void
     {
         // Setup a token stream and feed it into our token parser.
         $twig = new TestEnvironment(new CodeGenerationExtension());
 
-        $stream = $twig->parse($twig->tokenize(new \Twig_Source($template, 'found')));
+        $stream = $twig->parse($twig->tokenize(new Source($template, 'found')));
 
         $per_line = null;
         foreach ($this->iterateAllNodes($stream) as $node) {
-            if ($node instanceof \Twig_Node && $node->getNodeTag() === 'perline') {
+            if ($node instanceof Node && $node->getNodeTag() === 'perline') {
                 $per_line = $node;
                 break;
             }

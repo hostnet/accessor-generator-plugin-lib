@@ -7,10 +7,13 @@ declare(strict_types=1);
 namespace Hostnet\Component\AccessorGenerator\Twig;
 
 use PHPUnit\Framework\TestCase;
-use Twig_Node as Node;
-use Twig_Node_Expression_Name as Name;
-use Twig_Node_Print as PrintNode;
-use Twig_Node_Text as TextNode;
+use Twig\Compiler;
+use Twig\Environment;
+use Twig\Loader\ArrayLoader;
+use Twig\Node\Expression\NameExpression;
+use Twig\Node\Node;
+use Twig\Node\PrintNode;
+use Twig\Node\TextNode;
 
 /**
  * @covers \Hostnet\Component\AccessorGenerator\Twig\PerLineNode
@@ -19,7 +22,7 @@ class PerLineNodeTest extends TestCase
 {
     public function parseProvider()
     {
-        $data = new PrintNode(new Name('data', 1), 1);
+        $data = new PrintNode(new NameExpression('data', 1), 1);
         $text = new TextNode('TEXT', 1);
 
         return [
@@ -43,7 +46,7 @@ class PerLineNodeTest extends TestCase
      */
     public function testParse(Node $lines, $prefix, $postfix, $file): void
     {
-        $compiler = new \Twig_Compiler(new \Twig_Environment(new \Twig_Loader_Array()));
+        $compiler = new Compiler(new Environment(new ArrayLoader()));
         $node     = new PerLineNode($lines, $prefix, $postfix, 1);
         $node->compile($compiler);
 
