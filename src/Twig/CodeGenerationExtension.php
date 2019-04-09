@@ -69,21 +69,21 @@ class CodeGenerationExtension extends AbstractExtension
                 try {
                     return self::twosComplementMin($int);
                 } catch (\DomainException $e) {
-                    throw new RuntimeError($e->getMessage(), null, null, $e);
+                    throw new RuntimeError($e->getMessage(), -1, null, $e);
                 }
             }),
             new TwigFilter('twos_complement_max', function ($int) {
                 try {
                     return self::twosComplementMax($int);
                 } catch (\DomainException $e) {
-                    throw new RuntimeError($e->getMessage(), null, null, $e);
+                    throw new RuntimeError($e->getMessage(), -1, null, $e);
                 }
             }),
             new TwigFilter('decimal_right_shift', function ($input, $amount) {
                 try {
                     return self::decimalRightShift($input, $amount);
                 } catch (\InvalidArgumentException $e) {
-                    throw new RuntimeError($e->getMessage(), null, null, $e);
+                    throw new RuntimeError($e->getMessage(), -1, null, $e);
                 }
             }),
         ];
