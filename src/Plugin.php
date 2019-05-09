@@ -40,7 +40,7 @@ use Twig\Error\SyntaxError;
  */
 class Plugin implements PluginInterface, EventSubscriberInterface
 {
-    public const NAME = 'hostnet/accessor-generator-plugin-lib';
+    public const NAME = 'bouw7/accessor-generator-plugin';
 
     /**
      * @var Composer
