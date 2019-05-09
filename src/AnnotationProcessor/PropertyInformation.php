@@ -22,133 +22,114 @@ class PropertyInformation implements PropertyInformationInterface
 {
     /**
      * {@inheritdoc}
-
      * @var string|null
      */
     private $type;
 
     /**
      * {@inheritdoc}
-
      * @var string
      */
     private $type_hint = '';
 
     /**
      * {@inheritdoc}
-
      * @var string
      */
     private $fully_qualified_type = '';
 
     /**
      * {@inheritdoc}
-
      * @var string
      */
     private $encryption_alias;
 
     /**
      * {@inheritdoc}
-
      * @var int
      */
     private $integer_size = 32; // Be on the safe side for database interaction.
 
     /**
      * {@inheritdoc}
-
      * @var int
      */
     private $length = 0;
 
     /**
      * {@inheritdoc}
-
      * @var int
      */
     private $precision = 0;
 
     /**
      * {@inheritdoc}
-
      * @var int
      */
     private $scale = 0;
 
     /**
      * {@inheritdoc}
-
      * @var bool|null
      */
     private $nullable;
 
     /**
      * {@inheritdoc}
-
      * @var bool|null
      */
     private $unique;
 
     /**
      * {@inheritdoc}
-
      * @var bool
      */
     private $is_generator = false;
 
     /**
      * {@inheritdoc}
-
      * @var bool
      */
     private $is_fixed_point_number = false;
 
     /**
      * {@inheritdoc}
-
      * @var string
      */
     private $referenced_property = '';
 
     /**
      * {@inheritdoc}
-
      * @var bool
      */
     private $is_collection = false;
 
     /**
      * {@inheritdoc}
-
      * @var bool
      */
     private $is_referencing_collection = false;
 
     /**
      * {@inheritdoc}
-
      * @var bool
      */
     private $generate_strict = true;
 
     /**
      * {@inheritdoc}
-
      * @var string|null
      */
     private $generate_get;
 
     /**
      * {@inheritdoc}
-
      * @var string|null
      */
     private $generate_set;
 
     /**
      * {@inheritdoc}
-
      * @var string|null
      */
     private $generate_add;
@@ -162,14 +143,12 @@ class PropertyInformation implements PropertyInformationInterface
 
     /**
      * {@inheritdoc}
-
      * @var string|null
      */
     private $index;
 
     /**
      * {@inheritdoc}
-
      * @var string|null
      */
     private $generate_remove;
@@ -407,8 +386,12 @@ class PropertyInformation implements PropertyInformationInterface
             throw new \DomainException(sprintf('A type name may not be empty'));
         }
 
-        if ((int) $type) {
+        if ((int)$type) {
             throw new \DomainException(sprintf('A type name may not start with a number. Found %s', $type));
+        }
+
+        if ($type === 'timestamp') {
+            $type = '\\DateTime';
         }
 
         if (\in_array($type, static::getValidTypes(), true)) {
@@ -439,7 +422,7 @@ class PropertyInformation implements PropertyInformationInterface
      */
     public function setType(?string $type): self
     {
-        $this->type                          = $this->validateType($type);
+        $this->type = $this->validateType($type);
         $this->type_hint || $this->type_hint = $this->type;
 
         return $this;
@@ -477,8 +460,8 @@ class PropertyInformation implements PropertyInformationInterface
      *
      * @param string $type
      *
-     * @throws \DomainException
      * @return PropertyInformation
+     * @throws \DomainException
      */
     public function setFullyQualifiedType(string $type): self
     {
@@ -522,8 +505,8 @@ class PropertyInformation implements PropertyInformationInterface
      *
      * @param string $encryption_alias
      *
-     * @throws \InvalidArgumentException
      * @return PropertyInformation
+     * @throws \InvalidArgumentException
      */
     public function setEncryptionAlias(string $encryption_alias): self
     {
@@ -550,12 +533,12 @@ class PropertyInformation implements PropertyInformationInterface
      * length is unbound. Typically a length is between 1 to 255 (including)
      * for varchar fields and 0 (unbounded) for Text, Blob and  Binary fields.
      *
-     * @throws \RangeException
-     * @throws \InvalidArgumentException
-     *
      * @param int $length
      *
      * @return PropertyInformation
+     * @throws \RangeException
+     * @throws \InvalidArgumentException
+     *
      */
     public function setLength(int $length): self
     {
@@ -582,12 +565,12 @@ class PropertyInformation implements PropertyInformationInterface
     /**
      * Set the size of the integer that will be stored, in bits.
      *
-     * @throws \InvalidArgumentException
-     * @throws \RangeException
-     *
      * @param int $integer_size
      *
      * @return PropertyInformation
+     * @throws \InvalidArgumentException
+     * @throws \RangeException
+     *
      */
     public function setIntegerSize(int $integer_size): self
     {
@@ -634,12 +617,12 @@ class PropertyInformation implements PropertyInformationInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \DomainException
-     * @throws \InvalidArgumentException
-     *
      * @param string $referenced_property
      *
      * @return PropertyInformation
+     * @throws \DomainException
+     * @throws \InvalidArgumentException
+     *
      */
     public function setReferencedProperty(string $referenced_property): self
     {
@@ -1016,7 +999,7 @@ class PropertyInformation implements PropertyInformationInterface
             'string',
             'array',
             'resource',
-            'object',
+            'object'
         ];
     }
 

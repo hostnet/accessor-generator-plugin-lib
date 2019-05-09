@@ -7,6 +7,9 @@ namespace {{ namespace }};
 use {{ use }}{% if alias and alias == 0 %} as {{ alias }}{% endif %};
 {% endfor %}
 
+/**
+ * @codeCoverageIgnore This code is generated and behaves the same across any entity.
+ */
 trait {{ name }}
 {
     {% perline %}

@@ -1,3 +1,4 @@
+.idea
 /vendor/
 /test/Generator/fixtures/Generated/
 composer.lock
