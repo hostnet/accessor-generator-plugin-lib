@@ -507,6 +507,10 @@ class CodeGenerator implements CodeGeneratorInterface
      */
     private static function fqcn($name, array $imports): string
     {
+        if (empty($name)) {
+            return '';
+        }
+
         // Already FQCN
         if ($name[0] === '\\') {
             return $name;

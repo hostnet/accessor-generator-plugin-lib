@@ -1,11 +1,12 @@
 {
-    "name":              "hostnet/accessor-generator-plugin-lib",
+    "name":              "bouw7/accessor-generator-plugin",
     "description":       "Generate get, set, add, remove methods on the fly.",
     "license":           "MIT",
     "type":              "composer-plugin",
     "require": {
         "php":                  ">=7.1",
         "ext-bcmath":           "*",
+        "ext-ctype":            "*",
         "ext-json":             "*",
         "composer-plugin-api":  "^1.0",
         "doctrine/annotations": "~1.2",
