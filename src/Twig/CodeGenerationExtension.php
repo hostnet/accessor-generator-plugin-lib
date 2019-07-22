@@ -7,6 +7,9 @@ declare(strict_types=1);
 namespace Hostnet\Component\AccessorGenerator\Twig;
 
 use Doctrine\Common\Inflector\Inflector;
+use Twig\Error\RuntimeError;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 
 /**
  * Twig extension to have some filters and tags available to be able to write
@@ -31,7 +34,7 @@ use Doctrine\Common\Inflector\Inflector;
  * @see Inflector::classify
  * @see Inflector::singularize
  */
-class CodeGenerationExtension extends \Twig_Extension
+class CodeGenerationExtension extends AbstractExtension
 {
     /**
      * {@inheritdoc}
@@ -47,13 +50,13 @@ class CodeGenerationExtension extends \Twig_Extension
     public function getFilters(): array
     {
         return [
-            new \Twig_SimpleFilter('classify', function ($string) {
+            new TwigFilter('classify', function ($string) {
                 return Inflector::classify($string);
             }),
-            new \Twig_SimpleFilter('singularize', function ($string) {
+            new TwigFilter('singularize', function ($string) {
                 return Inflector::singularize($string);
             }),
-            new \Twig_SimpleFilter('phptype', function ($string) {
+            new TwigFilter('phptype', function ($string) {
                 if ($string === 'integer') {
                     return 'int';
                 }
@@ -62,25 +65,25 @@ class CodeGenerationExtension extends \Twig_Extension
                 }
                 return $string;
             }),
-            new \Twig_SimpleFilter('twos_complement_min', function ($int) {
+            new TwigFilter('twos_complement_min', function ($int) {
                 try {
                     return self::twosComplementMin($int);
                 } catch (\DomainException $e) {
-                    throw new \Twig_Error_Runtime($e->getMessage(), null, null, $e);
+                    throw new RuntimeError($e->getMessage(), -1, null, $e);
                 }
             }),
-            new \Twig_SimpleFilter('twos_complement_max', function ($int) {
+            new TwigFilter('twos_complement_max', function ($int) {
                 try {
                     return self::twosComplementMax($int);
                 } catch (\DomainException $e) {
-                    throw new \Twig_Error_Runtime($e->getMessage(), null, null, $e);
+                    throw new RuntimeError($e->getMessage(), -1, null, $e);
                 }
             }),
-            new \Twig_SimpleFilter('decimal_right_shift', function ($input, $amount) {
+            new TwigFilter('decimal_right_shift', function ($input, $amount) {
                 try {
                     return self::decimalRightShift($input, $amount);
                 } catch (\InvalidArgumentException $e) {
-                    throw new \Twig_Error_Runtime($e->getMessage(), null, null, $e);
+                    throw new RuntimeError($e->getMessage(), -1, null, $e);
                 }
             }),
         ];

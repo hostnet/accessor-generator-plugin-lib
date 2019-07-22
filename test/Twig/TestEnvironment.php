@@ -6,28 +6,31 @@ declare(strict_types=1);
 
 namespace Hostnet\Component\AccessorGenerator\Twig;
 
-use Twig_ExtensionInterface;
+use Twig\Environment;
+use Twig\Extension\AbstractExtension;
+use Twig\Extension\ExtensionInterface;
+use Twig\Loader\ArrayLoader;
 
 /**
- * Prevents using the default registered extensions by \Twig_Environment.
+ * Prevents using the default registered extensions by Twig\Environment.
  *
- * The default loader is always \Twig_Loader_Array.
+ * The default loader is always Twig\Loader\ArrayLoader.
  */
-class TestEnvironment extends \Twig_Environment
+class TestEnvironment extends Environment
 {
     /**
-     * @var \Twig_Extension
+     * @var AbstractExtension
      */
     private $extension;
 
-    public function __construct(\Twig_Extension $extension)
+    public function __construct(AbstractExtension $extension)
     {
         $this->extension = $extension;
-        parent::__construct(new \Twig_Loader_Array());
+        parent::__construct(new ArrayLoader());
         $this->addExtension($extension);
     }
 
-    public function addExtension(Twig_ExtensionInterface $extension)
+    public function addExtension(ExtensionInterface $extension)
     {
         if ($this->extension !== $extension) {
             return;
