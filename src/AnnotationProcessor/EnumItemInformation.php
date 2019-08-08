@@ -56,7 +56,9 @@ class EnumItemInformation
         $this->name        = substr($constant->name, 2);
         $this->enum_class  = $constant->getDeclaringClass()->getName();
         $this->const_name  = $constant->name;
-        $this->doc_block   = trim(trim(trim($constant->getDocComment()), '/**/'));
+        $this->doc_block   = false !== $constant->getDocComment()
+            ? trim(trim(trim($constant->getDocComment()), '/**/'))
+            : '';
         $this->type_hint   = self::TYPE_MAP[$type];
         $this->method_name = Inflector::classify(strtolower($this->name));
     }
