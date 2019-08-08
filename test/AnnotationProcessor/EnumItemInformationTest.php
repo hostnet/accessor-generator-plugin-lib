@@ -44,31 +44,31 @@ class EnumItemInformationTest extends TestCase
      */
     public const BROKEN_CONSTANT = 'BROKEN_CONSTANT';
 
+    public const S_CONSTANT_WITHOUT_DOCBLOCK = 'S_CONSTANT_WITHOUT_DOCBLOCK';
+
     public function constantProvider(): array
     {
         return [
-            [self::A_TEST_CONSTANT, 'int'],
-            [self::S_TEST_CONSTANT, 'string'],
-            [self::I_TEST_CONSTANT, 'int'],
-            [self::F_TEST_CONSTANT, 'float'],
-            [self::B_TEST_CONSTANT, 'bool'],
+            ['* This is of type: int.', self::A_TEST_CONSTANT, 'int'],
+            ['* This is of type: string.', self::S_TEST_CONSTANT, 'string'],
+            ['* This is of type: int.', self::I_TEST_CONSTANT, 'int'],
+            ['* This is of type: float.', self::F_TEST_CONSTANT, 'float'],
+            ['* This is of type: bool.', self::B_TEST_CONSTANT, 'bool'],
+            ['', self::S_CONSTANT_WITHOUT_DOCBLOCK, 'string'],
         ];
     }
 
     /**
      * @dataProvider constantProvider
-     *
-     * @param string $name
-     * @param string $type
      */
-    public function testConstants($name, $type): void
+    public function testConstants(string $expected_doc_block_prefix, string $name, string $type): void
     {
         $reflector = new \ReflectionClass(self::class);
         $constant  = $reflector->getReflectionConstant($name);
         $info      = new EnumItemInformation($constant);
 
         self::assertEquals($type, $info->getTypeHint());
-        self::assertEquals('* This is of type: ' . $type . '.', $info->getDocBlock());
+        self::assertEquals($expected_doc_block_prefix, $info->getDocBlock());
         self::assertEquals($name, $info->getConstName());
         self::assertEquals(substr($name, 2), $info->getName());
         self::assertEquals(Inflector::classify(strtolower(substr($name, 2))), $info->getMethodName());
