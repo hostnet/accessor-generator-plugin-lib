@@ -5,6 +5,7 @@ namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
+use Hostnet\Component\AccessorGenerator\Enum\EnumeratorCompatibleEntityInterface;
 
 /**
  * Generated accessor for enum class \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName.
@@ -17,10 +18,10 @@ class ParamNameEnum
 
     /**
      * @param Collection $collection
-     * @param Entity|*   $owning_entity
+     * @param object     $owning_entity
      * @param string     $parameter_entity_class
      */
-    public function __construct(Collection $collection, $owning_entity, string $parameter_entity_class)
+    public function __construct(Collection $collection, object $owning_entity, string $parameter_entity_class)
     {
         $this->collection             = $collection;
         $this->owning_entity          = $owning_entity;
@@ -62,12 +63,9 @@ class ParamNameEnum
     {
         $items = $this
             ->collection
-            ->matching((new Criteria())
-                ->where(Criteria::expr()->eq(
-                    'name',
-                    \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::A_SOME_ARRAY
-                ))
-            );
+            ->filter(function(EnumeratorCompatibleEntityInterface $object) {
+                return $object->getName() === \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::A_SOME_ARRAY;
+            });
 
         if ($items->isEmpty()) {
             $item = new $this->parameter_entity_class(
@@ -92,12 +90,9 @@ class ParamNameEnum
     {
         $items = $this
             ->collection
-            ->matching((new Criteria())
-                ->where(Criteria::expr()->eq(
-                    'name',
-                    \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::A_SOME_ARRAY
-                ))
-            );
+            ->filter(function(EnumeratorCompatibleEntityInterface $object) {
+                return $object->getName() === \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::A_SOME_ARRAY;
+            });
 
         return $items->isEmpty()
             ? false
@@ -177,12 +172,9 @@ class ParamNameEnum
     {
         $items = $this
             ->collection
-            ->matching((new Criteria())
-                ->where(Criteria::expr()->eq(
-                    'name',
-                    \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::S_SOME_STRING
-                ))
-            );
+            ->filter(function(EnumeratorCompatibleEntityInterface $object) {
+                return $object->getName() === \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::S_SOME_STRING;
+            });
 
         if ($items->isEmpty()) {
             $item = new $this->parameter_entity_class(
@@ -207,12 +199,9 @@ class ParamNameEnum
     {
         $items = $this
             ->collection
-            ->matching((new Criteria())
-                ->where(Criteria::expr()->eq(
-                    'name',
-                    \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::S_SOME_STRING
-                ))
-            );
+            ->filter(function(EnumeratorCompatibleEntityInterface $object) {
+                return $object->getName() === \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::S_SOME_STRING;
+            });
 
         return $items->isEmpty()
             ? false
@@ -292,12 +281,9 @@ class ParamNameEnum
     {
         $items = $this
             ->collection
-            ->matching((new Criteria())
-                ->where(Criteria::expr()->eq(
-                    'name',
-                    \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::I_SOME_INTEGER
-                ))
-            );
+            ->filter(function(EnumeratorCompatibleEntityInterface $object) {
+                return $object->getName() === \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::I_SOME_INTEGER;
+            });
 
         if ($items->isEmpty()) {
             $item = new $this->parameter_entity_class(
@@ -322,12 +308,9 @@ class ParamNameEnum
     {
         $items = $this
             ->collection
-            ->matching((new Criteria())
-                ->where(Criteria::expr()->eq(
-                    'name',
-                    \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::I_SOME_INTEGER
-                ))
-            );
+            ->filter(function(EnumeratorCompatibleEntityInterface $object) {
+                return $object->getName() === \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::I_SOME_INTEGER;
+            });
 
         return $items->isEmpty()
             ? false
@@ -407,12 +390,9 @@ class ParamNameEnum
     {
         $items = $this
             ->collection
-            ->matching((new Criteria())
-                ->where(Criteria::expr()->eq(
-                    'name',
-                    \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::F_SOME_FLOAT
-                ))
-            );
+            ->filter(function(EnumeratorCompatibleEntityInterface $object) {
+                return $object->getName() === \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::F_SOME_FLOAT;
+            });
 
         if ($items->isEmpty()) {
             $item = new $this->parameter_entity_class(
@@ -437,12 +417,9 @@ class ParamNameEnum
     {
         $items = $this
             ->collection
-            ->matching((new Criteria())
-                ->where(Criteria::expr()->eq(
-                    'name',
-                    \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::F_SOME_FLOAT
-                ))
-            );
+            ->filter(function(EnumeratorCompatibleEntityInterface $object) {
+                return $object->getName() === \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::F_SOME_FLOAT;
+            });
 
         return $items->isEmpty()
             ? false
@@ -522,12 +499,9 @@ class ParamNameEnum
     {
         $items = $this
             ->collection
-            ->matching((new Criteria())
-                ->where(Criteria::expr()->eq(
-                    'name',
-                    \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::B_SOME_BOOLEAN
-                ))
-            );
+            ->filter(function(EnumeratorCompatibleEntityInterface $object) {
+                return $object->getName() === \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::B_SOME_BOOLEAN;
+            });
 
         if ($items->isEmpty()) {
             $item = new $this->parameter_entity_class(
@@ -552,12 +526,9 @@ class ParamNameEnum
     {
         $items = $this
             ->collection
-            ->matching((new Criteria())
-                ->where(Criteria::expr()->eq(
-                    'name',
-                    \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::B_SOME_BOOLEAN
-                ))
-            );
+            ->filter(function(EnumeratorCompatibleEntityInterface $object) {
+                return $object->getName() === \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::B_SOME_BOOLEAN;
+            });
 
         return $items->isEmpty()
             ? false
@@ -611,18 +582,15 @@ class ParamNameEnum
     /**
      * Returns the parameter element for easy access.
      *
-     * @return object
+     * @return EnumeratorCompatibleEntityInterface
      */
-    private function getSomeArrayEntityInstance()
+    private function getSomeArrayEntityInstance(): EnumeratorCompatibleEntityInterface
     {
         $items = $this
             ->collection
-            ->matching((new Criteria())
-                ->where(Criteria::expr()->eq(
-                    'name',
-                    \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::A_SOME_ARRAY
-                ))
-            );
+            ->filter(function(EnumeratorCompatibleEntityInterface $object) {
+                return $object->getName() === \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::A_SOME_ARRAY;
+            });
 
         return $items->first();
     }
@@ -630,18 +598,15 @@ class ParamNameEnum
     /**
      * Returns the parameter element for easy access.
      *
-     * @return object
+     * @return EnumeratorCompatibleEntityInterface
      */
-    private function getSomeStringEntityInstance()
+    private function getSomeStringEntityInstance(): EnumeratorCompatibleEntityInterface
     {
         $items = $this
             ->collection
-            ->matching((new Criteria())
-                ->where(Criteria::expr()->eq(
-                    'name',
-                    \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::S_SOME_STRING
-                ))
-            );
+            ->filter(function(EnumeratorCompatibleEntityInterface $object) {
+                return $object->getName() === \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::S_SOME_STRING;
+            });
 
         return $items->first();
     }
@@ -649,18 +614,15 @@ class ParamNameEnum
     /**
      * Returns the parameter element for easy access.
      *
-     * @return object
+     * @return EnumeratorCompatibleEntityInterface
      */
-    private function getSomeIntegerEntityInstance()
+    private function getSomeIntegerEntityInstance(): EnumeratorCompatibleEntityInterface
     {
         $items = $this
             ->collection
-            ->matching((new Criteria())
-                ->where(Criteria::expr()->eq(
-                    'name',
-                    \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::I_SOME_INTEGER
-                ))
-            );
+            ->filter(function(EnumeratorCompatibleEntityInterface $object) {
+                return $object->getName() === \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::I_SOME_INTEGER;
+            });
 
         return $items->first();
     }
@@ -668,18 +630,15 @@ class ParamNameEnum
     /**
      * Returns the parameter element for easy access.
      *
-     * @return object
+     * @return EnumeratorCompatibleEntityInterface
      */
-    private function getSomeFloatEntityInstance()
+    private function getSomeFloatEntityInstance(): EnumeratorCompatibleEntityInterface
     {
         $items = $this
             ->collection
-            ->matching((new Criteria())
-                ->where(Criteria::expr()->eq(
-                    'name',
-                    \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::F_SOME_FLOAT
-                ))
-            );
+            ->filter(function(EnumeratorCompatibleEntityInterface $object) {
+                return $object->getName() === \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::F_SOME_FLOAT;
+            });
 
         return $items->first();
     }
@@ -687,18 +646,15 @@ class ParamNameEnum
     /**
      * Returns the parameter element for easy access.
      *
-     * @return object
+     * @return EnumeratorCompatibleEntityInterface
      */
-    private function getSomeBooleanEntityInstance()
+    private function getSomeBooleanEntityInstance(): EnumeratorCompatibleEntityInterface
     {
         $items = $this
             ->collection
-            ->matching((new Criteria())
-                ->where(Criteria::expr()->eq(
-                    'name',
-                    \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::B_SOME_BOOLEAN
-                ))
-            );
+            ->filter(function(EnumeratorCompatibleEntityInterface $object) {
+                return $object->getName() === \Hostnet\Component\AccessorGenerator\Generator\fixtures\ParamName::B_SOME_BOOLEAN;
+            });
 
         return $items->first();
     }

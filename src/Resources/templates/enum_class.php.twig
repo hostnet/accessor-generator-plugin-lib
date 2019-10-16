@@ -5,6 +5,7 @@ namespace {{ namespace }};
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
+use Hostnet\Component\AccessorGenerator\Enum\EnumeratorCompatibleEntityInterface;
 
 /**
  * Generated accessor for enum class {{ enum_class }}.
@@ -17,10 +18,10 @@ class {{ class_name }}
 
     /**
      * @param Collection $collection
-     * @param Entity|*   $owning_entity
+     * @param object     $owning_entity
      * @param string     $parameter_entity_class
      */
-    public function __construct(Collection $collection, $owning_entity, string $parameter_entity_class)
+    public function __construct(Collection $collection, object $owning_entity, string $parameter_entity_class)
     {
         $this->collection             = $collection;
         $this->owning_entity          = $owning_entity;
@@ -67,12 +68,9 @@ class {{ class_name }}
     {
         $items = $this
             ->collection
-            ->matching((new Criteria())
-                ->where(Criteria::expr()->eq(
-                    'name',
-                    \{{ info.enumClass }}::{{ info.constName }}
-                ))
-            );
+            ->filter(function(EnumeratorCompatibleEntityInterface $object) {
+                return $object->getName() === \{{ info.enumClass }}::{{ info.constName }};
+            });
 
         if ($items->isEmpty()) {
             $item = new $this->parameter_entity_class(
@@ -105,12 +103,9 @@ class {{ class_name }}
     {
         $items = $this
             ->collection
-            ->matching((new Criteria())
-                ->where(Criteria::expr()->eq(
-                    'name',
-                    \{{ info.enumClass }}::{{ info.constName }}
-                ))
-            );
+            ->filter(function(EnumeratorCompatibleEntityInterface $object) {
+                return $object->getName() === \{{ info.enumClass }}::{{ info.constName }};
+            });
 
         return $items->isEmpty()
             ? false
@@ -166,18 +161,15 @@ class {{ class_name }}
     /**
      * Returns the parameter element for easy access.
      *
-     * @return object
+     * @return EnumeratorCompatibleEntityInterface
      */
-    private function get{{ info.methodName }}EntityInstance()
+    private function get{{ info.methodName }}EntityInstance(): EnumeratorCompatibleEntityInterface
     {
         $items = $this
             ->collection
-            ->matching((new Criteria())
-                ->where(Criteria::expr()->eq(
-                    'name',
-                    \{{ info.enumClass }}::{{ info.constName }}
-                ))
-            );
+            ->filter(function(EnumeratorCompatibleEntityInterface $object) {
+                return $object->getName() === \{{ info.enumClass }}::{{ info.constName }};
+            });
 
         return $items->first();
     }
