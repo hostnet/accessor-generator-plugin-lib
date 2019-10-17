@@ -4,7 +4,7 @@
     "license":           "MIT",
     "type":              "composer-plugin",
     "require": {
-        "php":                  ">=7.1",
+        "php":                  ">=7.2",
         "ext-bcmath":           "*",
         "ext-json":             "*",
         "composer-plugin-api":  "^1.0",

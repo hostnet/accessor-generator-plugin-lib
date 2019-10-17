@@ -27,10 +27,15 @@ interface EnumeratorCompatibleEntityInterface
     /**
      * @return string
      */
+    public function getName(): string;
+
+    /**
+     * @return string
+     */
     public function getValue(): ?string;
 
     /**
-     * @param string $value
+     * @param string|null $value
      */
     public function setValue($value);
 }
