@@ -75,14 +75,16 @@ class EnumItemInformationTest extends TestCase
         self::assertEquals(self::class, $info->getEnumClass());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The name of the constant "BROKEN_CONSTANT" is not prefixed with a valid type string
-     */
     public function testBrokenConstant(): void
     {
         $reflector = new \ReflectionClass(self::class);
         $constant  = $reflector->getReflectionConstant('BROKEN_CONSTANT');
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'The name of the constant "BROKEN_CONSTANT" is not prefixed with a valid type string'
+        );
+
         new EnumItemInformation($constant);
     }
 }

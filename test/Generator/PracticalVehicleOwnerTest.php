@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
+use Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Bicycle;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Boat;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Car;
@@ -29,12 +30,12 @@ class PracticalVehicleOwnerTest extends TestCase
         self::assertSame([$boat, $car], $owner->vehicles->toArray());
     }
 
-    /**
-     * @expectedException \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
-     */
     public function testAddWrongVehicle(): void
     {
         $owner = new PracticalVehicleOwner();
+
+        $this->expectException(MissingPropertyException::class);
+
         $owner->addVehicle($this->prophesize(VehicleInterface::class)->reveal());
     }
 
@@ -47,19 +48,16 @@ class PracticalVehicleOwnerTest extends TestCase
         self::assertContains($bicycle, $owner->vehicles);
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testAddVehicleTooManyArguments(): void
     {
         $car   = new Car();
         $owner = new PracticalVehicleOwner();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $owner->addVehicle($car, $car);
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testAddVehicleToMultipleOwners(): void
     {
         $owner = new PracticalVehicleOwner();
@@ -68,6 +66,9 @@ class PracticalVehicleOwnerTest extends TestCase
         $bicycle = new Bicycle();
 
         $owner->addVehicle($bicycle);
+
+        $this->expectException(\LogicException::class);
+
         $thief->addVehicle($bicycle);
     }
 }

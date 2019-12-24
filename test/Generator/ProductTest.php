@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\EntityNotFoundException;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Attribute;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Period;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Product;
@@ -33,14 +34,13 @@ class ProductTest extends TestCase
         self::assertEquals(10, $this->product->getId());
     }
 
-    /**
-     * @expectedException \DomainException
-     */
     public function testGetIdDomain(): void
     {
         $id = new \ReflectionProperty(Product::class, 'id');
         $id->setAccessible(true);
         $id->setValue($this->product, PHP_INT_MAX . '0');
+
+        $this->expectException(\DomainException::class);
 
         $this->product->getId();
     }
@@ -50,11 +50,10 @@ class ProductTest extends TestCase
         self::assertNull($this->product->getId());
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testGetIdTooManyArguments(): void
     {
+        $this->expectException(\BadMethodCallException::class);
+
         $this->product->getId(1);
     }
 
@@ -68,19 +67,17 @@ class ProductTest extends TestCase
         self::assertTrue(is_string($this->product->getName()));
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testGetNameNew(): void
     {
+        $this->expectException(\LogicException::class);
+
         $this->product->getName();
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testGetNameTooManyArguments(): void
     {
+        $this->expectException(\BadMethodCallException::class);
+
         $this->product->getName(1);
     }
 
@@ -99,22 +96,21 @@ class ProductTest extends TestCase
         self::assertEquals('empty', $this->product->getDescription());
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testGetDescriptionNewNull(): void
     {
         $property = new \ReflectionProperty($this->product, 'description');
         $property->setAccessible(true);
         $property->setValue($this->product, null);
+
+        $this->expectException(\LogicException::class);
+
         $this->product->getDescription();
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testGetDescriptionTooManyArguments(): void
     {
+        $this->expectException(\BadMethodCallException::class);
+
         $this->product->getDescription(1);
     }
 
@@ -125,27 +121,24 @@ class ProductTest extends TestCase
         self::assertTrue(is_string($this->product->getSystemName()), 'of type string');
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testSetSystemNameTooManyArguments(): void
     {
+        $this->expectException(\BadMethodCallException::class);
+
         $this->product->setSystemName('', 2);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testSetSystemNameWrongType(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->product->setSystemName([]);
     }
 
-    /**
-     * @expectedException \LengthException
-     */
     public function testSetSystemNameTooLong(): void
     {
+        $this->expectException(\LengthException::class);
+
         $this->product->setSystemName(str_repeat('a', 51));
     }
 
@@ -155,22 +148,21 @@ class ProductTest extends TestCase
         self::assertTrue(is_string($this->product->getSystemName()), 'of type string');
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testGetSystemNameNewNull(): void
     {
         $property = new \ReflectionProperty($this->product, 'system_name');
         $property->setAccessible(true);
         $property->setValue($this->product, null);
+
+        $this->expectException(\LogicException::class);
+
         $this->product->getSystemName();
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testGetSystemNameTooManyArguments(): void
     {
+        $this->expectException(\BadMethodCallException::class);
+
         $this->product->getSystemName(1);
     }
 
@@ -184,19 +176,17 @@ class ProductTest extends TestCase
         self::assertSame($duration, $this->product->getDuration());
     }
 
-    /**
-     * @expectedException \Doctrine\ORM\EntityNotFoundException
-     */
     public function testGetDurationEmpty(): void
     {
+        $this->expectException(EntityNotFoundException::class);
+
         $this->product->getDuration();
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testGetDurationTooManyArguments(): void
     {
+        $this->expectException(\BadMethodCallException::class);
+
         $this->product->getDuration(1);
     }
 
@@ -207,11 +197,10 @@ class ProductTest extends TestCase
         self::assertInstanceOf(Collection::class, $attributes);
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testGetAttributesTooManyArguments(): void
     {
+        $this->expectException(\BadMethodCallException::class);
+
         $this->product->getAttributes(1);
     }
 
@@ -243,7 +232,6 @@ class ProductTest extends TestCase
 
     /**
      * @depends testGetAttributes
-     * @expectedException \LogicException
      * @throws \BadMethodCallException
      */
     public function testAddAttributeNonUniqueIndex(): void
@@ -254,15 +242,18 @@ class ProductTest extends TestCase
         $attribute_b->name = 'Same';
 
         $this->product->addAttribute($attribute_a);
+
+        $this->expectException(\LogicException::class);
+
         $this->product->addAttribute($attribute_b);
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testAddAttributesTooManyArguments(): void
     {
         $attribute = new Attribute();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $this->product->addAttribute($attribute, 2);
     }
 
@@ -283,24 +274,24 @@ class ProductTest extends TestCase
         self::assertCount(0, $attributes);
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testRemoveAttributesTooManyArguments(): void
     {
         $attribute = new Attribute();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $this->product->removeAttribute($attribute, 2);
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testAddAttributeToMultipleProducts(): void
     {
         $attribute = new Attribute();
         $product2  = new Product();
 
         $this->product->addAttribute($attribute);
+
+        $this->expectException(\LogicException::class);
+
         $product2->addAttribute($attribute);
     }
 }

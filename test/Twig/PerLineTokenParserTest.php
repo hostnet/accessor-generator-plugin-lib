@@ -26,7 +26,7 @@ class PerLineTokenParserTest extends TestCase
         self::assertEquals('perline', (new PerLineTokenParser())->getTag());
     }
 
-    public function parseProvider()
+    public function parseProvider(): array
     {
         $simple_lines  = new PrintNode(new NameExpression('data', 1), 1);
         $complex_lines = new Node([
@@ -50,7 +50,7 @@ class PerLineTokenParserTest extends TestCase
      *
      * @return \Generator
      */
-    private function iterateAllNodes(Node $node)
+    private function iterateAllNodes(Node $node): \Generator
     {
         yield $node;
 

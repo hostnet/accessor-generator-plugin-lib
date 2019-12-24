@@ -75,59 +75,52 @@ class ImmutableCollectionTest extends TestCase
         self::assertSame($col->removeElement('a'), $cln->removeElement('a'));
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testAdd(): void
     {
+        $this->expectException(\LogicException::class);
+
         $this->immutable_collection->add(0);
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testClear(): void
     {
+        $this->expectException(\LogicException::class);
+
         $this->immutable_collection->clear();
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testRemove(): void
     {
+        $this->expectException(\LogicException::class);
+
         $this->immutable_collection->remove(0);
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testRemoveElement(): void
     {
+        $this->expectException(\LogicException::class);
+
         $this->immutable_collection->removeElement(0);
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testSet(): void
     {
+        $this->expectException(\LogicException::class);
+
         $this->immutable_collection->set(0, 0);
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testOffsetSet(): void
     {
+        $this->expectException(\LogicException::class);
+
         $this->immutable_collection[0] = 0;
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testOffsetUnset(): void
     {
+        $this->expectException(\LogicException::class);
+
         unset($this->immutable_collection[0]);
     }
 

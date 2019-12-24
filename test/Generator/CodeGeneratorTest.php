@@ -8,6 +8,7 @@ namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Hostnet\Component\AccessorGenerator\Annotation\Enumerator;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformation;
+use Hostnet\Component\AccessorGenerator\Generator\Exception\ReferencedClassNotFoundException;
 use Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
@@ -26,7 +27,7 @@ class CodeGeneratorTest extends TestCase
      * {@inheritDoc}
      * @throws \Symfony\Component\Filesystem\Exception\IOException
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $fs = new Filesystem();
         $fs->remove(__DIR__ . '/fixtures/Generated');
@@ -67,7 +68,7 @@ class CodeGeneratorTest extends TestCase
         $this->compareExpectedToGeneratedFiles(true);
     }
 
-    private function getGenerator()
+    private function getGenerator(): CodeGenerator
     {
         if ($this->generator === null) {
             $this->generator = new CodeGenerator();
@@ -104,22 +105,16 @@ class CodeGeneratorTest extends TestCase
         }
     }
 
-    /**
-     * @expectedException \Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException
-     * @throws TypeUnknownException
-     */
     public function testGenerateAccessorsTypeUnknown(): void
     {
         $info = new PropertyInformation(new ReflectionProperty('phpunit'));
         $info->setIsGenerator(true); // Default for all @Generate properties.
 
+        $this->expectException(TypeUnknownException::class);
+
         $this->getGenerator()->generateAccessors($info);
     }
 
-    /**
-     * @expectedException \Hostnet\Component\AccessorGenerator\Generator\Exception\ReferencedClassNotFoundException
-     * @expectedExceptionMessage "CodeGeneratorTest" was not generated because the enum class "\This\Does\Not\Exist"
-     */
     public function testGenerateEnumeratorClassNotFound(): void
     {
         $enumerator        = new Enumerator();
@@ -127,6 +122,11 @@ class CodeGeneratorTest extends TestCase
 
         $class = new ReflectionClass(__FILE__);
         $info  = new PropertyInformation(new ReflectionProperty('my_prop', null, null, null, $class));
+
+        $this->expectException(ReferencedClassNotFoundException::class);
+        $this->expectExceptionMessage(
+            '"CodeGeneratorTest" was not generated because the enum class "\This\Does\Not\Exist"'
+        );
 
         $this->getGenerator()->generateEnumeratorAccessors($enumerator, $info);
     }

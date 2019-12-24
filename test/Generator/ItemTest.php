@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
+use Doctrine\ORM\EntityNotFoundException;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Item;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Shipping;
 use PHPUnit\Framework\TestCase;
@@ -21,31 +22,31 @@ class ItemTest extends TestCase
         self::assertSame($shipping, $item->getShipping());
     }
 
-    /**
-     * @expectedException \Doctrine\ORM\EntityNotFoundException
-     */
     public function testGetShippingEmpty(): void
     {
         $item = new Item();
+
+        $this->expectException(EntityNotFoundException::class);
+
         $item->getShipping();
     }
 
-    /**
-     * @expectedException BadMethodCallException
-     */
     public function testGetShippingTooManyArguments(): void
     {
         $item = new Item();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $item->getShipping(1);
     }
 
-    /**
-     * @expectedException BadMethodCallException
-     */
     public function testSetShippingTooManyArguments(): void
     {
         $item     = new Item();
         $shipping = new Shipping();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $item->setShipping($shipping, 2);
     }
 }

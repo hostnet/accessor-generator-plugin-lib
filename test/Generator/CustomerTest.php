@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
+use Doctrine\ORM\EntityNotFoundException;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Cart;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Customer;
 use PHPUnit\Framework\TestCase;
@@ -21,31 +22,31 @@ class CustomerTest extends TestCase
         self::assertSame($cart, $customer->getCart());
     }
 
-    /**
-     * @expectedException \Doctrine\ORM\EntityNotFoundException
-     */
     public function testGetCartEmpty(): void
     {
         $customer = new Customer();
+
+        $this->expectException(EntityNotFoundException::class);
+
         $customer->getCart();
     }
 
-    /**
-     * @expectedException BadMethodCallException
-     */
     public function testGetCartTooManyArguments(): void
     {
         $customer = new Customer();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $customer->getCart(1);
     }
 
-    /**
-     * @expectedException BadMethodCallException
-     */
     public function testSetCartTooManyArguments(): void
     {
         $cart     = new Cart();
         $customer = new Customer();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $customer->setCart($cart, 2);
     }
 }

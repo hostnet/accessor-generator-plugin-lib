@@ -27,22 +27,22 @@ class CartTest extends TestCase
         self::assertNull($cart->getCustomer());
     }
 
-    /**
-     * @expectedException BadMethodCallException
-     */
     public function testGetCustomerTooManyArguments(): void
     {
         $cart = new Cart();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $cart->getCustomer(1);
     }
 
-    /**
-     * @expectedException BadMethodCallException
-     */
     public function testSetCustomerTooManyArguments(): void
     {
         $cart     = new Cart();
         $customer = new Customer();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $cart->setCustomer($customer, 2);
     }
 }

@@ -30,7 +30,7 @@ class TestEnvironment extends Environment
         $this->addExtension($extension);
     }
 
-    public function addExtension(ExtensionInterface $extension)
+    public function addExtension(ExtensionInterface $extension): void
     {
         if ($this->extension !== $extension) {
             return;

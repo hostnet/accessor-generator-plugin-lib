@@ -19,22 +19,20 @@ class UseFunctionTest extends TestCase
         self::assertEquals('Items: 1', $use_function->setCount(1)->formattedCount());
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testGetCountTooManyArguments(): void
     {
         $use_function = new UseFunction();
 
+        $this->expectException(\BadMethodCallException::class);
+
         $use_function->getCount(1);
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testSetCountTooManyArguments(): void
     {
         $use_function = new UseFunction();
+
+        $this->expectException(\BadMethodCallException::class);
 
         $use_function->setCount(1, 2);
     }

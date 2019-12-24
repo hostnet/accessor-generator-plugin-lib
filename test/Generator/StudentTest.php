@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
+use Doctrine\ORM\EntityNotFoundException;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Student;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\StudentInterface;
 use PHPUnit\Framework\TestCase;
@@ -25,31 +26,31 @@ class StudentTest extends TestCase
         self::assertSame($stefan, $nico->getStudent());
     }
 
-    /**
-     * @expectedException \Doctrine\ORM\EntityNotFoundException
-     */
     public function testGetStudentEmpty(): void
     {
         $nico = new Student();
+
+        $this->expectException(EntityNotFoundException::class);
+
         $nico->getStudent();
     }
 
-    /**
-     * @expectedException BadMethodCallException
-     */
     public function testGetStudentTooManyArguments(): void
     {
         $nico = new Student();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $nico->getStudent(1);
     }
 
-    /**
-     * @expectedException BadMethodCallException
-     */
     public function testSetStudentTooManyArguments(): void
     {
         $stefan = new Student();
         $nico   = new Student();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $nico->setStudent($stefan, 2);
     }
 }

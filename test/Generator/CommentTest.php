@@ -20,12 +20,12 @@ class CommentTest extends TestCase
         self::assertEquals('test', $comment->getCol());
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testGetColTooManyArguments(): void
     {
         $comment = new Comment();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $comment->getCol('yiha');
     }
 }
