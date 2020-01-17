@@ -129,14 +129,14 @@ class CodeGenerator implements CodeGeneratorInterface
         $twig   = new Environment($loader);
         $twig->addExtension(new CodeGenerationExtension());
 
-        $this->get        = $twig->loadTemplate('get.php.twig');
-        $this->set        = $twig->loadTemplate('set.php.twig');
-        $this->add        = $twig->loadTemplate('add.php.twig');
-        $this->remove     = $twig->loadTemplate('remove.php.twig');
-        $this->trait      = $twig->loadTemplate('trait.php.twig');
-        $this->keys       = $twig->loadTemplate('keys.php.twig');
-        $this->enum_get   = $twig->loadTemplate('enum_get.php.twig');
-        $this->enum_class = $twig->loadTemplate('enum_class.php.twig');
+        $this->get        = $twig->load('get.php.twig');
+        $this->set        = $twig->load('set.php.twig');
+        $this->add        = $twig->load('add.php.twig');
+        $this->remove     = $twig->load('remove.php.twig');
+        $this->trait      = $twig->load('trait.php.twig');
+        $this->keys       = $twig->load('keys.php.twig');
+        $this->enum_get   = $twig->load('enum_get.php.twig');
+        $this->enum_class = $twig->load('enum_class.php.twig');
     }
 
     /**
@@ -241,7 +241,7 @@ class CodeGenerator implements CodeGeneratorInterface
         ]);
     }
 
-    private function getMetadataForClass(ReflectionClass $class)
+    private function getMetadataForClass(ReflectionClass $class): array
     {
         $cache_key = (string) $class->getFilename();
         if (isset($this->metadata_cache[$cache_key])) {
