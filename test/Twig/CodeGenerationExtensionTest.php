@@ -41,7 +41,6 @@ class CodeGenerationExtensionTest extends TestCase
             'perline_stars'       => " {% perline %}\n * {{data}} *\n{% endperline %}",
             'perline_indent'      => "    {% perline %}\n    {{data}}\n    {% endperline %}",
             'decimal_right_shift' => '{{ data | decimal_right_shift(amount) }}',
-            'string'              => '{% if data is string %}true{% else %}false{% endif %}',
         ]);
 
         $this->twig = new Environment($loader);
@@ -139,7 +138,7 @@ class CodeGenerationExtensionTest extends TestCase
      * ordered as an array of string tuples.
      * @return string[][]
      */
-    public function singularizeProvider(): array
+    public function singularizeProvider()
     {
          return [
             ['categoria', 'categorias'],
@@ -236,21 +235,5 @@ class CodeGenerationExtensionTest extends TestCase
             $output,
             $this->twig->render('decimal_right_shift', ['data' => $input, 'amount' => $amount])
         );
-    }
-
-    /**
-     * @dataProvider stringProvider
-     */
-    public function testString($input, $output): void
-    {
-        self::assertEquals($output, $this->twig->render('string', ['data' => $input]));
-    }
-
-    public function stringProvider(): array
-    {
-        return [
-            [1, 'false'],
-            ['ORM', 'true'],
-        ];
     }
 }

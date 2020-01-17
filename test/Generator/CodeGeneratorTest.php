@@ -67,7 +67,7 @@ class CodeGeneratorTest extends TestCase
         $this->compareExpectedToGeneratedFiles(true);
     }
 
-    private function getGenerator(): CodeGenerator
+    private function getGenerator()
     {
         if ($this->generator === null) {
             $this->generator = new CodeGenerator();
@@ -99,7 +99,7 @@ class CodeGeneratorTest extends TestCase
             self::assertEquals(
                 $expected_contents,
                 $actual_contents,
-                'Generated result does not match for file ' . $expected_file
+                'Generated result does not match for for file ' . $expected_file
             );
         }
     }

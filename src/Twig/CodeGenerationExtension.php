@@ -10,7 +10,6 @@ use Doctrine\Common\Inflector\Inflector;
 use Twig\Error\RuntimeError;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
-use Twig\TwigTest;
 
 /**
  * Twig extension to have some filters and tags available to be able to write
@@ -86,18 +85,6 @@ class CodeGenerationExtension extends AbstractExtension
                 } catch (\InvalidArgumentException $e) {
                     throw new RuntimeError($e->getMessage(), -1, null, $e);
                 }
-            }),
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTests()
-    {
-        return [
-            new TwigTest('string', function ($input) {
-                return is_string($input);
             }),
         ];
     }
