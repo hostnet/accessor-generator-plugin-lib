@@ -4,7 +4,7 @@
 namespace {{ namespace }};
 
 {% for alias, use in uses %}
-use {{ use }}{% if alias and alias == 0 %} as {{ alias }}{% endif %};
+use {{ use }}{% if alias is string %} as {{ alias }}{% endif %};
 {% endfor %}
 
 trait {{ name }}
