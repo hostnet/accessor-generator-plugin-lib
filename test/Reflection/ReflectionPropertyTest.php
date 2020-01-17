@@ -38,19 +38,17 @@ class ReflectionPropertyTest extends TestCase
         $this->empty_doc = new ReflectionProperty('empty_doc', \ReflectionProperty::IS_PRIVATE, null, '');
     }
 
-    /**
-     * @expectedException \DomainException
-     */
     public function testModifiersDomainNone(): void
     {
+        $this->expectException(\DomainException::class);
+
         new ReflectionProperty('foo', 0);
     }
 
-    /**
-     * @expectedException \DomainException
-     */
     public function testModifiersDomainTwo(): void
     {
+        $this->expectException(\DomainException::class);
+
         new ReflectionProperty('foo', \ReflectionProperty::IS_PRIVATE | \ReflectionProperty::IS_PROTECTED);
     }
 

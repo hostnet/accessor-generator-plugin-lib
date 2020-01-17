@@ -34,12 +34,11 @@ class ParameterEnumTest extends TestCase
         self::assertSame($obj, $this->entity->getParams());
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Parameter "A_SOME_ARRAY" does not exist or has never been initialized.
-     */
     public function testGetterUndefinedParameter(): void
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Parameter "A_SOME_ARRAY" does not exist or has never been initialized.');
+
         $this->entity->getParams()->getSomeArray();
     }
 

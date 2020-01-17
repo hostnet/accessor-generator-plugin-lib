@@ -13,12 +13,12 @@ use PHPUnit\Framework\TestCase;
 
 class ActorTest extends TestCase
 {
-    /**
-     * @expectedException BadMethodCallException
-     */
     public function testActorGetMovieToManyArguments(): void
     {
         $actor = new Actor();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $actor->getMovies(1);
     }
 
@@ -31,13 +31,13 @@ class ActorTest extends TestCase
         self::assertEmpty($actor->getMovies());
     }
 
-    /**
-     * @expectedException BadMethodCallException
-     */
     public function testActorAddMovieToManyArguments(): void
     {
         $actor = new Actor();
         $movie = new Movie();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $actor->addMovie($movie, 2);
     }
 
@@ -66,13 +66,13 @@ class ActorTest extends TestCase
         self::assertEmpty($actor->getMovies());
     }
 
-    /**
-     * @expectedException BadMethodCallException
-     */
     public function testActorRemoveMovieToManyArguments(): void
     {
         $actor = new Actor();
         $movie = new Movie();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $actor->removeMovie($movie, 2);
     }
 

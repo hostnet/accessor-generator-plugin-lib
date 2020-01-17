@@ -24,11 +24,10 @@ class NullableTest extends TestCase
         $this->nullable = new Nullable();
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testSetDatetimeDefaultTooManyArguments(): void
     {
+        $this->expectException(\BadMethodCallException::class);
+
         $this->nullable->setDatetimeDefault(null, 1);
     }
 
@@ -42,11 +41,10 @@ class NullableTest extends TestCase
         self::assertSame(null, $property->getValue($this->nullable));
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testSetDatetimeNullableTooManyArguments(): void
     {
+        $this->expectException(\BadMethodCallException::class);
+
         $this->nullable->setDatetimeNullable(null, 1);
     }
 
@@ -60,11 +58,10 @@ class NullableTest extends TestCase
         self::assertSame(null, $property->getValue($this->nullable));
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testSetDatetimeBothTooManyArguments(): void
     {
+        $this->expectException(\BadMethodCallException::class);
+
         $this->nullable->setDatetimeBoth(new \DateTime(), 1);
     }
 
@@ -78,11 +75,10 @@ class NullableTest extends TestCase
         self::assertSame(null, $property->getValue($this->nullable));
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testSetFeatureTooManyArguments(): void
     {
+        $this->expectException(\BadMethodCallException::class);
+
         $this->nullable->setFeature(new Feature(), 1);
     }
 
@@ -96,11 +92,10 @@ class NullableTest extends TestCase
         self::assertSame(null, $property->getValue($this->nullable));
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testSetAnOtherFeatureTooManyArguments(): void
     {
+        $this->expectException(\BadMethodCallException::class);
+
         $this->nullable->setAnotherFeature(new Feature(), 1);
     }
 
@@ -114,30 +109,27 @@ class NullableTest extends TestCase
         self::assertNull($property->getValue($this->nullable));
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testSetIntDifferentTooManyArguments(): void
     {
+        $this->expectException(\BadMethodCallException::class);
+
         $this->nullable->setIntDifferent(1, 2);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testSetIntDifferentInvalidArgument(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->nullable->setIntDifferent([]);
     }
 
-    /**
-     * @expectedException \DomainException
-     */
     public function testSetIntDifferentInvalidDomain(): void
     {
         if (PHP_INT_SIZE < 8) {
             $this->markTestSkipped('Only valid on a 64bit system');
         } else {
+            $this->expectException(\DomainException::class);
+
             $this->nullable->setIntDifferent(PHP_INT_MAX);
         }
     }
@@ -159,30 +151,27 @@ class NullableTest extends TestCase
         self::assertSame(2, $property->getValue($this->nullable));
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testSetIntTooManyArguments(): void
     {
+        $this->expectException(\BadMethodCallException::class);
+
         $this->nullable->setInt(1, 2);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testSetIntInvalidArgument(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->nullable->setInt([]);
     }
 
-    /**
-     * @expectedException \DomainException
-     */
     public function testSetIntInvalidDomain(): void
     {
         if (PHP_INT_SIZE < 8) {
             $this->markTestSkipped('Only valid on a 64bit system');
         } else {
+            $this->expectException(\DomainException::class);
+
             $this->nullable->setInt(PHP_INT_MAX);
         }
     }
@@ -196,46 +185,42 @@ class NullableTest extends TestCase
         self::assertEquals(null, $this->nullable->getInt());
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testGetIntTooManyArguments(): void
     {
+        $this->expectException(\BadMethodCallException::class);
+
         $this->nullable->getInt([]);
     }
 
-    /**
-     * @expectedException \DomainException
-     */
     public function testGetIntInvalidDomain(): void
     {
         $property = new \ReflectionProperty($this->nullable, 'int');
         $property->setAccessible(true);
         $property->setValue($this->nullable, PHP_INT_MAX * 2);
+
+        $this->expectException(\DomainException::class);
+
         $this->nullable->getInt();
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testGetStringTooManyArguments(): void
     {
+        $this->expectException(\BadMethodCallException::class);
+
         $this->nullable->getString(1);
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testSetStringTooManyArguments(): void
     {
+        $this->expectException(\BadMethodCallException::class);
+
         $this->nullable->setString(1, 2);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testSetStringWrongType(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->nullable->setString([]);
     }
 
@@ -247,19 +232,17 @@ class NullableTest extends TestCase
         self::assertSame('', $this->nullable->getString());
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testGetOnlyOneTooManyArguments(): void
     {
+        $this->expectException(\BadMethodCallException::class);
+
         $this->nullable->getOnlyOne(1);
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testSetOnlyOneTooManyArguments(): void
     {
+        $this->expectException(\BadMethodCallException::class);
+
         $this->nullable->setOnlyOne(new OneToOneNullable(), 2);
     }
 
@@ -294,19 +277,17 @@ class NullableTest extends TestCase
         self::assertNull($property->getValue($one_to_one_b));
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testGetUnidirectionalOneToOneTooManyArguments(): void
     {
+        $this->expectException(\BadMethodCallException::class);
+
         $this->nullable->getUnidirectionalOneToOne(1);
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testSetUnidirectionalOneToOneTooManyArguments(): void
     {
+        $this->expectException(\BadMethodCallException::class);
+
         $this->nullable->setUnidirectionalOneToOne(new Item(), 2);
     }
 

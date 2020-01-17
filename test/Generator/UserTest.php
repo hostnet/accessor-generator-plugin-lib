@@ -18,12 +18,12 @@ class UserTest extends TestCase
         self::assertNull($user->getAddress());
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testGetAddressTooManyArguments(): void
     {
         $user = new User();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $user->getAddress(1);
     }
 
@@ -39,13 +39,13 @@ class UserTest extends TestCase
         self::assertNull($user->getAddress());
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testSetAddressTooManyArguments(): void
     {
         $user    = new User();
         $address = new Address();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $user->setAddress($address, 1);
     }
 }

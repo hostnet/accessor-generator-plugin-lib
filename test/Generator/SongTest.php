@@ -21,12 +21,12 @@ class SongTest extends TestCase
         self::assertInstanceOf(Collection::class, $genres);
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testGetGenresTooManyArguments(): void
     {
         $song = new Song();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $song->getGenres(1);
     }
 
@@ -67,13 +67,13 @@ class SongTest extends TestCase
         self::assertEquals([$rock, $jazz], $help->getGenres()->toArray());
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testAddGenreTooManyArguments(): void
     {
         $song  = new Song();
         $genre = new Genre();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $song->addGenre($genre, 2);
     }
 
@@ -103,13 +103,13 @@ class SongTest extends TestCase
         self::assertSame($song->removeGenre($genre), $song);
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testRemoveGenreTooManyArguments(): void
     {
         $song  = new Song();
         $genre = new Genre();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $song->removeGenre($genre, 2);
     }
 }

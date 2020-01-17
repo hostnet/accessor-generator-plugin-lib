@@ -11,33 +11,33 @@ use PHPUnit\Framework\TestCase;
 
 class AnnotationsTest extends TestCase
 {
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testGetStupidTooManyArguments(): void
     {
         $annotations = new Annotations();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $annotations->getStupid(1);
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testGetStupidEmpty(): void
     {
         $annotations = new Annotations();
         $property    = new \ReflectionProperty($annotations, 'stupid');
         $property->setAccessible(true);
         $property->setValue($annotations, null);
+
+        $this->expectException(\LogicException::class);
+
         $annotations->getStupid();
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testSetStupidTooManyArguments(): void
     {
         $annotations = new Annotations();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $annotations->setStupid(new \DateTime(), 2);
     }
 

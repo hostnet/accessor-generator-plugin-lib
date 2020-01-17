@@ -20,12 +20,12 @@ class NodeTest extends TestCase
         self::assertInstanceOf(Collection::class, $children);
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testGetOutTooManyArguments(): void
     {
         $node = new Node();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $node->getOut(1);
     }
 
@@ -77,12 +77,12 @@ class NodeTest extends TestCase
         self::assertEquals([$a, $b, $c, $d], $d->getOut()->toArray());
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testAddOutTooManyArguments(): void
     {
         $node = new Node();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $node->addOut($node, 2);
     }
 
@@ -112,12 +112,12 @@ class NodeTest extends TestCase
         self::assertSame($node->removeOut($child), $node);
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testRemoveOutTooManyArguments(): void
     {
         $node = new Node();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $node->RemoveOut($node, 2);
     }
 }

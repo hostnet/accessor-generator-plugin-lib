@@ -87,8 +87,12 @@ class ContactInfoTest extends TestCase
     {
         $info = new ContactInfo();
 
-        foreach (array_merge(ContactInfo::GETTERS, ContactInfo::ADDERS, ContactInfo::SETTERS, ContactInfo::REMOVERS) as
-                 $modifier) {
+        foreach (array_merge(
+            ContactInfo::GETTERS,
+            ContactInfo::ADDERS,
+            ContactInfo::SETTERS,
+            ContactInfo::REMOVERS
+        ) as $modifier) {
             $caught = false;
             try {
                 $info->$modifier($info, 2);

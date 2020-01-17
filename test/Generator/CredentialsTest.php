@@ -53,42 +53,42 @@ class CredentialsTest extends TestCase
         self::assertEquals($very_long_password, $this->credentials->getPassword());
     }
 
-    /**
-     * @expectedException BadMethodCallException
-     */
     public function testGetPasswordTooManyArguments(): void
     {
         $credentials = new Credentials();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $credentials->getPassword('pass');
     }
 
-    /**
-     * @expectedException BadMethodCallException
-     */
     public function testSetPasswordTooManyArguments(): void
     {
         $credentials = new Credentials();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $credentials->setPassword(1, 2);
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testGetPasswordEmpty(): void
     {
         $credentials = new Credentials();
         $property    = new \ReflectionProperty($credentials, 'password');
         $property->setAccessible(true);
         $property->setValue($credentials, null);
+
+        $this->expectException(\LogicException::class);
+
         $credentials->getPassword();
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testSetPasswordArray(): void
     {
         $credentials = new Credentials();
+
+        $this->expectException(\InvalidArgumentException::class);
+
         $credentials->setPassword([]);
     }
 }

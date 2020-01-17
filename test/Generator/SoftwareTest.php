@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Doctrine\Common\Collections\Collection;
+use Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\EmptyFeature;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Feature;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\NiceFeature;
@@ -24,12 +25,12 @@ class SoftwareTest extends TestCase
         self::assertInstanceOf(Collection::class, $features);
     }
 
-    /**
-     * @expectedException BadMethodCallException
-     */
     public function testGetFeaturesTooManyArguments(): void
     {
         $software = new Software();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $software->getFeatures(1);
     }
 
@@ -50,7 +51,6 @@ class SoftwareTest extends TestCase
 
     /**
      * @depends testGetFeatures
-     * @expectedException LogicException
      */
     public function testAddFeatureToMultiple(): void
     {
@@ -59,6 +59,9 @@ class SoftwareTest extends TestCase
         $b = new Software();
 
         $a->addFeature($f);
+
+        $this->expectException(\LogicException::class);
+
         $b->addFeature($f);
     }
 
@@ -87,13 +90,12 @@ class SoftwareTest extends TestCase
         self::assertCount(1, $features);
     }
 
-    /**
-     * @expectedException BadMethodCallException
-     */
     public function testAddFeatureTooManyArguments(): void
     {
         $feature  = new Feature();
         $software = new Software();
+
+        $this->expectException(\BadMethodCallException::class);
 
         $software->addFeature($feature, 2);
     }
@@ -124,20 +126,16 @@ class SoftwareTest extends TestCase
         self::assertEmpty($features);
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testRemoveFeatureTooManyArguments(): void
     {
         $feature  = new Feature();
         $software = new Software();
 
+        $this->expectException(\BadMethodCallException::class);
+
         $software->removeFeature($feature, 2);
     }
 
-    /**
-     * @expectedException \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
-     */
     public function testNonExistingPropertyWithInterface(): void
     {
         if (PHP_VERSION_ID < 70100) {
@@ -146,6 +144,9 @@ class SoftwareTest extends TestCase
 
         $software = new Software();
         $feature  = new EmptyFeature();
+
+        $this->expectException(MissingPropertyException::class);
+
         $software->addFeature($feature);
     }
 

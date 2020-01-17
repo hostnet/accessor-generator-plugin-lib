@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 class TypesTest extends TestCase
 {
-    public function typeProvider()
+    public function typeProvider(): array
     {
         $resource = fopen('data://text/plain,', 'r');
         $date     = new \DateTime();
@@ -51,7 +51,7 @@ class TypesTest extends TestCase
         return $values;
     }
 
-    public function getTypeProvider()
+    public function getTypeProvider(): array
     {
         $values = [['id', '0']];
         $class  = new \ReflectionClass(Types::class);
@@ -102,7 +102,7 @@ class TypesTest extends TestCase
         );
     }
 
-    public function setTypeProvider()
+    public function setTypeProvider(): array
     {
         // When an integer grows bigger than PHP_MAX_INT or smaller than
         // -PHP_MAX_INT - 1 it will be transformed into a float value.
@@ -212,21 +212,21 @@ class TypesTest extends TestCase
         self::assertEquals($value, $get);
     }
 
-    /**
-     * @expectedException DomainException
-     */
     public function testSetDecimalTooBig(): void
     {
         $types = new Types();
+
+        $this->expectException(\DomainException::class);
+
         $types->setDecimal('1E+10');
     }
 
-    /**
-     * @expectedException DomainException
-     */
     public function testSetDecimalTooSmall(): void
     {
         $types = new Types();
+
+        $this->expectException(\DomainException::class);
+
         $types->setDecimal('+10E-2');
     }
 

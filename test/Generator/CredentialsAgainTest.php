@@ -38,21 +38,21 @@ class CredentialsAgainTest extends TestCase
         self::assertNotEmpty($reflection_property->getValue($this->credentials_again));
     }
 
-    /**
-     * @expectedException BadMethodCallException
-     */
     public function testSetPasswordTooManyArguments(): void
     {
         $credentials_again = new CredentialsAgain();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $credentials_again->setPassword(1, 2);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testSetPasswordArray(): void
     {
         $credentials = new CredentialsAgain();
+
+        $this->expectException(\InvalidArgumentException::class);
+
         $credentials->setPassword([]);
     }
 }

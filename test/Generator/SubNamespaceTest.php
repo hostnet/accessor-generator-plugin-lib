@@ -11,42 +11,42 @@ use PHPUnit\Framework\TestCase;
 
 class SubNamespaceTest extends TestCase
 {
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testGetAsterixTooManyArguments(): void
     {
         $subnamespace = new SubNamespace();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $subnamespace->getAsterix(1);
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testGetAsterixEmpty(): void
     {
         $subnamespace = new SubNamespace();
         $property     = new \ReflectionProperty($subnamespace, 'asterix');
         $property->setAccessible(true);
         $property->setValue($subnamespace, null);
+
+        $this->expectException(\LogicException::class);
+
         $subnamespace->getAsterix();
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testSetAsterixTooManyArguments(): void
     {
         $subnamespace = new SubNamespace();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $subnamespace->setAsterix('1', 2);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testSetAsterixInvalidArgument(): void
     {
         $subnamespace = new SubNamespace();
+
+        $this->expectException(\InvalidArgumentException::class);
+
         $subnamespace->setAsterix([]);
     }
 
@@ -57,21 +57,21 @@ class SubNamespaceTest extends TestCase
         self::assertEquals('panoramix', $subnamespace->getAsterix());
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testSetSuperNamespaceTooManyArguments(): void
     {
         $subnamespace = new SubNamespace();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $subnamespace->setSuperNamespace('1', 2);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testSetSuperNamespaceInvalidArgument(): void
     {
         $subnamespace = new SubNamespace();
+
+        $this->expectException(\InvalidArgumentException::class);
+
         $subnamespace->setSuperNamespace([]);
     }
 

@@ -34,12 +34,12 @@ class CategoryTest extends TestCase
         self::assertInstanceOf(Collection::class, $children);
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testGetChildrenTooManyArguments(): void
     {
         $category = new Category();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $category->getChildren(1);
     }
 
@@ -84,12 +84,12 @@ class CategoryTest extends TestCase
         self::assertEquals(1, $category->getChildren()->count());
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testAddChildTooManyArguments(): void
     {
         $category = new Category();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $category->addChild($category, 2);
     }
 
@@ -121,18 +121,15 @@ class CategoryTest extends TestCase
         self::assertSame($category->removeChild($child), $category);
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testRemoveChildTooManyArguments(): void
     {
         $category = new Category();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $category->RemoveChild($category, 2);
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testAddMultipleTimes(): void
     {
         $a = new Category();
@@ -140,15 +137,18 @@ class CategoryTest extends TestCase
         $p = new Category();
 
         $a->addChild($p);
+
+        $this->expectException(\LogicException::class);
+
         $b->addChild($p);
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testSetParentTooManyArguments(): void
     {
         $c = new Category();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $c->setParent($c, 1);
     }
 
@@ -202,12 +202,12 @@ class CategoryTest extends TestCase
         self::assertNull($c->getParent());
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testGetParentTooManyArguments(): void
     {
         $c = new Category();
+
+        $this->expectException(\BadMethodCallException::class);
+
         $c->getParent([]);
     }
 }
