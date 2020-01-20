@@ -50,7 +50,13 @@ trait CredentialsAgainMethodsTrait
         }
 
         $iv = openssl_random_pseudo_bytes(32);
-        openssl_seal($password, $sealed_data, $env_keys, [$public_key], 'AES256', $iv);
+        if (false === openssl_seal($password, $sealed_data, $env_keys, [$public_key], 'AES256', $iv)) {
+            $err_string = '';
+            while ($msg = openssl_error_string()) {
+                $err_string .= $msg . ' | ';
+            }
+            throw new \InvalidArgumentException(sprintf('openssl_seal failed. Message: %s', $err_string));
+        }
 
         $env_key        = bin2hex($env_keys[0]);
         $iv             = bin2hex($iv);

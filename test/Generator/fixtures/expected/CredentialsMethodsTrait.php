@@ -51,7 +51,13 @@ trait CredentialsMethodsTrait
         $iv                                        = hex2bin(substr($pieces, $env_key_length, $iv_length));
         $sealed_data                               = hex2bin(substr($pieces, $env_key_length + $iv_length));
 
-        openssl_open($sealed_data, $open_data, $env_key, $private_key, 'AES256', $iv);
+        if (false === openssl_open($sealed_data, $open_data, $env_key, $private_key, 'AES256', $iv)) {
+            $err_string = '';
+            while ($msg = openssl_error_string()) {
+                $err_string .= $msg . ' | ';
+            }
+            throw new \InvalidArgumentException(sprintf('openssl_open failed. Message: %s', $err_string));
+        }
 
         return $open_data;
     }
@@ -97,7 +103,13 @@ trait CredentialsMethodsTrait
         }
 
         $iv = openssl_random_pseudo_bytes(32);
-        openssl_seal($password, $sealed_data, $env_keys, [$public_key], 'AES256', $iv);
+        if (false === openssl_seal($password, $sealed_data, $env_keys, [$public_key], 'AES256', $iv)) {
+            $err_string = '';
+            while ($msg = openssl_error_string()) {
+                $err_string .= $msg . ' | ';
+            }
+            throw new \InvalidArgumentException(sprintf('openssl_seal failed. Message: %s', $err_string));
+        }
 
         $env_key        = bin2hex($env_keys[0]);
         $iv             = bin2hex($iv);
