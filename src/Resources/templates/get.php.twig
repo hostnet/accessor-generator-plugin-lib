@@ -87,7 +87,13 @@
     $iv                                        = hex2bin(substr($pieces, $env_key_length, $iv_length));
     $sealed_data                               = hex2bin(substr($pieces, $env_key_length + $iv_length));
 
-    openssl_open($sealed_data, $open_data, $env_key, $private_key, 'AES256', $iv);
+    if (false === openssl_open($sealed_data, $open_data, $env_key, $private_key, 'AES256', $iv)) {
+        $err_string = '';
+        while ($msg = openssl_error_string()) {
+            $err_string .= $msg . ' | ';
+        }
+        throw new \InvalidArgumentException(sprintf('openssl_open failed. Message: %s', $err_string));
+    }
 
     return $open_data;
 {% elseif property.type == 'integer' %}
