@@ -155,14 +155,13 @@ class Plugin implements PluginInterface, EventSubscriberInterface
                     if ($this->io->isVerbose()) {
                         $this->io->write("    - " . $e->getMessage());
                     }
-                }
-
-                if (!$generated_enum_classes || !$this->io->isVeryVerbose()) {
                     continue;
                 }
 
-                foreach ($generated_enum_classes as $generated_enum_class) {
-                    $this->io->write("    - Generated enumerator accessor for <info>$generated_enum_class</info>");
+                if ($this->io->isVeryVerbose()) {
+                    foreach ($generated_enum_classes as $generated_enum_class) {
+                        $this->io->write("    - Generated enumerator accessor for <info>$generated_enum_class</info>");
+                    }
                 }
             }
         }
