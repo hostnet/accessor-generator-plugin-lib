@@ -471,7 +471,7 @@ class CodeGenerator implements CodeGeneratorInterface
      */
     private static function isAliased($name, array $imports): bool
     {
-        $aliases = array_keys($imports);
+        $aliases = array_filter(array_keys($imports), 'is_string');
         foreach ($aliases as $alias) {
             if (strpos($name, $alias) === 0) {
                 return true;
