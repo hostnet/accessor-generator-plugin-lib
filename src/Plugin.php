@@ -18,7 +18,6 @@ use Hostnet\Component\AccessorGenerator\Annotation\Generate;
 use Hostnet\Component\AccessorGenerator\Generator\CodeGenerator;
 use Hostnet\Component\AccessorGenerator\Generator\CodeGeneratorInterface;
 use Hostnet\Component\AccessorGenerator\Generator\Exception\ReferencedClassNotFoundException;
-use Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
 use Symfony\Component\Finder\Finder;
 use Twig\Error\LoaderError;
@@ -94,13 +93,18 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function activate(Composer $composer, IOInterface $io): void
     {
         $this->composer = $composer;
         $this->io       = $io;
+    }
+
+    public function deactivate(Composer $composer, IOInterface $io): void
+    {
+    }
+
+    public function uninstall(Composer $composer, IOInterface $io): void
+    {
     }
 
     /**
@@ -153,7 +157,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
                     $generated_enum_classes = $this->generator->writeEnumeratorAccessorsForClass($reflection_class);
                 } catch (ReferencedClassNotFoundException $e) {
                     if ($this->io->isVerbose()) {
-                        $this->io->write("    - " . $e->getMessage());
+                        $this->io->write('    - ' . $e->getMessage());
                     }
                     continue;
                 }

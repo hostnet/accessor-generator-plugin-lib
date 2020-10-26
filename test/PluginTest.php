@@ -14,9 +14,10 @@ use Composer\IO\BufferIO;
 use Composer\IO\NullIO;
 use Composer\Package\Package;
 use Composer\Package\RootPackage;
+use Composer\Repository\InstalledArrayRepository;
 use Composer\Repository\RepositoryManager;
-use Composer\Repository\WritableArrayRepository;
 use Composer\Script\ScriptEvents;
+use Composer\Util\HttpDownloader;
 use Hostnet\Component\AccessorGenerator\Generator\CodeGeneratorInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\StreamOutput;
@@ -109,8 +110,9 @@ class PluginTest extends TestCase
      */
     private function getMockComposer(): \Composer\Composer
     {
-        $config = new Config();
-        $io     = new NullIO();
+        $config     = new Config();
+        $io         = new NullIO();
+        $downloader = new HttpDownloader($io, $config);
 
         $root_package = new RootPackage(Plugin::NAME, 0, 0);
         $root_package->setRequires([Plugin::NAME => 0]);
@@ -119,11 +121,11 @@ class PluginTest extends TestCase
         $package       = new Package('TestEntity', 0, 0);
         $package->setRequires([Plugin::NAME => 0]);
 
-        $repository = new WritableArrayRepository();
+        $repository = new InstalledArrayRepository();
         $repository->addPackage($silly_package);
         $repository->addPackage($package);
 
-        $repository_manager = new RepositoryManager($io, $config);
+        $repository_manager = new RepositoryManager($io, $config, $downloader);
         $repository_manager->setLocalRepository($repository);
 
         $installation_manager = $this->createMock(InstallationManager::class);
@@ -142,7 +144,7 @@ class PluginTest extends TestCase
         $composer->getPackage()->setExtra([
             'accessor-generator' => [
                 'database.table.column' => [
-                    'public-key' => 'public',
+                    'public-key'  => 'public',
                     'private-key' => 'secret',
                 ],
             ],
