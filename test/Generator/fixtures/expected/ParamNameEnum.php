@@ -43,7 +43,7 @@ class ParamNameEnum
             ));
         }
 
-        if (null === ($result = json_decode($this->getSomeArrayEntityInstance()->getValue(), true))) {
+        if (null === ($result = json_decode((string) $this->getSomeArrayEntityInstance()->getValue(), true))) {
             throw new \RuntimeException(
                 'The value of parameter "A_SOME_ARRAY" could not be converted to a native array type.'
             );

@@ -45,7 +45,7 @@ class {{ class_name }}
         }
 
 {% if info.typeHint == "array" %}
-        if (null === ($result = json_decode($this->get{{ info.methodName }}EntityInstance()->getValue(), true))) {
+        if (null === ($result = json_decode((string) $this->get{{ info.methodName }}EntityInstance()->getValue(), true))) {
             throw new \RuntimeException(
                 'The value of parameter "{{ info.constName }}" could not be converted to a native array type.'
             );
