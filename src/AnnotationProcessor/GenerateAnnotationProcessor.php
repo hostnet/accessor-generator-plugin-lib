@@ -26,6 +26,9 @@ class GenerateAnnotationProcessor implements AnnotationProcessorInterface
     {
         // Standalone Enumerator annotation.
         if ($annotation instanceof Enumerator) {
+            if (!\class_exists($annotation->getType())) {
+                return;
+            }
             $info->addEnumeratorToGenerate($annotation);
             $annotation->property = $info->getName();
             if (! $info->getType() && $annotation->getType()) {
