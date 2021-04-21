@@ -179,4 +179,18 @@ class GenerateAnnotationProcessorTest extends TestCase
             (new GenerateAnnotationProcessor())->getProcessableAnnotationNamespace()
         );
     }
+
+    public function testEnumeratorOnMissingClass(): void
+    {
+        $enumerator        = new Enumerator();
+        $enumerator->type  = 'ClassDoesNotExist';
+
+        $property     = new ReflectionProperty('test');
+        $information  = new PropertyInformation($property);
+        $processor    = new GenerateAnnotationProcessor();
+
+        $processor->processAnnotation($enumerator, $information);
+
+        self::assertFalse($information->willGenerateEnumeratorAccessors());
+    }
 }
