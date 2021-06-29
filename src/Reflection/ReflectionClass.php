@@ -88,6 +88,11 @@ class ReflectionClass
      */
     public function __construct($filename)
     {
+        // PHP 8.0 forward compatibility @see https://www.php.net/manual/en/migration80.incompatible.php
+        if (!defined('T_NAME_QUALIFIED')) {
+            define('T_NAME_QUALIFIED', T_NS_SEPARATOR);
+        }
+
         $this->filename = $filename;
 
         // Check if file exists
@@ -103,10 +108,8 @@ class ReflectionClass
 
     /**
      * Returns the name of the parsed file.
-     *
-     * @return string
      */
-    public function getFilename()
+    public function getFilename(): string
     {
         return $this->filename;
     }
@@ -361,7 +364,7 @@ class ReflectionClass
         $alias  = null; // default array index of PHP
 
         // Parse alias
-        $loc = $tokens->next($loc, [T_NS_SEPARATOR, T_STRING, T_COMMENT, T_WHITESPACE]);
+        $loc = $tokens->next($loc, [T_NAME_QUALIFIED, T_STRING, T_COMMENT, T_WHITESPACE]);
         if ($tokens->type($loc) === T_AS) {
             $loc   = $tokens->next($loc);
             $alias = $this->parseNamespace($loc);
@@ -388,7 +391,7 @@ class ReflectionClass
             $loc = $tokens->next($loc);
         }
 
-        while (\in_array($tokens->type($loc), [T_NS_SEPARATOR, T_STRING])) {
+        while (\in_array($tokens->type($loc), [T_NAME_QUALIFIED, T_STRING])) {
             $ns .= $tokens->value($loc);
             $loc = $tokens->next($loc);
         }
@@ -495,10 +498,10 @@ class ReflectionClass
             if (\in_array($type, [T_DNUMBER, T_LNUMBER, T_CONSTANT_ENCAPSED_STRING])) {
                 // Easy numbers and strings.
                 $default = $tokens->value($loc);
-            } elseif (\in_array($type, [T_STRING, T_NS_SEPARATOR])) {
+            } elseif (\in_array($type, [T_STRING, T_NAME_QUALIFIED])) {
                 // Constants, definitions and null
                 $default = $this->parseNamespace($loc);
-                $loc     = $tokens->next($loc, [T_WHITESPACE, T_COMMENT, T_STRING, T_NS_SEPARATOR]);
+                $loc     = $tokens->next($loc, [T_WHITESPACE, T_COMMENT, T_STRING, T_NAME_QUALIFIED]);
                 if ($tokens->type($loc) === T_PAAMAYIM_NEKUDOTAYIM) {
                     $loc      = $tokens->next($loc);
                     $default .= '::' . $tokens->value($loc);
