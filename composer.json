@@ -1,13 +1,14 @@
 {
     "name":              "hostnet/accessor-generator-plugin-lib",
+    "type":              "composer-plugin",
     "description":       "Generate get, set, add, remove methods on the fly.",
     "license":           "MIT",
-    "type":              "composer-plugin",
+    "minimum-stability": "stable",
     "require": {
         "php":                  ">=7.3|>=8.0",
+        "composer-plugin-api":  "^2.0",
         "ext-bcmath":           "*",
         "ext-json":             "*",
-        "composer-plugin-api":  "^2.0",
         "doctrine/annotations": "~1.2",
         "doctrine/common":      "~2.4",
         "doctrine/inflector":   "~1.1",
@@ -17,16 +18,9 @@
     },
     "require-dev": {
         "composer/composer":  "^2.0.0",
-        "phpunit/phpunit":    "^8.5.0",
-        "hostnet/phpcs-tool": "^8.3.17"
+        "hostnet/phpcs-tool": "^8.3.18",
+        "phpunit/phpunit":    "^8.5.0"
     },
-    "minimum-stability": "stable",
-    "authors": [
-        {
-            "name":  "Hidde Boomsma",
-            "email": "hboomsma@hostnet.nl"
-        }
-    ],
     "autoload": {
         "psr-4": {
             "Hostnet\\Component\\AccessorGenerator\\": "src/"
@@ -35,11 +29,14 @@
     "autoload-dev": {
         "psr-4": {
             "Hostnet\\Component\\AccessorGenerator\\Generator\\fixtures\\Generated\\": "test/Generator/fixtures/expected/",
-            "Hostnet\\Component\\AccessorGenerator\\":                                 "test/"
+            "Hostnet\\Component\\AccessorGenerator\\":                              "test/"
         },
         "files": [
             "test/annotation_loader.php"
         ]
+    },
+    "extra": {
+        "class": "Hostnet\\Component\\AccessorGenerator\\Plugin"
     },
     "archive": {
         "exclude": [
@@ -49,8 +46,5 @@
             "/phpcs.xml.dist",
             "/cli-config.php"
         ]
-    },
-    "extra": {
-        "class": "Hostnet\\Component\\AccessorGenerator\\Plugin"
     }
 }
