@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 2014-2018 Hostnet B.V.
+ * @copyright 2014-present Hostnet B.V.
  */
 declare(strict_types=1);
 
@@ -13,8 +13,9 @@ use PHPUnit\Framework\TestCase;
  */
 class TokenStreamTest extends TestCase
 {
-    const SOURCE = 'tokens.php';
-    const SIZE   = 116;
+    private const SOURCE     = 'tokens.php';
+    private const PHP_7_SIZE = 116;
+    private const PHP_8_SIZE = 105;
 
     /**
      * @var TokenStream
@@ -28,12 +29,24 @@ class TokenStreamTest extends TestCase
 
     public function typeProvider(): array
     {
+        if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
+            return [
+                [         0, T_OPEN_TAG                                ],
+                [         1, T_NAMESPACE                               ],
+                [        4, ';'                                       ],
+                [        -1, null,         \OutOfBoundsException::class],
+                [self::PHP_8_SIZE, null,         \OutOfBoundsException::class],
+                [        32, T_PRIVATE                                 ],
+            ];
+        }
+
+        // before php7
         return [
             [         0, T_OPEN_TAG                                ],
             [         1, T_NAMESPACE                               ],
             [        10, ';'                                       ],
             [        -1, null,         \OutOfBoundsException::class],
-            [self::SIZE, null,         \OutOfBoundsException::class],
+            [self::PHP_7_SIZE, null,         \OutOfBoundsException::class],
             [        42, T_PRIVATE                                 ],
         ];
     }
@@ -47,12 +60,6 @@ class TokenStreamTest extends TestCase
      */
     public function testType($loc, $type, $exception = null): void
     {
-        if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
-            $this->markTestSkipped('Not compatible with PHP8');
-
-            return;
-        }
-
         $exception && $this->expectException($exception);
         $output = $this->stream->type($loc);
 
@@ -71,13 +78,25 @@ class TokenStreamTest extends TestCase
 
     public function valueProvider(): array
     {
+        if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
+            return [
+                [         0, "<?php\n"                                       ],
+                [         1, 'namespace'                                     ],
+                [         3, 'Hostnet\Component\AccessorGenerator\Reflection'                            ],
+                [        4, ';'                                             ],
+                [        -1, null,               \OutOfBoundsException::class],
+                [self::PHP_8_SIZE, null,               \OutOfBoundsException::class],
+                [        32, 'private'                                       ],
+            ];
+        }
+        // before php7
         return [
             [         0, "<?php\n"                                       ],
             [         1, 'namespace'                                     ],
             [         7, 'AccessorGenerator'                             ],
             [        10, ';'                                             ],
             [        -1, null,               \OutOfBoundsException::class],
-            [self::SIZE, null,               \OutOfBoundsException::class],
+            [self::PHP_7_SIZE, null,               \OutOfBoundsException::class],
             [        42, 'private'                                       ],
         ];
     }
@@ -90,32 +109,47 @@ class TokenStreamTest extends TestCase
      */
     public function testValue($loc, $value, $exception = null): void
     {
-        if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
-            $this->markTestSkipped('Not compatible with PHP8');
-
-            return;
-        }
-
         $exception && $this->expectException($exception);
         self::assertEquals($value, $this->stream->value($loc));
     }
 
     public function scanProvider(): array
     {
+        if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
+            return [
+                // Boundary Checks
+                [[],            -2, null, \OutOfBoundsException::class],
+                [[],            -1, null                              ],
+                [[],             0, null                              ],
+                [[],    self::PHP_8_SIZE, null, \OutOfBoundsException::class],
+                [[], self::PHP_8_SIZE - 1, null                             ],
+
+                // Scan does not probe current value.
+                [[T_OPEN_TAG], -1, 0],
+                [[T_OPEN_TAG], 0, null],
+
+                // Able to find last item
+                [[T_WHITESPACE], self::PHP_8_SIZE - 2, self::PHP_8_SIZE - 1],
+
+                // Test a token that is there to find
+                [[T_PRIVATE], 0, 32],
+            ];
+        }
+        // before php8
         return [
             // Boundary Checks
             [[],            -2, null, \OutOfBoundsException::class],
             [[],            -1, null                              ],
             [[],             0, null                              ],
-            [[],    self::SIZE, null, \OutOfBoundsException::class],
-            [[], self::SIZE - 1, null                             ],
+            [[],    self::PHP_7_SIZE, null, \OutOfBoundsException::class],
+            [[], self::PHP_7_SIZE - 1, null                             ],
 
             // Scan does not probe current value.
             [[T_OPEN_TAG], -1, 0],
             [[T_OPEN_TAG], 0, null],
 
             // Able to find last item
-            [[T_WHITESPACE], self::SIZE - 2, self::SIZE - 1],
+            [[T_WHITESPACE], self::PHP_7_SIZE - 2, self::PHP_7_SIZE - 1],
 
             // Test a token that is there to find
             [[T_PRIVATE], 0, 42],
@@ -131,33 +165,47 @@ class TokenStreamTest extends TestCase
      */
     public function testScan(array $tokens, $input_loc, $output_loc, $exception = null): void
     {
-        if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
-            $this->markTestSkipped('Not compatible with PHP8');
-
-            return;
-        }
-
         $exception && $this->expectException($exception);
         self::assertSame($output_loc, $this->stream->scan($input_loc, $tokens));
     }
 
     public function nextProvider(): array
     {
+        if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
+            return [
+                // Boundary checks
+                [           -2,        null    , [], \OutOfBoundsException::class],
+                [           -1,           0    , []                              ],
+                [            0,           1    , []                              ],
+                [self::PHP_8_SIZE,        null    , [], \OutOfBoundsException::class],
+                [self::PHP_8_SIZE - 1,       null    , []                              ],
+                [self::PHP_8_SIZE - 2, self::PHP_8_SIZE - 1, []                              ],
+
+                // Scan from private keyword on line 9
+                [32, 34], // Skip white space
+                [32, 36, [T_WHITESPACE, T_CONST]],
+
+                // Scan when no available maches can be found
+                [self::PHP_8_SIZE - 2, null],
+            ];
+        }
+
+        // Before php8
         return [
             // Boundary checks
             [           -2,        null    , [], \OutOfBoundsException::class],
             [           -1,           0    , []                              ],
             [            0,           1    , []                              ],
-            [   self::SIZE,        null    , [], \OutOfBoundsException::class],
-            [self::SIZE - 1,       null    , []                              ],
-            [self::SIZE - 2, self::SIZE - 1, []                              ],
+            [   self::PHP_7_SIZE,        null    , [], \OutOfBoundsException::class],
+            [self::PHP_7_SIZE - 1,       null    , []                              ],
+            [self::PHP_7_SIZE - 2, self::PHP_7_SIZE - 1, []                              ],
 
             // Scan from private keyword on line 9
-            [42, 44], // Skip white space
+            [42, 44],
             [42, 46, [T_WHITESPACE, T_CONST]],
 
             // Scan when no available maches can be found
-            [self::SIZE - 2, null],
+            [self::PHP_7_SIZE - 2, null],
         ];
     }
 
@@ -170,12 +218,6 @@ class TokenStreamTest extends TestCase
      */
     public function testNext($input_loc, $output_loc, array $tokens = null, $exception = null): void
     {
-        if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
-            $this->markTestSkipped('Not compatible with PHP8');
-
-            return;
-        }
-
         $exception && $this->expectException($exception);
         if ($tokens === null) {
             self::assertSame($output_loc, $this->stream->next($input_loc));
@@ -186,14 +228,35 @@ class TokenStreamTest extends TestCase
 
     public function previousProvider(): array
     {
+        if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
+            return [
+                // Boundary checks
+                [            -1,          null,  [], \OutOfBoundsException::class],
+                [             0,          null,  []                              ],
+                [             1,             0,  []                              ],
+                [self::PHP_8_SIZE + 1,          null,  [], \OutOfBoundsException::class],
+                [    self::PHP_8_SIZE, self::PHP_8_SIZE - 1, []                              ],
+                [self::PHP_8_SIZE - 1, self::PHP_8_SIZE - 2, []                              ],
+
+                [34, 32], // Skip from const on line 9 to private on line 9
+                [36, 32, [T_WHITESPACE, T_CONST]], // Skip from FOO on line 9 to private on line 9
+                [31, 30, [T_PUBLIC, T_PRIVATE]], // Skip from 5 spaces on line 9 to { on line 8
+
+                // Scan when no available maches can be found
+                [3, null, [T_NAMESPACE, T_NS_SEPARATOR, T_WHITESPACE, T_STRING, T_OPEN_TAG]],
+
+            ];
+        }
+
+        // before php8
         return [
             // Boundary checks
             [            -1,          null,  [], \OutOfBoundsException::class],
             [             0,          null,  []                              ],
             [             1,             0,  []                              ],
-            [self::SIZE + 1,          null,  [], \OutOfBoundsException::class],
-            [    self::SIZE, self::SIZE - 1, []                              ],
-            [self::SIZE - 1, self::SIZE - 2, []                              ],
+            [self::PHP_7_SIZE + 1,          null,  [], \OutOfBoundsException::class],
+            [    self::PHP_7_SIZE, self::PHP_7_SIZE - 1, []                              ],
+            [self::PHP_7_SIZE - 1, self::PHP_7_SIZE - 2, []                              ],
 
             // Scan from private keyword on line 9
             [44, 42], // Skip white space
@@ -214,12 +277,6 @@ class TokenStreamTest extends TestCase
      */
     public function testPrevious($input_loc, $output_loc, array $tokens = null, $exception = null): void
     {
-        if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
-            $this->markTestSkipped('Not compatible with PHP8');
-
-            return;
-        }
-
         $exception && $this->expectException($exception);
         if ($tokens === null) {
             self::assertSame($output_loc, $this->stream->previous($input_loc));
