@@ -31,23 +31,23 @@ class TokenStreamTest extends TestCase
     {
         if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
             return [
-                [         0, T_OPEN_TAG                                ],
-                [         1, T_NAMESPACE                               ],
-                [        4, ';'                                       ],
-                [        -1, null,         \OutOfBoundsException::class],
-                [self::PHP_8_SIZE, null,         \OutOfBoundsException::class],
-                [        32, T_PRIVATE                                 ],
+                [0, T_OPEN_TAG],
+                [1, T_NAMESPACE],
+                [4, ';'],
+                [-1, null, \OutOfBoundsException::class],
+                [self::PHP_8_SIZE, null, \OutOfBoundsException::class],
+                [32, T_PRIVATE],
             ];
         }
 
         // before php7
         return [
-            [         0, T_OPEN_TAG                                ],
-            [         1, T_NAMESPACE                               ],
-            [        10, ';'                                       ],
-            [        -1, null,         \OutOfBoundsException::class],
-            [self::PHP_7_SIZE, null,         \OutOfBoundsException::class],
-            [        42, T_PRIVATE                                 ],
+            [0, T_OPEN_TAG],
+            [1, T_NAMESPACE],
+            [10, ';'],
+            [-1, null, \OutOfBoundsException::class],
+            [self::PHP_7_SIZE, null, \OutOfBoundsException::class],
+            [42, T_PRIVATE],
         ];
     }
 
@@ -80,24 +80,24 @@ class TokenStreamTest extends TestCase
     {
         if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
             return [
-                [         0, "<?php\n"                                       ],
-                [         1, 'namespace'                                     ],
-                [         3, 'Hostnet\Component\AccessorGenerator\Reflection'                            ],
-                [        4, ';'                                             ],
-                [        -1, null,               \OutOfBoundsException::class],
-                [self::PHP_8_SIZE, null,               \OutOfBoundsException::class],
-                [        32, 'private'                                       ],
+                [0, "<?php\n"],
+                [1, 'namespace'],
+                [3, 'Hostnet\Component\AccessorGenerator\Reflection'],
+                [4, ';'],
+                [-1, null, \OutOfBoundsException::class],
+                [self::PHP_8_SIZE, null, \OutOfBoundsException::class],
+                [32, 'private'],
             ];
         }
         // before php7
         return [
-            [         0, "<?php\n"                                       ],
-            [         1, 'namespace'                                     ],
-            [         7, 'AccessorGenerator'                             ],
-            [        10, ';'                                             ],
-            [        -1, null,               \OutOfBoundsException::class],
-            [self::PHP_7_SIZE, null,               \OutOfBoundsException::class],
-            [        42, 'private'                                       ],
+            [0, "<?php\n"],
+            [1, 'namespace'],
+            [7, 'AccessorGenerator'],
+            [10, ';'],
+            [-1, null, \OutOfBoundsException::class],
+            [self::PHP_7_SIZE, null, \OutOfBoundsException::class],
+            [42, 'private'],
         ];
     }
 
@@ -118,11 +118,11 @@ class TokenStreamTest extends TestCase
         if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
             return [
                 // Boundary Checks
-                [[],            -2, null, \OutOfBoundsException::class],
-                [[],            -1, null                              ],
-                [[],             0, null                              ],
-                [[],    self::PHP_8_SIZE, null, \OutOfBoundsException::class],
-                [[], self::PHP_8_SIZE - 1, null                             ],
+                [[], -2, null, \OutOfBoundsException::class],
+                [[], -1, null],
+                [[], 0, null],
+                [[], self::PHP_8_SIZE, null, \OutOfBoundsException::class],
+                [[], self::PHP_8_SIZE - 1, null],
 
                 // Scan does not probe current value.
                 [[T_OPEN_TAG], -1, 0],
@@ -138,11 +138,11 @@ class TokenStreamTest extends TestCase
         // before php8
         return [
             // Boundary Checks
-            [[],            -2, null, \OutOfBoundsException::class],
-            [[],            -1, null                              ],
-            [[],             0, null                              ],
-            [[],    self::PHP_7_SIZE, null, \OutOfBoundsException::class],
-            [[], self::PHP_7_SIZE - 1, null                             ],
+            [[], -2, null, \OutOfBoundsException::class],
+            [[], -1, null],
+            [[], 0, null],
+            [[], self::PHP_7_SIZE, null, \OutOfBoundsException::class],
+            [[], self::PHP_7_SIZE - 1, null],
 
             // Scan does not probe current value.
             [[T_OPEN_TAG], -1, 0],
@@ -159,9 +159,9 @@ class TokenStreamTest extends TestCase
     /**
      * @dataProvider       scanProvider
      * @param int[]|char[] $tokens
-     * @param int          $input_loc
-     * @param int|null     $output_loc
-     * @param string       $exception
+     * @param int $input_loc
+     * @param int|null $output_loc
+     * @param string $exception
      */
     public function testScan(array $tokens, $input_loc, $output_loc, $exception = null): void
     {
@@ -174,12 +174,12 @@ class TokenStreamTest extends TestCase
         if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
             return [
                 // Boundary checks
-                [           -2,        null    , [], \OutOfBoundsException::class],
-                [           -1,           0    , []                              ],
-                [            0,           1    , []                              ],
-                [self::PHP_8_SIZE,        null    , [], \OutOfBoundsException::class],
-                [self::PHP_8_SIZE - 1,       null    , []                              ],
-                [self::PHP_8_SIZE - 2, self::PHP_8_SIZE - 1, []                              ],
+                [-2, null, [], \OutOfBoundsException::class],
+                [-1, 0, []],
+                [0, 1, []],
+                [self::PHP_8_SIZE, null, [], \OutOfBoundsException::class],
+                [self::PHP_8_SIZE - 1, null, []],
+                [self::PHP_8_SIZE - 2, self::PHP_8_SIZE - 1, []],
 
                 // Scan from private keyword on line 9
                 [32, 34], // Skip white space
@@ -193,12 +193,12 @@ class TokenStreamTest extends TestCase
         // Before php8
         return [
             // Boundary checks
-            [           -2,        null    , [], \OutOfBoundsException::class],
-            [           -1,           0    , []                              ],
-            [            0,           1    , []                              ],
-            [   self::PHP_7_SIZE,        null    , [], \OutOfBoundsException::class],
-            [self::PHP_7_SIZE - 1,       null    , []                              ],
-            [self::PHP_7_SIZE - 2, self::PHP_7_SIZE - 1, []                              ],
+            [-2, null, [], \OutOfBoundsException::class],
+            [-1, 0, []],
+            [0, 1, []],
+            [self::PHP_7_SIZE, null, [], \OutOfBoundsException::class],
+            [self::PHP_7_SIZE - 1, null, []],
+            [self::PHP_7_SIZE - 2, self::PHP_7_SIZE - 1, []],
 
             // Scan from private keyword on line 9
             [42, 44],
@@ -211,10 +211,10 @@ class TokenStreamTest extends TestCase
 
     /**
      * @dataProvider       nextProvider
-     * @param int          $input_loc
-     * @param int|null     $output_loc
+     * @param int $input_loc
+     * @param int|null $output_loc
      * @param int[]|char[] $tokens
-     * @param string       $exception
+     * @param string $exception
      */
     public function testNext($input_loc, $output_loc, array $tokens = null, $exception = null): void
     {
@@ -231,12 +231,12 @@ class TokenStreamTest extends TestCase
         if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
             return [
                 // Boundary checks
-                [            -1,          null,  [], \OutOfBoundsException::class],
-                [             0,          null,  []                              ],
-                [             1,             0,  []                              ],
-                [self::PHP_8_SIZE + 1,          null,  [], \OutOfBoundsException::class],
-                [    self::PHP_8_SIZE, self::PHP_8_SIZE - 1, []                              ],
-                [self::PHP_8_SIZE - 1, self::PHP_8_SIZE - 2, []                              ],
+                [-1, null, [], \OutOfBoundsException::class],
+                [0, null, []],
+                [1, 0, []],
+                [self::PHP_8_SIZE + 1, null, [], \OutOfBoundsException::class],
+                [self::PHP_8_SIZE, self::PHP_8_SIZE - 1, []],
+                [self::PHP_8_SIZE - 1, self::PHP_8_SIZE - 2, []],
 
                 [34, 32], // Skip from const on line 9 to private on line 9
                 [36, 32, [T_WHITESPACE, T_CONST]], // Skip from FOO on line 9 to private on line 9
@@ -251,12 +251,12 @@ class TokenStreamTest extends TestCase
         // before php8
         return [
             // Boundary checks
-            [            -1,          null,  [], \OutOfBoundsException::class],
-            [             0,          null,  []                              ],
-            [             1,             0,  []                              ],
-            [self::PHP_7_SIZE + 1,          null,  [], \OutOfBoundsException::class],
-            [    self::PHP_7_SIZE, self::PHP_7_SIZE - 1, []                              ],
-            [self::PHP_7_SIZE - 1, self::PHP_7_SIZE - 2, []                              ],
+            [-1, null, [], \OutOfBoundsException::class],
+            [0, null, []],
+            [1, 0, []],
+            [self::PHP_7_SIZE + 1, null, [], \OutOfBoundsException::class],
+            [self::PHP_7_SIZE, self::PHP_7_SIZE - 1, []],
+            [self::PHP_7_SIZE - 1, self::PHP_7_SIZE - 2, []],
 
             // Scan from private keyword on line 9
             [44, 42], // Skip white space
@@ -270,10 +270,10 @@ class TokenStreamTest extends TestCase
 
     /**
      * @dataProvider       previousProvider
-     * @param int          $input_loc
-     * @param int|null     $output_loc
+     * @param int $input_loc
+     * @param int|null $output_loc
      * @param int[]|char[] $tokens
-     * @param string       $exception
+     * @param string $exception
      */
     public function testPrevious($input_loc, $output_loc, array $tokens = null, $exception = null): void
     {
