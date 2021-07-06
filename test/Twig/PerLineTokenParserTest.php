@@ -47,8 +47,6 @@ class PerLineTokenParserTest extends TestCase
      * Flattens all Nodes in a tree.
      *
      * @param Node $node
-     *
-     * @return \Generator
      */
     private function iterateAllNodes(Node $node): \Generator
     {

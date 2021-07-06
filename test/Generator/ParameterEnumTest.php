@@ -6,12 +6,7 @@ declare(strict_types=1);
 
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
-use Hostnet\Component\AccessorGenerator\Generator\fixtures\Feature;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated\ParamNameEnum;
-use Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated\ParamsEnum;
-use Hostnet\Component\AccessorGenerator\Generator\fixtures\Item;
-use Hostnet\Component\AccessorGenerator\Generator\fixtures\Nullable;
-use Hostnet\Component\AccessorGenerator\Generator\fixtures\OneToOneNullable;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Parameterized;
 use PHPUnit\Framework\TestCase;
 

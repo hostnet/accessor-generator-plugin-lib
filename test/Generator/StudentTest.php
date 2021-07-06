@@ -8,7 +8,6 @@ namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Doctrine\ORM\EntityNotFoundException;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Student;
-use Hostnet\Component\AccessorGenerator\Generator\fixtures\StudentInterface;
 use PHPUnit\Framework\TestCase;
 
 class StudentTest extends TestCase

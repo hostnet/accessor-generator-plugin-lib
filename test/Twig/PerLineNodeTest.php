@@ -20,7 +20,7 @@ use Twig\Node\TextNode;
  */
 class PerLineNodeTest extends TestCase
 {
-    public function parseProvider()
+    public function parseProvider(): iterable
     {
         $data = new PrintNode(new NameExpression('data', 1), 1);
         $text = new TextNode('TEXT', 1);

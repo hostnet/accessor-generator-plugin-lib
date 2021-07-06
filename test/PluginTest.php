@@ -105,7 +105,6 @@ class PluginTest extends TestCase
      *
      * all with NullIO and a default empty config
      *
-     * @return \Composer\Composer
      * @throws \PHPUnit_Framework_Exception
      */
     private function getMockComposer(): \Composer\Composer

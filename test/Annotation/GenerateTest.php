@@ -99,6 +99,6 @@ class GenerateTest extends TestCase
         ], [
             Generate::VISIBILITY_PRIVATE,
             [Generate::VISIBILITY_PUBLIC, Generate::VISIBILITY_PRIVATE],
-        ]];
+        ],];
     }
 }
