@@ -92,7 +92,9 @@ class ReflectionClass
         if (!defined('T_NAME_QUALIFIED')) {
             define('T_NAME_QUALIFIED', T_NS_SEPARATOR);
         }
-
+        if (!defined('T_NAME_FULLY_QUALIFIED')) {
+            define('T_NAME_FULLY_QUALIFIED', T_NS_SEPARATOR);
+        }
         $this->filename = $filename;
 
         // Check if file exists
@@ -391,7 +393,7 @@ class ReflectionClass
             $loc = $tokens->next($loc);
         }
 
-        while (\in_array($tokens->type($loc), [T_NAME_QUALIFIED, T_STRING])) {
+        while (\in_array($tokens->type($loc), [T_NAME_FULLY_QUALIFIED, T_NAME_QUALIFIED, T_STRING])) {
             $ns .= $tokens->value($loc);
             $loc = $tokens->next($loc);
         }
@@ -491,6 +493,7 @@ class ReflectionClass
         $default = '';
         $loc     = $tokens->next($loc);
 
+
         if ($tokens->value($loc) === '=') {
             $loc  = $tokens->next($loc);
             $type = $tokens->type($loc);
@@ -498,10 +501,10 @@ class ReflectionClass
             if (\in_array($type, [T_DNUMBER, T_LNUMBER, T_CONSTANT_ENCAPSED_STRING])) {
                 // Easy numbers and strings.
                 $default = $tokens->value($loc);
-            } elseif (\in_array($type, [T_STRING, T_NAME_QUALIFIED])) {
+            } elseif (\in_array($type, [T_STRING, T_NAME_QUALIFIED, T_NAME_FULLY_QUALIFIED])) {
                 // Constants, definitions and null
                 $default = $this->parseNamespace($loc);
-                $loc     = $tokens->next($loc, [T_WHITESPACE, T_COMMENT, T_STRING, T_NAME_QUALIFIED]);
+                $loc     = $tokens->next($loc, [T_WHITESPACE, T_COMMENT, T_STRING, T_NAME_QUALIFIED, T_NAME_FULLY_QUALIFIED]);
                 if ($tokens->type($loc) === T_PAAMAYIM_NEKUDOTAYIM) {
                     $loc      = $tokens->next($loc);
                     $default .= '::' . $tokens->value($loc);

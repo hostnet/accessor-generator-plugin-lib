@@ -10,5 +10,6 @@ class Constant  {
     private $color = COLOR;
     private $color = self::COLOR;
     private $color = An\Other\Place::class;
+    private $color = \An\Other\Place::class;
 }
 
