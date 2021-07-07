@@ -493,7 +493,6 @@ class ReflectionClass
         $default = '';
         $loc     = $tokens->next($loc);
 
-
         if ($tokens->value($loc) === '=') {
             $loc  = $tokens->next($loc);
             $type = $tokens->type($loc);
@@ -504,7 +503,10 @@ class ReflectionClass
             } elseif (\in_array($type, [T_STRING, T_NAME_QUALIFIED, T_NAME_FULLY_QUALIFIED])) {
                 // Constants, definitions and null
                 $default = $this->parseNamespace($loc);
-                $loc     = $tokens->next($loc, [T_WHITESPACE, T_COMMENT, T_STRING, T_NAME_QUALIFIED, T_NAME_FULLY_QUALIFIED]);
+                $loc     = $tokens->next(
+                    $loc,
+                    [T_WHITESPACE, T_COMMENT, T_STRING, T_NAME_QUALIFIED, T_NAME_FULLY_QUALIFIED]
+                );
                 if ($tokens->type($loc) === T_PAAMAYIM_NEKUDOTAYIM) {
                     $loc      = $tokens->next($loc);
                     $default .= '::' . $tokens->value($loc);
