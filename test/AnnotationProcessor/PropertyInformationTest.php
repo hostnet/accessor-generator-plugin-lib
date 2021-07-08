@@ -26,9 +26,6 @@ class PropertyInformationTest extends TestCase
      */
     private $minimal_info;
 
-    /**
-     * {@inheritDoc}
-     */
     protected function setUp(): void
     {
         $class = $this->getMockBuilder(ReflectionClass::class)->disableOriginalConstructor()->getMock();
@@ -151,7 +148,6 @@ class PropertyInformationTest extends TestCase
         self::assertEquals($referenced_property, $this->info->getReferencedProperty());
     }
 
-
     public function setIntegerSizeProvider(): array
     {
         return [
@@ -209,7 +205,7 @@ class PropertyInformationTest extends TestCase
         self::assertEquals($scale, $this->info->getScale());
     }
 
-    public function setPrecisionProvider()
+    public function setPrecisionProvider(): iterable
     {
         //http://dev.mysql.com/doc/refman/5.0/en/precision-math-decimal-characteristics.html
         $max = 65;
@@ -261,7 +257,7 @@ class PropertyInformationTest extends TestCase
         self::assertEquals($length, $this->info->getLength());
     }
 
-    public function setTypeProvider()
+    public function setTypeProvider(): iterable
     {
         return array_merge([['integer', null]], $this->setTypeHintProvider());
     }

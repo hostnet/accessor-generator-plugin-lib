@@ -9,9 +9,6 @@ namespace Hostnet\Component\AccessorGenerator\Generator;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\ContactInfo;
 use PHPUnit\Framework\TestCase;
 
-/**
- * {@inheritDoc}
- */
 class ContactInfoTest extends TestCase
 {
     public function testSetWrong(): void

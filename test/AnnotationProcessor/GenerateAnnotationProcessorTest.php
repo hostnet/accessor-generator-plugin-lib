@@ -19,14 +19,14 @@ class GenerateAnnotationProcessorTest extends TestCase
 {
     // Some constants for better reading of the
     // parameters parsed into function.
-    const GET       = true;
-    const NO_GET    = false;
-    const SET       = true;
-    const NO_SET    = false;
-    const ADD       = true;
-    const NO_ADD    = false;
-    const REMOVE    = true;
-    const NO_REMOVE = false;
+    private const GET       = true;
+    private const NO_GET    = false;
+    private const SET       = true;
+    private const NO_SET    = false;
+    private const ADD       = true;
+    private const NO_ADD    = false;
+    private const REMOVE    = true;
+    private const NO_REMOVE = false;
 
     /**
      * Generate TestCases for the parsing

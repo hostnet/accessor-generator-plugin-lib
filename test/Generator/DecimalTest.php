@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 class DecimalTest extends TestCase
 {
-    private function getTestValues($scale, $precision)
+    private function getTestValues($scale, $precision): iterable
     {
         $values    = [];
         $property  = sprintf('decimal_%d_%d', $scale, $precision);
@@ -105,7 +105,7 @@ class DecimalTest extends TestCase
         return $values;
     }
 
-    public function setProvider()
+    public function setProvider(): iterable
     {
         $values = [];
         $values = array_merge($values, $this->getTestValues(0, 10));
@@ -168,7 +168,7 @@ class DecimalTest extends TestCase
         self::assertSame($decimal, $set);
     }
 
-    public function roundProvider()
+    public function roundProvider(): iterable
     {
         $huge = str_repeat('1', 35) . '.' . str_repeat('5', 29);
 

@@ -131,7 +131,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         isset($extra['accessor-generator']) && $this->generator->setEncryptionAliases($extra['accessor-generator']);
 
         foreach ($packages as $package) {
-            /** @var $package PackageInterface */
+            /** @var PackageInterface $package */
             if (!array_key_exists(self::NAME, $package->getRequires())) {
                 continue;
             }
@@ -147,7 +147,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         $packages[]       = $this->composer->getPackage();
 
         foreach ($packages as $package) {
-            /** @var $package PackageInterface */
+            /** @var PackageInterface $package */
             if (! array_key_exists(self::NAME, $package->getRequires())) {
                 continue;
             }

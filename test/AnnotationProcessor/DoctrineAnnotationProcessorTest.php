@@ -48,7 +48,7 @@ class DoctrineAnnotationProcessorTest extends TestCase
      * @throws \InvalidArgumentException
      * @throws \DomainException
      */
-    public function processColumnAnnotationProvider()
+    public function processColumnAnnotationProvider(): iterable
     {
         $property = new ReflectionProperty('test');
         $implicit = new Column();
@@ -154,7 +154,7 @@ class DoctrineAnnotationProcessorTest extends TestCase
         );
     }
 
-    public function processAssociationAnnotationProvider()
+    public function processAssociationAnnotationProvider(): iterable
     {
         $many_to_many      = new ManyToMany();
         $many_to_one       = new ManyToOne();

@@ -118,7 +118,7 @@ class CodeGeneratorTest extends TestCase
     public function testGenerateEnumeratorClassNotFound(): void
     {
         $enumerator        = new Enumerator();
-        $enumerator->value = "\\This\\Does\\Not\\Exist";
+        $enumerator->value = '\\This\\Does\\Not\\Exist';
 
         $class = new ReflectionClass(__FILE__);
         $info  = new PropertyInformation(new ReflectionProperty('my_prop', null, null, null, $class));

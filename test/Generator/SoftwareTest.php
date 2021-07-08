@@ -65,7 +65,6 @@ class SoftwareTest extends TestCase
         $b->addFeature($f);
     }
 
-
     /**
      * @depends testGetFeatures
      */

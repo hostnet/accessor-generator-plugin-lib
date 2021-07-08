@@ -76,7 +76,6 @@ class ConstantDefaultTest extends TestCase
         $constant_default->getWeather();
     }
 
-
     public function testSetWeather(): void
     {
         $constant_default = new ConstantDefault();

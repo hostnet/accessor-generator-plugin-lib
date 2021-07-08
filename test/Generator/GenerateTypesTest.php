@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 class GenerateTypesTest extends TestCase
 {
-    public function typeProvider()
+    public function typeProvider(): iterable
     {
         $date   = new \DateTime();
         $array  = [5 => 10, 6 => 11, 7 => [12 , 13]];
@@ -35,7 +35,7 @@ class GenerateTypesTest extends TestCase
         return $values;
     }
 
-    public function getTypeProvider()
+    public function getTypeProvider(): iterable
     {
         $values = [];
         $class  = new \ReflectionClass(GenerateTypes::class);
@@ -87,7 +87,7 @@ class GenerateTypesTest extends TestCase
         );
     }
 
-    public function setTypeProvider()
+    public function setTypeProvider(): iterable
     {
         $values = [
             ['integer',  01                                                    ],
