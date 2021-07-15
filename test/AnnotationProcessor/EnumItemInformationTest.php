@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
 use Doctrine\Common\Util\Inflector;
+use Doctrine\Inflector\InflectorFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -46,6 +47,13 @@ class EnumItemInformationTest extends TestCase
 
     public const S_CONSTANT_WITHOUT_DOCBLOCK = 'S_CONSTANT_WITHOUT_DOCBLOCK';
 
+    private $inflector;
+
+    public function setup(): void
+    {
+        $this->inflector = InflectorFactory::create()->build();
+    }
+
     public function constantProvider(): array
     {
         return [
@@ -71,7 +79,7 @@ class EnumItemInformationTest extends TestCase
         self::assertEquals($expected_doc_block_prefix, $info->getDocBlock());
         self::assertEquals($name, $info->getConstName());
         self::assertEquals(substr($name, 2), $info->getName());
-        self::assertEquals(Inflector::classify(strtolower(substr($name, 2))), $info->getMethodName());
+        self::assertEquals($this->inflector->classify(strtolower(substr($name, 2))), $info->getMethodName());
         self::assertEquals(self::class, $info->getEnumClass());
     }
 

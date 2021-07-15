@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
 use Doctrine\Common\Inflector\Inflector;
+use Doctrine\Inflector\InflectorFactory;
 
 class EnumItemInformation
 {
@@ -60,7 +61,7 @@ class EnumItemInformation
             ? trim(trim(trim($constant->getDocComment()), '/**/'))
             : '';
         $this->type_hint   = self::TYPE_MAP[$type];
-        $this->method_name = Inflector::classify(strtolower($this->name));
+        $this->method_name = InflectorFactory::create()->build()->classify(strtolower($this->name));
     }
 
     public function getName(): string

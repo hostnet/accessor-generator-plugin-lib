@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Hostnet\Component\AccessorGenerator\Twig;
 
-use Doctrine\Common\Inflector\Inflector;
+use Doctrine\Inflector\InflectorFactory;
 use Twig\Error\RuntimeError;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -37,6 +37,13 @@ use Twig\TwigTest;
  */
 class CodeGenerationExtension extends AbstractExtension
 {
+    private $inflector;
+
+    public function __construct()
+    {
+        $this->inflector = InflectorFactory::create()->build();
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -52,10 +59,10 @@ class CodeGenerationExtension extends AbstractExtension
     {
         return [
             new TwigFilter('classify', function ($string) {
-                return Inflector::classify($string);
+                return $this->inflector->classify($string);
             }),
             new TwigFilter('singularize', function ($string) {
-                return Inflector::singularize($string);
+                return $this->inflector->singularize($string);
             }),
             new TwigFilter('phptype', function ($string) {
                 if ($string === 'integer') {
