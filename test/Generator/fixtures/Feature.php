@@ -42,7 +42,7 @@ class Feature implements FeatureInterface
 {
     /**
      * @ORM\Id
-     * @ORM\Column
+     * @ORM\Column(type="integer")
      */
     private $id;
 

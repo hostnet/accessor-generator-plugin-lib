@@ -19,7 +19,7 @@ class Attribute
     private $id;
 
     /**
-     * @ORM\Column
+     * @ORM\Column(type="string")
      */
     public $name = '';
     /**

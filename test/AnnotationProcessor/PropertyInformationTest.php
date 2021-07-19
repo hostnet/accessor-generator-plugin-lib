@@ -183,6 +183,7 @@ class PropertyInformationTest extends TestCase
         return [
             [-1,       \RangeException::class          ],
             [0,        null                            ],
+            [null,     null                            ],
             [0b1,      null                            ],
             [0x1,      null                            ],
             [01,       null                            ],
@@ -212,6 +213,7 @@ class PropertyInformationTest extends TestCase
         return [
             [-1,       \RangeException::class          ],
             [0,        null                            ],
+            [null,     null                            ],
             [0b1,      null                            ],
             [0x1,      null                            ],
             [01,       null                            ],
@@ -222,7 +224,7 @@ class PropertyInformationTest extends TestCase
 
     /**
      * @dataProvider setPrecisionProvider
-     * @param string $precision
+     * @param mixed $precision
      * @param string $exception
      * @throws \RangeException
      */

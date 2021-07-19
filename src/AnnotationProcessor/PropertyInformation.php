@@ -764,8 +764,9 @@ class PropertyInformation implements PropertyInformationInterface
      *
      * @return PropertyInformation
      */
-    public function setPrecision(int $precision): self
+    public function setPrecision(?int $precision): self
     {
+        $precision = $precision ?: 0;
         // Check range.
         if ($precision < 0 || $precision > 65) {
             throw new \RangeException(sprintf('Precision %d, should be in interval [1,65]', $precision));
@@ -799,8 +800,9 @@ class PropertyInformation implements PropertyInformationInterface
      *
      * @return PropertyInformation
      */
-    public function setScale(int $scale): self
+    public function setScale(?int $scale): self
     {
+        $scale = $scale ?: 0;
         // Check range.
         if ($scale < 0 || $scale > 30) {
             throw new \RangeException(sprintf('Scale "%d", should be in interval [0,30]', $scale));

@@ -19,7 +19,7 @@ class UseFunction
     /**
      * @var int
      *
-     * @ORM\Column
+     * @ORM\Column(type="string")
      * @AG\Generate
      */
     private $count = 0;

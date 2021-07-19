@@ -13,7 +13,7 @@ abstract class AbstractVehicle implements VehicleInterface
 {
     /**
      * @ORM\Id
-     * @ORM\Column
+     * @ORM\Column(type="integer")
      */
     private $id;
 
