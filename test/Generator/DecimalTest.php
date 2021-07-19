@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
-use Doctrine\Inflector\Inflector;
 use Doctrine\Inflector\InflectorFactory;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Decimal;
 use PHPUnit\Framework\TestCase;
