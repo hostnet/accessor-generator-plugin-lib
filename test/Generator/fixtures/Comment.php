@@ -15,7 +15,7 @@ class Comment
 
     /**
      * --> col <--
-     * @ORM\Column
+     * @ORM\Column(type="string")
      * @AG\Generate(set="none")
      */
     private $col = null;

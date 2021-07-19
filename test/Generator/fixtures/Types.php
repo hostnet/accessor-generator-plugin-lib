@@ -15,7 +15,7 @@ class Types
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
-     * @ORM\Column
+     * @ORM\Column(type="string")
      * @AG\Generate
      */
     private $id;

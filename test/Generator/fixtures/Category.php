@@ -39,7 +39,7 @@ class Category
 
     /**
      * @ORM\Id
-     * @ORM\Column
+     * @ORM\Column(type="integer")
      */
     private $id;
 

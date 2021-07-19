@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
-use Doctrine\Common\Util\Inflector;
 use Doctrine\Inflector\InflectorFactory;
 use PHPUnit\Framework\TestCase;
 

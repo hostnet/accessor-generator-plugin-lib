@@ -51,9 +51,9 @@ class DoctrineAnnotationProcessorTest extends TestCase
     public function processColumnAnnotationProvider(): iterable
     {
         $property = new ReflectionProperty('test');
-        $implicit = new Column();
-        $explicit = new Column();
-        $faulty   = new Column();
+        $implicit = new Column(null, 'string');
+        $explicit = new Column(null, 'string');
+        $faulty   = new Column(null, 'string');
 
         $implicit_info = new PropertyInformation($property);
         $explicit_info = new PropertyInformation($property);

@@ -10,12 +10,12 @@ class PracticalVehicleOwner
 
     /**
      * @ORM\Id
-     * @ORM\Column
+     * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
-     * @ORM\Column
+     * @ORM\Column(type="string")
      */
     private $name;
 

@@ -15,12 +15,12 @@ class SubNamespace
 
     /**
      * @ORM\Id
-     * @ORM\Column
+     * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
-     * @ORM\Column
+     * @ORM\Column(type="string")
      * @AG\Generate
      **/
     private $asterix = Comic\Asterix::class;
@@ -34,7 +34,7 @@ class SubNamespace
     private $friend;
 
     /**
-     * @ORM\Column
+     * @ORM\Column(type="string")
      * @AG\Generate(get="none")
      **/
     public $super_namespace = Plugin::NAME;
