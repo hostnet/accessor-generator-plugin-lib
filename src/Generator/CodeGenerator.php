@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
-use Doctrine\Common\Inflector\Inflector;
+use Doctrine\Inflector\InflectorFactory;
 use Hostnet\Component\AccessorGenerator\Annotation\Enumerator;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\DoctrineAnnotationProcessor;
 use Hostnet\Component\AccessorGenerator\AnnotationProcessor\EnumItemInformation;
@@ -116,6 +116,8 @@ class CodeGenerator implements CodeGeneratorInterface
      */
     private $key_registry_data = [];
 
+    private $inflector;
+
     /**
      * Initialize Twig and templates.
      *
@@ -125,6 +127,8 @@ class CodeGenerator implements CodeGeneratorInterface
      */
     public function __construct()
     {
+        $this->inflector = InflectorFactory::create()->build();
+
         $loader = new FilesystemLoader(__DIR__ . '/../Resources/templates');
         $twig   = new Environment($loader);
         $twig->addExtension(new CodeGenerationExtension());
@@ -244,6 +248,7 @@ class CodeGenerator implements CodeGeneratorInterface
     private function getMetadataForClass(ReflectionClass $class): array
     {
         $cache_key = (string) $class->getFilename();
+
         if (isset($this->metadata_cache[$cache_key])) {
             return $this->metadata_cache[$cache_key];
         }
@@ -555,7 +560,7 @@ class CodeGenerator implements CodeGeneratorInterface
                 $class_path = str_replace('\\', DIRECTORY_SEPARATOR, $enumerator->getEnumeratorClass());
                 $class_ns   = str_replace(DIRECTORY_SEPARATOR, '\\', dirname($class_path)) . '\\' . $this->namespace;
                 $class_name = $class_ns . '\\' . basename($class_path) . $this->enum_name_suffix;
-                $property   = $enumerator->getPropertyName() ?? Inflector::tableize(
+                $property   = $enumerator->getPropertyName() ?? $this->inflector->tableize(
                     basename($class_path) . $this->enum_name_suffix
                 );
 
@@ -566,7 +571,7 @@ class CodeGenerator implements CodeGeneratorInterface
 
                 $code .= $this->enum_get->render([
                     'property'      => $info->isGenerator() ? $info->getName() : $enumerator->getName(),
-                    'name'          => Inflector::classify($property),
+                    'name'          => $this->inflector->classify($property),
                     'class_name'    => $class_name,
                     'info'          => $info,
                     'enum_class'    => $enumerator->getEnumeratorClass(),
@@ -582,12 +587,12 @@ class CodeGenerator implements CodeGeneratorInterface
             // an is method is generated instead of a get method.
             if ($info->getType() === 'boolean') {
                 if (preg_match('/^is[_A-Z0-9]/', $info->getName())) {
-                    $getter = Inflector::camelize($info->getName());
+                    $getter = $this->inflector->camelize($info->getName());
                 } else {
-                    $getter = 'is' . Inflector::classify($info->getName());
+                    $getter = 'is' . $this->inflector->classify($info->getName());
                 }
             } else {
-                $getter = 'get' . Inflector::classify($info->getName());
+                $getter = 'get' . $this->inflector->classify($info->getName());
             }
 
             // Render the get/is method.

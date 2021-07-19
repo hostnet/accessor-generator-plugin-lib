@@ -6,12 +6,20 @@ declare(strict_types=1);
 
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
-use Doctrine\Common\Util\Inflector;
+use Doctrine\Inflector\Inflector;
+use Doctrine\Inflector\InflectorFactory;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Types;
 use PHPUnit\Framework\TestCase;
 
 class TypesTest extends TestCase
 {
+    private $inflector;
+
+    public function setup(): void
+    {
+        $this->inflector = InflectorFactory::create()->build();
+    }
+
     public function typeProvider(): array
     {
         $resource = fopen('data://text/plain,', 'r');
@@ -88,7 +96,7 @@ class TypesTest extends TestCase
         } elseif ($type === 'is_this_boolean') {
             $getter = 'isThisBoolean';
         } else {
-            $getter = 'get' . Inflector::classify($type);
+            $getter = 'get' . $this->inflector->classify($type);
         }
         if ($extra_parameter) {
             $get = $types->$getter($extra_parameter);
@@ -104,6 +112,7 @@ class TypesTest extends TestCase
 
     public function setTypeProvider(): array
     {
+        $inflector = InflectorFactory::create()->build();
         // When an integer grows bigger than PHP_MAX_INT or smaller than
         // -PHP_MAX_INT - 1 it will be transformed into a float value.
         // This float value lacks the precision of an integer, to detect
@@ -149,7 +158,7 @@ class TypesTest extends TestCase
         // Try an invalid type and wrong number of parameters
         $class = new \ReflectionClass(Types::class);
         foreach ($class->getProperties() as $property) {
-            $setter = 'set' . Inflector::classify($property->getName());
+            $setter = 'set' . $inflector->classify($property->getName());
             if (!method_exists(Types::class, $setter)) {
                 continue;
             }
@@ -187,7 +196,7 @@ class TypesTest extends TestCase
         } elseif ($type === 'is_this_boolean') {
             $getter = 'isThisBoolean';
         } else {
-            $getter = 'get' . Inflector::classify($type);
+            $getter = 'get' . $this->inflector->classify($type);
         }
 
         set_error_handler(function ($errno, $errstr, $errfile, $errline) {
@@ -197,7 +206,7 @@ class TypesTest extends TestCase
             return false;
         });
 
-        $setter = 'set' . Inflector::classify($type);
+        $setter = 'set' . $this->inflector->classify($type);
 
         if ($extra_parameter !== null) {
             $set = $types->$setter($value, false, $extra_parameter);

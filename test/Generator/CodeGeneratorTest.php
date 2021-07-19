@@ -55,7 +55,6 @@ class CodeGeneratorTest extends TestCase
         foreach ($files as $file) {
             // Read class information;
             $class = new ReflectionClass($file->getRealPath());
-
             // Generate the accessor methods trait.
             $generator->writeTraitForClass($class);
             $generator->writeEnumeratorAccessorsForClass($class);

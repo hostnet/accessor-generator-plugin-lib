@@ -6,12 +6,20 @@ declare(strict_types=1);
 
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
-use Doctrine\Common\Util\Inflector;
+use Doctrine\Inflector\Inflector;
+use Doctrine\Inflector\InflectorFactory;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Decimal;
 use PHPUnit\Framework\TestCase;
 
 class DecimalTest extends TestCase
 {
+    private $inflector;
+
+    public function setup(): void
+    {
+        $this->inflector = InflectorFactory::create()->build();
+    }
+
     private function getTestValues($scale, $precision): iterable
     {
         $values    = [];
@@ -131,7 +139,7 @@ class DecimalTest extends TestCase
         $decimal = new Decimal();
 
         $property = sprintf('decimal_%d_%d', $scale, $precision);
-        $setter   = 'set' . Inflector::classify($property);
+        $setter   = 'set' . $this->inflector->classify($property);
 
         if ($extra_parameter !== null) {
             $set = $decimal->$setter($value, false, $extra_parameter);
@@ -221,7 +229,7 @@ class DecimalTest extends TestCase
     public function testRound($field, $value_in, $value_out): void
     {
         $decimal = new Decimal();
-        $setter  = 'set' . Inflector::classify($field);
+        $setter  = 'set' . $this->inflector->classify($field);
         $set     = $decimal->$setter($value_in, true);
 
         // Check for fluent interface

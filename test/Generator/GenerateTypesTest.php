@@ -6,12 +6,19 @@ declare(strict_types=1);
 
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
-use Doctrine\Common\Util\Inflector;
+use Doctrine\Inflector\InflectorFactory;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\GenerateTypes;
 use PHPUnit\Framework\TestCase;
 
 class GenerateTypesTest extends TestCase
 {
+    private $inflector;
+
+    public function setup(): void
+    {
+        $this->inflector = InflectorFactory::create()->build();
+    }
+
     public function typeProvider(): iterable
     {
         $date   = new \DateTime();
@@ -73,7 +80,7 @@ class GenerateTypesTest extends TestCase
         } elseif ($type === 'is_this_boolean') {
             $getter = 'isThisBoolean';
         } else {
-            $getter = 'get' . Inflector::classify($type);
+            $getter = 'get' . $this->inflector->classify($type);
         }
         if ($extra_parameter) {
             $get = $types->$getter($extra_parameter);
@@ -89,6 +96,8 @@ class GenerateTypesTest extends TestCase
 
     public function setTypeProvider(): iterable
     {
+        $inflector = InflectorFactory::create()->build();
+
         $values = [
             ['integer',  01                                                    ],
             ['integer',  0x1                                                   ],
@@ -106,7 +115,7 @@ class GenerateTypesTest extends TestCase
         // Try an invalid type and wrong number of parameters
         $class = new \ReflectionClass(GenerateTypes::class);
         foreach ($class->getProperties() as $property) {
-            $setter = 'set' . Inflector::classify($property->getName());
+            $setter = 'set' . $inflector->classify($property->getName());
             if (!method_exists(GenerateTypes::class, $setter)) {
                 continue;
             }
@@ -142,7 +151,7 @@ class GenerateTypesTest extends TestCase
         } elseif ($type === 'is_this_boolean') {
             $getter = 'isThisBoolean';
         } else {
-            $getter = 'get' . Inflector::classify($type);
+            $getter = 'get' . $this->inflector->classify($type);
         }
 
         set_error_handler(function ($errno, $errstr, $errfile, $errline) {
@@ -152,7 +161,7 @@ class GenerateTypesTest extends TestCase
             return false;
         });
 
-        $setter = 'set' . Inflector::classify($type);
+        $setter = 'set' . $this->inflector->classify($type);
 
         if ($extra_parameter !== null) {
             $set = $types->$setter($value, false, $extra_parameter);
