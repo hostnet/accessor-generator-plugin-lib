@@ -22,6 +22,9 @@
         "hostnet/phpcs-tool": "^8.3.21",
         "phpunit/phpunit":    "^8.5.0"
     },
+    "conflict": {
+        "doctrine/orm": "2.9.0|2.9.1"
+    },
     "autoload": {
         "psr-4": {
             "Hostnet\\Component\\AccessorGenerator\\": "src/"
