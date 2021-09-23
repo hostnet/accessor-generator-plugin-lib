@@ -18,4 +18,5 @@ class Boom {
     public $kruin static;
     var $nerf;
     public static private final protected private $riet;
+    private string $touw;
 }
