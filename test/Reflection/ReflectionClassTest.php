@@ -110,6 +110,7 @@ class ReflectionClassTest extends TestCase
                     'public $kruin;',
                     'public $nerf;',
                     'private $riet;',
+                    'private $touw;',
                 ],
             ],
             [

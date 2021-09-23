@@ -311,11 +311,13 @@ class ReflectionClass
                 // Seek forward, skipping static, if it was found and check if we
                 // really have a property here, otherwise confine and try to find more
                 // properties.
-
-                // We also skip final, to improve error handling and consistent behaviour,
+                //
+                // Skip final, to improve error handling and consistent behaviour,
                 // otherwise final private $foo would be parsed and private final $bar
                 // would not be parsed.
-                $var_loc = $tokens->next($vis_loc, [T_COMMENT, T_WHITESPACE, T_STATIC, T_FINAL]);
+                //
+                // Skip T_STRING because if it exists, it must contains a type declaration.
+                $var_loc = $tokens->next($vis_loc, [T_COMMENT, T_WHITESPACE, T_STATIC, T_FINAL, T_STRING]);
                 if ($tokens->type($var_loc) !== T_VARIABLE) {
                     continue;
                 }
