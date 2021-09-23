@@ -316,7 +316,7 @@ class ReflectionClass
                 // otherwise final private $foo would be parsed and private final $bar
                 // would not be parsed.
                 //
-                // Skip T_STRING because if it exists, it must contains a type declaration.
+                // Skip T_STRING because if it exists, it must contain a type declaration.
                 $var_loc = $tokens->next($vis_loc, [T_COMMENT, T_WHITESPACE, T_STATIC, T_FINAL, T_STRING]);
                 if ($tokens->type($var_loc) !== T_VARIABLE) {
                     continue;
