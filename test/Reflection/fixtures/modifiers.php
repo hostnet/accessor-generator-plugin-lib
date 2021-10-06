@@ -19,4 +19,5 @@ class Boom {
     var $nerf;
     public static private final protected private $riet;
     private string $touw;
+    private ?int $sap;
 }
