@@ -111,6 +111,7 @@ class ReflectionClassTest extends TestCase
                     'public $nerf;',
                     'private $riet;',
                     'private $touw;',
+                    'private $sap;',
                 ],
             ],
             [
@@ -239,7 +240,7 @@ class ReflectionClassTest extends TestCase
         $class = new ReflectionClass(__DIR__ . '/fixtures/no_class.php');
         self::assertEquals('ThisNamespace', $class->getNamespace());
 
-        self::expectException(ClassDefinitionNotFoundException::class);
+        $this->expectException(ClassDefinitionNotFoundException::class);
 
         $class->getName();
     }
@@ -249,7 +250,7 @@ class ReflectionClassTest extends TestCase
         $class = new ReflectionClass(__DIR__ . '/fixtures/empty.php');
         self::assertEquals('', $class->getNamespace());
 
-        self::expectException(ClassDefinitionNotFoundException::class);
+        $this->expectException(ClassDefinitionNotFoundException::class);
 
         $class->getName();
     }
@@ -258,7 +259,7 @@ class ReflectionClassTest extends TestCase
     {
         $class = new ReflectionClass(__DIR__ . '/fixtures/broken.php');
 
-        self::expectException(ClassDefinitionNotFoundException::class);
+        $this->expectException(ClassDefinitionNotFoundException::class);
 
         $class->getUseStatements();
     }
