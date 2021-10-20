@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\JoinColumn;
@@ -27,7 +27,11 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
     private const ZEROED_DATE_TIME = 'zeroeddatetime';
     private const ZEROED_DATE      = 'zeroeddate';
     private const YAML_ARRAY       = 'yaml_array';
-    private const NULLABLE_TYPES   = [self::ZEROED_DATE, self::ZEROED_DATE_TIME];
+    /**
+     * @deprecated since doctrine/dbal:2.6
+     */
+    private const JSON_ARRAY     = 'json_array';
+    private const NULLABLE_TYPES = [self::ZEROED_DATE, self::ZEROED_DATE_TIME];
 
     /**
      * Process annotations of type:
@@ -156,7 +160,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
     protected function processColumn(Column $column, PropertyInformation $information): void
     {
         $information->setType($this->transformType($column->type));
-        $information->setFixedPointNumber(strtolower($column->type) === Type::DECIMAL);
+        $information->setFixedPointNumber(strtolower($column->type) === Types::DECIMAL);
         $information->setLength($column->length ?: 0);
         $information->setPrecision($column->precision);
         $information->setScale($column->scale);
@@ -214,29 +218,36 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      */
     private function transformType($type)
     {
-        if ($type === Type::BOOLEAN) {
+        if ($type === Types::BOOLEAN) {
             return 'boolean';
         }
 
-        if ($type === Type::SMALLINT || $type === Type::BIGINT || $type === Type::INTEGER) {
+        if ($type === Types::SMALLINT || $type === Types::BIGINT || $type === Types::INTEGER) {
             return 'integer';
         }
 
-        if ($type === Type::FLOAT) {
+        if ($type === Types::FLOAT) {
             return 'float';
         }
 
-        if ($type === Type::TEXT || $type === Type::GUID || $type === Type::STRING || $type === Type::DECIMAL) {
+        if ($type === Types::TEXT || $type === Types::GUID || $type === Types::STRING || $type === Types::DECIMAL) {
             return 'string';
         }
 
-        if ($type === Type::BLOB /* binary will be added in doctrine 2.5 */) {
+        if ($type === Types::BLOB /* binary will be added in doctrine 2.5 */) {
             return 'resource';
         }
 
         if (\in_array(
             $type,
-            [Type::DATETIME, Type::DATETIMETZ, Type::DATE, Type::TIME, self::ZEROED_DATE_TIME, self::ZEROED_DATE],
+            [
+                Types::DATETIME_MUTABLE,
+                Types::DATETIMETZ_MUTABLE,
+                Types::DATE_MUTABLE,
+                Types::TIME_MUTABLE,
+                self::ZEROED_DATE_TIME,
+                self::ZEROED_DATE,
+            ],
             true
         )) {
             return '\\' . \DateTime::class;
@@ -244,13 +255,13 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
 
         if (\in_array(
             $type,
-            [Type::SIMPLE_ARRAY, Type::JSON_ARRAY, Type::JSON, Type::TARRAY, self::YAML_ARRAY],
+            [Types::SIMPLE_ARRAY, self::JSON_ARRAY, Types::JSON, Types::ARRAY, self::YAML_ARRAY],
             true
         )) {
             return 'array';
         }
 
-        if ($type === Type::OBJECT) {
+        if ($type === Types::OBJECT) {
             return 'object';
         }
 

@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
 
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\JoinColumn;
@@ -75,14 +75,14 @@ class DoctrineAnnotationProcessorTest extends TestCase
         $explicit->scale = 9;
         $explicit_info->setScale(9);
 
-        $explicit->type = Type::BIGINT;
+        $explicit->type = Types::BIGINT;
         $explicit_info->setType('integer');
         $explicit_info->setIntegerSize(64);
 
         $explicit->unique = true;
         $explicit_info->setUnique(true);
 
-        $faulty->type = Type::DECIMAL;
+        $faulty->type = Types::DECIMAL;
 
         return [
             [$implicit, $implicit_info, null],
