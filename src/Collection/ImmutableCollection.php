@@ -45,7 +45,7 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
      *
      * @throws \LogicException if the collection not cloned.
      */
-    public function add($element)
+    public function add($element): bool
     {
         if ($this->is_clone) {
             return $this->collection->add($element);
@@ -61,7 +61,7 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
      *
      * @throws \LogicException if the collection is not cloned.
      */
-    public function clear()
+    public function clear(): void
     {
         if (!$this->is_clone) {
             throw new \LogicException('This collection is immutable');
@@ -78,9 +78,6 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
         return $this->collection->contains($element);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isEmpty(): bool
     {
         return $this->collection->isEmpty();
@@ -90,6 +87,7 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
      * Do not use, this collection is immutable.
      * {@inheritdoc}
      * @throws \LogicException if the collection is not cloned.
+     * @return mixed
      */
     public function remove($key)
     {
@@ -105,7 +103,7 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
      * {@inheritdoc}
      * @throws \LogicException if the collection is not cloned.
      */
-    public function removeElement($element)
+    public function removeElement($element): bool
     {
         if ($this->is_clone) {
             return $this->collection->removeElement($element);
@@ -146,7 +144,7 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
         return $this->collection->getValues();
     }
 
-    public function set($key, $value)
+    public function set($key, $value): void
     {
         if (!$this->is_clone) {
             throw new \LogicException('This collection is immutable');
@@ -203,33 +201,21 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
         return $this->collection->next();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function exists(Closure $predicate): bool
     {
         return $this->collection->exists($predicate);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function filter(Closure $predicate): Collection
     {
         return $this->collection->filter($predicate);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function forAll(Closure $predicate): bool
     {
         return $this->collection->forAll($predicate);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function map(Closure $func): Collection
     {
         return $this->collection->map($func);
@@ -259,18 +245,12 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
         return $this->collection->slice($offset, $length);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function count()
+    public function count(): int
     {
         return $this->collection->count();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         return $this->collection->getIterator();
     }
@@ -278,13 +258,15 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
     /**
      * {@inheritdoc}
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return $this->collection->offsetExists($offset);
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @return mixed
      */
     public function offsetGet($offset)
     {
@@ -296,7 +278,7 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
      * {@inheritdoc}
      * @throws \LogicException if the collection is not cloned.
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         if (!$this->is_clone) {
             throw new \LogicException('This collection is immutable');
@@ -310,7 +292,7 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
      * {@inheritdoc}
      * @throws \LogicException if the collection is not cloned.
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         if (!$this->is_clone) {
             throw new \LogicException('This collection is immutable');
@@ -319,10 +301,7 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
         $this->collection->offsetUnset($offset);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function matching(Criteria $criteria)
+    public function matching(Criteria $criteria): Collection
     {
         return $this->collection->matching($criteria);
     }
