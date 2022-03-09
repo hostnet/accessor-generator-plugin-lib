@@ -39,6 +39,12 @@
             "test/annotation_loader.php"
         ]
     },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": false,
+            "hostnet/*":                                      true
+        }
+    },
     "extra": {
         "class": "Hostnet\\Component\\AccessorGenerator\\Plugin"
     },
