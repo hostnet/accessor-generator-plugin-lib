@@ -78,9 +78,6 @@ class GenerateAnnotationProcessor implements AnnotationProcessorInterface
         $info->setIsGenerator(true);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getProcessableAnnotationNamespace(): string
     {
         return 'Hostnet\Component\AccessorGenerator\Annotation';

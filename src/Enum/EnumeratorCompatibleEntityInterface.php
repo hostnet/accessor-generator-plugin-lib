@@ -24,17 +24,13 @@ interface EnumeratorCompatibleEntityInterface
      */
     public function __construct($owning_entity, string $name, ?string $value);
 
-    /**
-     * @return string
-     */
     public function getName(): string;
 
-    /**
-     * @return string
-     */
     public function getValue(): ?string;
 
     /**
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint
+     *
      * @param string|null $value
      */
     public function setValue($value);

@@ -21,7 +21,6 @@ interface AnnotationProcessorInterface
      * @param object              $annotation  class annotated with @annotation
      * @param PropertyInformation $information location to store new
      *                                          information about the property
-     * @return void
      */
     public function processAnnotation($annotation, PropertyInformation $information): void;
 
@@ -31,8 +30,6 @@ interface AnnotationProcessorInterface
      *
      * This value can be used to feed it into a doc parser to only parse
      * the annotations that will actually be used.
-     *
-     * @return string
      */
     public function getProcessableAnnotationNamespace(): string;
 }

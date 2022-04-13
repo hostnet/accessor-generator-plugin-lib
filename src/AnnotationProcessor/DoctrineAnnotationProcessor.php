@@ -51,8 +51,6 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      *
      * @param mixed $annotation object of a class annotated with @annotation
      * @param PropertyInformation $information
-     *
-     * @return void
      */
 
     public function processAnnotation($annotation, PropertyInformation $information): void
@@ -98,9 +96,6 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
         // Do nothing for other types
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getProcessableAnnotationNamespace(): string
     {
         return 'Doctrine\ORM\Mapping';
@@ -214,6 +209,8 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      *
      * @param mixed $type
      *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint
+     *
      * @return mixed A valid PHP type
      */
     private function transformType($type)
@@ -279,8 +276,6 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * is in the current namespace and is left as-is.
      *
      * @param string $type
-     *
-     * @return string
      */
     private function transformComplexType($type): string
     {
@@ -303,8 +298,6 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * @see http://doctrine-dbal.readthedocs.org/en/latest/reference/types.html
      *
      * @param string $type
-     *
-     * @return int
      */
     private function getIntegerSizeForType(string $type): int
     {

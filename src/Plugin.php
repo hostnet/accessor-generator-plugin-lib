@@ -14,6 +14,7 @@ use Composer\Package\RootPackageInterface;
 use Composer\Plugin\PluginInterface;
 use Composer\Script\ScriptEvents;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+// phpcs:ignore SlevomatCodingStandard.Namespaces.UnusedUses.UnusedUse
 use Hostnet\Component\AccessorGenerator\Annotation\Generate;
 use Hostnet\Component\AccessorGenerator\Generator\CodeGenerator;
 use Hostnet\Component\AccessorGenerator\Generator\CodeGeneratorInterface;
@@ -210,6 +211,8 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      * Returns a key-value array of ReflectionClass instances for all the file names found in the given package.
      * This method returns a cached instance when executed more than once for the same package.
      *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint
+     *
      * @param PackageInterface $package
      * @return mixed
      * @throws Reflection\Exception\FileException
@@ -246,6 +249,8 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      *
      * @throws \LogicException
      * @throws \InvalidArgumentException
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint
      *
      * @param PackageInterface $package
      * @return \Iterator|\SplFileInfo[]
