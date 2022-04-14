@@ -143,9 +143,6 @@ class CodeGenerator implements CodeGeneratorInterface
         $this->enum_class = $twig->load('enum_class.php.twig');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function writeTraitForClass(ReflectionClass $class): bool
     {
         $data = $this->generateTraitForClass($class);
@@ -213,7 +210,6 @@ class CodeGenerator implements CodeGeneratorInterface
      * @throws ReferencedClassNotFoundException
      * @param Enumerator          $enumerator
      * @param PropertyInformation $info
-     * @return string
      */
     public function generateEnumeratorAccessors(Enumerator $enumerator, PropertyInformation $info): string
     {
@@ -326,9 +322,6 @@ class CodeGenerator implements CodeGeneratorInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function generateTraitForClass(ReflectionClass $class): string
     {
         $code                  = '';
@@ -472,7 +465,6 @@ class CodeGenerator implements CodeGeneratorInterface
      *
      * @param string   $name
      * @param string[] $imports
-     * @return bool
      */
     private static function isAliased($name, array $imports): bool
     {
@@ -490,7 +482,6 @@ class CodeGenerator implements CodeGeneratorInterface
     /**
      * @param string   $type
      * @param string[] $imports
-     * @return string|null
      */
     private static function getPlainImportIfExists($type, $imports): ?string
     {
@@ -509,7 +500,6 @@ class CodeGenerator implements CodeGeneratorInterface
      *
      * @param string   $name
      * @param string[] $imports
-     * @return string
      */
     private static function fqcn($name, array $imports): string
     {
@@ -532,9 +522,6 @@ class CodeGenerator implements CodeGeneratorInterface
         return '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function generateAccessors(PropertyInformationInterface $info): string
     {
         $code = '';
@@ -626,9 +613,6 @@ class CodeGenerator implements CodeGeneratorInterface
         return $code;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function writeKeyRegistriesForPackage(): bool
     {
         foreach ($this->key_registry_data as $directory => $data) {

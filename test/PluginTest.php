@@ -67,7 +67,7 @@ class PluginTest extends TestCase
 
         // Hit every fixture one time.
         $generator->expects(self::exactly(2))->method('writeTraitForClass')->willReturn(true);
-        $generator->expects(self::exactly(0))->method('writeEnumeratorAccessorsForClass')->willReturn(true);
+        $generator->expects(self::exactly(0))->method('writeEnumeratorAccessorsForClass')->willReturn([]);
         $generator->expects(self::once())->method('setEncryptionAliases');
 
         $plugin = new Plugin($generator);
@@ -113,11 +113,11 @@ class PluginTest extends TestCase
         $io         = new NullIO();
         $downloader = new HttpDownloader($io, $config);
 
-        $root_package = new RootPackage(Plugin::NAME, 0, 0);
+        $root_package = new RootPackage(Plugin::NAME, '0', '0');
         $root_package->setRequires([Plugin::NAME => 0]);
 
-        $silly_package = new Package('TestEntity', 0, 0);
-        $package       = new Package('TestEntity', 0, 0);
+        $silly_package = new Package('TestEntity', '0', '0');
+        $package       = new Package('TestEntity', '0', '0');
         $package->setRequires([Plugin::NAME => 0]);
 
         $repository = new InstalledArrayRepository();

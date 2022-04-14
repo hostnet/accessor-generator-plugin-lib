@@ -31,10 +31,8 @@ class GenerateAnnotationProcessorTest extends TestCase
     /**
      * Generate TestCases for the parsing
      * of the @Generate annotation.
-     *
-     * @return Generate|bool[][]
      */
-    public function processAnnotationProvider()
+    public function processAnnotationProvider(): iterable
     {
         $all           = new Generate();
         $no_get        = new Generate();

@@ -24,17 +24,15 @@ interface CodeGeneratorInterface
      *
      * @see generateTraitForClass
      * @param ReflectionClass $class
-     * @return bool
      */
-    public function writeTraitForClass(ReflectionClass $class);
+    public function writeTraitForClass(ReflectionClass $class): bool;
 
     /**
      * Writes one or more enumerator accessors.
      *
      * @param ReflectionClass $class
-     * @return bool
      */
-    public function writeEnumeratorAccessorsForClass(ReflectionClass $class);
+    public function writeEnumeratorAccessorsForClass(ReflectionClass $class): array;
 
     /**
      * Returns the generated PHP code for the accessor methods trait for
@@ -44,9 +42,8 @@ interface CodeGeneratorInterface
      * Returns an empty string if no code generation was needed nor done.
      *
      * @param ReflectionClass $class
-     * @return string
      */
-    public function generateTraitForClass(ReflectionClass $class);
+    public function generateTraitForClass(ReflectionClass $class): string;
 
     /**
      * Generate Accessor methods for property associated with the given
@@ -54,9 +51,8 @@ interface CodeGeneratorInterface
      * separated with line-breaks.
      *
      * @param PropertyInformationInterface $info
-     * @return string
      */
-    public function generateAccessors(PropertyInformationInterface $info);
+    public function generateAccessors(PropertyInformationInterface $info): string;
 
     /**
      * Expects an array of aliases, each alias can contain a public key file and/or a private key file.
@@ -67,14 +63,12 @@ interface CodeGeneratorInterface
      *
      * @param array $encryption_aliases
      */
-    public function setEncryptionAliases(array $encryption_aliases);
+    public function setEncryptionAliases(array $encryption_aliases): void;
 
     /**
      * Method to write KeyRegistry class(es), call this after all the Traits have been generated
      * for a package. These KeyRegistry classes contain the encryption aliases and corresponding
      * public/private key paths.
-     *
-     * @return bool
      */
-    public function writeKeyRegistriesForPackage();
+    public function writeKeyRegistriesForPackage(): bool;
 }

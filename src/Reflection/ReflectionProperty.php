@@ -89,8 +89,6 @@ class ReflectionProperty
 
     /**
      * Return the Class or Trait that this property belongs to.
-     *
-     * @return ReflectionClass|null
      */
     public function getClass(): ?ReflectionClass
     {
@@ -99,8 +97,6 @@ class ReflectionProperty
 
     /**
      * Get the raw doc_comment as string.
-     *
-     * @return string|null
      */
     public function getDocComment(): ?string
     {
@@ -109,8 +105,6 @@ class ReflectionProperty
 
     /**
      * Get the name of the property. The name is returned without the $-prefix.
-     *
-     * @return string
      */
     public function getName(): string
     {
@@ -119,8 +113,6 @@ class ReflectionProperty
 
     /**
      * Returns true if this property is static, false otherwise.
-     *
-     * @return bool
      */
     public function isStatic(): bool
     {
@@ -130,8 +122,6 @@ class ReflectionProperty
     /**
      * Returns true if this property is private, false otherwise. If true,
      * isProtected and isPublic will return false.
-     *
-     * @return bool
      */
     public function isPrivate(): bool
     {
@@ -141,8 +131,6 @@ class ReflectionProperty
     /**
      * Returns true if this property is protected, false otherwise.  If true,
      * isPrivate and isPublic will return false.
-     *
-     * @return bool
      */
     public function isProtected(): bool
     {
@@ -152,8 +140,6 @@ class ReflectionProperty
     /**
      * Returns true if this property is public, false otherwise. If true,
      * isPrivate and isProtected will return false.
-     *
-     * @return bool
      */
     public function isPublic(): bool
     {
@@ -166,8 +152,6 @@ class ReflectionProperty
      *
      * It will return 'bar' including the quotes. It will return null if no
      * default value was defined.
-     *
-     * @return string|null
      */
     public function getDefault(): ?string
     {
@@ -183,10 +167,8 @@ class ReflectionProperty
      *
      * The string returned includes multiple lines if needed and no trailing
      * whitespace that was not there in the original code (doc comment).
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         $text = '';
 

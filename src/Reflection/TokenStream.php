@@ -10,29 +10,21 @@ class TokenStream
 {
     /**
      * Location of type within the PHP Token.
-     *
-     * @var int
      */
     private const TYPE = 0;
 
     /**
      * Location of value within the PHP Token.
-     *
-     * @var int
      */
     private const VALUE = 1;
 
     /**
      * Search direction from left to right.
-     *
-     * @var int
      */
     private const LTR = 1;
 
     /**
      * Search direction from right to left.
-     *
-     * @var int
      */
     private const RTL = -1;
 
@@ -62,6 +54,8 @@ class TokenStream
      * @return string|int            the char value of the token or a numeric
      *                               value corresponding with the T_ constants.
      * @throws \OutOfBoundsException for invalid token location
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint
      */
     public function type($loc)
     {
@@ -94,9 +88,8 @@ class TokenStream
      * @param int   $loc
      * @param array $tokens          PHP tokens (T_*)
      * @throws \OutOfBoundsException
-     * @return number|NULL
      */
-    public function scan($loc, array $tokens)
+    public function scan($loc, array $tokens): ?int
     {
         // Check validity of start position
         // -1 is allowed and trying scanning
@@ -210,6 +203,8 @@ class TokenStream
      * @param int $loc token location
      * @param int $type self::TYPE or self::VALUE
      * @return int|string the value or type of the token
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint
      */
     private function token($loc, $type)
     {

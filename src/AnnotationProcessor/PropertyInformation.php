@@ -22,133 +22,133 @@ class PropertyInformation implements PropertyInformationInterface
 {
     /**
      * {@inheritdoc}
-
+     *
      * @var string|null
      */
     private $type;
 
     /**
      * {@inheritdoc}
-
+     *
      * @var string
      */
     private $type_hint = '';
 
     /**
      * {@inheritdoc}
-
+     *
      * @var string
      */
     private $fully_qualified_type = '';
 
     /**
      * {@inheritdoc}
-
+     *
      * @var string
      */
     private $encryption_alias;
 
     /**
      * {@inheritdoc}
-
+     *
      * @var int
      */
     private $integer_size = 32; // Be on the safe side for database interaction.
 
     /**
      * {@inheritdoc}
-
+     *
      * @var int
      */
     private $length = 0;
 
     /**
      * {@inheritdoc}
-
+     *
      * @var int
      */
     private $precision = 0;
 
     /**
      * {@inheritdoc}
-
+     *
      * @var int
      */
     private $scale = 0;
 
     /**
      * {@inheritdoc}
-
+     *
      * @var bool|null
      */
     private $nullable;
 
     /**
      * {@inheritdoc}
-
+     *
      * @var bool|null
      */
     private $unique;
 
     /**
      * {@inheritdoc}
-
+     *
      * @var bool
      */
     private $is_generator = false;
 
     /**
      * {@inheritdoc}
-
+     *
      * @var bool
      */
     private $is_fixed_point_number = false;
 
     /**
      * {@inheritdoc}
-
+     *
      * @var string
      */
     private $referenced_property = '';
 
     /**
      * {@inheritdoc}
-
+     *
      * @var bool
      */
     private $is_collection = false;
 
     /**
      * {@inheritdoc}
-
+     *
      * @var bool
      */
     private $is_referencing_collection = false;
 
     /**
      * {@inheritdoc}
-
+     *
      * @var bool
      */
     private $generate_strict = true;
 
     /**
      * {@inheritdoc}
-
+     *
      * @var string|null
      */
     private $generate_get;
 
     /**
      * {@inheritdoc}
-
+     *
      * @var string|null
      */
     private $generate_set;
 
     /**
      * {@inheritdoc}
-
+     *
      * @var string|null
      */
     private $generate_add;
@@ -162,14 +162,14 @@ class PropertyInformation implements PropertyInformationInterface
 
     /**
      * {@inheritdoc}
-
+     *
      * @var string|null
      */
     private $index;
 
     /**
      * {@inheritdoc}
-
+     *
      * @var string|null
      */
     private $generate_remove;
@@ -230,7 +230,6 @@ class PropertyInformation implements PropertyInformationInterface
     /**
      * Start the processing of processAnnotations
      *
-     * @return void
      * @throws \OutOfBoundsException
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
      * @throws \RuntimeException
@@ -399,7 +398,6 @@ class PropertyInformation implements PropertyInformationInterface
      *
      * @throws \DomainException
      * @throws \InvalidArgumentException
-     * @return string
      */
     private function validateType(string $type): string
     {
@@ -613,9 +611,6 @@ class PropertyInformation implements PropertyInformationInterface
         $this->is_generator = $bool;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isGenerator(): bool
     {
         return $this->is_generator;
@@ -782,7 +777,7 @@ class PropertyInformation implements PropertyInformationInterface
      *
      * @return number
      */
-    public function getScale()
+    public function getScale(): int
     {
         return $this->scale;
     }
@@ -813,12 +808,7 @@ class PropertyInformation implements PropertyInformationInterface
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return bool|null
-     */
-    public function isNullable()
+    public function isNullable(): ?bool
     {
         if (null === $this->nullable) {
             return null;
@@ -1022,42 +1012,22 @@ class PropertyInformation implements PropertyInformationInterface
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string|null
-     */
-    public function getGetVisibility()
+    public function getGetVisibility(): ?string
     {
         return $this->generate_get;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string|null
-     */
-    public function getSetVisibility()
+    public function getSetVisibility(): ?string
     {
         return $this->generate_set;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string|null
-     */
-    public function getAddVisibility()
+    public function getAddVisibility(): ?string
     {
         return $this->generate_add;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string|null
-     */
-    public function getRemoveVisibility()
+    public function getRemoveVisibility(): ?string
     {
         return $this->generate_remove;
     }
@@ -1082,8 +1052,6 @@ class PropertyInformation implements PropertyInformationInterface
 
     /**
      * Returns true if an enumerator accessor will be generated for this property.
-     *
-     * @return bool
      */
     public function willGenerateEnumeratorAccessors(): bool
     {

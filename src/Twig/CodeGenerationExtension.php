@@ -109,9 +109,6 @@ class CodeGenerationExtension extends AbstractExtension
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'Hostnet Twig Code Generation Extension';
@@ -120,7 +117,6 @@ class CodeGenerationExtension extends AbstractExtension
     /**
      * @throws \DomainException
      * @param mixed $bits
-     * @return int
      */
     private static function twosComplementMin($bits): int
     {
@@ -141,7 +137,6 @@ class CodeGenerationExtension extends AbstractExtension
     /**
      * @throws \DomainException
      * @param mixed $bits
-     * @return int
      */
     private static function twosComplementMax($bits): int
     {
@@ -164,6 +159,8 @@ class CodeGenerationExtension extends AbstractExtension
      * @param mixed $input
      * @param int   $amount
      * @return mixed|string
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint
      */
     private static function decimalRightShift($input, $amount = 0)
     {

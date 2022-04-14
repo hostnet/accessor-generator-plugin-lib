@@ -42,8 +42,6 @@ class PerLineTokenParser extends AbstractTokenParser
      * @param Token $token
      *
      * @throws SyntaxError
-     *
-     * @return PerLineNode
      */
     public function parse(Token $token): PerLineNode
     {
@@ -72,8 +70,6 @@ class PerLineTokenParser extends AbstractTokenParser
      * lines.
      *
      * @param Node $body
-     *
-     * @return PerLineNode
      */
     private function parseBody(Node $body): PerLineNode
     {

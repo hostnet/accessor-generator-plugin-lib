@@ -124,8 +124,6 @@ class ReflectionClass
      *
      * @throws Exception\ClassDefinitionNotFoundException
      * @throws \OutOfBoundsException
-     *
-     * @return string
      */
     public function getName(): string
     {
@@ -166,8 +164,6 @@ class ReflectionClass
     /**
      * Returns the namespace of the class in this file or an empty string if no
      * namespace was declared.
-     *
-     * @return string
      */
     public function getNamespace(): string
     {
@@ -203,8 +199,6 @@ class ReflectionClass
      *
      * @throws \OutOfBoundsException
      * @throws Exception\ClassDefinitionNotFoundException
-     *
-     * @return string
      */
     public function getFullyQualifiedClassName(): string
     {
@@ -382,8 +376,6 @@ class ReflectionClass
      *
      * @param int $loc location of the first namespace token (T_STRING)
      *                  and not the T_NAMESPACE, T_AS or T_USE.
-     *
-     * @return string
      */
     private function parseNamespace($loc): string
     {
@@ -443,8 +435,6 @@ class ReflectionClass
      * @see \ReflectionProperty
      *
      * @param int $loc location of the visibility modifier
-     *
-     * @return int
      */
     private function parsePropertyModifiers($loc): int
     {
@@ -603,8 +593,6 @@ class ReflectionClass
      * useful for default values and inline assignment.
      *
      * @param int $loc
-     *
-     * @return string|null
      */
     private function parseHereNowDocConcat($loc): ?string
     {
@@ -626,8 +614,6 @@ class ReflectionClass
 
     /**
      * Returns the TokenStream instance for the class.
-     *
-     * @return TokenStream
      */
     private function getTokenStream(): TokenStream
     {

@@ -40,8 +40,6 @@ interface ConstCollectionInterface extends \Countable, \IteratorAggregate, \Arra
      * key/index, false otherwise.
      *
      * @param string|int $key The key/index to check for.
-     *
-     * @return bool
      */
     public function containsKey($key): bool;
 
@@ -51,6 +49,8 @@ interface ConstCollectionInterface extends \Countable, \IteratorAggregate, \Arra
      * @param string|int $key The key/index of the element to retrieve.
      *
      * @return mixed
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint
      */
     public function get($key);
 
@@ -83,6 +83,8 @@ interface ConstCollectionInterface extends \Countable, \IteratorAggregate, \Arra
      * returns this element.
      *
      * @return mixed
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint
      */
     public function first();
 
@@ -91,6 +93,8 @@ interface ConstCollectionInterface extends \Countable, \IteratorAggregate, \Arra
      * returns this element.
      *
      * @return mixed
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint
      */
     public function last();
 
@@ -98,6 +102,8 @@ interface ConstCollectionInterface extends \Countable, \IteratorAggregate, \Arra
      * Returns the key/index of the element at the current iterator position.
      *
      * @return int|string
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint
      */
     public function key();
 
@@ -105,6 +111,8 @@ interface ConstCollectionInterface extends \Countable, \IteratorAggregate, \Arra
      * Returns the element of the collection at the current iterator position.
      *
      * @return mixed
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint
      */
     public function current();
 
@@ -113,6 +121,8 @@ interface ConstCollectionInterface extends \Countable, \IteratorAggregate, \Arra
      * this element.
      *
      * @return mixed
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint
      */
     public function next();
 
@@ -120,8 +130,6 @@ interface ConstCollectionInterface extends \Countable, \IteratorAggregate, \Arra
      * Returns true if the predicate is true for at least one element, false otherwise.
      *
      * @param \Closure $predicate
-     *
-     * @return bool
      */
     public function exists(\Closure $predicate): bool;
 
@@ -130,8 +138,6 @@ interface ConstCollectionInterface extends \Countable, \IteratorAggregate, \Arra
      * The order of the elements is preserved.
      *
      * @param \Closure $predicate
-     *
-     * @return Collection
      */
     public function filter(\Closure $predicate): Collection;
 
@@ -140,8 +146,6 @@ interface ConstCollectionInterface extends \Countable, \IteratorAggregate, \Arra
      * collection, false otherwise.
      *
      * @param \Closure $predicate
-     *
-     * @return bool
      */
     public function forAll(\Closure $predicate): bool;
 
@@ -150,8 +154,6 @@ interface ConstCollectionInterface extends \Countable, \IteratorAggregate, \Arra
      * a new collection with the elements returned by the function.
      *
      * @param \Closure $func
-     *
-     * @return Collection
      */
     public function map(\Closure $func): Collection;
 
@@ -178,6 +180,8 @@ interface ConstCollectionInterface extends \Countable, \IteratorAggregate, \Arra
      * @param mixed $element The element to search for.
      *
      * @return int|string|bool
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint
      */
     public function indexOf($element);
 

@@ -23,29 +23,21 @@ class Generate
 {
     /**
      * No method should be generated.
-     *
-     * @var string
      */
     public const VISIBILITY_NONE = 'none';
 
     /**
      * A public method should be generated.
-     *
-     * @var string
      */
     public const VISIBILITY_PUBLIC = 'public';
 
     /**
      * A protected method should be generated.
-     *
-     * @var string
      */
     public const VISIBILITY_PROTECTED = 'protected';
 
     /**
      * A private method should be generated.
-     *
-     * @var string
      */
     public const VISIBILITY_PRIVATE = 'private';
 
@@ -218,8 +210,6 @@ class Generate
      *  - public
      *
      * @param array ...$requirements
-     *
-     * @return string
      */
     public static function getMostLimitedVisibility(...$requirements): string
     {
