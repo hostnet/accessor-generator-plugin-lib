@@ -12,5 +12,5 @@ class Annotations
      * @AG\Generate(type="\DateTime")
      * @Stupid\Really
      */
-    public $stupid;
+    public ?\DateTime $stupid;
 }
