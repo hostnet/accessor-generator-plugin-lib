@@ -311,7 +311,10 @@ class ReflectionClass
                 // would not be parsed.
                 //
                 // Skip T_STRING and "?" because if it exists, it must be a type declaration.
-                $var_loc = $tokens->next($vis_loc, [T_COMMENT, T_WHITESPACE, T_STATIC, T_FINAL, T_STRING, '?', T_NAME_FULLY_QUALIFIED]);
+                $var_loc = $tokens->next(
+                    $vis_loc,
+                    [T_COMMENT, T_WHITESPACE, T_STATIC, T_FINAL, T_STRING, '?', T_NAME_FULLY_QUALIFIED]
+                );
                 if ($tokens->type($var_loc) !== T_VARIABLE) {
                     continue;
                 }
