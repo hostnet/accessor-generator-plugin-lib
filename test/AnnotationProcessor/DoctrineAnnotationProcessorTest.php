@@ -264,15 +264,20 @@ class DoctrineAnnotationProcessorTest extends TestCase
             ['datetimetz',     '\\DateTime'],
             ['zeroeddatetime', '\\DateTime'],
             ['zeroeddate',     '\\DateTime'],
+            ['dateinterval',   '\\DateInterval'],
             ['array',          'array'],
             ['json_array',     'array'],
             ['json',           'array'],
             ['object',         'object'],
+            ['binary',         'resource'],
             ['double',         null,  \DomainException::class],
             ['bool',           null,  \DomainException::class],
-            ['binary',         null,  \DomainException::class],
             ['int',            null,  \DomainException::class],
             ['',               null,  \DomainException::class],
+            ['datetime_immutable',   '\\DateTimeImmutable'],
+            ['date_immutable',       '\\DateTimeImmutable'],
+            ['datetimetz_immutable', '\\DateTimeImmutable'],
+            ['time_immutable',       '\\DateTimeImmutable'],
         ];
     }
 
