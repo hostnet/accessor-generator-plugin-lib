@@ -231,7 +231,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
             return 'string';
         }
 
-        if ($type === Types::BLOB /* binary will be added in doctrine 2.5 */) {
+        if ($type === Types::BLOB || $type === Types::BINARY) {
             return 'resource';
         }
 
@@ -248,6 +248,23 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
             true
         )) {
             return '\\' . \DateTime::class;
+        }
+
+        if (\in_array(
+            $type,
+            [
+                Types::DATETIME_IMMUTABLE,
+                Types::DATE_IMMUTABLE,
+                Types::DATETIMETZ_IMMUTABLE,
+                Types::TIME_IMMUTABLE,
+            ],
+            true
+        )) {
+            return '\\' . \DateTimeImmutable::class;
+        }
+
+        if ($type === Types::DATEINTERVAL) {
+            return '\\' . \DateInterval::class;
         }
 
         if (\in_array(
