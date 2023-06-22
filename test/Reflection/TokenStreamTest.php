@@ -14,7 +14,6 @@ use PHPUnit\Framework\TestCase;
 class TokenStreamTest extends TestCase
 {
     private const SOURCE     = 'tokens.php';
-    private const PHP_7_SIZE = 116;
     private const PHP_8_SIZE = 105;
 
     /**
@@ -29,7 +28,6 @@ class TokenStreamTest extends TestCase
 
     public function typeProvider(): array
     {
-        if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
             return [
                 [0, T_OPEN_TAG],
                 [1, T_NAMESPACE],
@@ -38,17 +36,6 @@ class TokenStreamTest extends TestCase
                 [self::PHP_8_SIZE, null, \OutOfBoundsException::class],
                 [32, T_PRIVATE],
             ];
-        }
-
-        // before php7
-        return [
-            [0, T_OPEN_TAG],
-            [1, T_NAMESPACE],
-            [10, ';'],
-            [-1, null, \OutOfBoundsException::class],
-            [self::PHP_7_SIZE, null, \OutOfBoundsException::class],
-            [42, T_PRIVATE],
-        ];
     }
 
     /**
@@ -78,7 +65,6 @@ class TokenStreamTest extends TestCase
 
     public function valueProvider(): array
     {
-        if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
             return [
                 [0, "<?php\n"],
                 [1, 'namespace'],
@@ -88,17 +74,6 @@ class TokenStreamTest extends TestCase
                 [self::PHP_8_SIZE, null, \OutOfBoundsException::class],
                 [32, 'private'],
             ];
-        }
-        // before php7
-        return [
-            [0, "<?php\n"],
-            [1, 'namespace'],
-            [7, 'AccessorGenerator'],
-            [10, ';'],
-            [-1, null, \OutOfBoundsException::class],
-            [self::PHP_7_SIZE, null, \OutOfBoundsException::class],
-            [42, 'private'],
-        ];
     }
 
     /**
@@ -115,7 +90,6 @@ class TokenStreamTest extends TestCase
 
     public function scanProvider(): array
     {
-        if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
             return [
                 // Boundary Checks
                 [[], -2, null, \OutOfBoundsException::class],
@@ -134,26 +108,6 @@ class TokenStreamTest extends TestCase
                 // Test a token that is there to find
                 [[T_PRIVATE], 0, 32],
             ];
-        }
-        // before php8
-        return [
-            // Boundary Checks
-            [[], -2, null, \OutOfBoundsException::class],
-            [[], -1, null],
-            [[], 0, null],
-            [[], self::PHP_7_SIZE, null, \OutOfBoundsException::class],
-            [[], self::PHP_7_SIZE - 1, null],
-
-            // Scan does not probe current value.
-            [[T_OPEN_TAG], -1, 0],
-            [[T_OPEN_TAG], 0, null],
-
-            // Able to find last item
-            [[T_WHITESPACE], self::PHP_7_SIZE - 2, self::PHP_7_SIZE - 1],
-
-            // Test a token that is there to find
-            [[T_PRIVATE], 0, 42],
-        ];
     }
 
     /**
@@ -171,7 +125,6 @@ class TokenStreamTest extends TestCase
 
     public function nextProvider(): array
     {
-        if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
             return [
                 // Boundary checks
                 [-2, null, [], \OutOfBoundsException::class],
@@ -188,25 +141,6 @@ class TokenStreamTest extends TestCase
                 // Scan when no available maches can be found
                 [self::PHP_8_SIZE - 2, null],
             ];
-        }
-
-        // Before php8
-        return [
-            // Boundary checks
-            [-2, null, [], \OutOfBoundsException::class],
-            [-1, 0, []],
-            [0, 1, []],
-            [self::PHP_7_SIZE, null, [], \OutOfBoundsException::class],
-            [self::PHP_7_SIZE - 1, null, []],
-            [self::PHP_7_SIZE - 2, self::PHP_7_SIZE - 1, []],
-
-            // Scan from private keyword on line 9
-            [42, 44],
-            [42, 46, [T_WHITESPACE, T_CONST]],
-
-            // Scan when no available maches can be found
-            [self::PHP_7_SIZE - 2, null],
-        ];
     }
 
     /**
@@ -228,7 +162,6 @@ class TokenStreamTest extends TestCase
 
     public function previousProvider(): array
     {
-        if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
             return [
                 // Boundary checks
                 [-1, null, [], \OutOfBoundsException::class],
@@ -246,26 +179,6 @@ class TokenStreamTest extends TestCase
                 [3, null, [T_NAMESPACE, T_NS_SEPARATOR, T_WHITESPACE, T_STRING, T_OPEN_TAG]],
 
             ];
-        }
-
-        // before php8
-        return [
-            // Boundary checks
-            [-1, null, [], \OutOfBoundsException::class],
-            [0, null, []],
-            [1, 0, []],
-            [self::PHP_7_SIZE + 1, null, [], \OutOfBoundsException::class],
-            [self::PHP_7_SIZE, self::PHP_7_SIZE - 1, []],
-            [self::PHP_7_SIZE - 1, self::PHP_7_SIZE - 2, []],
-
-            // Scan from private keyword on line 9
-            [44, 42], // Skip white space
-            [46, 42, [T_WHITESPACE, T_CONST]],
-            [41, 40, [T_PUBLIC, T_PRIVATE]],
-
-            // Scan when no available maches can be found
-            [5, null, [T_NAMESPACE, T_NS_SEPARATOR, T_WHITESPACE, T_STRING, T_OPEN_TAG]],
-        ];
     }
 
     /**

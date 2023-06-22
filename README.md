@@ -13,7 +13,6 @@ functions.
 ## Limitations
 
 - Imports through grouped `use` statements is not supported. (https://wiki.php.net/rfc/group_use_declarations)
-- Scalar typehints is not being added (https://wiki.php.net/rfc/scalar_type_hints_v5)
 
 ## Installation
 
@@ -46,9 +45,8 @@ class Period
      * @ORM\Column(name="id", type="integer")
      * @AG\Generate                                     // Here you ask methods to be generated
      *
-     * @var int
      */
-    private $id;
+    private int $id;
 
     // ...
 }
@@ -321,7 +319,7 @@ All methods are strictly typed based on their prefix in the enum class.
 Have a look at the [ParamNameEnum](test/Generator/fixtures/expected/ParamNameEnum.php) class to
 see an example of the generated code.
 
-> **WARNING**: The default visiblity of accessor methods (get/is/set/add/remove) will be set to 
+> **WARNING**: The default visibility of accessor methods (get/is/set/add/remove) will be set to 
 > `none` if enumerators are used. If you still need these methods to be generated, you'll have to
 > specify them explicitly.
 

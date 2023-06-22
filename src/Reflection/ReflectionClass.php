@@ -88,13 +88,6 @@ class ReflectionClass
      */
     public function __construct($filename)
     {
-        // PHP 8.0 forward compatibility @see https://www.php.net/manual/en/migration80.incompatible.php
-        if (!defined('T_NAME_QUALIFIED')) {
-            define('T_NAME_QUALIFIED', T_NS_SEPARATOR);
-        }
-        if (!defined('T_NAME_FULLY_QUALIFIED')) {
-            define('T_NAME_FULLY_QUALIFIED', T_NS_SEPARATOR);
-        }
         $this->filename = $filename;
 
         // Check if file exists
