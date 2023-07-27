@@ -265,10 +265,8 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
 
     /**
      * {@inheritdoc}
-     *
-     * @return mixed
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->collection->offsetGet($offset);
     }
