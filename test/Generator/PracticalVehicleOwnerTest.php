@@ -13,12 +13,15 @@ use Hostnet\Component\AccessorGenerator\Generator\fixtures\Car;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\PracticalVehicleOwner;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\VehicleInterface;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * @covers \Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated\PracticalVehicleOwnerMethodsTrait
  */
 class PracticalVehicleOwnerTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testAddVehicle(): void
     {
         $boat = new Boat();
