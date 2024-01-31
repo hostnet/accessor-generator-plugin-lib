@@ -21,7 +21,7 @@ use Prophecy\PhpUnit\ProphecyTrait;
 class PracticalVehicleOwnerTest extends TestCase
 {
     use ProphecyTrait;
-    
+
     public function testAddVehicle(): void
     {
         $boat = new Boat();
