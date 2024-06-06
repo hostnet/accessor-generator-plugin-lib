@@ -24,6 +24,9 @@
         "phpspec/prophecy-phpunit": "^2.1",
         "phpunit/phpunit":          "^9.6.0"
     },
+    "conflict": {
+        "twig/twig": "^3.9.0"
+    },
     "autoload": {
         "psr-4": {
             "Hostnet\\Component\\AccessorGenerator\\": "src/"
