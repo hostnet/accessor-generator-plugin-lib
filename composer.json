@@ -15,7 +15,7 @@
         "doctrine/inflector":   "^2.0.8",
         "doctrine/orm":         "^2.17.2",
         "symfony/filesystem":   "^5.4||^6.0",
-        "twig/twig":            "3.9.3"
+        "twig/twig":            "^3.9.3"
     },
     "require-dev": {
         "composer/composer":        "^2.0.0",
