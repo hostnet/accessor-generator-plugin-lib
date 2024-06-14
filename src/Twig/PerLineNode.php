@@ -6,7 +6,9 @@ declare(strict_types=1);
 
 namespace Hostnet\Component\AccessorGenerator\Twig;
 
+use Twig\Attribute\YieldReady;
 use Twig\Compiler;
+use Twig\Node\CaptureNode;
 use Twig\Node\Node;
 
 /**
@@ -25,6 +27,7 @@ use Twig\Node\Node;
  *            the perline block, otherwise a Twig_Node with sub nodes of all
  *            the nodes between the prefix and/or postfix.
  */
+#[YieldReady]
 class PerLineNode extends Node
 {
     /**
@@ -57,19 +60,19 @@ class PerLineNode extends Node
     {
         $prefix  = $this->getAttribute('prefix');
         $postfix = $this->getAttribute('postfix');
-        $lines   = $this->getNode('lines');
 
         // We use normal subcompilation, which uses echo so we buffer our output.
-        $compiler->write("ob_start();\n");
-        $compiler->subcompile($lines);
+        $compiler->write('$lines = ');
+        $compiler->subcompile(new CaptureNode($this->getNode('lines'), $this->getNode('lines')->lineno));
+        $compiler->raw("\n");
 
         $ltrim_prefix = ltrim($prefix);                        // Trimmed version for use on first line
         $indent       = ! trim($prefix) && ! trim($postfix);   // Are we only indenting or also prefixing
 
         // Fetch the content of the lines inside of this block
-        // and itterate over them
+        // and iterate over them
         $compiler
-            ->write("\$lines = explode(\"\\n\", ob_get_clean());\n")
+            ->write("\$lines = explode(\"\\n\", \$lines);\n")
             ->write("foreach (\$lines as \$key => \$line) {\n")
             ->indent(1);
 
@@ -82,11 +85,11 @@ class PerLineNode extends Node
 
         // Write out the prefix for this line.
         if ($prefix) {
-            $compiler->write("echo \$key > 0 ? '$prefix' : '$ltrim_prefix' ;\n");
+            $compiler->write("yield \$key > 0 ? '$prefix' : '$ltrim_prefix' ;\n");
         }
 
         // Write the line itself
-        $compiler->write("echo \"\$line\";\n");
+        $compiler->write("yield \"\$line\";\n");
 
         // Close if statement for empty line check when indenting.
         if ($indent) {
@@ -97,7 +100,7 @@ class PerLineNode extends Node
 
         // Write postfix and new line.
         $compiler
-            ->write("echo \"$postfix\\n\";\n")
+            ->write("yield \"$postfix\\n\";\n")
             ->outdent(1)
             ->write("}\n");
     }

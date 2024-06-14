@@ -1,2 +1,2 @@
 // line 1
-echo ($context["data"] ?? null);
+yield ($context["data"] ?? null);

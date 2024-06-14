@@ -1,11 +1,12 @@
 // line 1
-ob_start();
-echo ($context["data"] ?? null);
-$lines = explode("\n", ob_get_clean());
+$lines = ('' === $tmp = \Twig\Extension\CoreExtension::captureOutput((function () use (&$context, $macros) {
+    yield ($context["data"] ?? null);
+})() ?? new \EmptyIterator())) ? '' : new Markup($tmp, $this->env->getCharset());
+$lines = explode("\n", $lines);
 foreach ($lines as $key => $line) {
     if (trim($line)) {
-        echo $key > 0 ? '    ' : '' ;
-        echo "$line";
+        yield $key > 0 ? '    ' : '' ;
+        yield "$line";
     }
-    echo "\n";
+    yield "\n";
 }

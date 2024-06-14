@@ -37,7 +37,6 @@ class CodeGenerationExtensionTest extends TestCase
             'singularize'         => '{{ data | singularize }}',
             'twos_complement_min' => '{{ data | twos_complement_min }}',
             'twos_complement_max' => '{{ data | twos_complement_max }}',
-            'singularize'         => '{{ data | singularize }}',
             'perline_stars'       => " {% perline %}\n * {{data}} *\n{% endperline %}",
             'perline_indent'      => "    {% perline %}\n    {{data}}\n    {% endperline %}",
             'decimal_right_shift' => '{{ data | decimal_right_shift(amount) }}',
