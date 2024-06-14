@@ -18,6 +18,7 @@ use Symfony\Component\Finder\Finder;
 
 /**
  * @covers \Hostnet\Component\AccessorGenerator\Generator\CodeGenerator
+ * @covers \Hostnet\Component\AccessorGenerator\Twig\PerLineNode
  */
 class CodeGeneratorTest extends TestCase
 {
