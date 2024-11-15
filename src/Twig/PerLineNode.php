@@ -33,19 +33,17 @@ class PerLineNode extends Node
     /**
      * Create new PerLineNode
      *
-     * @param Node       $lines
-     * @param string     $prefix
-     * @param string     $postfix
-     * @param int        $lineno
-     * @param string     $tag
+     * @param Node   $lines
+     * @param string $prefix
+     * @param string $postfix
+     * @param int    $lineno
      */
-    public function __construct(Node $lines, $prefix, $postfix, $lineno, $tag = 'perline')
+    public function __construct(Node $lines, $prefix, $postfix, $lineno)
     {
         parent::__construct(
             ['lines' => $lines],
             ['prefix' => $prefix, 'postfix' => $postfix],
-            $lineno,
-            $tag
+            $lineno
         );
     }
 
