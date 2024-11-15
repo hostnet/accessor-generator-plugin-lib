@@ -82,7 +82,7 @@ class PerLineTokenParser extends AbstractTokenParser
         // tag. This is the case when the perline tags could be removed without
         // an effect in the generated code.
         if (count($body) === 0) {
-            return new PerLineNode($body, '', '', $lineno, $this->getTag());
+            return new PerLineNode($body, '', '', $lineno);
         }
 
         // Get all the nodes as array, because it will be modified.
@@ -114,6 +114,6 @@ class PerLineTokenParser extends AbstractTokenParser
         }
 
         // Return the new structured node.
-        return new PerLineNode($nodes, $prefix, $postfix, $lineno, $this->getTag());
+        return new PerLineNode($nodes, $prefix, $postfix, $lineno);
     }
 }
