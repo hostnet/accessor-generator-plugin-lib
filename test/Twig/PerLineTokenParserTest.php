@@ -7,7 +7,7 @@ declare(strict_types=1);
 namespace Hostnet\Component\AccessorGenerator\Twig;
 
 use PHPUnit\Framework\TestCase;
-use Twig\Node\Expression\NameExpression;
+use Twig\Node\Expression\Variable\ContextVariable;
 use Twig\Node\Node;
 use Twig\Node\PrintNode;
 use Twig\Node\TextNode;
@@ -28,11 +28,11 @@ class PerLineTokenParserTest extends TestCase
 
     public function parseProvider(): array
     {
-        $simple_lines  = new PrintNode(new NameExpression('data', 1), 1);
+        $simple_lines  = new PrintNode(new ContextVariable('data', 1), 1);
         $complex_lines = new Node([
-            new PrintNode(new NameExpression('data', 1), 1),
+            new PrintNode(new ContextVariable('data', 1), 1),
             new TextNode('/* infix */', 1),
-            new PrintNode(new NameExpression('data', 1), 1),
+            new PrintNode(new ContextVariable('data', 1), 1),
         ]);
 
         return [
