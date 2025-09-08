@@ -67,14 +67,15 @@ trait CredentialsMethodsTrait
             return $decrypt($private_key_path);
         } catch (\InvalidArgumentException $e) {
             if (false == ($fallback_private_key_path = KeyRegistry::getPrivateKeyPath('database.table.column_fallback'))) {
-                throw new \InvalidArgumentException('Initial decryption failed and no fallback key was found.', 0, $e);
+                throw $e;
             }
 
             try {
                 return $decrypt($fallback_private_key_path);
             } catch (\InvalidArgumentException $fallback_exception) {
                 throw new \InvalidArgumentException(sprintf(
-                    'Initial decryption failed and fallback also failed with message: %s',
+                    "Decryption failed: [%s]\nFallback also failed: [%s]",
+                    $e->getMessage(),
                     $fallback_exception->getMessage()
                 ), 0, $e);
             }
