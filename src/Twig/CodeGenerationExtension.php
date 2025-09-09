@@ -8,6 +8,7 @@ namespace Hostnet\Component\AccessorGenerator\Twig;
 
 use Doctrine\Inflector\InflectorFactory;
 use Twig\Error\RuntimeError;
+use Twig\ExpressionParser\Prefix\LiteralExpressionParser;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigTest;
@@ -50,6 +51,11 @@ class CodeGenerationExtension extends AbstractExtension
     public function getTokenParsers(): array
     {
         return [new PerLineTokenParser()];
+    }
+
+    public function getExpressionParsers(): array
+    {
+        return [new LiteralExpressionParser()];
     }
 
     /**
