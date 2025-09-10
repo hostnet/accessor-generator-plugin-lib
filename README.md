@@ -148,7 +148,7 @@ In case the encryption keys ever need to be rotated, a fallback mechanism is ava
 while switching keys. Using the fallback logic, new values can be encrypted with a new public key while still being able
 to decrypt both values encrypted with the old and values encrypted with the new public key.
 
-The flow to roll-over encryption keys would we as follows:
+The flow to roll-over encryption keys would be as follows:
 - Generate a new private/public-key pair
 - Store these in the paths specified in the composer.json as before
 - Store the old private key somewhere next to it and specify it in the composer.json under `<encryption_alias>_fallback`
