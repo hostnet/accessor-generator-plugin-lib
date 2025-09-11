@@ -143,6 +143,39 @@ class MyEntity
 }
 ```
 
+### Encryption key roll-over
+In case the encryption keys ever need to be rotated, a fallback mechanism is available to minimize service interruption
+while switching keys. Using the fallback logic, new values can be encrypted with a new public key while still being able
+to decrypt both values encrypted with the old and values encrypted with the new public key.
+
+**DISCLAIMER: The fallback logic assumes that trying to decrypt and old value with the new key will throw an error, and 
+doesn't just succeed with an unexpected value!**
+
+The flow to roll-over encryption keys would be as follows:
+- Generate a new private/public-key pair
+- Store these in the paths specified in the composer.json as before
+- Store the old private key somewhere next to it and specify it in the composer.json under `<encryption_alias>_fallback`
+- After deploying, new values will be encrypted with the new public key and can be decrypted with the new private key,
+  while old values are first tried to be decrypted with the new private key and when that fails, the old (fallback) 
+  private key is used.
+- Run a script to re-encrypt all values (`get()` the values and `set()` them again using the generated methods)
+- When all values have been re-encrypted, the fallback key should be removed again.
+
+Example composer.json config:
+```
+"extra": {
+    "accessor-generator": {
+        <encryption_alias>: {
+            "public-key": <public_key_file>
+            "private-key": <private_key_file>
+        },
+        <encryption_alias>_fallback: {
+            "private-key": <fallback_private_key_file>
+        }
+    }   
+...
+```
+
 ## Parameters using ENUM classes
 
 Since version 2.8.0, the support of accessor generation of parameterized collections has been added. With this addition,
