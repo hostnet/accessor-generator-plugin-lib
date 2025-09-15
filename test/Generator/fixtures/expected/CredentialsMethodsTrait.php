@@ -42,24 +42,44 @@ trait CredentialsMethodsTrait
             throw new \InvalidArgumentException('A private key path must be set to use this method.');
         }
 
-        if (false === ($private_key = openssl_get_privatekey($private_key_path))) {
-            throw new \InvalidArgumentException(sprintf('The path "%s" does not contain a private key.', $private_key_path));
-        }
-
-        list($env_key_length, $iv_length, $pieces) = explode(',', $this->password, 3);
-        $env_key                                   = hex2bin(substr($pieces, 0, $env_key_length));
-        $iv                                        = hex2bin(substr($pieces, $env_key_length, $iv_length));
-        $sealed_data                               = hex2bin(substr($pieces, $env_key_length + $iv_length));
-
-        if (false === openssl_open($sealed_data, $open_data, $env_key, $private_key, 'AES256', $iv)) {
-            $err_string = '';
-            while ($msg = openssl_error_string()) {
-                $err_string .= $msg . ' | ';
+        $decrypt = function ($private_key_path) {
+            if (false === ($private_key = openssl_get_privatekey($private_key_path))) {
+                throw new \InvalidArgumentException(sprintf('The path "%s" does not contain a private key.', $private_key_path));
             }
-            throw new \InvalidArgumentException(sprintf('openssl_open failed. Message: %s', $err_string));
-        }
 
-        return $open_data;
+            list($env_key_length, $iv_length, $pieces) = explode(',', $this->password, 3);
+            $env_key                                   = hex2bin(substr($pieces, 0, $env_key_length));
+            $iv                                        = hex2bin(substr($pieces, $env_key_length, $iv_length));
+            $sealed_data                               = hex2bin(substr($pieces, $env_key_length + $iv_length));
+
+            if (false === openssl_open($sealed_data, $open_data, $env_key, $private_key, 'AES256', $iv)) {
+                $err_string = '';
+                while ($msg = openssl_error_string()) {
+                    $err_string .= $msg . ' | ';
+                }
+                throw new \InvalidArgumentException(sprintf('openssl_open failed. Message: %s', $err_string));
+            }
+
+            return $open_data;
+        };
+
+        try {
+            return $decrypt($private_key_path);
+        } catch (\InvalidArgumentException $e) {
+            if (false == ($fallback_private_key_path = KeyRegistry::getPrivateKeyPath('database.table.column_fallback'))) {
+                throw $e;
+            }
+
+            try {
+                return $decrypt($fallback_private_key_path);
+            } catch (\InvalidArgumentException $fallback_exception) {
+                throw new \InvalidArgumentException(sprintf(
+                    "Decryption failed: [%s]\nFallback also failed: [%s]",
+                    $e->getMessage(),
+                    $fallback_exception->getMessage()
+                ), 0, $e);
+            }
+        }
     }
 
     /**

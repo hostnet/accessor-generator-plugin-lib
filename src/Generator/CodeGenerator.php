@@ -366,6 +366,11 @@ class CodeGenerator implements CodeGeneratorInterface
 
                 $this->key_registry_data[$dir_name]['namespace']                         = $class->getNamespace();
                 $this->key_registry_data[$dir_name]['keys'][$info->getEncryptionAlias()] = $keys;
+
+                $fallback_alias = $info->getEncryptionAlias() . '_fallback';
+                if ($fallback_keys = $this->encryption_aliases[$fallback_alias] ?? null) {
+                    $this->key_registry_data[$dir_name]['keys'][$fallback_alias] = $fallback_keys;
+                }
             }
 
             $code .= $this->generateAccessors($info);
