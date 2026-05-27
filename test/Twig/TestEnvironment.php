@@ -8,34 +8,18 @@ namespace Hostnet\Component\AccessorGenerator\Twig;
 
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
-use Twig\Extension\ExtensionInterface;
 use Twig\Loader\ArrayLoader;
 
 /**
- * Prevents using the default registered extensions by Twig\Environment.
+ * A minimal Twig environment that adds a single extension for testing.
  *
  * The default loader is always Twig\Loader\ArrayLoader.
  */
 class TestEnvironment extends Environment
 {
-    /**
-     * @var AbstractExtension
-     */
-    private $extension;
-
     public function __construct(AbstractExtension $extension)
     {
-        $this->extension = $extension;
-        parent::__construct(new ArrayLoader());
+        parent::__construct(new ArrayLoader(), ['autoescape' => false]);
         $this->addExtension($extension);
-    }
-
-    public function addExtension(ExtensionInterface $extension): void
-    {
-        if ($this->extension !== $extension) {
-            return;
-        }
-
-        parent::addExtension($extension);
     }
 }

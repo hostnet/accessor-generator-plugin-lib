@@ -4,7 +4,7 @@
  */
 declare(strict_types=1);
 
-namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
+namespace Hostnet\Component\AccessorGenerator\PropertyProcessor;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
@@ -14,14 +14,14 @@ use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OneToOne;
-use Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception\InvalidColumnSettingsException;
+use Hostnet\Component\AccessorGenerator\PropertyProcessor\Exception\InvalidColumnSettingsException;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Hostnet\Component\AccessorGenerator\AnnotationProcessor\DoctrineAnnotationProcessor
+ * @covers \Hostnet\Component\AccessorGenerator\PropertyProcessor\DoctrineMappingProcessor
  */
-class DoctrineAnnotationProcessorTest extends TestCase
+class DoctrineMappingProcessorTest extends TestCase
 {
     /**
      * @var PropertyInformation
@@ -29,26 +29,23 @@ class DoctrineAnnotationProcessorTest extends TestCase
     private $information;
 
     /**
-     * @var DoctrineAnnotationProcessor
+     * @var DoctrineMappingProcessor
      */
     private $processor;
 
     protected function setUp(): void
     {
         $this->information = new PropertyInformation(new ReflectionProperty('test'));
-        $this->processor   = new DoctrineAnnotationProcessor();
+        $this->processor   = new DoctrineMappingProcessor();
     }
 
     /**
-     * Generate TestCases for the parsing
-     * of the @Column annotation.
-     *
      * @return Column|mixed[][]
      * @throws \RangeException
      * @throws \InvalidArgumentException
      * @throws \DomainException
      */
-    public function processColumnAnnotationProvider(): iterable
+    public function columnProvider(): iterable
     {
         $property = new ReflectionProperty('test');
         $implicit = new Column(null, 'string');
@@ -92,24 +89,24 @@ class DoctrineAnnotationProcessorTest extends TestCase
     }
 
     /**
-     * @dataProvider processColumnAnnotationProvider
+     * @dataProvider columnProvider
      * @param Column $column
-     * @param PropertyInformationInterface $output
+     * @param PropertyInformation $output
      * @param $exception
      * @throws \DomainException
-     * @throws \Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception\InvalidColumnSettingsException
+     * @throws \Hostnet\Component\AccessorGenerator\PropertyProcessor\Exception\InvalidColumnSettingsException
      * @throws \InvalidArgumentException
      * @throws \RangeException
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
      * @throws \OutOfBoundsException
      */
-    public function testProcessColumnAnnotation(Column $column, PropertyInformationInterface $output, $exception): void
+    public function testProcessColumn(Column $column, PropertyInformation $output, $exception): void
     {
         // Set if an explosion is needed.
         $exception && $this->expectException($exception);
 
         // Set up dependencies.
-        $this->processor->processAnnotation($column, $this->information);
+        $this->processor->apply($column, $this->information);
 
         // Check if right information was processed.
         self::assertEquals(
@@ -154,7 +151,7 @@ class DoctrineAnnotationProcessorTest extends TestCase
         );
     }
 
-    public function processAssociationAnnotationProvider(): iterable
+    public function associationProvider(): iterable
     {
         $many_to_many      = new ManyToMany();
         $many_to_one       = new ManyToOne();
@@ -192,21 +189,21 @@ class DoctrineAnnotationProcessorTest extends TestCase
     }
 
     /**
-     * @dataProvider processAssociationAnnotationProvider
+     * @dataProvider associationProvider
      * @param $annotation
      * @throws \DomainException
-     * @throws \Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception\InvalidColumnSettingsException
+     * @throws \Hostnet\Component\AccessorGenerator\PropertyProcessor\Exception\InvalidColumnSettingsException
      * @throws \InvalidArgumentException
      * @throws \RangeException
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
      * @throws \OutOfBoundsException
      */
-    public function testAssociationAnnotations($annotation): void
+    public function testAssociation($annotation): void
     {
         // Set up dependencies.
-        $this->processor->processAnnotation($annotation, $this->information);
+        $this->processor->apply($annotation, $this->information);
 
-        // These annotation should lead to isCollection is is true
+        // These should lead to isCollection() returning true
         if ($annotation instanceof ManyToMany || $annotation instanceof OneToMany) {
             self::assertTrue($this->information->isCollection());
         } else {
@@ -287,7 +284,7 @@ class DoctrineAnnotationProcessorTest extends TestCase
      * @param string $php_type
      * @param null $exception
      * @throws \DomainException
-     * @throws \Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception\InvalidColumnSettingsException
+     * @throws \Hostnet\Component\AccessorGenerator\PropertyProcessor\Exception\InvalidColumnSettingsException
      * @throws \InvalidArgumentException
      * @throws \RangeException
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
@@ -310,7 +307,7 @@ class DoctrineAnnotationProcessorTest extends TestCase
             $annotation->scale = 1;
         }
 
-        $this->processor->processAnnotation($annotation, $this->information);
+        $this->processor->apply($annotation, $this->information);
         self::assertSame($php_type, $this->information->getType());
     }
 
@@ -318,16 +315,16 @@ class DoctrineAnnotationProcessorTest extends TestCase
      * @throws InvalidColumnSettingsException
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
      */
-    public function testOtherAnnotation(): void
+    public function testUnrecognisedObjectIsIgnored(): void
     {
         $information = clone $this->information;
         $annotation  = new \stdClass();
-        $this->processor->processAnnotation($annotation, $this->information);
+        $this->processor->apply($annotation, $this->information);
         self::assertEquals($information, $this->information);
     }
 
-    public function testGetProcessableAnnotationNamespace(): void
+    public function testGetProcessableNamespace(): void
     {
-        self::assertSame('Doctrine\ORM\Mapping', $this->processor->getProcessableAnnotationNamespace());
+        self::assertSame('Doctrine\ORM\Mapping', $this->processor->getProcessableNamespace());
     }
 }

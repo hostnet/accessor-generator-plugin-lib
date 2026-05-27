@@ -4,7 +4,7 @@
  */
 declare(strict_types=1);
 
-namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception;
+namespace Hostnet\Component\AccessorGenerator\PropertyProcessor\Exception;
 
 class InvalidColumnSettingsException extends \Exception
 {

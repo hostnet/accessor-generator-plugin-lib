@@ -4,21 +4,23 @@
  */
 declare(strict_types=1);
 
-namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
+namespace Hostnet\Component\AccessorGenerator\PropertyProcessor;
 
 use Doctrine\Common\Annotations\DocParser;
 use Doctrine\ORM\Mapping\Column;
-use Hostnet\Component\AccessorGenerator\Annotation\Enumerator;
-use Hostnet\Component\AccessorGenerator\Annotation\Generate;
+use Hostnet\Component\AccessorGenerator\Attribute\Enumerator;
+use Hostnet\Component\AccessorGenerator\Attribute\Generate;
+use Hostnet\Component\AccessorGenerator\Reflection\AttributeInstantiator;
+use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
 
 /**
- * Gather all the information needed for code generation for the accessor
- * methods. It is possible to register various annotation processors that will
- * process information from the doc blocks and add it to the
- * PropertyInformation.
+ * Aggregates all metadata needed to generate accessor methods for a single property.
+ *
+ * Register processors via registerProcessor(), then call process() to run them
+ * against the property's docblock annotations and native attributes.
  */
-class PropertyInformation implements PropertyInformationInterface
+class PropertyInformation
 {
     /**
      * {@inheritdoc}
@@ -190,13 +192,9 @@ class PropertyInformation implements PropertyInformationInterface
     private $parser;
 
     /**
-     * List of registered annotation processors
-     * that will be used in the parsing of the
-     * doc blocks.
-     *
-     * @var AnnotationProcessorInterface[]
+     * @var PropertyProcessorInterface[]
      */
-    private $annotation_processors;
+    private $processors;
 
     /**
      * Create new PropertyInformation object based
@@ -213,46 +211,58 @@ class PropertyInformation implements PropertyInformationInterface
     }
 
     /**
-     * Register an AnnotationParser that will be called for every
-     * found annotation and may or may not extract information and
-     * add it to this object.
+     * Register a processor that will be called for every annotation or attribute found on this property.
      *
-     * After all annotation processors are registered call
-     * processAnnotations().
+     * After all processors are registered, call process().
      *
-     * @param AnnotationProcessorInterface $processor
+     * @param PropertyProcessorInterface $processor
      */
-    public function registerAnnotationProcessor(AnnotationProcessorInterface $processor): void
+    public function registerProcessor(PropertyProcessorInterface $processor): void
     {
-        $this->annotation_processors[] = $processor;
+        $this->processors[] = $processor;
     }
 
     /**
-     * Start the processing of processAnnotations
+     * Run all registered processors against this property's docblock annotations and native attributes.
      *
      * @throws \OutOfBoundsException
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
      * @throws \RuntimeException
      */
-    public function processAnnotations(): void
+    public function process(): void
     {
         $class    = $this->property->getClass();
         $imports  = $class ? array_change_key_case($class->getUseStatements()) : [];
         $filename = $class ? $class->getFilename() : 'memory';
 
-        // Get all the namespaces in which annotations reside.
+        $known_imports = $this->filterKnownImports($imports);
+
+        [$doc_encrypted, $doc_string]   = $this->processDocblockAnnotations($known_imports, $filename);
+        [$attr_encrypted, $attr_string] = $this->processNativeAttributes($class);
+
+        $this->validateEncryptionColumnType(
+            $doc_encrypted || $attr_encrypted,
+            $doc_string && $attr_string,
+        );
+    }
+
+    /**
+     * Filters the file's use-statement imports down to namespaces known to registered processors.
+     * This prevents Doctrine's DocParser from throwing on unrecognised annotations.
+     *
+     * @param array<string, string> $imports
+     * @return array<string, string>
+     */
+    private function filterKnownImports(array $imports): array
+    {
         $namespaces = [];
-        foreach ($this->annotation_processors as $processor) {
-            $namespaces[] = $processor->getProcessableAnnotationNamespace();
+        foreach ($this->processors as $processor) {
+            $namespaces[] = $processor->getProcessableNamespace();
         }
 
-        // Filter all imports that could lead to non loaded annotations,
-        // this would let the DocParser explode with an Exception, while
-        // the goal is to ignore other annotations besides the one explicitly
-        // loaded.
-        $without_foreign_annotations = array_filter(
+        return array_filter(
             $imports,
-            function ($import) use ($namespaces) {
+            static function ($import) use ($namespaces) {
                 foreach ($namespaces as $namespace) {
                     if (stripos($namespace, $import) === 0) {
                         return true;
@@ -262,34 +272,83 @@ class PropertyInformation implements PropertyInformationInterface
                 return false;
             }
         );
+    }
 
-        $this->parser->setImports($without_foreign_annotations);
+    /**
+     * Parses docblock annotations from the property's doc comment and runs all registered processors.
+     *
+     * @param array<string, string> $known_imports Imports filtered to known annotation namespaces.
+     * @return array{bool, bool} [is_encrypted, is_string_column]
+     */
+    private function processDocblockAnnotations(array $known_imports, string $filename): array
+    {
+        $this->parser->setImports($known_imports);
         $this->parser->setIgnoreNotImportedAnnotations(true);
 
-        $annotations = $this->parser->parse($this->property->getDocComment(), $filename);
-
-        // If the property is encrypted, column type MUST be string.
+        $annotations  = $this->parser->parse($this->property->getDocComment(), $filename);
         $is_encrypted = false;
         $is_string    = true;
-        foreach ($this->annotation_processors as $processor) {
-            foreach ($annotations as $annotation) {
-                $processor->processAnnotation($annotation, $this);
 
-                if ($annotation instanceof Generate && isset($annotation->encryption_alias)) {
+        foreach ($this->processors as $processor) {
+            foreach ($annotations as $annotation) {
+                $processor->apply($annotation, $this);
+
+                if ($annotation instanceof Generate && $annotation->getEncryptionAlias() !== null) {
                     $is_encrypted = true;
                 }
 
-                if (!($annotation instanceof Column)
-                    || !isset($annotation->type)
-                    || \in_array($annotation->type, ['string', 'text'])
+                if ($annotation instanceof Column
+                    && isset($annotation->type)
+                    && !\in_array($annotation->type, ['string', 'text'])
                 ) {
-                    continue;
+                    $is_string = false;
                 }
-
-                $is_string = false;
             }
         }
 
+        return [$is_encrypted, $is_string];
+    }
+
+    /**
+     * Instantiates native PHP 8 #[...] attributes via AttributeInstantiator and runs all registered processors.
+     *
+     * @return array{bool, bool} [is_encrypted, is_string_column]
+     */
+    private function processNativeAttributes(?ReflectionClass $class): array
+    {
+        $imports      = $class ? $class->getUseStatements() : [];
+        $is_encrypted = false;
+        $is_string    = true;
+
+        foreach ($this->property->getAttributes() as $attr_text) {
+            foreach (AttributeInstantiator::instantiate($attr_text, $imports) as $instance) {
+                foreach ($this->processors as $processor) {
+                    $processor->apply($instance, $this);
+                }
+
+                if ($instance instanceof Generate && $instance->getEncryptionAlias() !== null) {
+                    $is_encrypted = true;
+                }
+
+                if ($instance instanceof Column
+                    && isset($instance->type)
+                    && !\in_array($instance->type, ['string', 'text'])
+                ) {
+                    $is_string = false;
+                }
+            }
+        }
+
+        return [$is_encrypted, $is_string];
+    }
+
+    /**
+     * Throws if the property has an encryption_alias but its Column type is not string/text.
+     *
+     * @throws \RuntimeException
+     */
+    private function validateEncryptionColumnType(bool $is_encrypted, bool $is_string): void
+    {
         if ($is_encrypted && !$is_string) {
             throw new \RuntimeException(sprintf(
                 'Property %s in class %s\%s has an encryption_alias set, but is not declared as column type \'string\'',
@@ -306,7 +365,16 @@ class PropertyInformation implements PropertyInformationInterface
      */
     public function getDocumentation(): string
     {
-        $block = strstr($this->property->getDocComment(), '@', true);
+        $doc_comment = $this->property->getDocComment();
+        if (!$doc_comment) {
+            return '';
+        }
+
+        $block = strstr($doc_comment, '@', true);
+        if ($block === false) {
+            return '';
+        }
+
         $block = preg_replace('/\/\*\*\n/m', '', $block);
         $block = preg_replace('/\n[ \t]*[ ]?\*\/$/', '', $block);
         $block = preg_replace('/\n\n/', '', $block);

@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
-use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformationInterface;
+use Hostnet\Component\AccessorGenerator\PropertyProcessor\PropertyInformation;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
 
 /**
@@ -50,9 +50,9 @@ interface CodeGeneratorInterface
      * {$info}. The output will consist of generated code for the accessors
      * separated with line-breaks.
      *
-     * @param PropertyInformationInterface $info
+     * @param PropertyInformation $info
      */
-    public function generateAccessors(PropertyInformationInterface $info): string;
+    public function generateAccessors(PropertyInformation $info): string;
 
     /**
      * Expects an array of aliases, each alias can contain a public key file and/or a private key file.

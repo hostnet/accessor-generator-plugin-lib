@@ -15,7 +15,7 @@ use Composer\Plugin\PluginInterface;
 use Composer\Script\ScriptEvents;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 // phpcs:ignore SlevomatCodingStandard.Namespaces.UnusedUses.UnusedUse
-use Hostnet\Component\AccessorGenerator\Annotation\Generate;
+use Hostnet\Component\AccessorGenerator\Attribute\Generate;
 use Hostnet\Component\AccessorGenerator\Generator\CodeGenerator;
 use Hostnet\Component\AccessorGenerator\Generator\CodeGeneratorInterface;
 use Hostnet\Component\AccessorGenerator\Generator\Exception\ReferencedClassNotFoundException;
@@ -40,7 +40,7 @@ use Twig\Error\SyntaxError;
  */
 class Plugin implements PluginInterface, EventSubscriberInterface
 {
-    public const NAME = 'hostnet/accessor-generator-plugin-lib';
+    public const string NAME = 'hostnet/accessor-generator-plugin-lib';
 
     /**
      * @var Composer

@@ -37,17 +37,26 @@ class ReflectionProperty
      */
     private $name;
 
+    /**
+     * Raw attribute text blocks extracted from the source (e.g. "ORM\Column(type: 'string')").
+     *
+     * @var string[]
+     */
+    private $attributes;
+
     public function __construct(
         string $name,
         ?int $modifiers = null,
         ?string $default = null,
         ?string $doc_comment = null,
-        ?ReflectionClass $class = null
+        ?ReflectionClass $class = null,
+        array $attributes = []
     ) {
         $this->name        = $name;
         $this->default     = $default;
         $this->doc_comment = $doc_comment;
         $this->class       = $class;
+        $this->attributes  = $attributes;
         $this->setModifiers($modifiers);
     }
 
@@ -101,6 +110,18 @@ class ReflectionProperty
     public function getDocComment(): ?string
     {
         return $this->doc_comment;
+    }
+
+    /**
+     * Get the raw attribute text blocks found before this property's visibility modifier.
+     *
+     * Each entry is the text inside a #[...] block, e.g. "ORM\Column(type: 'string')".
+     *
+     * @return string[]
+     */
+    public function getAttributes(): array
+    {
+        return $this->attributes;
     }
 
     /**

@@ -4,13 +4,13 @@
  */
 declare(strict_types=1);
 
-namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
+namespace Hostnet\Component\AccessorGenerator\PropertyProcessor;
 
 use Doctrine\Inflector\InflectorFactory;
 
 class EnumItemInformation
 {
-    private const TYPE_MAP = ['S_' => 'string', 'I_' => 'int', 'F_' => 'float', 'A_' => 'array', 'B_' => 'bool'];
+    private const array TYPE_MAP = ['S_' => 'string', 'I_' => 'int', 'F_' => 'float', 'A_' => 'array', 'B_' => 'bool'];
 
     /**
      * @var string

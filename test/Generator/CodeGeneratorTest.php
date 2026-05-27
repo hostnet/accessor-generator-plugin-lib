@@ -6,10 +6,10 @@ declare(strict_types=1);
 
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
-use Hostnet\Component\AccessorGenerator\Annotation\Enumerator;
-use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformation;
+use Hostnet\Component\AccessorGenerator\Attribute\Enumerator;
 use Hostnet\Component\AccessorGenerator\Generator\Exception\ReferencedClassNotFoundException;
 use Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException;
+use Hostnet\Component\AccessorGenerator\PropertyProcessor\PropertyInformation;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
 use PHPUnit\Framework\TestCase;
@@ -117,8 +117,7 @@ class CodeGeneratorTest extends TestCase
 
     public function testGenerateEnumeratorClassNotFound(): void
     {
-        $enumerator        = new Enumerator();
-        $enumerator->value = '\\This\\Does\\Not\\Exist';
+        $enumerator = new Enumerator(value: '\\This\\Does\\Not\\Exist');
 
         $class = new ReflectionClass(__FILE__);
         $info  = new PropertyInformation(new ReflectionProperty('my_prop', null, null, null, $class));

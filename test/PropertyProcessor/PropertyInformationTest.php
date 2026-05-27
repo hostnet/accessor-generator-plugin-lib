@@ -4,15 +4,15 @@
  */
 declare(strict_types=1);
 
-namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
+namespace Hostnet\Component\AccessorGenerator\PropertyProcessor;
 
-use Hostnet\Component\AccessorGenerator\Annotation\Generate;
+use Hostnet\Component\AccessorGenerator\Attribute\Generate;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformation
+ * @covers \Hostnet\Component\AccessorGenerator\PropertyProcessor\PropertyInformation
  */
 class PropertyInformationTest extends TestCase
 {
@@ -47,12 +47,12 @@ class PropertyInformationTest extends TestCase
 
     public function testProcessAnnotations(): void
     {
-        $processor = $this->createMock(AnnotationProcessorInterface::class);
-        $processor->expects(self::atLeastOnce())->method('processAnnotation');
+        $processor = $this->createMock(PropertyProcessorInterface::class);
+        $processor->expects(self::atLeastOnce())->method('apply');
 
-        /** @var AnnotationProcessorInterface $processor */
-        $this->info->registerAnnotationProcessor($processor);
-        $this->info->processAnnotations();
+        /** @var PropertyProcessorInterface $processor */
+        $this->info->registerProcessor($processor);
+        $this->info->process();
     }
 
     public function testGetDocumentation(): void

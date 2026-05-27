@@ -21,11 +21,11 @@ class UniqueImportsTest extends TestCase
     public function testFilterSortedSet(): void
     {
         $sorted_set = [
-            'A',
-            'A\A',
-            'A\B',
-            'B',
-            'B\A',
+            'A\X',
+            'A\X\A',
+            'A\X\B',
+            'B\X',
+            'B\X\A',
         ];
 
         self::assertSame($sorted_set, UniqueImports::filter($sorted_set));
@@ -35,19 +35,19 @@ class UniqueImportsTest extends TestCase
     {
         self::assertSame(
             [
-                'A',
-                'A\A',
-                'A\B',
-                'B',
-                'B\A',
+                'A\X',
+                'A\X\A',
+                'A\X\B',
+                'B\X',
+                'B\X\A',
             ],
             UniqueImports::filter(
                 [
-                    'B',
-                    'A\A',
-                    'B\A',
-                    'A',
-                    'A\B',
+                    'B\X',
+                    'A\X\A',
+                    'B\X\A',
+                    'A\X',
+                    'A\X\B',
                 ]
             )
         );
@@ -57,18 +57,18 @@ class UniqueImportsTest extends TestCase
     {
         self::assertEquals(
             [
-                'A',
-                'A\A',
-                'B',
+                'A\X',
+                'A\X\A',
+                'B\X',
             ],
             UniqueImports::filter(
                 [
-                    'A\A',
-                    'B',
-                    'B',
-                    'A',
-                    'A\A',
-                    'B',
+                    'A\X\A',
+                    'B\X',
+                    'B\X',
+                    'A\X',
+                    'A\X\A',
+                    'B\X',
                 ]
             )
         );
@@ -78,21 +78,42 @@ class UniqueImportsTest extends TestCase
     {
         self::assertSame(
             [
-                0         => 'A',
-                1         => 'A\A',
-                'alias_a' => 'B',
-                'alias_b' => 'B',
-                2         => 'B',
+                0         => 'A\X',
+                1         => 'A\X\A',
+                'alias_a' => 'B\X',
+                'alias_b' => 'B\X',
+                2         => 'B\X',
             ],
             UniqueImports::filter(
                 [
-                    2         => 'B',
-                    'alias_a' => 'B',
-                    1         => 'A',
-                    0         => 'A\A',
-                    'alias_b' => 'B',
+                    2         => 'B\X',
+                    'alias_a' => 'B\X',
+                    1         => 'A\X',
+                    0         => 'A\X\A',
+                    'alias_b' => 'B\X',
                 ]
             )
+        );
+    }
+
+    public function testFilterDropsNonCompoundClassNames(): void
+    {
+        // Non-compound class names (no backslash) produce `use DateTime;` which
+        // PHP warns has no effect. They must be stripped from trait output.
+        self::assertSame(
+            ['A\X', 'B\X'],
+            array_values(UniqueImports::filter(['DateTime', 'A\X', 'B\X']))
+        );
+    }
+
+    public function testFilterKeepsFunctionAndConstImports(): void
+    {
+        // `use function sprintf;` and `use const PHP_EOL;` are intentional even
+        // when non-compound and must not be removed.
+        // After filtering and sorting the order is alphabetical.
+        self::assertSame(
+            ['A\X', 'const PHP_EOL', 'function sprintf'],
+            array_values(UniqueImports::filter(['function sprintf', 'const PHP_EOL', 'A\X']))
         );
     }
 }
