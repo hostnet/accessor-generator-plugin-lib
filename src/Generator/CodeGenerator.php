@@ -7,16 +7,15 @@ declare(strict_types=1);
 namespace Hostnet\Component\AccessorGenerator\Generator;
 
 use Doctrine\Inflector\InflectorFactory;
-use Hostnet\Component\AccessorGenerator\Annotation\Enumerator;
-use Hostnet\Component\AccessorGenerator\AnnotationProcessor\DoctrineAnnotationProcessor;
-use Hostnet\Component\AccessorGenerator\AnnotationProcessor\EnumItemInformation;
-use Hostnet\Component\AccessorGenerator\AnnotationProcessor\GenerateAnnotationProcessor;
-use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformation;
-use Hostnet\Component\AccessorGenerator\AnnotationProcessor\PropertyInformationInterface;
+use Hostnet\Component\AccessorGenerator\Attribute\Enumerator;
 use Hostnet\Component\AccessorGenerator\Collection\ImmutableCollection;
 use Hostnet\Component\AccessorGenerator\Enum\EnumeratorCompatibleEntityInterface;
 use Hostnet\Component\AccessorGenerator\Generator\Exception\ReferencedClassNotFoundException;
 use Hostnet\Component\AccessorGenerator\Generator\Exception\TypeUnknownException;
+use Hostnet\Component\AccessorGenerator\PropertyProcessor\AccessorGenerationProcessor;
+use Hostnet\Component\AccessorGenerator\PropertyProcessor\DoctrineMappingProcessor;
+use Hostnet\Component\AccessorGenerator\PropertyProcessor\EnumItemInformation;
+use Hostnet\Component\AccessorGenerator\PropertyProcessor\PropertyInformation;
 use Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
 use Hostnet\Component\AccessorGenerator\Twig\CodeGenerationExtension;
@@ -258,17 +257,17 @@ class CodeGenerator implements CodeGeneratorInterface
 
         $imports[] = $class->getNamespace() . '\\' . $class->getName();
 
-        $generate_processor = new GenerateAnnotationProcessor();
-        $doctrine_processor = new DoctrineAnnotationProcessor();
+        $generate_processor = new AccessorGenerationProcessor();
+        $doctrine_processor = new DoctrineMappingProcessor();
 
         $this->metadata_cache[$cache_key]['imports']    = $imports;
         $this->metadata_cache[$cache_key]['properties'] = [];
 
         foreach ($properties as $property) {
             $info = new PropertyInformation($property);
-            $info->registerAnnotationProcessor($generate_processor);
-            $info->registerAnnotationProcessor($doctrine_processor);
-            $info->processAnnotations();
+            $info->registerProcessor($generate_processor);
+            $info->registerProcessor($doctrine_processor);
+            $info->process();
 
             $this->metadata_cache[$cache_key]['properties'][$info->getName()] = $info;
         }
@@ -302,7 +301,7 @@ class CodeGenerator implements CodeGeneratorInterface
                             $info->getClass()
                         ));
                     }
-                    $enumerator->name = $info->getName();
+                    $enumerator->setName($info->getName());
                 }
 
                 $collection = $metadata['properties'][$enumerator->getName()];
@@ -527,7 +526,7 @@ class CodeGenerator implements CodeGeneratorInterface
         return '';
     }
 
-    public function generateAccessors(PropertyInformationInterface $info): string
+    public function generateAccessors(PropertyInformation $info): string
     {
         $code = '';
 

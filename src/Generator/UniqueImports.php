@@ -23,6 +23,16 @@ final class UniqueImports
      */
     public static function filter(array $imports): array
     {
+        // Drop non-compound class names (e.g. `use DateTime;`): they live in
+        // the global namespace and the statement generates a PHP warning.
+        // Function/const imports (prefixed "function "/"const ") are kept even
+        // when non-compound, as `use function sprintf;` is intentional.
+        $imports = array_filter($imports, static function (string $fqn): bool {
+            return str_starts_with($fqn, 'function ')
+                || str_starts_with($fqn, 'const ')
+                || str_contains($fqn, '\\');
+        });
+
         uksort($imports, function ($a, $b) use ($imports) {
             $alias_a = is_numeric($a) ? " as $a;" : '';
             $alias_b = is_numeric($b) ? " as $b;" : '';

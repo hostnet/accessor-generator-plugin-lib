@@ -11,22 +11,22 @@ class TokenStream
     /**
      * Location of type within the PHP Token.
      */
-    private const TYPE = 0;
+    private const int TYPE = 0;
 
     /**
      * Location of value within the PHP Token.
      */
-    private const VALUE = 1;
+    private const int VALUE = 1;
 
     /**
      * Search direction from left to right.
      */
-    private const LTR = 1;
+    private const int LTR = 1;
 
     /**
      * Search direction from right to left.
      */
-    private const RTL = -1;
+    private const int RTL = -1;
 
     /**
      * PHP Token Stack.

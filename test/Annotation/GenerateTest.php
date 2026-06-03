@@ -9,35 +9,28 @@ namespace Hostnet\Component\AccessorGenerator\Annotation;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Hostnet\Component\AccessorGenerator\Annotation\Generate
+ * @covers \Hostnet\Component\AccessorGenerator\Attribute\Generate
  */
 class GenerateTest extends TestCase
 {
     public function testDefaults(): void
     {
         $generate = new Generate();
-
-        // Test default on values and availabillity of
-        // the Generate Annotation public fields
         $generate->setDefaultVisibility(Generate::VISIBILITY_PUBLIC);
 
-        self::assertSame(Generate::VISIBILITY_PUBLIC, $generate->get);
-        self::assertSame(Generate::VISIBILITY_PUBLIC, $generate->set);
-        self::assertSame(Generate::VISIBILITY_PUBLIC, $generate->add);
-        self::assertSame(Generate::VISIBILITY_PUBLIC, $generate->remove);
-        self::assertSame(Generate::VISIBILITY_PUBLIC, $generate->is);
-        self::assertTrue($generate->strict);
-        self::assertNull($generate->type);
-        self::assertNull($generate->encryption_alias);
+        self::assertSame(Generate::VISIBILITY_PUBLIC, $generate->getGet());
+        self::assertSame(Generate::VISIBILITY_PUBLIC, $generate->getSet());
+        self::assertSame(Generate::VISIBILITY_PUBLIC, $generate->getAdd());
+        self::assertSame(Generate::VISIBILITY_PUBLIC, $generate->getRemove());
+        self::assertSame(Generate::VISIBILITY_PUBLIC, $generate->getIs());
+        self::assertTrue($generate->isStrict());
+        self::assertNull($generate->getType());
+        self::assertNull($generate->getEncryptionAlias());
     }
 
     public function testTypeAndStrictnessAndEncryptionAlias(): void
     {
-        $generate = new Generate();
-
-        $generate->strict           = false;
-        $generate->type             = \stdClass::class;
-        $generate->encryption_alias = 'database.table.column';
+        $generate = new Generate(strict: false, type: \stdClass::class, encryption_alias: 'database.table.column');
 
         self::assertFalse($generate->isStrict());
         self::assertSame(\stdClass::class, $generate->getType());
@@ -49,13 +42,7 @@ class GenerateTest extends TestCase
      */
     public function testNew($given, $expected): void
     {
-        $generate = new Generate();
-
-        $generate->get    = $given;
-        $generate->set    = $given;
-        $generate->add    = $given;
-        $generate->remove = $given;
-        $generate->is     = $given;
+        $generate = new Generate(get: $given, set: $given, add: $given, remove: $given, is: $given);
 
         self::assertSame($expected, $generate->getGet());
         self::assertSame($expected, $generate->getSet());

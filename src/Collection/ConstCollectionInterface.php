@@ -73,8 +73,6 @@ interface ConstCollectionInterface extends \Countable, \IteratorAggregate, \Arra
     /**
      * Returns a native PHP array representation of the collection. The array
      * is a copy, as is the case for all arrays in PHP.
-     *
-     * @return array
      */
     public function toArray(): array;
 

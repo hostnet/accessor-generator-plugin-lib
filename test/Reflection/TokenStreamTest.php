@@ -13,8 +13,8 @@ use PHPUnit\Framework\TestCase;
  */
 class TokenStreamTest extends TestCase
 {
-    private const SOURCE     = 'tokens.php';
-    private const PHP_8_SIZE = 105;
+    private const string SOURCE  = 'tokens.php';
+    private const int PHP_8_SIZE = 105;
 
     /**
      * @var TokenStream

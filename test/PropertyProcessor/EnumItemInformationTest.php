@@ -4,47 +4,47 @@
  */
 declare(strict_types=1);
 
-namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
+namespace Hostnet\Component\AccessorGenerator\PropertyProcessor;
 
 use Doctrine\Inflector\InflectorFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Hostnet\Component\AccessorGenerator\AnnotationProcessor\EnumItemInformation
+ * @covers \Hostnet\Component\AccessorGenerator\PropertyProcessor\EnumItemInformation
  */
 class EnumItemInformationTest extends TestCase
 {
     /**
      * This is of type: array.
      */
-    public const A_TEST_CONSTANT = 'I_TEST_CONSTANT';
+    public const string A_TEST_CONSTANT = 'I_TEST_CONSTANT';
 
     /**
      * This is of type: int.
      */
-    public const I_TEST_CONSTANT = 'I_TEST_CONSTANT';
+    public const string I_TEST_CONSTANT = 'I_TEST_CONSTANT';
 
     /**
      * This is of type: string.
      */
-    public const S_TEST_CONSTANT = 'S_TEST_CONSTANT';
+    public const string S_TEST_CONSTANT = 'S_TEST_CONSTANT';
 
     /**
      * This is of type: float.
      */
-    public const F_TEST_CONSTANT = 'F_TEST_CONSTANT';
+    public const string F_TEST_CONSTANT = 'F_TEST_CONSTANT';
 
     /**
      * This is of type: bool.
      */
-    public const B_TEST_CONSTANT = 'B_TEST_CONSTANT';
+    public const string B_TEST_CONSTANT = 'B_TEST_CONSTANT';
 
     /**
      * This is a broken constant.
      */
-    public const BROKEN_CONSTANT = 'BROKEN_CONSTANT';
+    public const string BROKEN_CONSTANT = 'BROKEN_CONSTANT';
 
-    public const S_CONSTANT_WITHOUT_DOCBLOCK = 'S_CONSTANT_WITHOUT_DOCBLOCK';
+    public const string S_CONSTANT_WITHOUT_DOCBLOCK = 'S_CONSTANT_WITHOUT_DOCBLOCK';
 
     private $inflector;
 

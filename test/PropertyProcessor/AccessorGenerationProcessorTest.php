@@ -4,83 +4,60 @@
  */
 declare(strict_types=1);
 
-namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
+namespace Hostnet\Component\AccessorGenerator\PropertyProcessor;
 
 use Doctrine\ORM\Mapping\Column;
-use Hostnet\Component\AccessorGenerator\Annotation\Enumerator;
-use Hostnet\Component\AccessorGenerator\Annotation\Generate;
+use Hostnet\Component\AccessorGenerator\Attribute\Enumerator;
+use Hostnet\Component\AccessorGenerator\Attribute\Generate;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Hostnet\Component\AccessorGenerator\AnnotationProcessor\GenerateAnnotationProcessor
+ * @covers \Hostnet\Component\AccessorGenerator\PropertyProcessor\AccessorGenerationProcessor
  */
-class GenerateAnnotationProcessorTest extends TestCase
+class AccessorGenerationProcessorTest extends TestCase
 {
     // Some constants for better reading of the
     // parameters parsed into function.
-    private const GET       = true;
-    private const NO_GET    = false;
-    private const SET       = true;
-    private const NO_SET    = false;
-    private const ADD       = true;
-    private const NO_ADD    = false;
-    private const REMOVE    = true;
-    private const NO_REMOVE = false;
+    private const true GET        = true;
+    private const false NO_GET    = false;
+    private const true SET        = true;
+    private const false NO_SET    = false;
+    private const true ADD        = true;
+    private const false NO_ADD    = false;
+    private const true REMOVE     = true;
+    private const false NO_REMOVE = false;
 
-    /**
-     * Generate TestCases for the parsing
-     * of the @Generate annotation.
-     */
-    public function processAnnotationProvider(): iterable
+    public function applyProvider(): iterable
     {
-        $all           = new Generate();
-        $no_get        = new Generate();
-        $no_is         = new Generate();
-        $no_set        = new Generate();
-        $no_add        = new Generate();
-        $no_remove     = new Generate();
-        $no_collection = new Generate();
-        $nothing       = new Generate();
-        $type          = new Generate();
-        $encryption    = new Generate();
-        $enumerate     = new Generate();
-
         $column     = new Column();
-        $enumerator = new Enumerator();
+        $enumerator = new Enumerator(value: 'SomeClass', name: 'Foo');
 
-        $no_is->is         = 'none';
-        $no_get->get       = 'none';
-        $no_set->set       = 'none';
-        $no_add->add       = 'none';
-        $no_remove->remove = 'none';
-
-        $no_collection->add    = 'none';
-        $no_collection->remove = 'none';
-
-        $nothing->get    = 'none';
-        $nothing->is     = 'none';
-        $nothing->set    = 'none';
-        $nothing->add    = 'none';
-        $nothing->remove = 'none';
-
-        $type->get    = 'none';
-        $type->is     = 'none';
-        $type->set    = 'none';
-        $type->add    = 'none';
-        $type->remove = 'none';
-        $type->type   = \ArrayObject::class;
-
-        $encryption->get              = 'none';
-        $encryption->is               = 'none';
-        $encryption->set              = 'none';
-        $encryption->add              = 'none';
-        $encryption->remove           = 'none';
-        $encryption->encryption_alias = 'database.table.column';
-
-        $enumerate->enumerators = [$enumerator];
-        $enumerator->name       = 'Foo';
-        $enumerator->value      = 'SomeClass';
+        $all           = new Generate();
+        $no_get        = new Generate(get: 'none');
+        $no_is         = new Generate(is: 'none');
+        $no_set        = new Generate(set: 'none');
+        $no_add        = new Generate(add: 'none');
+        $no_remove     = new Generate(remove: 'none');
+        $no_collection = new Generate(add: 'none', remove: 'none');
+        $nothing       = new Generate(get: 'none', is: 'none', set: 'none', add: 'none', remove: 'none');
+        $type          = new Generate(
+            get: 'none',
+            is: 'none',
+            set: 'none',
+            add: 'none',
+            remove: 'none',
+            type: \ArrayObject::class
+        );
+        $encryption    = new Generate(
+            get: 'none',
+            is: 'none',
+            set: 'none',
+            add: 'none',
+            remove: 'none',
+            encryption_alias: 'database.table.column'
+        );
+        $enumerate     = new Generate(enumerators: [$enumerator]);
 
         return [
             [$column,        self::NO_GET, self::NO_SET, self::NO_ADD, self::NO_REMOVE, null,                null],
@@ -107,7 +84,7 @@ class GenerateAnnotationProcessorTest extends TestCase
     }
 
     /**
-     * @dataProvider processAnnotationProvider
+     * @dataProvider applyProvider
      * @param mixed $annotation
      * @param bool $get
      * @param bool $set
@@ -116,13 +93,13 @@ class GenerateAnnotationProcessorTest extends TestCase
      * @param string $type
      * @param string $encryption
      */
-    public function testProcessAnnotation($annotation, $get, $set, $add, $remove, $type, $encryption): void
+    public function testApply($annotation, $get, $set, $add, $remove, $type, $encryption): void
     {
         // Set up dependencies.
         $property    = new ReflectionProperty('test');
         $information = new PropertyInformation($property);
-        $processor   = new GenerateAnnotationProcessor();
-        $processor->processAnnotation($annotation, $information);
+        $processor   = new AccessorGenerationProcessor();
+        $processor->apply($annotation, $information);
 
         // Check if right information was processed.
         self::assertSame($get, $information->willGenerateGet());
@@ -143,25 +120,18 @@ class GenerateAnnotationProcessorTest extends TestCase
 
     public function testEnumeratorVisibilities(): void
     {
-        $enumerator        = new Enumerator();
-        $enumerator->name  = 'Foo';
-        $enumerator->value = 'SomeClass';
-
-        $annotation  = new Generate();
-        $annotation2 = new Generate();
-
-        $annotation->enumerators  = [$enumerator];
-        $annotation2->enumerators = [$enumerator];
-        $annotation2->get         = Generate::VISIBILITY_PUBLIC;
+        $enumerator  = new Enumerator(value: 'SomeClass', name: 'Foo');
+        $annotation  = new Generate(enumerators: [$enumerator]);
+        $annotation2 = new Generate(enumerators: [$enumerator], get: Generate::VISIBILITY_PUBLIC);
 
         $property     = new ReflectionProperty('test');
         $property2    = new ReflectionProperty('test2');
         $information  = new PropertyInformation($property);
         $information2 = new PropertyInformation($property2);
-        $processor    = new GenerateAnnotationProcessor();
+        $processor    = new AccessorGenerationProcessor();
 
-        $processor->processAnnotation($annotation, $information);
-        $processor->processAnnotation($annotation2, $information2);
+        $processor->apply($annotation, $information);
+        $processor->apply($annotation2, $information2);
 
         self::assertTrue($information->willGenerateEnumeratorAccessors());
         self::assertFalse($information->willGenerateGet());
@@ -170,11 +140,11 @@ class GenerateAnnotationProcessorTest extends TestCase
         self::assertFalse($information->willGenerateRemove());
     }
 
-    public function testGetProcessableAnnotationNamespace(): void
+    public function testGetProcessableNamespace(): void
     {
         self::assertSame(
             'Hostnet\Component\AccessorGenerator\Annotation',
-            (new GenerateAnnotationProcessor())->getProcessableAnnotationNamespace()
+            (new AccessorGenerationProcessor())->getProcessableNamespace()
         );
     }
 }

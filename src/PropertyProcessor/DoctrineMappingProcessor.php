@@ -4,7 +4,7 @@
  */
 declare(strict_types=1);
 
-namespace Hostnet\Component\AccessorGenerator\AnnotationProcessor;
+namespace Hostnet\Component\AccessorGenerator\PropertyProcessor;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
@@ -14,24 +14,26 @@ use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OneToOne;
-use Hostnet\Component\AccessorGenerator\Annotation\Generate;
-use Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception\InvalidColumnSettingsException;
+use Hostnet\Component\AccessorGenerator\Attribute\Generate;
+use Hostnet\Component\AccessorGenerator\PropertyProcessor\Exception\InvalidColumnSettingsException;
 
 /**
- * Process Column, ManyToMany, OneToOne, ManyToOne, OneToMany and
- * GeneratedValue Doctrine ORM annotations and extract the type and
- * relationship information.
+ * Extracts type and relationship metadata from Doctrine ORM mapping objects —
+ * Column, JoinColumn, GeneratedValue, OneToMany, ManyToMany, OneToOne, ManyToOne.
+ *
+ * Works for both docblock annotations (@ORM\Column) and native attributes (#[ORM\Column])
+ * because Doctrine's mapping classes are dual-registered and produce the same object either way.
  */
-class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
+class DoctrineMappingProcessor implements PropertyProcessorInterface
 {
-    private const ZEROED_DATE_TIME = 'zeroeddatetime';
-    private const ZEROED_DATE      = 'zeroeddate';
-    private const YAML_ARRAY       = 'yaml_array';
+    private const string ZEROED_DATE_TIME = 'zeroeddatetime';
+    private const string ZEROED_DATE      = 'zeroeddate';
+    private const string YAML_ARRAY       = 'yaml_array';
     /**
      * @deprecated since doctrine/dbal:2.6
      */
-    private const JSON_ARRAY     = 'json_array';
-    private const NULLABLE_TYPES = [self::ZEROED_DATE, self::ZEROED_DATE_TIME];
+    private const string JSON_ARRAY    = 'json_array';
+    private const array NULLABLE_TYPES = [self::ZEROED_DATE, self::ZEROED_DATE_TIME];
 
     /**
      * Process annotations of type:
@@ -45,15 +47,15 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * @throws \OutOfBoundsException
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
      * @throws \RangeException
-     * @throws \Hostnet\Component\AccessorGenerator\AnnotationProcessor\Exception\InvalidColumnSettingsException
+     * @throws \Hostnet\Component\AccessorGenerator\PropertyProcessor\Exception\InvalidColumnSettingsException
      * @throws \InvalidArgumentException
      * @throws \DomainException
      *
-     * @param mixed $annotation object of a class annotated with @annotation
+     * @param mixed $annotation instantiated annotation or attribute object
      * @param PropertyInformation $information
      */
 
-    public function processAnnotation($annotation, PropertyInformation $information): void
+    public function apply($annotation, PropertyInformation $information): void
     {
         // Process scalar value (db-wise) columns.
         if ($annotation instanceof Column) {
@@ -96,7 +98,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
         // Do nothing for other types
     }
 
-    public function getProcessableAnnotationNamespace(): string
+    public function getProcessableNamespace(): string
     {
         return 'Doctrine\ORM\Mapping';
     }
@@ -107,7 +109,7 @@ class DoctrineAnnotationProcessor implements AnnotationProcessorInterface
      * @throws \DomainException
      * @throws \InvalidArgumentException
      *
-     * @param mixed $annotation with annotation Annotation
+     * @param mixed $annotation instantiated annotation or attribute object
      * @param PropertyInformation $information
      */
     private function processBidirectional($annotation, PropertyInformation $information): void

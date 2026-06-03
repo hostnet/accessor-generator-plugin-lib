@@ -312,11 +312,12 @@ class ReflectionClass
                     continue;
                 }
 
+                $attributes  = $this->parseAttributeTexts($vis_loc);        // native PHP 8 attribute blocks
                 $doc_comment = $this->parseDocComment($vis_loc);           // doc comment
                 $modifiers   = $this->parsePropertyModifiers($vis_loc);    // public, protected, private, static
                 $name        = substr($tokens->value($var_loc), 1);  // property name
                 $default     = $this->parseDefaultValue($var_loc);         // default value
-                $property    = new ReflectionProperty($name, $modifiers, $default, $doc_comment, $this);
+                $property    = new ReflectionProperty($name, $modifiers, $default, $doc_comment, $this, $attributes);
 
                 $this->properties[] = $property;
             }
@@ -396,6 +397,10 @@ class ReflectionClass
      * stripped of leading whitespaces. Returns an empty string if no doc-
      * comment or an empty doc comment was found.
      *
+     * Skips over any #[...] attribute blocks that appear between the docblock
+     * and the visibility modifier, so that PHP 8 native attributes do not
+     * prevent the docblock from being found.
+     *
      * @param int $loc location of the visibility modifier or T_CLASS
      *
      * @return string the contents of the doc comment
@@ -403,21 +408,114 @@ class ReflectionClass
     private function parseDocComment($loc): string
     {
         $tokens = $this->getTokenStream();
+        $pos    = $loc;
 
-        // Look back from T_PUBLIC, T_PROTECTED, T_PRIVATE or T_CLASS
-        // for the T_DOC_COMMENT token
-        $loc = $tokens->previous($loc, [T_WHITESPACE, T_STATIC, T_FINAL]);
+        while (true) {
+            $pos = $tokens->previous($pos, [T_WHITESPACE, T_STATIC, T_FINAL]);
 
-        // Check for doc comment
-        if ($loc && $tokens->type($loc) === T_DOC_COMMENT) {
-            $doc_comment = $tokens->value($loc);
-            // strip off indentation
-            $doc_comment = preg_replace('/^[ \t]*\*/m', ' *', $doc_comment);
+            if ($pos === null) {
+                return '';
+            }
 
-            return $doc_comment;
+            if ($tokens->type($pos) === T_DOC_COMMENT) {
+                $doc_comment = $tokens->value($pos);
+
+                return preg_replace('/^[ \t]*\*/m', ' *', $doc_comment);
+            }
+
+            // Skip over a complete #[...] attribute block going backward.
+            if ($tokens->value($pos) === ']') {
+                $pos = $this->findAttributeOpenBracket($pos);
+                if ($pos === null) {
+                    return '';
+                }
+                continue;
+            }
+
+            return '';
+        }
+    }
+
+    /**
+     * Given the position of a ']' that closes a #[...] attribute block, scan
+     * backward to find the matching T_ATTRIBUTE ('#[') and return its position.
+     * Handles nested brackets (e.g. array literals inside attribute arguments).
+     *
+     * @param int $close_loc position of the closing ']' token
+     *
+     * @return int|null position of T_ATTRIBUTE, or null if not found
+     */
+    private function findAttributeOpenBracket(int $close_loc): ?int
+    {
+        $tokens = $this->getTokenStream();
+        $depth  = 1;
+        $pos    = $close_loc;
+
+        while ($depth > 0) {
+            if ($pos === 0) {
+                return null;
+            }
+
+            $pos--;
+            $val  = $tokens->value($pos);
+            $type = $tokens->type($pos);
+
+            if ($val === ']') {
+                $depth++;
+            } elseif ($val === '[' || $type === T_ATTRIBUTE) {
+                $depth--;
+            }
         }
 
-        return '';
+        return $pos;
+    }
+
+    /**
+     * Collects the raw text of each #[...] attribute block that appears
+     * immediately before the visibility modifier at $vis_loc (i.e. between
+     * the docblock and the modifier, skipping whitespace).
+     *
+     * Returns an array of strings, each being the content inside one #[...]
+     * block (without the surrounding #[ and ]).
+     *
+     * @param int $vis_loc location of the visibility modifier
+     *
+     * @return string[]
+     */
+    private function parseAttributeTexts(int $vis_loc): array
+    {
+        $tokens     = $this->getTokenStream();
+        $attributes = [];
+        $pos        = $vis_loc;
+
+        while (true) {
+            $pos = $tokens->previous($pos, [T_WHITESPACE, T_STATIC, T_FINAL]);
+
+            if ($pos === null) {
+                break;
+            }
+
+            if ($tokens->value($pos) !== ']') {
+                break;
+            }
+
+            $close_pos = $pos;
+            $open_pos  = $this->findAttributeOpenBracket($close_pos);
+
+            if ($open_pos === null) {
+                break;
+            }
+
+            $text = '';
+            for ($i = $open_pos + 1; $i < $close_pos; $i++) {
+                $text .= $tokens->value($i);
+            }
+
+            $attributes[] = $text;
+            $pos          = $open_pos;
+        }
+
+        return array_reverse($attributes);
     }
 
     /**
