@@ -255,6 +255,36 @@ class ReflectionClassTest extends TestCase
         $class->getName();
     }
 
+    /**
+     * PHP 8 uses T_CLASS for both `class Foo` declarations and `Foo::class` constant expressions.
+     * When a class-level attribute such as #[ORM\DiscriminatorMap(['a' => Child::class])] appears
+     * above the class keyword, those ::class tokens come first in the token stream. Previously,
+     * getName() took the very first T_CLASS it found, saw that the next token was not T_STRING
+     * (it was `,` or `]`), and set $name = false — causing ClassDefinitionNotFoundException to
+     * be silently swallowed in getMetadataForClass(), resulting in zero properties being found
+     * and no MethodsTrait being generated.
+     *
+     * @throws ClassDefinitionNotFoundException
+     * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
+     * @throws \OutOfBoundsException
+     */
+    public function testGetNameSkipsClassConstantExpressionsInAttributeArguments(): void
+    {
+        $class = new ReflectionClass(__DIR__ . '/fixtures/discriminator_map_class_const.php');
+
+        // Before the fix this threw ClassDefinitionNotFoundException because the ::class
+        // tokens inside #[ORM\DiscriminatorMap([...::class, ...])] were mistaken for the
+        // class declaration.
+        self::assertEquals('ParentEntity', $class->getName());
+        self::assertEquals('Test', $class->getNamespace());
+
+        // The properties must also be reachable; previously getMetadataForClass() caught
+        // the exception and returned an empty property list, so no MethodsTrait was written.
+        $properties = $class->getProperties();
+        self::assertCount(1, $properties);
+        self::assertEquals('name', $properties[0]->getName());
+    }
+
     public function testBroken(): void
     {
         $class = new ReflectionClass(__DIR__ . '/fixtures/broken.php');

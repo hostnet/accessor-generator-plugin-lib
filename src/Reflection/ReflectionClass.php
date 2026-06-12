@@ -115,6 +115,12 @@ class ReflectionClass
      * This is the simple class name and not the fully
      * qualified class name.
      *
+     * PHP 8 emits T_CLASS for both `class Foo` declarations and `Foo::class` expressions.
+     * When a class-level attribute like #[ORM\DiscriminatorMap(['a' => Child::class])]
+     * appears above the class keyword, those ::class tokens appear first in the stream.
+     * We skip any T_CLASS not immediately followed by T_STRING, since only a real
+     * declaration has the class name as its next token.
+     *
      * @throws Exception\ClassDefinitionNotFoundException
      * @throws \OutOfBoundsException
      */
@@ -130,18 +136,22 @@ class ReflectionClass
                 throw new ClassDefinitionNotFoundException('No class is found inside ' . $this->filename . '.', 0, $e);
             }
 
-            // Get the following token
-            if ($loc !== null) {
-                $loc = $tokens->next($loc);
+            // Loop past ::class expressions until we find a T_CLASS/T_TRAIT immediately
+            // followed by T_STRING, which is the real class or trait declaration.
+            while ($loc !== null) {
+                $next = $tokens->next($loc);
+
+                if ($next !== null && $tokens->type($next) === T_STRING) {
+                    $this->name           = $tokens->value($next);
+                    $this->class_location = $next;
+                    break;
+                }
+
+                // T_CLASS from a ::class expression — keep scanning.
+                $loc = $tokens->scan($loc, [T_CLASS, T_TRAIT]);
             }
 
-            // Make sure it is not :: but a name
-            if ($loc !== null && $tokens->type($loc) === T_STRING) {
-                // Read the name from the token
-                $this->name           = $tokens->value($loc);
-                $this->class_location = $loc;
-            } else {
-                // Mark the name as NOT found (in contrast to not initialized)
+            if (!$this->name) {
                 $this->name = false;
             }
         }
