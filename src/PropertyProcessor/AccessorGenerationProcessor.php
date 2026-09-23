@@ -16,32 +16,32 @@ use Hostnet\Component\AccessorGenerator\Attribute\Generate;
 class AccessorGenerationProcessor implements PropertyProcessorInterface
 {
     #[\Override]
-    public function apply($annotation, PropertyInformation $info): void
+    public function apply(object $attribute, PropertyInformation $info): void
     {
-        // Standalone Enumerator annotation.
-        if ($annotation instanceof Enumerator) {
-            $info->addEnumeratorToGenerate($annotation);
-            $annotation->setProperty($info->getName());
-            if (! $info->getType() && $annotation->getType()) {
-                $info->setType($annotation->getType());
+        // Standalone Enumerator attribute.
+        if ($attribute instanceof Enumerator) {
+            $info->addEnumeratorToGenerate($attribute);
+            $attribute->setProperty($info->getName());
+            if (! $info->getType() && $attribute->getType()) {
+                $info->setType($attribute->getType());
             }
             return;
         }
 
-        // Only process Generate annotations from this point.
-        if (!$annotation instanceof Generate) {
+        // Only process Generate attributes from this point.
+        if (!$attribute instanceof Generate) {
             return;
         }
 
         $info->setIsGenerator(true);
 
-        if ($annotation->getEnumerators()) {
-            $annotation->setDefaultVisibility(Generate::VISIBILITY_NONE);
-            foreach ($annotation->getEnumerators() as $enumerator) {
+        if ($attribute->getEnumerators()) {
+            $attribute->setDefaultVisibility(Generate::VISIBILITY_NONE);
+            foreach ($attribute->getEnumerators() as $enumerator) {
                 $info->addEnumeratorToGenerate($enumerator);
             }
         } else {
-            $annotation->setDefaultVisibility(Generate::VISIBILITY_PUBLIC);
+            $attribute->setDefaultVisibility(Generate::VISIBILITY_PUBLIC);
         }
 
         // By default no method is generated.
@@ -51,24 +51,24 @@ class AccessorGenerationProcessor implements PropertyProcessorInterface
         // be protected, it will end up private.
 
         $info->limitMaximumGetVisibility(
-            Generate::getMostLimitedVisibility($annotation->getGet(), $annotation->getIs())
+            Generate::getMostLimitedVisibility($attribute->getGet(), $attribute->getIs())
         );
         $info->limitMaximumSetVisibility(
-            Generate::getMostLimitedVisibility($annotation->getSet())
+            Generate::getMostLimitedVisibility($attribute->getSet())
         );
         $info->limitMaximumAddVisibility(
-            Generate::getMostLimitedVisibility($annotation->getAdd(), $annotation->getSet())
+            Generate::getMostLimitedVisibility($attribute->getAdd(), $attribute->getSet())
         );
         $info->limitMaximumRemoveVisibility(
-            Generate::getMostLimitedVisibility($annotation->getRemove(), $annotation->getSet())
+            Generate::getMostLimitedVisibility($attribute->getRemove(), $attribute->getSet())
         );
 
-        null === $info->getType() && $annotation->getType() && $info->setType($annotation->getType());
-        null !== $annotation->getType() && $info->setTypeHint($annotation->getType());
-        null !== $annotation->getEncryptionAlias() && $info->setEncryptionAlias($annotation->getEncryptionAlias());
+        null === $info->getType() && $attribute->getType() && $info->setType($attribute->getType());
+        null !== $attribute->getType() && $info->setTypeHint($attribute->getType());
+        null !== $attribute->getEncryptionAlias() && $info->setEncryptionAlias($attribute->getEncryptionAlias());
 
         // Enforce always
-        $info->setGenerateStrict($annotation->isStrict());
+        $info->setGenerateStrict($attribute->isStrict());
         $info->setIsGenerator(true);
     }
 }

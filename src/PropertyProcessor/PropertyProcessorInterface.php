@@ -13,10 +13,7 @@ namespace Hostnet\Component\AccessorGenerator\PropertyProcessor;
 interface PropertyProcessorInterface
 {
     /**
-     * Apply the metadata from $annotation (an instantiated native attribute) to $information.
-     *
-     * @param object              $annotation  instantiated attribute object
-     * @param PropertyInformation $information accumulator for this property's metadata
+     * Apply the metadata from $attribute (an instantiated native attribute) to $information.
      */
-    public function apply($annotation, PropertyInformation $information): void;
+    public function apply(object $attribute, PropertyInformation $information): void;
 }

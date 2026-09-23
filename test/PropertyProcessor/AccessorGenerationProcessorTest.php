@@ -85,21 +85,21 @@ class AccessorGenerationProcessorTest extends TestCase
 
     /**
      * @dataProvider applyProvider
-     * @param mixed $annotation
-     * @param bool $get
-     * @param bool $set
-     * @param bool $add
-     * @param bool $remove
-     * @param string $type
-     * @param string $encryption
      */
-    public function testApply($annotation, $get, $set, $add, $remove, $type, $encryption): void
-    {
+    public function testApply(
+        object $attribute,
+        bool $get,
+        bool $set,
+        bool $add,
+        bool $remove,
+        ?string $type,
+        ?string $encryption
+    ): void {
         // Set up dependencies.
         $property    = new ReflectionProperty('test');
         $information = new PropertyInformation($property);
         $processor   = new AccessorGenerationProcessor();
-        $processor->apply($annotation, $information);
+        $processor->apply($attribute, $information);
 
         // Check if right information was processed.
         self::assertSame($get, $information->willGenerateGet());
@@ -120,9 +120,9 @@ class AccessorGenerationProcessorTest extends TestCase
 
     public function testEnumeratorVisibilities(): void
     {
-        $enumerator  = new Enumerator(value: 'SomeClass', name: 'Foo');
-        $annotation  = new Generate(enumerators: [$enumerator]);
-        $annotation2 = new Generate(enumerators: [$enumerator], get: Generate::VISIBILITY_PUBLIC);
+        $enumerator = new Enumerator(value: 'SomeClass', name: 'Foo');
+        $attribute  = new Generate(enumerators: [$enumerator]);
+        $attribute2 = new Generate(enumerators: [$enumerator], get: Generate::VISIBILITY_PUBLIC);
 
         $property     = new ReflectionProperty('test');
         $property2    = new ReflectionProperty('test2');
@@ -130,8 +130,8 @@ class AccessorGenerationProcessorTest extends TestCase
         $information2 = new PropertyInformation($property2);
         $processor    = new AccessorGenerationProcessor();
 
-        $processor->apply($annotation, $information);
-        $processor->apply($annotation2, $information2);
+        $processor->apply($attribute, $information);
+        $processor->apply($attribute2, $information2);
 
         self::assertTrue($information->willGenerateEnumeratorAccessors());
         self::assertFalse($information->willGenerateGet());
