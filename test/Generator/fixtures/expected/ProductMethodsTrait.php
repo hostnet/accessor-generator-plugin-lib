@@ -241,8 +241,6 @@ trait ProductMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct.
      * @throws \LogicException         if a member was added that already exists within the collection.
      * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
-     *
-     * @param Attribute $attribute
      */
     public function addAttribute(Attribute $attribute): static
     {
@@ -294,8 +292,6 @@ trait ProductMethodsTrait
      * Removes the given attribute from this collection.
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param Attribute $attribute
      */
     public function removeAttribute(Attribute $attribute): static
     {

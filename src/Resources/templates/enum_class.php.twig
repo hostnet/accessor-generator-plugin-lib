@@ -16,11 +16,6 @@ class {{ class_name }}
     private $collection;
     private $parameter_entity_class;
 
-    /**
-     * @param Collection $collection
-     * @param object     $owning_entity
-     * @param string     $parameter_entity_class
-     */
     public function __construct(Collection $collection, object $owning_entity, string $parameter_entity_class)
     {
         $this->collection             = $collection;
@@ -59,8 +54,6 @@ class {{ class_name }}
 
     /**
      * Sets the value for the parameter {{ info.name }}.
-     *
-     * @param {{ info.typeHint }} $value
      */
     public function set{{ info.methodName }}({{ info.typeHint }} $value): {{ class_name }}
     {

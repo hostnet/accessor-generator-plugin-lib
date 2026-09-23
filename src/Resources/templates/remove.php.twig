@@ -8,8 +8,6 @@
  {% endif -%}
  *
  * @throws \BadMethodCallException if the number of arguments is not correct
- *
- * @param {{ property.typeHint }} ${{ property.name | singularize }}
  */
 {{ property.getRemoveVisibility() }} function remove{{ property.name | singularize | classify }}({{ property.typeHint }} ${{ property.name | singularize }}): static
 {

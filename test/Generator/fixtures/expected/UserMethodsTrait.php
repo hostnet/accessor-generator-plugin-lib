@@ -35,8 +35,6 @@ trait UserMethodsTrait
      * Sets address
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param Address $address
      */
     public function setAddress(?Address $address = null): static
     {

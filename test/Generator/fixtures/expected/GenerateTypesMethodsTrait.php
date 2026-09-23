@@ -381,8 +381,6 @@ trait GenerateTypesMethodsTrait
      * Sets datetime
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param \DateTime $datetime
      */
     public function setDatetime(\DateTime $datetime): static
     {

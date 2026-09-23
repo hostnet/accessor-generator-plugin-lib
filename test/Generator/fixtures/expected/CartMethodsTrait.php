@@ -36,8 +36,6 @@ trait CartMethodsTrait
      * Sets customer
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param Client $customer
      */
     public function setCustomer(Client $customer): static
     {

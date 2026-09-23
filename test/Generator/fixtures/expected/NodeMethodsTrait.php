@@ -40,8 +40,6 @@ trait NodeMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct.
      * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
-     *
-     * @param Node $out
      */
     public function addOut(Node $out): static
     {
@@ -94,8 +92,6 @@ trait NodeMethodsTrait
      * Removes the given out from this collection.
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param Node $out
      */
     public function removeOut(Node $out): static
     {

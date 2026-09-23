@@ -16,8 +16,6 @@ trait PracticalVehicleOwnerMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct.
      * @throws \LogicException         if a member was added that already exists within the collection.
      * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
-     *
-     * @param \Hostnet\Component\AccessorGenerator\Generator\fixtures\VehicleInterface $vehicle
      */
     public function addVehicle(\Hostnet\Component\AccessorGenerator\Generator\fixtures\VehicleInterface $vehicle): static
     {

@@ -899,8 +899,6 @@ trait TypesMethodsTrait
      * Sets date
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param \DateTime $date
      */
     public function setDate(\DateTime $date): static
     {
@@ -954,8 +952,6 @@ trait TypesMethodsTrait
      * Sets datetime
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param \DateTime $datetime
      */
     public function setDatetime(\DateTime $datetime): static
     {

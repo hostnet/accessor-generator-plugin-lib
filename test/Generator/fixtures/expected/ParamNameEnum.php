@@ -16,11 +16,6 @@ class ParamNameEnum
     private $collection;
     private $parameter_entity_class;
 
-    /**
-     * @param Collection $collection
-     * @param object     $owning_entity
-     * @param string     $parameter_entity_class
-     */
     public function __construct(Collection $collection, object $owning_entity, string $parameter_entity_class)
     {
         $this->collection             = $collection;
@@ -54,8 +49,6 @@ class ParamNameEnum
 
     /**
      * Sets the value for the parameter SOME_ARRAY.
-     *
-     * @param array $value
      */
     public function setSomeArray(array $value): ParamNameEnum
     {
@@ -157,8 +150,6 @@ class ParamNameEnum
 
     /**
      * Sets the value for the parameter SOME_STRING.
-     *
-     * @param string $value
      */
     public function setSomeString(string $value): ParamNameEnum
     {
@@ -260,8 +251,6 @@ class ParamNameEnum
 
     /**
      * Sets the value for the parameter SOME_INTEGER.
-     *
-     * @param int $value
      */
     public function setSomeInteger(int $value): ParamNameEnum
     {
@@ -363,8 +352,6 @@ class ParamNameEnum
 
     /**
      * Sets the value for the parameter SOME_FLOAT.
-     *
-     * @param float $value
      */
     public function setSomeFloat(float $value): ParamNameEnum
     {
@@ -466,8 +453,6 @@ class ParamNameEnum
 
     /**
      * Sets the value for the parameter SOME_BOOLEAN.
-     *
-     * @param bool $value
      */
     public function setSomeBoolean(bool $value): ParamNameEnum
     {

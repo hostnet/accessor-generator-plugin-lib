@@ -41,8 +41,6 @@ trait StudentMethodsTrait
      * Sets student
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param StudentInterface $student
      */
     public function setStudent(StudentInterface $student): static
     {

@@ -41,8 +41,6 @@ trait ItemMethodsTrait
      * Sets shipping
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param Shipping $shipping
      */
     public function setShipping(Shipping $shipping): static
     {

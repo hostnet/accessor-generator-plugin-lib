@@ -45,8 +45,6 @@ trait AnnotationsMethodsTrait
      * Sets stupid
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param \DateTime $stupid
      */
     public function setStupid(\DateTime $stupid): static
     {

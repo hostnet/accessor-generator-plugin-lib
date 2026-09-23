@@ -271,8 +271,6 @@ trait ContactInfoMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct.
      * @throws \LogicException         if a member was added that already exists within the collection.
      * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
-     *
-     * @param ContactInfo $referenced_contact
      */
     private function addReferencedContact(ContactInfo $referenced_contact): static
     {
@@ -317,8 +315,6 @@ trait ContactInfoMethodsTrait
      * Removes the given referenced_contact from this collection.
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param ContactInfo $referenced_contact
      */
     private function removeReferencedContact(ContactInfo $referenced_contact): static
     {
@@ -376,8 +372,6 @@ trait ContactInfoMethodsTrait
      * this message, specify a default value or use JoinColumn(nullable=false).
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param ContactInfo $referrer
      */
     protected function setReferrer(?ContactInfo $referrer = null): static
     {
@@ -448,8 +442,6 @@ trait ContactInfoMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct.
      * @throws \LogicException         if a member was added that already exists within the collection.
      * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
-     *
-     * @param ContactInfo $friend
      */
     private function addFriend(ContactInfo $friend): static
     {
@@ -494,8 +486,6 @@ trait ContactInfoMethodsTrait
      * Removes the given friend from this collection.
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param ContactInfo $friend
      */
     protected function removeFriend(ContactInfo $friend): static
     {
@@ -553,8 +543,6 @@ trait ContactInfoMethodsTrait
      * this message, specify a default value or use JoinColumn(nullable=false).
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param ContactInfo $friended_by
      */
     private function setFriendedBy(?ContactInfo $friended_by = null): static
     {

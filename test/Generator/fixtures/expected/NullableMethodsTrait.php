@@ -45,8 +45,6 @@ trait NullableMethodsTrait
      * this message, specify a default value or use JoinColumn(nullable=false).
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param \DateTime $zeroed_datetime
      */
     public function setZeroedDatetime(?\DateTime $zeroed_datetime = null): static
     {
@@ -97,8 +95,6 @@ trait NullableMethodsTrait
      * this message, specify a default value or use JoinColumn(nullable=false).
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param \DateTime $zeroed_date
      */
     public function setZeroedDate(?\DateTime $zeroed_date = null): static
     {
@@ -120,8 +116,6 @@ trait NullableMethodsTrait
      * Sets datetime_default
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param \DateTime $datetime_default
      */
     public function setDatetimeDefault(?\DateTime $datetime_default = null): static
     {
@@ -147,8 +141,6 @@ trait NullableMethodsTrait
      * this message, specify a default value or use JoinColumn(nullable=false).
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param \DateTime $datetime_nullable
      */
     public function setDatetimeNullable(?\DateTime $datetime_nullable = null): static
     {
@@ -170,8 +162,6 @@ trait NullableMethodsTrait
      * Sets datetime_both
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param \DateTime $datetime_both
      */
     public function setDatetimeBoth(?\DateTime $datetime_both = null): static
     {
@@ -325,8 +315,6 @@ trait NullableMethodsTrait
      * this message, specify a default value or use JoinColumn(nullable=false).
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param Feature $feature
      */
     public function setFeature(?Feature $feature = null): static
     {
@@ -352,8 +340,6 @@ trait NullableMethodsTrait
      * this message, specify a default value or use JoinColumn(nullable=false).
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param Feature $an_other_feature
      */
     public function setAnOtherFeature(?Feature $an_other_feature = null): static
     {
@@ -461,8 +447,6 @@ trait NullableMethodsTrait
      * Sets only_one
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param OneToOneNullable $only_one
      */
     public function setOnlyOne(?OneToOneNullable $only_one = null): static
     {
@@ -515,8 +499,6 @@ trait NullableMethodsTrait
      * Sets unidirectional_one_to_one
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param Item $unidirectional_one_to_one
      */
     public function setUnidirectionalOneToOne(?Item $unidirectional_one_to_one = null): static
     {

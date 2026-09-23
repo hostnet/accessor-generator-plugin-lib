@@ -40,8 +40,6 @@ trait SongMethodsTrait
      * Adds the given genre to this collection.
      *
      * @throws \BadMethodCallException if the number of arguments is not correct.
-     *
-     * @param Genre $genre
      */
     public function addGenre(Genre $genre): static
     {
@@ -70,8 +68,6 @@ trait SongMethodsTrait
      * Removes the given genre from this collection.
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param Genre $genre
      */
     public function removeGenre(Genre $genre): static
     {

@@ -41,8 +41,6 @@ trait MovieMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct.
      * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
-     *
-     * @param Actor $a
      */
     public function addA(Actor $a): static
     {
@@ -95,8 +93,6 @@ trait MovieMethodsTrait
      * Removes the given a from this collection.
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param Actor $a
      */
     public function removeA(Actor $a): static
     {
