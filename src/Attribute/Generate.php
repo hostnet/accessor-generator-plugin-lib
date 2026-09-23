@@ -35,11 +35,20 @@ class Generate
      */
     public const string VISIBILITY_PRIVATE = 'private';
 
+    private const array VALID_VISIBILITIES = [
+        self::VISIBILITY_NONE,
+        self::VISIBILITY_PUBLIC,
+        self::VISIBILITY_PROTECTED,
+        self::VISIBILITY_PRIVATE,
+    ];
+
     public function __construct(
         /**
          * Will generate a getter of the given visibility.
          *
          * Default: public.
+         *
+         * @var 'public'|'protected'|'private'|'none'|null
          */
         private ?string $get = null,
         /**
@@ -50,6 +59,8 @@ class Generate
          * be individually controlled by setting the add / remove properties.
          *
          * Default: public.
+         *
+         * @var 'public'|'protected'|'private'|'none'|null
          */
         private ?string $set = null,
         /**
@@ -57,6 +68,8 @@ class Generate
          * relation. Might already be disabled with the set property.
          *
          * Default: public.
+         *
+         * @var 'public'|'protected'|'private'|'none'|null
          */
         private ?string $add = null,
         /**
@@ -64,6 +77,8 @@ class Generate
          * relation. Might already be disabled with the set property.
          *
          * Default: public.
+         *
+         * @var 'public'|'protected'|'private'|'none'|null
          */
         private ?string $remove = null,
         /**
@@ -71,6 +86,8 @@ class Generate
          * with the get property.
          *
          * Default: public.
+         *
+         * @var 'public'|'protected'|'private'|'none'
          */
         private readonly string $is = self::VISIBILITY_PUBLIC,
         /**
@@ -112,6 +129,25 @@ class Generate
          */
         private readonly ?string $encryption_alias = null,
     ) {
+        self::validateVisibility($get, 'get');
+        self::validateVisibility($set, 'set');
+        self::validateVisibility($add, 'add');
+        self::validateVisibility($remove, 'remove');
+        self::validateVisibility($is, 'is');
+    }
+
+    /**
+     * @throws \DomainException if $visibility is not one of "public", "protected", "private", "none" or null
+     */
+    private static function validateVisibility(?string $visibility, string $param_name): void
+    {
+        if (null !== $visibility && !\in_array($visibility, self::VALID_VISIBILITIES, true)) {
+            throw new \DomainException(sprintf(
+                'Invalid value "%s" for Generate::$%s, must be one of "public", "protected", "private", "none".',
+                $visibility,
+                $param_name
+            ));
+        }
     }
 
     public function getGet(): ?string
