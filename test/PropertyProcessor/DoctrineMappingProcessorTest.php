@@ -322,9 +322,4 @@ class DoctrineMappingProcessorTest extends TestCase
         $this->processor->apply($annotation, $this->information);
         self::assertEquals($information, $this->information);
     }
-
-    public function testGetProcessableNamespace(): void
-    {
-        self::assertSame('Doctrine\ORM\Mapping', $this->processor->getProcessableNamespace());
-    }
 }

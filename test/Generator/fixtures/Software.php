@@ -2,7 +2,7 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 
 /**
  * 6.5. One-To-Many, Bidirectional (Inverse)
@@ -31,22 +31,17 @@ use Hostnet\Component\AccessorGenerator\Annotation as AG;
  * ManyToMany mapping declaration. The mappedBy
  * attribute contains the name of the associa-
  * tion-field on the owning side.
- *
- * @ORM\Entity
  */
+#[ORM\Entity]
 class Software
 {
     use Generated\SoftwareMethodsTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Feature", mappedBy="software")
-     * @AG\Generate(type="FeatureInterface")
-     */
+    #[ORM\OneToMany(targetEntity: 'Feature', mappedBy: 'software')]
+    #[AG\Generate(type: 'FeatureInterface')]
     private $features;
 }

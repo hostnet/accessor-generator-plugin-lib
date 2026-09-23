@@ -2,7 +2,7 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 
 /**
  * 6.10. Many-To-Many, Self-referencing, Uni-directional
@@ -29,29 +29,22 @@ use Hostnet\Component\AccessorGenerator\Annotation as AG;
  * ManyToMany mapping declaration. The mappedBy
  * attribute contains the name of the associa-
  * tion-field on the owning side.
- *
- * @ORM\Entity
- * @ORM\Table(name="graph_node")
  */
+#[ORM\Entity]
+#[ORM\Table(name: 'graph_node')]
 class Node
 {
     use Generated\NodeMethodsTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="Node", inversedBy="in")
-     * @ORM\JoinTable("Node")
-     * @AG\Generate
-     */
+    #[ORM\ManyToMany(targetEntity: 'Node', inversedBy: 'in')]
+    #[ORM\JoinTable('Node')]
+    #[AG\Generate]
     private $out;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="Node", mappedBy="out")
-     */
+    #[ORM\ManyToMany(targetEntity: 'Node', mappedBy: 'out')]
     private $in;
 }

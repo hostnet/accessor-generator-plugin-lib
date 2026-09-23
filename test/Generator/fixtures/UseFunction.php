@@ -3,25 +3,22 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 use const Hostnet\Component\AccessorGenerator\Generator\BYE as DAG;
 use const Hostnet\Component\AccessorGenerator\Generator\BYE;
 use function Hostnet\Component\AccessorGenerator\Generator\fixtures\destroy as kaboom;
 use function sprintf;
 
-/**
- * @ORM\Entity
- */
+#[ORM\Entity]
 class UseFunction
 {
     use Generated\UseFunctionMethodsTrait;
 
     /**
      * @var int
-     *
-     * @ORM\Column(type="string")
-     * @AG\Generate
      */
+    #[ORM\Column(type: 'string')]
+    #[AG\Generate]
     private $count = 0;
 
     public function formattedCount(): string

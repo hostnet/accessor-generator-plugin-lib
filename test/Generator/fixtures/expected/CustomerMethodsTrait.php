@@ -4,7 +4,7 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Cart;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Customer;
 
@@ -43,10 +43,8 @@ trait CustomerMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
      * @param Cart $cart
-     *
-     * @return $this|Customer
      */
-    public function setCart(Cart $cart)
+    public function setCart(Cart $cart): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(

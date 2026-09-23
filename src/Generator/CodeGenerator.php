@@ -142,6 +142,7 @@ class CodeGenerator implements CodeGeneratorInterface
         $this->enum_class = $twig->load('enum_class.php.twig');
     }
 
+    #[\Override]
     public function writeTraitForClass(ReflectionClass $class): bool
     {
         $data = $this->generateTraitForClass($class);
@@ -160,6 +161,7 @@ class CodeGenerator implements CodeGeneratorInterface
         return false;
     }
 
+    #[\Override]
     public function writeEnumeratorAccessorsForClass(ReflectionClass $class): array
     {
         $metadata  = $this->getMetadataForClass($class);
@@ -321,6 +323,7 @@ class CodeGenerator implements CodeGeneratorInterface
         }
     }
 
+    #[\Override]
     public function generateTraitForClass(ReflectionClass $class): string
     {
         $code                  = '';
@@ -404,9 +407,7 @@ class CodeGenerator implements CodeGeneratorInterface
         return $code;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function setEncryptionAliases(array $encryption_aliases): void
     {
         $this->encryption_aliases = $encryption_aliases;
@@ -526,6 +527,7 @@ class CodeGenerator implements CodeGeneratorInterface
         return '';
     }
 
+    #[\Override]
     public function generateAccessors(PropertyInformation $info): string
     {
         $code = '';
@@ -617,6 +619,7 @@ class CodeGenerator implements CodeGeneratorInterface
         return $code;
     }
 
+    #[\Override]
     public function writeKeyRegistriesForPackage(): bool
     {
         foreach ($this->key_registry_data as $directory => $data) {

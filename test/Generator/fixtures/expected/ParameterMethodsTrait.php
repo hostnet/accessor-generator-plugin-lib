@@ -4,7 +4,7 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 use Hostnet\Component\AccessorGenerator\Enum\EnumeratorCompatibleEntityInterface;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Parameter;
 
@@ -121,10 +121,8 @@ trait ParameterMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      *
      * @param string $value
-     *
-     * @return $this|Parameter
      */
-    public function setValue($value = null)
+    public function setValue($value = null): static
     {
         if (\func_num_args() > 1) {
             throw new \BadMethodCallException(

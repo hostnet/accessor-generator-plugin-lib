@@ -6,8 +6,6 @@ declare(strict_types=1);
 
 namespace Hostnet\Component\AccessorGenerator\Attribute;
 
-use Doctrine\Common\Annotations\Annotation\Enum;
-
 /**
  * Activates accessor method generation for a property.
  *
@@ -42,8 +40,6 @@ class Generate
          * Will generate a getter of the given visibility.
          *
          * Default: public.
-         *
-         * @Enum({"public", "protected", "private", "none"})
          */
         private ?string $get = null,
         /**
@@ -54,8 +50,6 @@ class Generate
          * be individually controlled by setting the add / remove properties.
          *
          * Default: public.
-         *
-         * @Enum({"public", "protected", "private", "none"})
          */
         private ?string $set = null,
         /**
@@ -63,8 +57,6 @@ class Generate
          * relation. Might already be disabled with the set property.
          *
          * Default: public.
-         *
-         * @Enum({"public", "protected", "private", "none"})
          */
         private ?string $add = null,
         /**
@@ -72,8 +64,6 @@ class Generate
          * relation. Might already be disabled with the set property.
          *
          * Default: public.
-         *
-         * @Enum({"public", "protected", "private", "none"})
          */
         private ?string $remove = null,
         /**
@@ -81,8 +71,6 @@ class Generate
          * with the get property.
          *
          * Default: public.
-         *
-         * @Enum({"public", "protected", "private", "none"})
          */
         private readonly string $is = self::VISIBILITY_PUBLIC,
         /**

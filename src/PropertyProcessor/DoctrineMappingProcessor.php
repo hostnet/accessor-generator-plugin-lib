@@ -18,11 +18,8 @@ use Hostnet\Component\AccessorGenerator\Attribute\Generate;
 use Hostnet\Component\AccessorGenerator\PropertyProcessor\Exception\InvalidColumnSettingsException;
 
 /**
- * Extracts type and relationship metadata from Doctrine ORM mapping objects —
+ * Extracts type and relationship metadata from Doctrine ORM mapping attributes —
  * Column, JoinColumn, GeneratedValue, OneToMany, ManyToMany, OneToOne, ManyToOne.
- *
- * Works for both docblock annotations (@ORM\Column) and native attributes (#[ORM\Column])
- * because Doctrine's mapping classes are dual-registered and produce the same object either way.
  */
 class DoctrineMappingProcessor implements PropertyProcessorInterface
 {
@@ -36,7 +33,7 @@ class DoctrineMappingProcessor implements PropertyProcessorInterface
     private const array NULLABLE_TYPES = [self::ZEROED_DATE, self::ZEROED_DATE_TIME];
 
     /**
-     * Process annotations of type:
+     * Process attributes of type:
      *  Column,
      *  GeneratedValue,
      *  ManyToMany,
@@ -50,11 +47,8 @@ class DoctrineMappingProcessor implements PropertyProcessorInterface
      * @throws \Hostnet\Component\AccessorGenerator\PropertyProcessor\Exception\InvalidColumnSettingsException
      * @throws \InvalidArgumentException
      * @throws \DomainException
-     *
-     * @param mixed $annotation instantiated annotation or attribute object
-     * @param PropertyInformation $information
      */
-
+    #[\Override]
     public function apply($annotation, PropertyInformation $information): void
     {
         // Process scalar value (db-wise) columns.
@@ -98,18 +92,13 @@ class DoctrineMappingProcessor implements PropertyProcessorInterface
         // Do nothing for other types
     }
 
-    public function getProcessableNamespace(): string
-    {
-        return 'Doctrine\ORM\Mapping';
-    }
-
     /**
      * Return referenced entity if we have a bidirectional doctrine association.
      *
      * @throws \DomainException
      * @throws \InvalidArgumentException
      *
-     * @param mixed $annotation instantiated annotation or attribute object
+     * @param mixed $annotation instantiated attribute object
      * @param PropertyInformation $information
      */
     private function processBidirectional($annotation, PropertyInformation $information): void

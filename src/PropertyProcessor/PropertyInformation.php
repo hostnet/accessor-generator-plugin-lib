@@ -6,212 +6,65 @@ declare(strict_types=1);
 
 namespace Hostnet\Component\AccessorGenerator\PropertyProcessor;
 
-use Doctrine\Common\Annotations\DocParser;
 use Doctrine\ORM\Mapping\Column;
 use Hostnet\Component\AccessorGenerator\Attribute\Enumerator;
 use Hostnet\Component\AccessorGenerator\Attribute\Generate;
 use Hostnet\Component\AccessorGenerator\Reflection\AttributeInstantiator;
-use Hostnet\Component\AccessorGenerator\Reflection\ReflectionClass;
 use Hostnet\Component\AccessorGenerator\Reflection\ReflectionProperty;
 
 /**
  * Aggregates all metadata needed to generate accessor methods for a single property.
  *
  * Register processors via registerProcessor(), then call process() to run them
- * against the property's docblock annotations and native attributes.
+ * against the property's native attributes.
  */
 class PropertyInformation
 {
-    /**
-     * {@inheritdoc}
-     *
-     * @var string|null
-     */
-    private $type;
+    private ?string $type                   = null;
+    private string $type_hint               = '';
+    private string $fully_qualified_type    = '';
+    private ?string $encryption_alias       = null;
+    private int $integer_size               = 32; // Be on the safe side for database interaction.
+    private int $length                     = 0;
+    private int $precision                  = 0;
+    private int $scale                      = 0;
+    private ?bool $nullable                 = null;
+    private ?bool $unique                   = null;
+    private bool $is_generator              = false;
+    private bool $is_fixed_point_number     = false;
+    private string $referenced_property     = '';
+    private bool $is_collection             = false;
+    private bool $is_referencing_collection = false;
+    private bool $generate_strict           = true;
+    private ?string $generate_get           = null;
+    private ?string $generate_set           = null;
+    private ?string $generate_add           = null;
 
     /**
-     * {@inheritdoc}
-     *
-     * @var string
-     */
-    private $type_hint = '';
-
-    /**
-     * {@inheritdoc}
-     *
-     * @var string
-     */
-    private $fully_qualified_type = '';
-
-    /**
-     * {@inheritdoc}
-     *
-     * @var string
-     */
-    private $encryption_alias;
-
-    /**
-     * {@inheritdoc}
-     *
-     * @var int
-     */
-    private $integer_size = 32; // Be on the safe side for database interaction.
-
-    /**
-     * {@inheritdoc}
-     *
-     * @var int
-     */
-    private $length = 0;
-
-    /**
-     * {@inheritdoc}
-     *
-     * @var int
-     */
-    private $precision = 0;
-
-    /**
-     * {@inheritdoc}
-     *
-     * @var int
-     */
-    private $scale = 0;
-
-    /**
-     * {@inheritdoc}
-     *
-     * @var bool|null
-     */
-    private $nullable;
-
-    /**
-     * {@inheritdoc}
-     *
-     * @var bool|null
-     */
-    private $unique;
-
-    /**
-     * {@inheritdoc}
-     *
-     * @var bool
-     */
-    private $is_generator = false;
-
-    /**
-     * {@inheritdoc}
-     *
-     * @var bool
-     */
-    private $is_fixed_point_number = false;
-
-    /**
-     * {@inheritdoc}
-     *
-     * @var string
-     */
-    private $referenced_property = '';
-
-    /**
-     * {@inheritdoc}
-     *
-     * @var bool
-     */
-    private $is_collection = false;
-
-    /**
-     * {@inheritdoc}
-     *
-     * @var bool
-     */
-    private $is_referencing_collection = false;
-
-    /**
-     * {@inheritdoc}
-     *
-     * @var bool
-     */
-    private $generate_strict = true;
-
-    /**
-     * {@inheritdoc}
-     *
-     * @var string|null
-     */
-    private $generate_get;
-
-    /**
-     * {@inheritdoc}
-     *
-     * @var string|null
-     */
-    private $generate_set;
-
-    /**
-     * {@inheritdoc}
-     *
-     * @var string|null
-     */
-    private $generate_add;
-
-    /**
-     * {@inheritdoc}
-     *
      * @var Enumerator[]
      */
-    private $enums_to_generate = [];
+    private array $enums_to_generate = [];
 
-    /**
-     * {@inheritdoc}
-     *
-     * @var string|null
-     */
-    private $index;
-
-    /**
-     * {@inheritdoc}
-     *
-     * @var string|null
-     */
-    private $generate_remove;
-
-    /**
-     * Information parsed from the PHP
-     *
-     * @var \ReflectionProperty
-     */
-    private $property;
-
-    /**
-     * Doc Comment parser to parse all
-     * the annotations inside a doc block.
-     *
-     * @var DocParser
-     */
-    private $parser;
+    private ?string $index           = null;
+    private ?string $generate_remove = null;
+    private ReflectionProperty $property;
 
     /**
      * @var PropertyProcessorInterface[]
      */
-    private $processors;
+    private array $processors = [];
 
     /**
      * Create new PropertyInformation object based
      * on a Reflected property from PHP source.
-     *
-     * @param ReflectionProperty $property
      */
     public function __construct(ReflectionProperty $property)
     {
         $this->property = $property;
-
-        // Not injected because it has no interface and is final
-        $this->parser = new DocParser();
     }
 
     /**
-     * Register a processor that will be called for every annotation or attribute found on this property.
+     * Register a processor that will be called for every attribute found on this property.
      *
      * After all processors are registered, call process().
      *
@@ -223,7 +76,8 @@ class PropertyInformation
     }
 
     /**
-     * Run all registered processors against this property's docblock annotations and native attributes.
+     * Instantiate this property's native PHP attributes via AttributeInstantiator and run all
+     * registered processors against them.
      *
      * @throws \OutOfBoundsException
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
@@ -231,91 +85,7 @@ class PropertyInformation
      */
     public function process(): void
     {
-        $class    = $this->property->getClass();
-        $imports  = $class ? array_change_key_case($class->getUseStatements()) : [];
-        $filename = $class ? $class->getFilename() : 'memory';
-
-        $known_imports = $this->filterKnownImports($imports);
-
-        [$doc_encrypted, $doc_string]   = $this->processDocblockAnnotations($known_imports, $filename);
-        [$attr_encrypted, $attr_string] = $this->processNativeAttributes($class);
-
-        $this->validateEncryptionColumnType(
-            $doc_encrypted || $attr_encrypted,
-            $doc_string && $attr_string,
-        );
-    }
-
-    /**
-     * Filters the file's use-statement imports down to namespaces known to registered processors.
-     * This prevents Doctrine's DocParser from throwing on unrecognised annotations.
-     *
-     * @param array<string, string> $imports
-     * @return array<string, string>
-     */
-    private function filterKnownImports(array $imports): array
-    {
-        $namespaces = [];
-        foreach ($this->processors as $processor) {
-            $namespaces[] = $processor->getProcessableNamespace();
-        }
-
-        return array_filter(
-            $imports,
-            static function ($import) use ($namespaces) {
-                foreach ($namespaces as $namespace) {
-                    if (stripos($namespace, $import) === 0) {
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-        );
-    }
-
-    /**
-     * Parses docblock annotations from the property's doc comment and runs all registered processors.
-     *
-     * @param array<string, string> $known_imports Imports filtered to known annotation namespaces.
-     * @return array{bool, bool} [is_encrypted, is_string_column]
-     */
-    private function processDocblockAnnotations(array $known_imports, string $filename): array
-    {
-        $this->parser->setImports($known_imports);
-        $this->parser->setIgnoreNotImportedAnnotations(true);
-
-        $annotations  = $this->parser->parse($this->property->getDocComment(), $filename);
-        $is_encrypted = false;
-        $is_string    = true;
-
-        foreach ($this->processors as $processor) {
-            foreach ($annotations as $annotation) {
-                $processor->apply($annotation, $this);
-
-                if ($annotation instanceof Generate && $annotation->getEncryptionAlias() !== null) {
-                    $is_encrypted = true;
-                }
-
-                if ($annotation instanceof Column
-                    && isset($annotation->type)
-                    && !\in_array($annotation->type, ['string', 'text'])
-                ) {
-                    $is_string = false;
-                }
-            }
-        }
-
-        return [$is_encrypted, $is_string];
-    }
-
-    /**
-     * Instantiates native PHP 8 #[...] attributes via AttributeInstantiator and runs all registered processors.
-     *
-     * @return array{bool, bool} [is_encrypted, is_string_column]
-     */
-    private function processNativeAttributes(?ReflectionClass $class): array
-    {
+        $class        = $this->property->getClass();
         $imports      = $class ? $class->getUseStatements() : [];
         $is_encrypted = false;
         $is_string    = true;
@@ -339,7 +109,7 @@ class PropertyInformation
             }
         }
 
-        return [$is_encrypted, $is_string];
+        $this->validateEncryptionColumnType($is_encrypted, $is_string);
     }
 
     /**
@@ -370,9 +140,13 @@ class PropertyInformation
             return '';
         }
 
+        // strstr() returns false when the docblock has no @-tag at all (e.g. a pure-prose
+        // docblock on a property whose mapping/generation markers are now native attributes,
+        // not docblock tags) - in that case the whole comment is documentation, not a signal
+        // there is none.
         $block = strstr($doc_comment, '@', true);
         if ($block === false) {
-            return '';
+            $block = $doc_comment;
         }
 
         $block = preg_replace('/\/\*\*\n/m', '', $block);

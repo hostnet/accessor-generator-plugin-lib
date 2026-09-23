@@ -4,9 +4,7 @@ namespace Hostnet\Component\AccessorGenerator\Generator\fixtures;
 use Doctrine\ORM\Mapping as ORM;
 use Hostnet\Component\AccessorGenerator\Attribute as AG;
 
-/**
- * @ORM\Entity
- */
+#[ORM\Entity]
 class NativeAttributes
 {
     use Generated\NativeAttributesMethodsTrait;

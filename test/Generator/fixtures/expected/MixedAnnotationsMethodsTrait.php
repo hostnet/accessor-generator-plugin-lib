@@ -49,10 +49,8 @@ trait MixedAnnotationsMethodsTrait
      * @throws \LengthException if the length of the value is to long
      *
      * @param string $name
-     *
-     * @return $this|MixedAnnotations
      */
-    public function setName($name)
+    public function setName($name): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(

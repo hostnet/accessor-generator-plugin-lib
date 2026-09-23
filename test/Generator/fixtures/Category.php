@@ -2,7 +2,7 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 
 /**
  * 6.7. One-To-Many, Self-referencing
@@ -25,9 +25,8 @@ use Hostnet\Component\AccessorGenerator\Annotation as AG;
  * ManyToMany mapping declaration. The mappedBy
  * attribute contains the name of the associa-
  * tion-field on the owning side.
- *
- * @ORM\Entity
  */
+#[ORM\Entity]
 class Category
 {
     use Generated\CategoryMethodsTrait;
@@ -37,22 +36,16 @@ class Category
         $this->parent = $parent;
     }
 
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Category", mappedBy="parent")
-     * @AG\Generate
-     */
+    #[ORM\OneToMany(targetEntity: 'Category', mappedBy: 'parent')]
+    #[AG\Generate]
     private $children;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Category", inversedBy="children")
-     * @ORM\JoinColumn(nullable=false)
-     * @AG\Generate
-     */
+    #[ORM\ManyToOne(targetEntity: 'Category', inversedBy: 'children')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[AG\Generate]
     private $parent = null;
 }

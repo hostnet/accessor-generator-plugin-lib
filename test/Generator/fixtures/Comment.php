@@ -2,7 +2,7 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 
 class Comment
 {
@@ -15,8 +15,8 @@ class Comment
 
     /**
      * --> col <--
-     * @ORM\Column(type="string")
-     * @AG\Generate(set="none")
      */
+    #[ORM\Column(type: 'string')]
+    #[AG\Generate(set: 'none')]
     private $col = null;
 }

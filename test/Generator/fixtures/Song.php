@@ -2,7 +2,7 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 
 /**
  * 6.8. Many-To-Many, Unidirectional
@@ -21,23 +21,18 @@ use Hostnet\Component\AccessorGenerator\Annotation as AG;
  * and is replaced by one-to-many/many-to-one
  * associations between the 3 participating
  * classes.
- *
- * @ORM\Entity
  */
+#[ORM\Entity]
 class Song
 {
     use Generated\SongMethodsTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="Genre")
-     * @ORM\JoinTable(name="songs_genres")
-     * @AG\Generate
-     */
+    #[ORM\ManyToMany(targetEntity: 'Genre')]
+    #[ORM\JoinTable(name: 'songs_genres')]
+    #[AG\Generate]
     private $genres;
 }

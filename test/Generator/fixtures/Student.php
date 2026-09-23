@@ -2,7 +2,7 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 
 /**
  * 6.4. One-To-One, Self-referencing
@@ -20,23 +20,18 @@ use Hostnet\Component\AccessorGenerator\Annotation as AG;
  * ManyToMany mapping declaration. The mappedBy
  * attribute contains the name of the associa-
  * tion-field on the owning side.
- *
- * @ORM\Entity
  */
+#[ORM\Entity]
 class Student implements StudentInterface
 {
     use Generated\StudentMethodsTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Student")
-     * @ORM\JoinColumn(nullable=false)
-     * @AG\Generate(type="StudentInterface")
-     */
+    #[ORM\OneToOne(targetEntity: 'Student')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[AG\Generate(type: 'StudentInterface')]
     private $student;
 }

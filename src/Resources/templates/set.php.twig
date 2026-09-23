@@ -28,18 +28,17 @@
  {% if property.isFixedPointNumber -%}
  * @param bool $round round the number fit in the precision and scale (round away from zero)
  {% endif -%}
- *
- * @return $this|{{ property.class }}
  */
+{% set has_null_default = property.default == 'null' or (not property.default and property.isNullable) %}
 {{ property.getSetVisibility() }} function set{{ property.name | classify }}(
-    {{- property.isComplexType ? property.typeHint ~ ' '-}}
+    {{- property.isComplexType ? (has_null_default ? '?' : '') ~ property.typeHint ~ ' '-}}
     ${{ property.name -}}
     {%- if property.default %} = {{ property.default | raw }}
     {%- elseif property.isNullable %} = null{% endif %}
     {%- if property.isFixedPointNumber -%}
     , $round = false
     {%- endif -%}
-)
+): static
 {
 {% if property.default and property.isFixedPointNumber %}
     if (\func_num_args() > 2) {

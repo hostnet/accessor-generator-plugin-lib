@@ -10,22 +10,12 @@ use Hostnet\Component\AccessorGenerator\Attribute\Enumerator;
 use Hostnet\Component\AccessorGenerator\Attribute\Generate;
 
 /**
- * Processes Generate and Enumerator annotations/attributes and determines which
+ * Processes Generate and Enumerator attributes and determines which
  * accessor methods should be generated. Stores the result in a PropertyInformation object.
- *
- * This processor is path-agnostic: it receives already-instantiated objects regardless of
- * whether they originated from a docblock annotation (parsed by Doctrine's DocParser) or a
- * native PHP 8 attribute (evaluated by AttributeInstantiator). Both paths produce the same
- * Generate/Enumerator instances, so no branching on the source is needed here.
  */
 class AccessorGenerationProcessor implements PropertyProcessorInterface
 {
-    /**
-     * @see PropertyProcessorInterface::apply()
-     *
-     * @param object              $annotation
-     * @param PropertyInformation $info
-     */
+    #[\Override]
     public function apply($annotation, PropertyInformation $info): void
     {
         // Standalone Enumerator annotation.
@@ -80,10 +70,5 @@ class AccessorGenerationProcessor implements PropertyProcessorInterface
         // Enforce always
         $info->setGenerateStrict($annotation->isStrict());
         $info->setIsGenerator(true);
-    }
-
-    public function getProcessableNamespace(): string
-    {
-        return 'Hostnet\Component\AccessorGenerator\Annotation';
     }
 }

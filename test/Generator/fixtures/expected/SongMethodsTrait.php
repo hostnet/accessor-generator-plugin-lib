@@ -4,7 +4,7 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 use Hostnet\Component\AccessorGenerator\Collection\ImmutableCollection;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Genre;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Song;
@@ -42,10 +42,8 @@ trait SongMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct.
      *
      * @param Genre $genre
-     *
-     * @return $this|Song
      */
-    public function addGenre(Genre $genre)
+    public function addGenre(Genre $genre): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -74,10 +72,8 @@ trait SongMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct
      *
      * @param Genre $genre
-     *
-     * @return $this|Song
      */
-    public function removeGenre(Genre $genre)
+    public function removeGenre(Genre $genre): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(

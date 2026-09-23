@@ -4,7 +4,7 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Comic as Comic;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Comic\Obelix;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\SubNamespace;
@@ -51,10 +51,8 @@ trait SubNamespaceMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      *
      * @param string $asterix
-     *
-     * @return $this|SubNamespace
      */
-    public function setAsterix($asterix = Comic\Asterix::class)
+    public function setAsterix($asterix = Comic\Asterix::class): static
     {
         if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
@@ -88,10 +86,8 @@ trait SubNamespaceMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      *
      * @param string $super_namespace
-     *
-     * @return $this|SubNamespace
      */
-    public function setSuperNamespace($super_namespace = Plugin::NAME)
+    public function setSuperNamespace($super_namespace = Plugin::NAME): static
     {
         if (\func_num_args() > 1) {
             throw new \BadMethodCallException(

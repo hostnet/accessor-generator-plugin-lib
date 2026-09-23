@@ -4,7 +4,7 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\ConstantDefault;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Weather;
 
@@ -61,10 +61,8 @@ trait ConstantDefaultMethodsTrait
      * @throws \DomainException if the integer value is outside of the domain on this machine
      *
      * @param int $weather
-     *
-     * @return $this|ConstantDefault
      */
-    public function setWeather($weather = Weather::SUN)
+    public function setWeather($weather = Weather::SUN): static
     {
         if (\func_num_args() > 1) {
             throw new \BadMethodCallException(

@@ -9,12 +9,12 @@
         "composer-plugin-api":  "^2.0",
         "ext-bcmath":           "*",
         "ext-json":             "*",
-        "doctrine/annotations": "^1.14.3",
         "doctrine/collections": "^1.8.0",
         "doctrine/dbal":        "^3.7.2",
         "doctrine/inflector":   "^2.0.8",
         "doctrine/orm":         "^2.17.2",
-        "symfony/filesystem":   "^5.4||^6.0",
+        "symfony/filesystem":   "^5.4||^6.0||^7.0",
+        "symfony/finder":       "^5.4||^6.0||^7.0",
         "twig/twig":            "^3.15.0"
     },
     "require-dev": {
@@ -22,7 +22,8 @@
         "hostnet/phpcs-tool":       "^9.0.0",
         "phpspec/prophecy":         "^1.17",
         "phpspec/prophecy-phpunit": "^2.1",
-        "phpunit/phpunit":          "^9.6.0"
+        "phpunit/phpunit":          "^9.6.0",
+        "symfony/cache":            "^7.4"
     },
     "autoload": {
         "psr-4": {
@@ -33,10 +34,7 @@
         "psr-4": {
             "Hostnet\\Component\\AccessorGenerator\\Generator\\fixtures\\Generated\\": "test/Generator/fixtures/expected/",
             "Hostnet\\Component\\AccessorGenerator\\":                              "test/"
-        },
-        "files": [
-            "test/annotation_loader.php"
-        ]
+        }
     },
     "config": {
         "allow-plugins": {

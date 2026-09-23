@@ -2,77 +2,56 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Attribute;
 
-/**
- * @ORM\Entity
- */
+#[ORM\Entity]
 class Product
 {
     use Generated\ProductMethodsTrait;
 
     /**
      * Product Id not good etc
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue
-     * @AG\Generate(strict=false)
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue]
+    #[AG\Generate(strict: false)]
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Hostnet\Component\AccessorGenerator\Generator\fixtures\Period")
-     * @ORM\JoinColumn(name="looptijd_id", nullable=false)
-     * @AG\Generate(set="none")
      * @var Period
      */
+    #[ORM\ManyToOne(targetEntity: 'Hostnet\Component\AccessorGenerator\Generator\fixtures\Period')]
+    #[ORM\JoinColumn(name: 'looptijd_id', nullable: false)]
+    #[AG\Generate(set: 'none')]
     private $duration;
 
-    /**
-     * @ORM\Column(name="naam", type="string", length=50)
-     * @AG\Generate(set="none")
-     */
+    #[ORM\Column(name: 'naam', type: 'string', length: 50)]
+    #[AG\Generate(set: 'none')]
     private $name;
 
     /**
      * Used in invoices and email
-     * @ORM\Column(name="omschrijving_factuur", type="string", length=50)
-     * @AG\Generate(set="none")
      */
+    #[ORM\Column(name: 'omschrijving_factuur', type: 'string', length: 50)]
+    #[AG\Generate(set: 'none')]
     private $description = 'empty';
 
-    /**
-     * @ORM\Column(name="begin_datum", type="datetime")
-     */
+    #[ORM\Column(name: 'begin_datum', type: 'datetime')]
     private $start_date;
 
-    /**
-     * @ORM\Column(name="eind_datum", type="datetime")
-     */
+    #[ORM\Column(name: 'eind_datum', type: 'datetime')]
     private $end_date;
 
-    /**
-     * @ORM\Column(name="expensive", type="boolean")
-     */
+    #[ORM\Column(name: 'expensive', type: 'boolean')]
     private $expensive;
 
-    /**
-     * @ORM\Column(name="systeem_naam", type="string", length=50)
-     * @AG\Generate
-     */
+    #[ORM\Column(name: 'systeem_naam', type: 'string', length: 50)]
+    #[AG\Generate]
     private $system_name = '';
 
-    /**
-     * @ORM\OneToMany(
-     *   targetEntity="Attribute",
-     *   mappedBy="product",
-     *   cascade={"all"},
-     *   orphanRemoval=true,
-     *   indexBy="name"
-     * )
-     * @AG\Generate
-     */
+    #[ORM\OneToMany(targetEntity: 'Attribute', mappedBy: 'product', cascade: ['all'], orphanRemoval: true, indexBy: 'name')]
+    #[AG\Generate]
     private $attributes;
 }

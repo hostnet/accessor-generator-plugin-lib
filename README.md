@@ -3,8 +3,7 @@ Welcome to the Accessor Generator composer plugin.
 ## Goals
 The goal of this plugin is to provide dynamically generated get, set, add, remove
 accessor methods for Classes based on information that we can read from PHP 8 native
-attributes or from doc comments.
-Currently we can process Doctrine ORM annotations and their native attribute equivalents.
+attributes.
 
 Since the code is automatically generated you do not have to (unit) test it and it
 will be very consistent with a lot of added boilerplate code that will make your code
@@ -14,6 +13,27 @@ functions.
 ## Limitations
 
 - Imports through grouped `use` statements is not supported. (https://wiki.php.net/rfc/group_use_declarations)
+
+## Upgrading to 7.0
+
+Version 7.0 drops docblock-annotation support entirely (`doctrine/annotations` is no longer a
+dependency) - only native PHP attributes (`#[AG\Generate]`, `#[AG\Enumerator]`, `#[ORM\...]`) are
+read. If your entities are already fully on attribute syntax, this is likely all you need to check:
+
+- `Hostnet\Component\AccessorGenerator\Annotation\Generate` and `...\Annotation\Enumerator` (the
+  deprecated docblock-annotation classes) are removed. If any of your entities import
+  `Hostnet\Component\AccessorGenerator\Annotation as AG` and apply it as a native attribute
+  (`#[AG\Generate(...)]`), repoint that import to
+  `Hostnet\Component\AccessorGenerator\Attribute as AG` instead.
+- `PropertyProcessorInterface::getProcessableNamespace()` is removed. It only existed to support
+  docblock-annotation parsing; if you have a custom `PropertyProcessorInterface` implementation,
+  drop that method from it.
+- Generated `set`/`add`/`remove` accessor methods (previously undeclared) now declare a native
+  `: static` return type. A hand-written subclass that overrides one of these without an explicit
+  return type will fail to load with a `must be compatible with ...: static` error - add `: static`
+  to the override (this is also valid against the previous major, so it can be done ahead of the
+  upgrade). The generated `Enumerator` accessor class's `set`/`remove`/`clear` methods already
+  declared an explicit return type before and keep it unchanged.
 
 ## Installation
 
@@ -49,30 +69,6 @@ class Period
 }
 ```
 
-Docblock-style annotations are also supported and can be mixed freely with native attributes:
-
-```php
-use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
-
-/**
- * @ORM\Entity
- * @ORM\Table(name="periode")
- */
-class Period
-{
-    use Generated\PeriodMethodsTrait;
-
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(name="id", type="integer")
-     * @AG\Generate
-     */
-    private int $id;
-}
-```
-
 The files will be generated in a subdirectory and namespace (Generated) relative to the current
 file. This file can be included as trait.
 
@@ -83,13 +79,6 @@ the attribute.
 
 ```php
 #[AG\Generate(add: 'none', set: 'none', remove: 'none', get: 'none', is: 'none')]
-```
-
-Docblock equivalent:
-```php
-/**
- * @AG\Generate(add="none",set="none",remove="none",get="none",is="none")
- */
 ```
 
 `Is` is an alias for get. If your property is of type boolean an `isProperty` method is
@@ -108,14 +97,6 @@ plus the length of the sealed data itself.
 
 ```php
 #[AG\Generate(encryption_alias: 'database.table.column')]
-private $encrypted_variable;
-```
-
-Docblock equivalent:
-```php
-/**
- * @AG\Generate(encryption_alias="database.table.column")
- */
 private $encrypted_variable;
 ```
 

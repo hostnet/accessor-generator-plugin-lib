@@ -139,12 +139,4 @@ class AccessorGenerationProcessorTest extends TestCase
         self::assertFalse($information->willGenerateAdd());
         self::assertFalse($information->willGenerateRemove());
     }
-
-    public function testGetProcessableNamespace(): void
-    {
-        self::assertSame(
-            'Hostnet\Component\AccessorGenerator\Annotation',
-            (new AccessorGenerationProcessor())->getProcessableNamespace()
-        );
-    }
 }

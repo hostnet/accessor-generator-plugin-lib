@@ -69,4 +69,24 @@ class AttributeInstantiatorTest extends TestCase
         self::assertCount(1, $result);
         self::assertInstanceOf(Generate::class, $result[0]);
     }
+
+    public function testMalformedOwnAttributeThrows(): void
+    {
+        $this->expectException(\Error::class);
+
+        AttributeInstantiator::instantiate(
+            "AG\\Generate(bogus_argument: 'x')",
+            ['AG' => 'Hostnet\Component\AccessorGenerator\Attribute']
+        );
+    }
+
+    public function testMalformedForeignAttributeIsSkippedSilently(): void
+    {
+        $result = AttributeInstantiator::instantiate(
+            'Foreign()',
+            ['Foreign' => 'Hostnet\Component\AccessorGenerator\Reflection\ForeignTestAttribute']
+        );
+
+        self::assertSame([], $result);
+    }
 }

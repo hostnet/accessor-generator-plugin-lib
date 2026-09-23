@@ -57,10 +57,20 @@ class AttributeInstantiator
         $attrs  = (new \ReflectionClass($cls))->getProperty('p')->getAttributes();
         $result = [];
         foreach ($attrs as $attr) {
+            if (!class_exists($attr->getName())) {
+                // Unrelated attribute on the same property whose class isn't loadable here — skip silently.
+                continue;
+            }
+
             try {
                 $result[] = $attr->newInstance();
-            } catch (\Throwable) {
-                // Attribute class not loadable or constructor args invalid — skip silently.
+            } catch (\Throwable $e) {
+                // A genuinely malformed use of one of our own attributes (unknown/invalid named
+                // argument, wrong type, ...) is a real error worth surfacing, not silently dropped -
+                // any other attribute class is left alone since it isn't this package's concern.
+                if (str_starts_with($attr->getName(), 'Hostnet\Component\AccessorGenerator\Attribute\\')) {
+                    throw $e;
+                }
             }
         }
 

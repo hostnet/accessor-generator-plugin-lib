@@ -1,12 +1,13 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 
+use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\ORMSetup;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
-use Doctrine\ORM\Tools\Setup;
 
-$paths         = [ 'test/Generator/fixtures'];
-$config        = Setup::createAnnotationMetadataConfiguration($paths, true, null, null, false);
-$entityManager = EntityManager::create([driver => 'pdo_sqlite', 'memory' => true], $config);
+$paths      = ['test/Generator/fixtures'];
+$config     = ORMSetup::createAttributeMetadataConfiguration($paths, true);
+$connection = DriverManager::getConnection(['driver' => 'pdo_sqlite', 'memory' => true], $config);
 
-return ConsoleRunner::createHelperSet($entityManager);
+return ConsoleRunner::createHelperSet(new EntityManager($connection, $config));

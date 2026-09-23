@@ -49,10 +49,8 @@ trait NativeAttributesMethodsTrait
      * @throws \LengthException if the length of the value is to long
      *
      * @param string $label
-     *
-     * @return $this|NativeAttributes
      */
-    public function setLabel($label)
+    public function setLabel($label): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(

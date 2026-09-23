@@ -13,9 +13,10 @@ jobs:
     strategy:
       matrix:
         php-versions: ['8.3', '8.4']
-    name: PHP ${{ matrix.php-versions }}
+        dependency-versions: ['highest', 'lowest']
+    name: PHP ${{ matrix.php-versions }} (${{ matrix.dependency-versions }} deps)
     steps:
-      -   uses: actions/checkout@v2
+      -   uses: actions/checkout@v4
       -   uses: shivammathur/setup-php@v2
           with:
             php-version: ${{ matrix.php-versions }}
@@ -26,10 +27,16 @@ jobs:
       -   uses: actions/cache@v4
           with:
             path: ${{ steps.composer-cache.outputs.dir }}
-            key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-            restore-keys: ${{ runner.os }}-composer-
+            key: ${{ runner.os }}-composer-${{ matrix.dependency-versions }}-${{ hashFiles('**/composer.lock') }}
+            restore-keys: ${{ runner.os }}-composer-${{ matrix.dependency-versions }}-
+      -   name: composer validate
+          run: composer validate --strict
       -   name: composer install
+          if: matrix.dependency-versions == 'highest'
           run: composer install --no-progress --prefer-dist --optimize-autoloader
+      -   name: composer update --prefer-lowest
+          if: matrix.dependency-versions == 'lowest'
+          run: composer update --no-progress --prefer-dist --prefer-stable --prefer-lowest --optimize-autoloader
       -   name: phpunit
           run: php vendor/bin/phpunit
       -   name: phpcs
