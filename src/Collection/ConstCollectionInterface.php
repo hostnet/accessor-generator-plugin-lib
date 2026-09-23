@@ -126,32 +126,24 @@ interface ConstCollectionInterface extends \Countable, \IteratorAggregate, \Arra
 
     /**
      * Returns true if the predicate is true for at least one element, false otherwise.
-     *
-     * @param \Closure $predicate
      */
     public function exists(\Closure $predicate): bool;
 
     /**
      * Returns all the elements of this collection that satisfy the given predicate.
      * The order of the elements is preserved.
-     *
-     * @param \Closure $predicate
      */
     public function filter(\Closure $predicate): Collection;
 
     /**
      * Returns true if the given predicate is satisfied by all elements in this
      * collection, false otherwise.
-     *
-     * @param \Closure $predicate
      */
     public function forAll(\Closure $predicate): bool;
 
     /**
      * Applies the given function to each element in the collection and returns
      * a new collection with the elements returned by the function.
-     *
-     * @param \Closure $func
      */
     public function map(\Closure $func): Collection;
 
@@ -162,8 +154,6 @@ interface ConstCollectionInterface extends \Countable, \IteratorAggregate, \Arra
      * The first returned element contains the collection of elements where
      * the predicate returned TRUE, the second returned element contains the
      * collection of elements where the predicate returned FALSE.
-     *
-     * @param \Closure $predicate
      *
      * @return Collection[]
      */

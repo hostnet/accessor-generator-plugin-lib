@@ -179,8 +179,6 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      * @throws \OutOfBoundsException
      * @throws \RuntimeException
      * @throws \Symfony\Component\Filesystem\Exception\IOException
-     *
-     * @param PackageInterface $package
      */
     private function generateTraitForPackage(PackageInterface $package): void
     {
@@ -207,7 +205,6 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      *
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint
      *
-     * @param PackageInterface $package
      * @return mixed
      * @throws Reflection\Exception\FileException
      */
@@ -246,7 +243,6 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      *
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint
      *
-     * @param PackageInterface $package
      * @return \Iterator|\SplFileInfo[]
      */
     private function getFilesForPackage(PackageInterface $package)

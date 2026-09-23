@@ -67,8 +67,6 @@ class PropertyInformation
      * Register a processor that will be called for every attribute found on this property.
      *
      * After all processors are registered, call process().
-     *
-     * @param PropertyProcessorInterface $processor
      */
     public function registerProcessor(PropertyProcessorInterface $processor): void
     {
@@ -236,8 +234,6 @@ class PropertyInformation
      *
      * @see http://php.net/manual/en/language.types.php
      *
-     * @param string $type
-     *
      * @throws \DomainException
      * @throws \InvalidArgumentException
      */
@@ -271,8 +267,6 @@ class PropertyInformation
      *
      * @see http://php.net/manual/en/language.types.php
      *
-     * @param string|null $type
-     *
      * @throws \DomainException
      * @throws \InvalidArgumentException
      * @return PropertyInformation
@@ -297,8 +291,6 @@ class PropertyInformation
      *
      * @see http://php.net/manual/en/language.types.php
      *
-     * @param string $type_hint
-     *
      * @throws \DomainException
      * @throws \InvalidArgumentException
      * @return PropertyInformation
@@ -314,8 +306,6 @@ class PropertyInformation
      * Set the fully qualified type for this property.
      * The type must be a valid class name starting from
      * the root namespace, so it should start with a \
-     *
-     * @param string $type
      *
      * @throws \DomainException
      * @return PropertyInformation
@@ -360,8 +350,6 @@ class PropertyInformation
      *             private-key:
      * ...
      *
-     * @param string $encryption_alias
-     *
      * @throws \InvalidArgumentException
      * @return PropertyInformation
      */
@@ -393,8 +381,6 @@ class PropertyInformation
      * @throws \RangeException
      * @throws \InvalidArgumentException
      *
-     * @param int $length
-     *
      * @return PropertyInformation
      */
     public function setLength(int $length): self
@@ -424,8 +410,6 @@ class PropertyInformation
      *
      * @throws \InvalidArgumentException
      * @throws \RangeException
-     *
-     * @param int $integer_size
      *
      * @return PropertyInformation
      */
@@ -473,8 +457,6 @@ class PropertyInformation
      *
      * @throws \DomainException
      * @throws \InvalidArgumentException
-     *
-     * @param string $referenced_property
      *
      * @return PropertyInformation
      */
@@ -526,8 +508,6 @@ class PropertyInformation
      * Set to true whenever this property is a collection type like an array or
      * a DoctrineCollection.
      *
-     * @param bool $is_collection
-     *
      * @return PropertyInformation
      */
     public function setCollection(bool $is_collection): self
@@ -541,8 +521,6 @@ class PropertyInformation
      * Set to true whenever this property is part of a bidirectional
      * association where the referenced part is a collection - a many side of
      * the relationship.
-     *
-     * @param bool $is_referencing_collection
      *
      * @return PropertyInformation
      */
@@ -565,8 +543,6 @@ class PropertyInformation
 
     /**
      * {@inheritdoc}
-     *
-     * @param bool $is_fixed_point_number
      *
      * @return PropertyInformation
      */
@@ -596,8 +572,6 @@ class PropertyInformation
      * @see http://dev.mysql.com/doc/refman/5.7/en/precision-math-decimal-characteristics.html
      *
      * @throws \RangeException It has a range of 1 to 65.
-     *
-     * @param int $precision
      *
      * @return PropertyInformation
      */
@@ -633,8 +607,6 @@ class PropertyInformation
      *
      * @throws \RangeException
      *
-     * @param int $scale
-     *
      * @return PropertyInformation
      */
     public function setScale(?int $scale): self
@@ -662,8 +634,6 @@ class PropertyInformation
     /**
      * {@inheritdoc}
      *
-     * @param bool $nullable
-     *
      * @return PropertyInformation
      */
     public function setNullable(bool $nullable): self
@@ -685,8 +655,6 @@ class PropertyInformation
 
     /**
      * {@inheritdoc}
-     *
-     * @param bool $unique
      *
      * @return PropertyInformation
      */
@@ -710,8 +678,6 @@ class PropertyInformation
     /**
      * {@inheritdoc}
      *
-     * @param bool $generate_strict
-     *
      * @return PropertyInformation
      */
     public function setGenerateStrict(bool $generate_strict): self
@@ -732,8 +698,6 @@ class PropertyInformation
     }
 
     /**
-     * @param string $visibility
-     *
      * @return PropertyInformation
      */
     public function limitMaximumGetVisibility(string $visibility): self
@@ -766,8 +730,6 @@ class PropertyInformation
     /**
      * {@inheritdoc}
      *
-     * @param string|null $index = null
-     *
      * @return PropertyInformation
      */
     public function setIndex(?string $index = null): self
@@ -778,8 +740,6 @@ class PropertyInformation
     }
 
     /**
-     * @param string $visibility
-     *
      * @return PropertyInformation
      */
     public function limitMaximumSetVisibility(string $visibility): self
@@ -800,8 +760,6 @@ class PropertyInformation
     }
 
     /**
-     * @param string $visibility
-     *
      * @return PropertyInformation
      */
     public function limitMaximumAddVisibility(string $visibility): self
@@ -822,11 +780,9 @@ class PropertyInformation
     }
 
     /**
-     * @param string $visibility
-     *
      * @return PropertyInformation
      */
-    public function limitMaximumRemoveVisibility($visibility): self
+    public function limitMaximumRemoveVisibility(string $visibility): self
     {
         $this->generate_remove = Generate::getMostLimitedVisibility($this->generate_remove, $visibility);
 
@@ -884,9 +840,6 @@ class PropertyInformation
         return $this->enums_to_generate;
     }
 
-    /**
-     * @param Enumerator $enumerator
-     */
     public function addEnumeratorToGenerate(Enumerator $enumerator): void
     {
         $this->enums_to_generate[] = $enumerator;

@@ -130,9 +130,6 @@ class DoctrineMappingProcessor implements PropertyProcessorInterface
      * precision for decimal types, length and size of string and integer
      * types, if the column may be null and if it should be a unique value.
      *
-     * @param Column $column
-     * @param PropertyInformation $information
-     *
      * @throws InvalidColumnSettingsException
      * @throws \DomainException
      * @throws \InvalidArgumentException
@@ -171,9 +168,6 @@ class DoctrineMappingProcessor implements PropertyProcessorInterface
 
     /**
      * Process a JoinColumn attribute, extract nullable.
-     *
-     * @param JoinColumn $join_column
-     * @param PropertyInformation $information
      */
     private function processJoinColumn(JoinColumn $join_column, PropertyInformation $information): void
     {
@@ -301,8 +295,6 @@ class DoctrineMappingProcessor implements PropertyProcessorInterface
      * eventually turn them silently into a float.
      *
      * @see http://doctrine-dbal.readthedocs.org/en/latest/reference/types.html
-     *
-     * @param string $type
      */
     private function getIntegerSizeForType(string $type): int
     {

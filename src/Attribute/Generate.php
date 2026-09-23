@@ -225,8 +225,6 @@ class Generate
 
     /**
      * Sets the given visibility to all accessors if they are not explicitly defined.
-     *
-     * @param string $visibility
      */
     public function setDefaultVisibility(string $visibility): void
     {

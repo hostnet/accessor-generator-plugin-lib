@@ -66,8 +66,6 @@ class ReflectionProperty
      *
      * @throws \InvalidArgumentException
      * @throws \DomainException
-     *
-     * @param int|null $modifiers
      */
     private function setModifiers(?int $modifiers): void
     {

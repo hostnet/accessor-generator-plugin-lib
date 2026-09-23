@@ -30,15 +30,7 @@ use Twig\Node\Node;
 #[YieldReady]
 class PerLineNode extends Node
 {
-    /**
-     * Create new PerLineNode
-     *
-     * @param Node   $lines
-     * @param string $prefix
-     * @param string $postfix
-     * @param int    $lineno
-     */
-    public function __construct(Node $lines, $prefix, $postfix, $lineno)
+    public function __construct(Node $lines, string $prefix, string $postfix, int $lineno)
     {
         parent::__construct(
             ['lines' => $lines],
@@ -51,8 +43,6 @@ class PerLineNode extends Node
      * Perform code generation in case there is a prefix or postfix (or both).
      *
      * This function is safe for indenting and does not generate empty lines.
-     *
-     * @param Compiler $compiler
      */
     private function compileComplex(Compiler $compiler): void
     {
@@ -105,8 +95,6 @@ class PerLineNode extends Node
 
     /**
      * Compiles the node to PHP.
-     *
-     * @param Compiler $compiler A Twig_Compiler instance
      */
     public function compile(Compiler $compiler): void
     {
