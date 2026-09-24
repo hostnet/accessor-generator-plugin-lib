@@ -18,11 +18,8 @@ use Hostnet\Component\AccessorGenerator\Attribute\Generate;
 use Hostnet\Component\AccessorGenerator\PropertyProcessor\Exception\InvalidColumnSettingsException;
 
 /**
- * Extracts type and relationship metadata from Doctrine ORM mapping objects —
+ * Extracts type and relationship metadata from Doctrine ORM mapping attributes —
  * Column, JoinColumn, GeneratedValue, OneToMany, ManyToMany, OneToOne, ManyToOne.
- *
- * Works for both docblock annotations (@ORM\Column) and native attributes (#[ORM\Column])
- * because Doctrine's mapping classes are dual-registered and produce the same object either way.
  */
 class DoctrineMappingProcessor implements PropertyProcessorInterface
 {
@@ -36,7 +33,7 @@ class DoctrineMappingProcessor implements PropertyProcessorInterface
     private const array NULLABLE_TYPES = [self::ZEROED_DATE, self::ZEROED_DATE_TIME];
 
     /**
-     * Process annotations of type:
+     * Process attributes of type:
      *  Column,
      *  GeneratedValue,
      *  ManyToMany,
@@ -50,57 +47,49 @@ class DoctrineMappingProcessor implements PropertyProcessorInterface
      * @throws \Hostnet\Component\AccessorGenerator\PropertyProcessor\Exception\InvalidColumnSettingsException
      * @throws \InvalidArgumentException
      * @throws \DomainException
-     *
-     * @param mixed $annotation instantiated annotation or attribute object
-     * @param PropertyInformation $information
      */
-
-    public function apply($annotation, PropertyInformation $information): void
+    #[\Override]
+    public function apply(object $attribute, PropertyInformation $information): void
     {
         // Process scalar value (db-wise) columns.
-        if ($annotation instanceof Column) {
-            $this->processColumn($annotation, $information);
+        if ($attribute instanceof Column) {
+            $this->processColumn($attribute, $information);
         }
 
         // Process references to Collections.
-        if ($annotation instanceof OneToMany || $annotation instanceof ManyToMany) {
+        if ($attribute instanceof OneToMany || $attribute instanceof ManyToMany) {
             // We are one the owning side (db-wise) of a collection,
             // so we should generate add en remove methods.
             $information->setCollection(true);
 
             // All relationships have a target type that can
             // be extracted and used as the column type.
-            $type = $this->transformComplexType($annotation->targetEntity);
+            $type = $this->transformComplexType($attribute->targetEntity);
             $information->setType($type);
-            $this->processBidirectional($annotation, $information);
+            $this->processBidirectional($attribute, $information);
         }
 
         // All relationships have a target type that can
         // be extracted and used as the column type.
-        if ($annotation instanceof OneToOne || $annotation instanceof ManyToOne) {
-            $type = $this->transformComplexType($annotation->targetEntity);
+        if ($attribute instanceof OneToOne || $attribute instanceof ManyToOne) {
+            $type = $this->transformComplexType($attribute->targetEntity);
             $information->setType($type);
-            $this->processBidirectional($annotation, $information);
+            $this->processBidirectional($attribute, $information);
         }
 
         // Process scalar value (db-wise) columns.
-        if ($annotation instanceof JoinColumn) {
-            $this->processJoinColumn($annotation, $information);
+        if ($attribute instanceof JoinColumn) {
+            $this->processJoinColumn($attribute, $information);
         }
 
         // Generated value columns such as auto_increment
         // should not have a setter function generated.
         // If the user insists on setting this column
         // a setter could be implemented by hand.
-        if ($annotation instanceof GeneratedValue) {
+        if ($attribute instanceof GeneratedValue) {
             $information->limitMaximumSetVisibility(Generate::VISIBILITY_NONE);
         }
         // Do nothing for other types
-    }
-
-    public function getProcessableNamespace(): string
-    {
-        return 'Doctrine\ORM\Mapping';
     }
 
     /**
@@ -108,21 +97,18 @@ class DoctrineMappingProcessor implements PropertyProcessorInterface
      *
      * @throws \DomainException
      * @throws \InvalidArgumentException
-     *
-     * @param mixed $annotation instantiated annotation or attribute object
-     * @param PropertyInformation $information
      */
-    private function processBidirectional($annotation, PropertyInformation $information): void
+    private function processBidirectional(object $attribute, PropertyInformation $information): void
     {
         // Parse the mappedBy and inversedBy columns, there is no nice interface
         // on them so we have to check for existence of the property.
-        if (property_exists($annotation, 'inversedBy') && $annotation->inversedBy) {
-            $information->setReferencedProperty($annotation->inversedBy);
-        } elseif (property_exists($annotation, 'mappedBy') && $annotation->mappedBy) {
-            $information->setReferencedProperty($annotation->mappedBy);
+        if (property_exists($attribute, 'inversedBy') && $attribute->inversedBy) {
+            $information->setReferencedProperty($attribute->inversedBy);
+        } elseif (property_exists($attribute, 'mappedBy') && $attribute->mappedBy) {
+            $information->setReferencedProperty($attribute->mappedBy);
         }
 
-        if ($annotation instanceof ManyToOne || $annotation instanceof ManyToMany) {
+        if ($attribute instanceof ManyToOne || $attribute instanceof ManyToMany) {
             $information->setReferencingCollection(true);
         }
 
@@ -132,20 +118,17 @@ class DoctrineMappingProcessor implements PropertyProcessorInterface
         }
 
         // Set field name for index on this collection.
-        if (!property_exists($annotation, 'indexBy') || !$annotation->indexBy) {
+        if (!property_exists($attribute, 'indexBy') || !$attribute->indexBy) {
             return;
         }
 
-        $information->setIndex($annotation->indexBy);
+        $information->setIndex($attribute->indexBy);
     }
 
     /**
-     * Process a Column Annotation, extract information about scale and
+     * Process a Column attribute, extract information about scale and
      * precision for decimal types, length and size of string and integer
      * types, if the column may be null and if it should be a unique value.
-     *
-     * @param Column $column
-     * @param PropertyInformation $information
      *
      * @throws InvalidColumnSettingsException
      * @throws \DomainException
@@ -184,10 +167,7 @@ class DoctrineMappingProcessor implements PropertyProcessorInterface
     }
 
     /**
-     * Process a JoinColumn Annotation, extract nullable.
-     *
-     * @param JoinColumn $join_column
-     * @param PropertyInformation $information
+     * Process a JoinColumn attribute, extract nullable.
      */
     private function processJoinColumn(JoinColumn $join_column, PropertyInformation $information): void
     {
@@ -315,8 +295,6 @@ class DoctrineMappingProcessor implements PropertyProcessorInterface
      * eventually turn them silently into a float.
      *
      * @see http://doctrine-dbal.readthedocs.org/en/latest/reference/types.html
-     *
-     * @param string $type
      */
     private function getIntegerSizeForType(string $type): int
     {

@@ -4,7 +4,7 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 use Hostnet\Component\AccessorGenerator\Collection\ImmutableCollection;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Feature;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\FeatureInterface;
@@ -43,12 +43,8 @@ trait SoftwareMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct.
      * @throws \LogicException         if a member was added that already exists within the collection.
      * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
-     *
-     * @param FeatureInterface $feature
-     *
-     * @return $this|Software
      */
-    public function addFeature(FeatureInterface $feature)
+    public function addFeature(FeatureInterface $feature): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -95,12 +91,8 @@ trait SoftwareMethodsTrait
      * Removes the given feature from this collection.
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param FeatureInterface $feature
-     *
-     * @return $this|Software
      */
-    public function removeFeature(FeatureInterface $feature)
+    public function removeFeature(FeatureInterface $feature): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(

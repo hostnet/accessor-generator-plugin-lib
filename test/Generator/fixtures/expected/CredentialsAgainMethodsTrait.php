@@ -4,7 +4,7 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\CredentialsAgain;
 
 trait CredentialsAgainMethodsTrait
@@ -16,10 +16,8 @@ trait CredentialsAgainMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      *
      * @param string $password
-     *
-     * @return $this|CredentialsAgain
      */
-    public function setPassword($password)
+    public function setPassword($password): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(

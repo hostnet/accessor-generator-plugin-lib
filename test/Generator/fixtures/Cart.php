@@ -2,7 +2,7 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Customer as Client;
 
 /**
@@ -23,23 +23,18 @@ use Hostnet\Component\AccessorGenerator\Generator\fixtures\Customer as Client;
  * ManyToMany mapping declaration. The mappedBy
  * attribute contains the name of the associa-
  * tion-field on the owning side.
- *
- * @ORM\Entity
  */
+#[ORM\Entity]
 class Cart
 {
     use Generated\CartMethodsTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Customer", mappedBy="cart")
-     * @ORM\JoinColumn(nullable=false)
-     * @AG\Generate(strict=false, type="Client")
-     */
+    #[ORM\OneToOne(targetEntity: 'Customer', mappedBy: 'cart')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[AG\Generate(strict: false, type: 'Client')]
     private $customer;
 }

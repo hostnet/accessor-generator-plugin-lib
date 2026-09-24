@@ -4,7 +4,7 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 use Hostnet\Component\AccessorGenerator\Collection\ImmutableCollection;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Category;
 
@@ -41,12 +41,8 @@ trait CategoryMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct.
      * @throws \LogicException         if a member was added that already exists within the collection.
      * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
-     *
-     * @param Category $child
-     *
-     * @return $this|Category
      */
-    public function addChild(Category $child)
+    public function addChild(Category $child): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -89,12 +85,8 @@ trait CategoryMethodsTrait
      * Removes the given child from this collection.
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param Category $child
-     *
-     * @return $this|Category
      */
-    public function removeChild(Category $child)
+    public function removeChild(Category $child): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -146,12 +138,8 @@ trait CategoryMethodsTrait
      * Sets parent
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param Category $parent
-     *
-     * @return $this|Category
      */
-    public function setParent(Category $parent = null)
+    public function setParent(?Category $parent = null): static
     {
         if (\func_num_args() > 1) {
             throw new \BadMethodCallException(

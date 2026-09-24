@@ -30,8 +30,6 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
 
     /**
      * Wrap a collection to make it immutable.
-     *
-     * @param Collection $collection
      */
     public function __construct(Collection $collection)
     {

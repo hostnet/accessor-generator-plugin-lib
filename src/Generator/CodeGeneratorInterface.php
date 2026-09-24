@@ -23,14 +23,11 @@ interface CodeGeneratorInterface
      * where no annotations found and/or creating a trait was not needed.
      *
      * @see generateTraitForClass
-     * @param ReflectionClass $class
      */
     public function writeTraitForClass(ReflectionClass $class): bool;
 
     /**
      * Writes one or more enumerator accessors.
-     *
-     * @param ReflectionClass $class
      */
     public function writeEnumeratorAccessorsForClass(ReflectionClass $class): array;
 
@@ -40,8 +37,6 @@ interface CodeGeneratorInterface
      * "Generated" relative to the namespace of {$class}.
      *
      * Returns an empty string if no code generation was needed nor done.
-     *
-     * @param ReflectionClass $class
      */
     public function generateTraitForClass(ReflectionClass $class): string;
 
@@ -49,8 +44,6 @@ interface CodeGeneratorInterface
      * Generate Accessor methods for property associated with the given
      * {$info}. The output will consist of generated code for the accessors
      * separated with line-breaks.
-     *
-     * @param PropertyInformation $info
      */
     public function generateAccessors(PropertyInformation $info): string;
 
@@ -60,8 +53,6 @@ interface CodeGeneratorInterface
      * for the columns on which the aliases have been defined.
      *
      * ex. [{encryption_alias} => ['public-key' => {key_file}, 'private-key' => {key_file}], ...]
-     *
-     * @param array $encryption_aliases
      */
     public function setEncryptionAliases(array $encryption_aliases): void;
 

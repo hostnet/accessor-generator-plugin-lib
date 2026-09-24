@@ -4,7 +4,7 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Feature;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Item;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Nullable;
@@ -45,12 +45,8 @@ trait NullableMethodsTrait
      * this message, specify a default value or use JoinColumn(nullable=false).
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param \DateTime $zeroed_datetime
-     *
-     * @return $this|Nullable
      */
-    public function setZeroedDatetime(\DateTime $zeroed_datetime = null)
+    public function setZeroedDatetime(?\DateTime $zeroed_datetime = null): static
     {
         if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
@@ -99,12 +95,8 @@ trait NullableMethodsTrait
      * this message, specify a default value or use JoinColumn(nullable=false).
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param \DateTime $zeroed_date
-     *
-     * @return $this|Nullable
      */
-    public function setZeroedDate(\DateTime $zeroed_date = null)
+    public function setZeroedDate(?\DateTime $zeroed_date = null): static
     {
         if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
@@ -124,12 +116,8 @@ trait NullableMethodsTrait
      * Sets datetime_default
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param \DateTime $datetime_default
-     *
-     * @return $this|Nullable
      */
-    public function setDatetimeDefault(\DateTime $datetime_default = null)
+    public function setDatetimeDefault(?\DateTime $datetime_default = null): static
     {
         if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
@@ -153,12 +141,8 @@ trait NullableMethodsTrait
      * this message, specify a default value or use JoinColumn(nullable=false).
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param \DateTime $datetime_nullable
-     *
-     * @return $this|Nullable
      */
-    public function setDatetimeNullable(\DateTime $datetime_nullable = null)
+    public function setDatetimeNullable(?\DateTime $datetime_nullable = null): static
     {
         if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
@@ -178,12 +162,8 @@ trait NullableMethodsTrait
      * Sets datetime_both
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param \DateTime $datetime_both
-     *
-     * @return $this|Nullable
      */
-    public function setDatetimeBoth(\DateTime $datetime_both = null)
+    public function setDatetimeBoth(?\DateTime $datetime_both = null): static
     {
         if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
@@ -243,10 +223,8 @@ trait NullableMethodsTrait
      * @throws \DomainException if the integer value is outside of the domain on this machine
      *
      * @param int $int
-     *
-     * @return $this|Nullable
      */
-    public function setInt($int = null)
+    public function setInt($int = null): static
     {
         if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
@@ -291,10 +269,8 @@ trait NullableMethodsTrait
      * @throws \DomainException if the integer value is outside of the domain on this machine
      *
      * @param int $int_different
-     *
-     * @return $this|Nullable
      */
-    public function setIntDifferent($int_different = 2)
+    public function setIntDifferent($int_different = 2): static
     {
         if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
@@ -339,12 +315,8 @@ trait NullableMethodsTrait
      * this message, specify a default value or use JoinColumn(nullable=false).
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param Feature $feature
-     *
-     * @return $this|Nullable
      */
-    public function setFeature(Feature $feature = null)
+    public function setFeature(?Feature $feature = null): static
     {
         if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
@@ -368,12 +340,8 @@ trait NullableMethodsTrait
      * this message, specify a default value or use JoinColumn(nullable=false).
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param Feature $an_other_feature
-     *
-     * @return $this|Nullable
      */
-    public function setAnOtherFeature(Feature $an_other_feature = null)
+    public function setAnOtherFeature(?Feature $an_other_feature = null): static
     {
         if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
@@ -421,10 +389,8 @@ trait NullableMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      *
      * @param string $string
-     *
-     * @return $this|Nullable
      */
-    public function setString($string = null)
+    public function setString($string = null): static
     {
         if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
@@ -481,12 +447,8 @@ trait NullableMethodsTrait
      * Sets only_one
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param OneToOneNullable $only_one
-     *
-     * @return $this|Nullable
      */
-    public function setOnlyOne(OneToOneNullable $only_one = null)
+    public function setOnlyOne(?OneToOneNullable $only_one = null): static
     {
         if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
@@ -537,12 +499,8 @@ trait NullableMethodsTrait
      * Sets unidirectional_one_to_one
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param Item $unidirectional_one_to_one
-     *
-     * @return $this|Nullable
      */
-    public function setUnidirectionalOneToOne(Item $unidirectional_one_to_one = null)
+    public function setUnidirectionalOneToOne(?Item $unidirectional_one_to_one = null): static
     {
         if (\func_num_args() > 1) {
             throw new \BadMethodCallException(

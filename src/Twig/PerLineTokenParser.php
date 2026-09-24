@@ -39,8 +39,6 @@ class PerLineTokenParser extends AbstractTokenParser
      * Parse everything within the perline block and then restructure the
      * contents into some thing nice to build a PerLineNode out of.
      *
-     * @param Token $token
-     *
      * @throws SyntaxError
      */
     public function parse(Token $token): PerLineNode
@@ -68,8 +66,6 @@ class PerLineTokenParser extends AbstractTokenParser
      * Parse the body into a prefix, postfix and all the
      * other twig nodes that will compile into multiple
      * lines.
-     *
-     * @param Node $body
      */
     private function parseBody(Node $body): PerLineNode
     {

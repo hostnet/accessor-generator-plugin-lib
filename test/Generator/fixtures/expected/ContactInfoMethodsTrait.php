@@ -4,7 +4,7 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 use Hostnet\Component\AccessorGenerator\Collection\ImmutableCollection;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\ContactInfo;
 
@@ -42,10 +42,8 @@ trait ContactInfoMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      *
      * @param string $address_line
-     *
-     * @return $this|ContactInfo
      */
-    public function setAddressLine($address_line)
+    public function setAddressLine($address_line): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -104,10 +102,8 @@ trait ContactInfoMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      *
      * @param string $name
-     *
-     * @return $this|ContactInfo
      */
-    private function setName($name)
+    private function setName($name): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -166,10 +162,8 @@ trait ContactInfoMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      *
      * @param bool $deleted
-     *
-     * @return $this|ContactInfo
      */
-    public function setDeleted($deleted)
+    public function setDeleted($deleted): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -223,10 +217,8 @@ trait ContactInfoMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      *
      * @param bool $spends_lots_of_money
-     *
-     * @return $this|ContactInfo
      */
-    protected function setSpendsLotsOfMoney($spends_lots_of_money)
+    protected function setSpendsLotsOfMoney($spends_lots_of_money): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -279,12 +271,8 @@ trait ContactInfoMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct.
      * @throws \LogicException         if a member was added that already exists within the collection.
      * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
-     *
-     * @param ContactInfo $referenced_contact
-     *
-     * @return $this|ContactInfo
      */
-    private function addReferencedContact(ContactInfo $referenced_contact)
+    private function addReferencedContact(ContactInfo $referenced_contact): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -327,12 +315,8 @@ trait ContactInfoMethodsTrait
      * Removes the given referenced_contact from this collection.
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param ContactInfo $referenced_contact
-     *
-     * @return $this|ContactInfo
      */
-    private function removeReferencedContact(ContactInfo $referenced_contact)
+    private function removeReferencedContact(ContactInfo $referenced_contact): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -388,12 +372,8 @@ trait ContactInfoMethodsTrait
      * this message, specify a default value or use JoinColumn(nullable=false).
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param ContactInfo $referrer
-     *
-     * @return $this|ContactInfo
      */
-    protected function setReferrer(ContactInfo $referrer = null)
+    protected function setReferrer(?ContactInfo $referrer = null): static
     {
         if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
@@ -462,12 +442,8 @@ trait ContactInfoMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct.
      * @throws \LogicException         if a member was added that already exists within the collection.
      * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
-     *
-     * @param ContactInfo $friend
-     *
-     * @return $this|ContactInfo
      */
-    private function addFriend(ContactInfo $friend)
+    private function addFriend(ContactInfo $friend): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -510,12 +486,8 @@ trait ContactInfoMethodsTrait
      * Removes the given friend from this collection.
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param ContactInfo $friend
-     *
-     * @return $this|ContactInfo
      */
-    protected function removeFriend(ContactInfo $friend)
+    protected function removeFriend(ContactInfo $friend): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -571,12 +543,8 @@ trait ContactInfoMethodsTrait
      * this message, specify a default value or use JoinColumn(nullable=false).
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param ContactInfo $friended_by
-     *
-     * @return $this|ContactInfo
      */
-    private function setFriendedBy(ContactInfo $friended_by = null)
+    private function setFriendedBy(?ContactInfo $friended_by = null): static
     {
         if (\func_num_args() > 1) {
             throw new \BadMethodCallException(

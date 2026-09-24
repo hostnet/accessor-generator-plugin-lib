@@ -6,8 +6,6 @@ declare(strict_types=1);
 
 namespace Hostnet\Component\AccessorGenerator\Attribute;
 
-use Doctrine\Common\Annotations\Annotation\Enum;
-
 /**
  * Activates accessor method generation for a property.
  *
@@ -37,13 +35,20 @@ class Generate
      */
     public const string VISIBILITY_PRIVATE = 'private';
 
+    private const array VALID_VISIBILITIES = [
+        self::VISIBILITY_NONE,
+        self::VISIBILITY_PUBLIC,
+        self::VISIBILITY_PROTECTED,
+        self::VISIBILITY_PRIVATE,
+    ];
+
     public function __construct(
         /**
          * Will generate a getter of the given visibility.
          *
          * Default: public.
          *
-         * @Enum({"public", "protected", "private", "none"})
+         * @var 'public'|'protected'|'private'|'none'|null
          */
         private ?string $get = null,
         /**
@@ -55,7 +60,7 @@ class Generate
          *
          * Default: public.
          *
-         * @Enum({"public", "protected", "private", "none"})
+         * @var 'public'|'protected'|'private'|'none'|null
          */
         private ?string $set = null,
         /**
@@ -64,7 +69,7 @@ class Generate
          *
          * Default: public.
          *
-         * @Enum({"public", "protected", "private", "none"})
+         * @var 'public'|'protected'|'private'|'none'|null
          */
         private ?string $add = null,
         /**
@@ -73,7 +78,7 @@ class Generate
          *
          * Default: public.
          *
-         * @Enum({"public", "protected", "private", "none"})
+         * @var 'public'|'protected'|'private'|'none'|null
          */
         private ?string $remove = null,
         /**
@@ -82,7 +87,7 @@ class Generate
          *
          * Default: public.
          *
-         * @Enum({"public", "protected", "private", "none"})
+         * @var 'public'|'protected'|'private'|'none'
          */
         private readonly string $is = self::VISIBILITY_PUBLIC,
         /**
@@ -124,6 +129,25 @@ class Generate
          */
         private readonly ?string $encryption_alias = null,
     ) {
+        self::validateVisibility($get, 'get');
+        self::validateVisibility($set, 'set');
+        self::validateVisibility($add, 'add');
+        self::validateVisibility($remove, 'remove');
+        self::validateVisibility($is, 'is');
+    }
+
+    /**
+     * @throws \DomainException if $visibility is not one of "public", "protected", "private", "none" or null
+     */
+    private static function validateVisibility(?string $visibility, string $param_name): void
+    {
+        if (null !== $visibility && !\in_array($visibility, self::VALID_VISIBILITIES, true)) {
+            throw new \DomainException(sprintf(
+                'Invalid value "%s" for Generate::$%s, must be one of "public", "protected", "private", "none".',
+                $visibility,
+                $param_name
+            ));
+        }
     }
 
     public function getGet(): ?string
@@ -201,8 +225,6 @@ class Generate
 
     /**
      * Sets the given visibility to all accessors if they are not explicitly defined.
-     *
-     * @param string $visibility
      */
     public function setDefaultVisibility(string $visibility): void
     {

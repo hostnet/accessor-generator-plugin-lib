@@ -2,7 +2,7 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 
 /**
  * 6.3. One-To-One, Bidirectional (Owning)
@@ -22,23 +22,18 @@ use Hostnet\Component\AccessorGenerator\Annotation as AG;
  * ManyToMany mapping declaration. The mappedBy
  * attribute contains the name of the associa-
  * tion-field on the owning side.
- *
- * @ORM\Entity
  */
+#[ORM\Entity]
 class Customer
 {
     use Generated\CustomerMethodsTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\JoinColumn(nullable=false)
-     * @ORM\OneToOne(targetEntity="Cart", inversedBy="customer")
-     * @AG\Generate
-     */
+    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\OneToOne(targetEntity: 'Cart', inversedBy: 'customer')]
+    #[AG\Generate]
     private $cart;
 }

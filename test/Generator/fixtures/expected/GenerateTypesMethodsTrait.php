@@ -3,7 +3,7 @@
 
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\GenerateTypes;
 
 trait GenerateTypesMethodsTrait
@@ -59,10 +59,8 @@ trait GenerateTypesMethodsTrait
      * @throws \DomainException if the integer value is outside of the domain on this machine
      *
      * @param int $integer
-     *
-     * @return $this|GenerateTypes
      */
-    public function setInteger($integer)
+    public function setInteger($integer): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -133,10 +131,8 @@ trait GenerateTypesMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      *
      * @param float $float
-     *
-     * @return $this|GenerateTypes
      */
-    public function setFloat($float)
+    public function setFloat($float): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -197,10 +193,8 @@ trait GenerateTypesMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      *
      * @param string $string
-     *
-     * @return $this|GenerateTypes
      */
-    public function setString($string)
+    public function setString($string): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -266,10 +260,8 @@ trait GenerateTypesMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      *
      * @param bool $boolean
-     *
-     * @return $this|GenerateTypes
      */
-    public function setBoolean($boolean)
+    public function setBoolean($boolean): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -330,10 +322,8 @@ trait GenerateTypesMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      *
      * @param bool $is_this_boolean
-     *
-     * @return $this|GenerateTypes
      */
-    public function setIsThisBoolean($is_this_boolean)
+    public function setIsThisBoolean($is_this_boolean): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -391,12 +381,8 @@ trait GenerateTypesMethodsTrait
      * Sets datetime
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param \DateTime $datetime
-     *
-     * @return $this|GenerateTypes
      */
-    public function setDatetime(\DateTime $datetime)
+    public function setDatetime(\DateTime $datetime): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -451,10 +437,8 @@ trait GenerateTypesMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      *
      * @param array $array
-     *
-     * @return $this|GenerateTypes
      */
-    public function setArray($array)
+    public function setArray($array): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -515,10 +499,8 @@ trait GenerateTypesMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      *
      * @param object $object
-     *
-     * @return $this|GenerateTypes
      */
-    public function setObject($object)
+    public function setObject($object): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(

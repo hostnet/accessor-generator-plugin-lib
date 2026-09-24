@@ -4,7 +4,7 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 use Hostnet\Component\AccessorGenerator\Collection\ImmutableCollection;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Node;
 
@@ -40,12 +40,8 @@ trait NodeMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct.
      * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
-     *
-     * @param Node $out
-     *
-     * @return $this|Node
      */
-    public function addOut(Node $out)
+    public function addOut(Node $out): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -96,12 +92,8 @@ trait NodeMethodsTrait
      * Removes the given out from this collection.
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param Node $out
-     *
-     * @return $this|Node
      */
-    public function removeOut(Node $out)
+    public function removeOut(Node $out): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(

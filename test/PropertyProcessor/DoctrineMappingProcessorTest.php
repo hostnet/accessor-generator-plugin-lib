@@ -190,7 +190,6 @@ class DoctrineMappingProcessorTest extends TestCase
 
     /**
      * @dataProvider associationProvider
-     * @param $annotation
      * @throws \DomainException
      * @throws \Hostnet\Component\AccessorGenerator\PropertyProcessor\Exception\InvalidColumnSettingsException
      * @throws \InvalidArgumentException
@@ -198,40 +197,40 @@ class DoctrineMappingProcessorTest extends TestCase
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\ClassDefinitionNotFoundException
      * @throws \OutOfBoundsException
      */
-    public function testAssociation($annotation): void
+    public function testAssociation(object $attribute): void
     {
         // Set up dependencies.
-        $this->processor->apply($annotation, $this->information);
+        $this->processor->apply($attribute, $this->information);
 
         // These should lead to isCollection() returning true
-        if ($annotation instanceof ManyToMany || $annotation instanceof OneToMany) {
+        if ($attribute instanceof ManyToMany || $attribute instanceof OneToMany) {
             self::assertTrue($this->information->isCollection());
         } else {
             self::assertFalse($this->information->isCollection());
         }
 
         // Check type.
-        if ($annotation instanceof ManyToMany
-            || $annotation instanceof ManyToOne
-            || $annotation instanceof OneToMany
+        if ($attribute instanceof ManyToMany
+            || $attribute instanceof ManyToOne
+            || $attribute instanceof OneToMany
         ) {
-            $type = $annotation->targetEntity;
+            $type = $attribute->targetEntity;
             self::assertEquals($type, $this->information->getType());
         }
 
         // Check Generated value disables
         // set method generation.
-        if ($annotation instanceof GeneratedValue) {
+        if ($attribute instanceof GeneratedValue) {
             self::assertFalse($this->information->willGenerateSet(), 'generate');
         }
 
         // Check for a bidirectional association
-        if (property_exists($annotation, 'mappedBy') && $annotation->mappedBy) {
+        if (property_exists($attribute, 'mappedBy') && $attribute->mappedBy) {
             // Bidirectional, inverse side.
-            self::assertEquals($annotation->mappedBy, $this->information->getReferencedProperty());
-        } elseif (property_exists($annotation, 'inversedBy') && $annotation->inversedBy) {
+            self::assertEquals($attribute->mappedBy, $this->information->getReferencedProperty());
+        } elseif (property_exists($attribute, 'inversedBy') && $attribute->inversedBy) {
             // Bidirectional, owning side.
-            self::assertEquals($annotation->inversedBy, $this->information->getReferencedProperty());
+            self::assertEquals($attribute->inversedBy, $this->information->getReferencedProperty());
         } else {
             // Unidirectional.
             self::assertEmpty($this->information->getReferencedProperty());
@@ -299,15 +298,15 @@ class DoctrineMappingProcessorTest extends TestCase
             && $doctrine_type
             && (ctype_upper($doctrine_type[0]) || $doctrine_type[0] === '\\')
         ) {
-            $annotation               = new ManyToOne();
-            $annotation->targetEntity = $doctrine_type;
+            $attribute               = new ManyToOne();
+            $attribute->targetEntity = $doctrine_type;
         } else {
-            $annotation        = new Column();
-            $annotation->type  = $doctrine_type;
-            $annotation->scale = 1;
+            $attribute        = new Column();
+            $attribute->type  = $doctrine_type;
+            $attribute->scale = 1;
         }
 
-        $this->processor->apply($annotation, $this->information);
+        $this->processor->apply($attribute, $this->information);
         self::assertSame($php_type, $this->information->getType());
     }
 
@@ -318,13 +317,8 @@ class DoctrineMappingProcessorTest extends TestCase
     public function testUnrecognisedObjectIsIgnored(): void
     {
         $information = clone $this->information;
-        $annotation  = new \stdClass();
-        $this->processor->apply($annotation, $this->information);
+        $attribute   = new \stdClass();
+        $this->processor->apply($attribute, $this->information);
         self::assertEquals($information, $this->information);
-    }
-
-    public function testGetProcessableNamespace(): void
-    {
-        self::assertSame('Doctrine\ORM\Mapping', $this->processor->getProcessableNamespace());
     }
 }

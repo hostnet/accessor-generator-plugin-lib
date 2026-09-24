@@ -4,7 +4,7 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 use Hostnet\Component\AccessorGenerator\Collection\ImmutableCollection;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Attribute;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Product;
@@ -178,10 +178,8 @@ trait ProductMethodsTrait
      * @throws \LengthException if the length of the value is to long
      *
      * @param string $system_name
-     *
-     * @return $this|Product
      */
-    public function setSystemName($system_name = '')
+    public function setSystemName($system_name = ''): static
     {
         if (\func_num_args() > 1) {
             throw new \BadMethodCallException(
@@ -243,12 +241,8 @@ trait ProductMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct.
      * @throws \LogicException         if a member was added that already exists within the collection.
      * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
-     *
-     * @param Attribute $attribute
-     *
-     * @return $this|Product
      */
-    public function addAttribute(Attribute $attribute)
+    public function addAttribute(Attribute $attribute): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -298,12 +292,8 @@ trait ProductMethodsTrait
      * Removes the given attribute from this collection.
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param Attribute $attribute
-     *
-     * @return $this|Product
      */
-    public function removeAttribute(Attribute $attribute)
+    public function removeAttribute(Attribute $attribute): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(

@@ -2,24 +2,18 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 
-/**
- * @ORM\Entity
- */
+#[ORM\Entity]
 class ConstantDefault
 {
     use Generated\ConstantDefaultMethodsTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="integer")
-     * @AG\Generate
-     **/
+    #[ORM\Column(type: 'integer')]
+    #[AG\Generate]
     private $weather = Weather::SUN;
 }

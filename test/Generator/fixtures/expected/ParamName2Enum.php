@@ -16,11 +16,6 @@ class ParamName2Enum
     private $collection;
     private $parameter_entity_class;
 
-    /**
-     * @param Collection $collection
-     * @param object     $owning_entity
-     * @param string     $parameter_entity_class
-     */
     public function __construct(Collection $collection, object $owning_entity, string $parameter_entity_class)
     {
         $this->collection             = $collection;
@@ -54,10 +49,6 @@ class ParamName2Enum
 
     /**
      * Sets the value for the parameter SOME_ARRAY.
-     *
-     * @param array $value
-     *
-     * @return ParamName2Enum
      */
     public function setSomeArray(array $value): ParamName2Enum
     {
@@ -103,8 +94,6 @@ class ParamName2Enum
      * Removes the parameter SOME_ARRAY from the collection.
      *
      * @throws \LogicException if the parameter does not exist.
-     *
-     * @return ParamName2Enum
      */
     public function removeSomeArray(): ParamName2Enum
     {
@@ -125,8 +114,6 @@ class ParamName2Enum
      * Nullifies the data for the parameter SOME_ARRAY.
      *
      * @throws \LogicException if the parameter does not exist or was never initialized.
-     *
-     * @return ParamName2Enum
      */
     public function clearSomeArray(): ParamName2Enum
     {
@@ -163,10 +150,6 @@ class ParamName2Enum
 
     /**
      * Sets the value for the parameter SOME_STRING.
-     *
-     * @param string $value
-     *
-     * @return ParamName2Enum
      */
     public function setSomeString(string $value): ParamName2Enum
     {
@@ -212,8 +195,6 @@ class ParamName2Enum
      * Removes the parameter SOME_STRING from the collection.
      *
      * @throws \LogicException if the parameter does not exist.
-     *
-     * @return ParamName2Enum
      */
     public function removeSomeString(): ParamName2Enum
     {
@@ -234,8 +215,6 @@ class ParamName2Enum
      * Nullifies the data for the parameter SOME_STRING.
      *
      * @throws \LogicException if the parameter does not exist or was never initialized.
-     *
-     * @return ParamName2Enum
      */
     public function clearSomeString(): ParamName2Enum
     {
@@ -272,10 +251,6 @@ class ParamName2Enum
 
     /**
      * Sets the value for the parameter SOME_INTEGER.
-     *
-     * @param int $value
-     *
-     * @return ParamName2Enum
      */
     public function setSomeInteger(int $value): ParamName2Enum
     {
@@ -321,8 +296,6 @@ class ParamName2Enum
      * Removes the parameter SOME_INTEGER from the collection.
      *
      * @throws \LogicException if the parameter does not exist.
-     *
-     * @return ParamName2Enum
      */
     public function removeSomeInteger(): ParamName2Enum
     {
@@ -343,8 +316,6 @@ class ParamName2Enum
      * Nullifies the data for the parameter SOME_INTEGER.
      *
      * @throws \LogicException if the parameter does not exist or was never initialized.
-     *
-     * @return ParamName2Enum
      */
     public function clearSomeInteger(): ParamName2Enum
     {
@@ -381,10 +352,6 @@ class ParamName2Enum
 
     /**
      * Sets the value for the parameter SOME_FLOAT.
-     *
-     * @param float $value
-     *
-     * @return ParamName2Enum
      */
     public function setSomeFloat(float $value): ParamName2Enum
     {
@@ -430,8 +397,6 @@ class ParamName2Enum
      * Removes the parameter SOME_FLOAT from the collection.
      *
      * @throws \LogicException if the parameter does not exist.
-     *
-     * @return ParamName2Enum
      */
     public function removeSomeFloat(): ParamName2Enum
     {
@@ -452,8 +417,6 @@ class ParamName2Enum
      * Nullifies the data for the parameter SOME_FLOAT.
      *
      * @throws \LogicException if the parameter does not exist or was never initialized.
-     *
-     * @return ParamName2Enum
      */
     public function clearSomeFloat(): ParamName2Enum
     {
@@ -490,10 +453,6 @@ class ParamName2Enum
 
     /**
      * Sets the value for the parameter SOME_BOOLEAN.
-     *
-     * @param bool $value
-     *
-     * @return ParamName2Enum
      */
     public function setSomeBoolean(bool $value): ParamName2Enum
     {
@@ -539,8 +498,6 @@ class ParamName2Enum
      * Removes the parameter SOME_BOOLEAN from the collection.
      *
      * @throws \LogicException if the parameter does not exist.
-     *
-     * @return ParamName2Enum
      */
     public function removeSomeBoolean(): ParamName2Enum
     {
@@ -561,8 +518,6 @@ class ParamName2Enum
      * Nullifies the data for the parameter SOME_BOOLEAN.
      *
      * @throws \LogicException if the parameter does not exist or was never initialized.
-     *
-     * @return ParamName2Enum
      */
     public function clearSomeBoolean(): ParamName2Enum
     {

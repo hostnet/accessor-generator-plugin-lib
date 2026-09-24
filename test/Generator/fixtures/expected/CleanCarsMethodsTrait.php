@@ -5,7 +5,7 @@ namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 use Hostnet\Component\AccessorGenerator\Collection\ImmutableCollection;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Car;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\CleanCars;
@@ -42,12 +42,8 @@ trait CleanCarsMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct.
      * @throws \LogicException         if a member was added that already exists within the collection.
-     *
-     * @param Car $car
-     *
-     * @return $this|CleanCars
      */
-    public function addCar(Car $car)
+    public function addCar(Car $car): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -74,12 +70,8 @@ trait CleanCarsMethodsTrait
      * Removes the given car from this collection.
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param Car $car
-     *
-     * @return $this|CleanCars
      */
-    public function removeCar(Car $car)
+    public function removeCar(Car $car): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(

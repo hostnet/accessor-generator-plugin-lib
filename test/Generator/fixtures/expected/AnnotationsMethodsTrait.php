@@ -3,7 +3,7 @@
 
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Annotations;
 use Symfony\Component\Console as Stupid;
 
@@ -45,12 +45,8 @@ trait AnnotationsMethodsTrait
      * Sets stupid
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param \DateTime $stupid
-     *
-     * @return $this|Annotations
      */
-    public function setStupid(\DateTime $stupid)
+    public function setStupid(\DateTime $stupid): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(

@@ -2,40 +2,30 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 use Hostnet\Component\AccessorGenerator\Enum\EnumeratorCompatibleEntityInterface;
 
-/**
- * @ORM\Entity()
- */
+#[ORM\Entity]
 class Parameter implements EnumeratorCompatibleEntityInterface
 {
     use Generated\ParameterMethodsTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue
-     * @AG\Generate(set="none")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue]
+    #[AG\Generate(set: 'none')]
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Hostnet\Component\AccessorGenerator\Generator\fixtures\Parameterized", inversedBy="parameters")
-     * @ORM\JoinColumn(name="parameter_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Hostnet\Component\AccessorGenerator\Generator\fixtures\Parameterized', inversedBy: 'parameters')]
+    #[ORM\JoinColumn(name: 'parameter_id', referencedColumnName: 'id')]
     private $parameterized;
 
-    /**
-     * @ORM\Column(type="string")
-     * @AG\Generate(set="none")
-     */
+    #[ORM\Column(type: 'string')]
+    #[AG\Generate(set: 'none')]
     private $name;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     * @AG\Generate()
-     */
+    #[ORM\Column(type: 'string', nullable: true)]
+    #[AG\Generate]
     private $value;
 
     /**

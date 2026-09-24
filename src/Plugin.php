@@ -13,9 +13,6 @@ use Composer\Package\PackageInterface;
 use Composer\Package\RootPackageInterface;
 use Composer\Plugin\PluginInterface;
 use Composer\Script\ScriptEvents;
-use Doctrine\Common\Annotations\AnnotationRegistry;
-// phpcs:ignore SlevomatCodingStandard.Namespaces.UnusedUses.UnusedUse
-use Hostnet\Component\AccessorGenerator\Attribute\Generate;
 use Hostnet\Component\AccessorGenerator\Generator\CodeGenerator;
 use Hostnet\Component\AccessorGenerator\Generator\CodeGeneratorInterface;
 use Hostnet\Component\AccessorGenerator\Generator\Exception\ReferencedClassNotFoundException;
@@ -63,19 +60,15 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     private $metadata;
 
     /**
-     * Initialize the annotation registry with composer as auto loader. Create
-     * a CodeGenerator if none was provided.
+     * Create a CodeGenerator if none was provided.
      *
-     * @param CodeGeneratorInterface $generator
      * @throws \InvalidArgumentException
      * @throws LoaderError
      * @throws SyntaxError
      * @throws RuntimeError
      */
-    public function __construct(CodeGeneratorInterface $generator = null)
+    public function __construct(?CodeGeneratorInterface $generator = null)
     {
-        AnnotationRegistry::registerLoader('class_exists');
-
         if ($generator) {
             $this->generator = $generator;
         } else {
@@ -83,9 +76,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public static function getSubscribedEvents(): array
     {
         return [
@@ -94,16 +85,19 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         ];
     }
 
+    #[\Override]
     public function activate(Composer $composer, IOInterface $io): void
     {
         $this->composer = $composer;
         $this->io       = $io;
     }
 
+    #[\Override]
     public function deactivate(Composer $composer, IOInterface $io): void
     {
     }
 
+    #[\Override]
     public function uninstall(Composer $composer, IOInterface $io): void
     {
     }
@@ -112,8 +106,8 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      * Gets called on the PRE_AUTOLOAD_DUMP event
      *
      * Generate Traits for every package that requires
-     * this plugin and has php files with the @Generate
-     * annotation set on at least one property.
+     * this plugin and has php files with the #[AG\Generate]
+     * attribute set on at least one property.
      *
      * @throws \DomainException
      * @throws \Hostnet\Component\AccessorGenerator\Reflection\Exception\FileException
@@ -175,7 +169,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     /**
      * Generate traits on disk for the given package.
      * Will only do so when the package actually has
-     * the @Generate annotation set on at least one
+     * the #[AG\Generate] attribute set on at least one
      * property.
      *
      * @throws \DomainException
@@ -185,8 +179,6 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      * @throws \OutOfBoundsException
      * @throws \RuntimeException
      * @throws \Symfony\Component\Filesystem\Exception\IOException
-     *
-     * @param PackageInterface $package
      */
     private function generateTraitForPackage(PackageInterface $package): void
     {
@@ -213,7 +205,6 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      *
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint
      *
-     * @param PackageInterface $package
      * @return mixed
      * @throws Reflection\Exception\FileException
      */
@@ -252,7 +243,6 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      *
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint
      *
-     * @param PackageInterface $package
      * @return \Iterator|\SplFileInfo[]
      */
     private function getFilesForPackage(PackageInterface $package)

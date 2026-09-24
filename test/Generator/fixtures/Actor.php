@@ -2,7 +2,7 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 
 /**
  * 6.9. Many-To-Many, Bidirectional (Owning)
@@ -35,23 +35,18 @@ use Hostnet\Component\AccessorGenerator\Annotation as AG;
  * ManyToMany mapping declaration. The mappedBy
  * attribute contains the name of the associa-
  * tion-field on the owning side.
- *
- * @ORM\Entity
  */
+#[ORM\Entity]
 class Actor
 {
     use Generated\ActorMethodsTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie", inversedBy="a")
-     * @ORM\JoinTable(name="actors_movies")
-     * @AG\Generate
-     */
+    #[ORM\ManyToMany(targetEntity: 'Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie', inversedBy: 'a')]
+    #[ORM\JoinTable(name: 'actors_movies')]
+    #[AG\Generate]
     private $movies;
 }

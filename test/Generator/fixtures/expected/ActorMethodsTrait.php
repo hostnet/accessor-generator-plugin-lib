@@ -4,7 +4,7 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 use Hostnet\Component\AccessorGenerator\Collection\ImmutableCollection;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Actor;
 
@@ -40,12 +40,8 @@ trait ActorMethodsTrait
      *
      * @throws \BadMethodCallException if the number of arguments is not correct.
      * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
-     *
-     * @param \Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie $movie
-     *
-     * @return $this|Actor
      */
-    public function addMovie(\Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie $movie)
+    public function addMovie(\Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie $movie): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -96,12 +92,8 @@ trait ActorMethodsTrait
      * Removes the given movie from this collection.
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param \Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie $movie
-     *
-     * @return $this|Actor
      */
-    public function removeMovie(\Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie $movie)
+    public function removeMovie(\Hostnet\Component\AccessorGenerator\Generator\fixtures\Movie $movie): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(

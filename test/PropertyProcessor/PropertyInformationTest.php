@@ -30,22 +30,25 @@ class PropertyInformationTest extends TestCase
     {
         $class = $this->getMockBuilder(ReflectionClass::class)->disableOriginalConstructor()->getMock();
         $class->expects(self::any())->method('getNamespace')->willReturn('');
-        $class->expects(self::any())->method('getUseStatements')->willReturn([]);
+        $class->expects(self::any())->method('getUseStatements')->willReturn([
+            'AG' => 'Hostnet\Component\AccessorGenerator\Attribute',
+        ]);
         $class->expects(self::any())->method('getName')->willReturn('Test');
 
         $property = new ReflectionProperty(
             'test',
             \ReflectionProperty::IS_PRIVATE,
             null,
-            file_get_contents(__DIR__ . '/fixtures/doc_block.txt'),
-            $class
+            "/**\n * Hidde\n */",
+            $class,
+            ["AG\\Generate(get: 'none')"]
         );
 
         $this->info         = new PropertyInformation($property);
         $this->minimal_info = new PropertyInformation(new ReflectionProperty('test'));
     }
 
-    public function testProcessAnnotations(): void
+    public function testProcessAttributes(): void
     {
         $processor = $this->createMock(PropertyProcessorInterface::class);
         $processor->expects(self::atLeastOnce())->method('apply');

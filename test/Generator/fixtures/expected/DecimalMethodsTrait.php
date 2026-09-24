@@ -4,7 +4,7 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Decimal;
 
 trait DecimalMethodsTrait
@@ -17,10 +17,8 @@ trait DecimalMethodsTrait
      *
      * @param string $decimal_0_10
      * @param bool $round round the number fit in the precision and scale (round away from zero)
-     *
-     * @return $this|Decimal
      */
-    public function setDecimal010($decimal_0_10, $round = false)
+    public function setDecimal010($decimal_0_10, $round = false): static
     {
         if (\func_num_args() > 2) {
             throw new \BadMethodCallException(
@@ -95,10 +93,8 @@ trait DecimalMethodsTrait
      *
      * @param string $decimal_1_10
      * @param bool $round round the number fit in the precision and scale (round away from zero)
-     *
-     * @return $this|Decimal
      */
-    public function setDecimal110($decimal_1_10, $round = false)
+    public function setDecimal110($decimal_1_10, $round = false): static
     {
         if (\func_num_args() > 2) {
             throw new \BadMethodCallException(
@@ -173,10 +169,8 @@ trait DecimalMethodsTrait
      *
      * @param string $decimal_5_10
      * @param bool $round round the number fit in the precision and scale (round away from zero)
-     *
-     * @return $this|Decimal
      */
-    public function setDecimal510($decimal_5_10, $round = false)
+    public function setDecimal510($decimal_5_10, $round = false): static
     {
         if (\func_num_args() > 2) {
             throw new \BadMethodCallException(
@@ -251,10 +245,8 @@ trait DecimalMethodsTrait
      *
      * @param string $decimal_10_10
      * @param bool $round round the number fit in the precision and scale (round away from zero)
-     *
-     * @return $this|Decimal
      */
-    public function setDecimal1010($decimal_10_10, $round = false)
+    public function setDecimal1010($decimal_10_10, $round = false): static
     {
         if (\func_num_args() > 2) {
             throw new \BadMethodCallException(
@@ -329,10 +321,8 @@ trait DecimalMethodsTrait
      *
      * @param string $decimal_18_20
      * @param bool $round round the number fit in the precision and scale (round away from zero)
-     *
-     * @return $this|Decimal
      */
-    public function setDecimal1820($decimal_18_20, $round = false)
+    public function setDecimal1820($decimal_18_20, $round = false): static
     {
         if (\func_num_args() > 2) {
             throw new \BadMethodCallException(
@@ -407,10 +397,8 @@ trait DecimalMethodsTrait
      *
      * @param string $decimal_19_20
      * @param bool $round round the number fit in the precision and scale (round away from zero)
-     *
-     * @return $this|Decimal
      */
-    public function setDecimal1920($decimal_19_20 = '1.2345678901234567890', $round = false)
+    public function setDecimal1920($decimal_19_20 = '1.2345678901234567890', $round = false): static
     {
         if (\func_num_args() > 2) {
             throw new \BadMethodCallException(
@@ -485,10 +473,8 @@ trait DecimalMethodsTrait
      *
      * @param string $decimal_30_65
      * @param bool $round round the number fit in the precision and scale (round away from zero)
-     *
-     * @return $this|Decimal
      */
-    public function setDecimal3065($decimal_30_65, $round = false)
+    public function setDecimal3065($decimal_30_65, $round = false): static
     {
         if (\func_num_args() > 2) {
             throw new \BadMethodCallException(

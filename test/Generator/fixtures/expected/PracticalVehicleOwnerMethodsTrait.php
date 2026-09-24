@@ -4,7 +4,7 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\AbstractVehicle;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\PracticalVehicleOwner;
 
@@ -16,12 +16,8 @@ trait PracticalVehicleOwnerMethodsTrait
      * @throws \BadMethodCallException if the number of arguments is not correct.
      * @throws \LogicException         if a member was added that already exists within the collection.
      * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
-     *
-     * @param \Hostnet\Component\AccessorGenerator\Generator\fixtures\VehicleInterface $vehicle
-     *
-     * @return $this|PracticalVehicleOwner
      */
-    public function addVehicle(\Hostnet\Component\AccessorGenerator\Generator\fixtures\VehicleInterface $vehicle)
+    public function addVehicle(\Hostnet\Component\AccessorGenerator\Generator\fixtures\VehicleInterface $vehicle): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(

@@ -4,7 +4,7 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Item;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Shipping;
 
@@ -41,12 +41,8 @@ trait ItemMethodsTrait
      * Sets shipping
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param Shipping $shipping
-     *
-     * @return $this|Item
      */
-    public function setShipping(Shipping $shipping)
+    public function setShipping(Shipping $shipping): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(

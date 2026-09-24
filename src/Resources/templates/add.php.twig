@@ -14,12 +14,8 @@
  {% if property.referencedProperty -%}
  * @throws \Hostnet\Component\AccessorGenerator\Exception\MissingPropertyException
  {% endif -%}
- *
- * @param {{ property.typeHint}} ${{ property.name | singularize }}
- *
- * @return $this|{{ property.class }}
  */
-{{ property.getAddVisibility() }} function add{{ property.name | singularize | classify }}({{ property.typeHint }} ${{ property.name | singularize }})
+{{ property.getAddVisibility() }} function add{{ property.name | singularize | classify }}({{ property.typeHint }} ${{ property.name | singularize }}): static
 {
     if (\func_num_args() !== 1) {
         throw new \BadMethodCallException(

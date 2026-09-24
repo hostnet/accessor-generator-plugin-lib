@@ -1,7 +1,7 @@
 <?php
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures;
 
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 use Symfony\Component\Console as Stupid;
 
 class Annotations
@@ -9,8 +9,8 @@ class Annotations
     use Generated\AnnotationsMethodsTrait;
 
     /**
-     * @AG\Generate(type="\DateTime")
      * @Stupid\Really
      */
+    #[AG\Generate(type: '\DateTime')]
     public ?\DateTime $stupid;
 }

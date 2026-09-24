@@ -142,6 +142,7 @@ class CodeGenerator implements CodeGeneratorInterface
         $this->enum_class = $twig->load('enum_class.php.twig');
     }
 
+    #[\Override]
     public function writeTraitForClass(ReflectionClass $class): bool
     {
         $data = $this->generateTraitForClass($class);
@@ -160,6 +161,7 @@ class CodeGenerator implements CodeGeneratorInterface
         return false;
     }
 
+    #[\Override]
     public function writeEnumeratorAccessorsForClass(ReflectionClass $class): array
     {
         $metadata  = $this->getMetadataForClass($class);
@@ -207,8 +209,6 @@ class CodeGenerator implements CodeGeneratorInterface
      * @throws \ReflectionException
      * @throws \Throwable
      * @throws ReferencedClassNotFoundException
-     * @param Enumerator          $enumerator
-     * @param PropertyInformation $info
      */
     public function generateEnumeratorAccessors(Enumerator $enumerator, PropertyInformation $info): string
     {
@@ -321,6 +321,7 @@ class CodeGenerator implements CodeGeneratorInterface
         }
     }
 
+    #[\Override]
     public function generateTraitForClass(ReflectionClass $class): string
     {
         $code                  = '';
@@ -404,17 +405,14 @@ class CodeGenerator implements CodeGeneratorInterface
         return $code;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function setEncryptionAliases(array $encryption_aliases): void
     {
         $this->encryption_aliases = $encryption_aliases;
     }
 
     /**
-     * @param PropertyInformation $info
-     * @param string[]            &$imports
+     * @param string[] &$imports
      */
     private static function addImportForProperty(PropertyInformation $info, array &$imports): void
     {
@@ -437,11 +435,9 @@ class CodeGenerator implements CodeGeneratorInterface
     }
 
     /**
-     * @param string   $type
-     * @param string   $namespace
      * @param string[] &$imports
      */
-    private static function addImportForType($type, $namespace, array &$imports): void
+    private static function addImportForType(string $type, string $namespace, array &$imports): void
     {
         if (self::isAliased($type, $imports)) {
             return;
@@ -467,10 +463,9 @@ class CodeGenerator implements CodeGeneratorInterface
      * Returns true if the given class name is in an aliased namespace, false
      * otherwise.
      *
-     * @param string   $name
      * @param string[] $imports
      */
-    private static function isAliased($name, array $imports): bool
+    private static function isAliased(string $name, array $imports): bool
     {
         // Imports with alias have the alias as key, otherwise it has a numerical index
         $aliases = array_filter(array_keys($imports), 'is_string');
@@ -484,10 +479,9 @@ class CodeGenerator implements CodeGeneratorInterface
     }
 
     /**
-     * @param string   $type
      * @param string[] $imports
      */
-    private static function getPlainImportIfExists($type, $imports): ?string
+    private static function getPlainImportIfExists(string $type, array $imports): ?string
     {
         foreach ($imports as $alias => $import) {
             if (is_numeric($alias) && substr($import, -1 - \strlen($type)) === '\\' . $type) {
@@ -502,10 +496,9 @@ class CodeGenerator implements CodeGeneratorInterface
      * Return the fully qualified class name based on the use statements in
      * the current file.
      *
-     * @param string   $name
      * @param string[] $imports
      */
-    private static function fqcn($name, array $imports): string
+    private static function fqcn(string $name, array $imports): string
     {
         // Already FQCN
         if ($name[0] === '\\') {
@@ -526,6 +519,7 @@ class CodeGenerator implements CodeGeneratorInterface
         return '';
     }
 
+    #[\Override]
     public function generateAccessors(PropertyInformation $info): string
     {
         $code = '';
@@ -617,6 +611,7 @@ class CodeGenerator implements CodeGeneratorInterface
         return $code;
     }
 
+    #[\Override]
     public function writeKeyRegistriesForPackage(): bool
     {
         foreach ($this->key_registry_data as $directory => $data) {
@@ -647,8 +642,6 @@ class CodeGenerator implements CodeGeneratorInterface
 
     /**
      * Ensures the entity class complies to the "standard" for holding parameters.
-     *
-     * @param string $entity_class
      */
     private function validateEnumEntity(string $entity_class): void
     {

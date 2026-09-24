@@ -4,7 +4,7 @@
 namespace Hostnet\Component\AccessorGenerator\Generator\fixtures\Generated;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hostnet\Component\AccessorGenerator\Annotation as AG;
+use Hostnet\Component\AccessorGenerator\Attribute as AG;
 use Hostnet\Component\AccessorGenerator\Generator\fixtures\Types;
 
 trait TypesMethodsTrait
@@ -92,10 +92,8 @@ trait TypesMethodsTrait
      * @throws \DomainException if the integer value is outside of the domain on this machine
      *
      * @param int $smallint
-     *
-     * @return $this|Types
      */
-    public function setSmallint($smallint)
+    public function setSmallint($smallint): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -178,10 +176,8 @@ trait TypesMethodsTrait
      * @throws \DomainException if the integer value is outside of the domain on this machine
      *
      * @param int $integer
-     *
-     * @return $this|Types
      */
-    public function setInteger($integer)
+    public function setInteger($integer): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -268,10 +264,8 @@ trait TypesMethodsTrait
      * @throws \DomainException if the integer value is outside of the domain on this machine
      *
      * @param int $bigint
-     *
-     * @return $this|Types
      */
-    public function setBigint($bigint)
+    public function setBigint($bigint): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -347,10 +341,8 @@ trait TypesMethodsTrait
      *
      * @param string $decimal
      * @param bool $round round the number fit in the precision and scale (round away from zero)
-     *
-     * @return $this|Types
      */
-    public function setDecimal($decimal, $round = false)
+    public function setDecimal($decimal, $round = false): static
     {
         if (\func_num_args() > 2) {
             throw new \BadMethodCallException(
@@ -456,10 +448,8 @@ trait TypesMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      *
      * @param float $float
-     *
-     * @return $this|Types
      */
-    public function setFloat($float)
+    public function setFloat($float): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -521,10 +511,8 @@ trait TypesMethodsTrait
      * @throws \LengthException if the length of the value is to long
      *
      * @param string $string
-     *
-     * @return $this|Types
      */
-    public function setString($string)
+    public function setString($string): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -594,10 +582,8 @@ trait TypesMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      *
      * @param string $text
-     *
-     * @return $this|Types
      */
-    public function setText($text)
+    public function setText($text): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -663,10 +649,8 @@ trait TypesMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      *
      * @param string $guid
-     *
-     * @return $this|Types
      */
-    public function setGuid($guid)
+    public function setGuid($guid): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -732,10 +716,8 @@ trait TypesMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      *
      * @param resource $blob
-     *
-     * @return $this|Types
      */
-    public function setBlob($blob)
+    public function setBlob($blob): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -796,10 +778,8 @@ trait TypesMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      *
      * @param bool $boolean
-     *
-     * @return $this|Types
      */
-    public function setBoolean($boolean)
+    public function setBoolean($boolean): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -860,10 +840,8 @@ trait TypesMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      *
      * @param bool $is_this_boolean
-     *
-     * @return $this|Types
      */
-    public function setIsThisBoolean($is_this_boolean)
+    public function setIsThisBoolean($is_this_boolean): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -921,12 +899,8 @@ trait TypesMethodsTrait
      * Sets date
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param \DateTime $date
-     *
-     * @return $this|Types
      */
-    public function setDate(\DateTime $date)
+    public function setDate(\DateTime $date): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -978,12 +952,8 @@ trait TypesMethodsTrait
      * Sets datetime
      *
      * @throws \BadMethodCallException if the number of arguments is not correct
-     *
-     * @param \DateTime $datetime
-     *
-     * @return $this|Types
      */
-    public function setDatetime(\DateTime $datetime)
+    public function setDatetime(\DateTime $datetime): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -1038,10 +1008,8 @@ trait TypesMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      *
      * @param array $array
-     *
-     * @return $this|Types
      */
-    public function setArray($array)
+    public function setArray($array): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -1102,10 +1070,8 @@ trait TypesMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      *
      * @param array $json_array
-     *
-     * @return $this|Types
      */
-    public function setJsonArray($json_array)
+    public function setJsonArray($json_array): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
@@ -1166,10 +1132,8 @@ trait TypesMethodsTrait
      * @throws \InvalidArgumentException if value is not of the right type
      *
      * @param object $object
-     *
-     * @return $this|Types
      */
-    public function setObject($object)
+    public function setObject($object): static
     {
         if (\func_num_args() !== 1) {
             throw new \BadMethodCallException(
