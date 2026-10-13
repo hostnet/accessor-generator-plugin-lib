@@ -41,7 +41,6 @@ class ReflectionClassTest extends TestCase
                     ' *' . PHP_EOL .
                     ' * en dit dan?' . PHP_EOL .
                     ' * @version bluh' . PHP_EOL .
-                    ' * @ORM\Column(name="stam", length=100, type="string")' . PHP_EOL .
                     ' */' . PHP_EOL .
                     'private $stam;',
                 ],
@@ -55,7 +54,6 @@ class ReflectionClassTest extends TestCase
                     '/**' . PHP_EOL .
                     ' * Waarom dit dan?' . PHP_EOL .
                     ' * @version bluh' . PHP_EOL .
-                    ' * @ORM\Column(name="stam", length=100, type="string")' . PHP_EOL .
                     ' */' . PHP_EOL .
                     'private static $stam;',
                 ],

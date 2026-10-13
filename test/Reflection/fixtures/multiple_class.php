@@ -7,8 +7,8 @@ abstract class Boom {
      *
      * en dit dan?
      * @version bluh
-     * @ORM\Column(name="stam", length=100, type="string")
      */
+    #[ORM\Column(name: 'stam', length: 100, type: 'string')]
     private $stam;
 
     use useless_trait;
