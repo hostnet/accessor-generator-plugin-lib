@@ -46,7 +46,9 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
     public function add($element): bool
     {
         if ($this->is_clone) {
-            return $this->collection->add($element);
+            $this->collection->add($element);
+
+            return true;
         }
 
         throw new \LogicException('This collection is immutable');
@@ -207,6 +209,22 @@ class ImmutableCollection implements Collection, ConstCollectionInterface, Selec
     public function filter(Closure $predicate): Collection
     {
         return $this->collection->filter($predicate);
+    }
+
+    /**
+     * Only part of the ReadableCollection interface as of doctrine/collections 2.1.
+     */
+    public function findFirst(Closure $predicate): mixed
+    {
+        return $this->collection->findFirst($predicate);
+    }
+
+    /**
+     * Only part of the ReadableCollection interface as of doctrine/collections 2.1.
+     */
+    public function reduce(Closure $func, mixed $initial = null): mixed
+    {
+        return $this->collection->reduce($func, $initial);
     }
 
     public function forAll(Closure $predicate): bool

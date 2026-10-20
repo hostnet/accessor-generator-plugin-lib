@@ -25,7 +25,13 @@ class DoctrineMappingProcessor implements PropertyProcessorInterface
 {
     private const string ZEROED_DATE_TIME = 'zeroeddatetime';
     private const string ZEROED_DATE      = 'zeroeddate';
-    private const string YAML_ARRAY       = 'yaml_array';
+    /**
+     * The 'array' and 'object' types are deprecated since doctrine/dbal:3.4 and removed in
+     * doctrine/dbal:4.0.
+     */
+    private const string ARRAY      = 'array';
+    private const string OBJECT     = 'object';
+    private const string YAML_ARRAY = 'yaml_array';
     /**
      * @deprecated since doctrine/dbal:2.6
      */
@@ -114,7 +120,7 @@ class DoctrineMappingProcessor implements PropertyProcessorInterface
 
         // Set default value for nullable.
         if ($information->isNullable() === null) {
-            $information->setNullable((new JoinColumn())->nullable);
+            $information->setNullable(true);
         }
 
         // Set field name for index on this collection.
@@ -171,7 +177,7 @@ class DoctrineMappingProcessor implements PropertyProcessorInterface
      */
     private function processJoinColumn(JoinColumn $join_column, PropertyInformation $information): void
     {
-        $information->setNullable($join_column->nullable);
+        $information->setNullable($join_column->nullable ?? true);
         $information->setUnique($join_column->unique);
     }
 
@@ -251,13 +257,13 @@ class DoctrineMappingProcessor implements PropertyProcessorInterface
 
         if (\in_array(
             $type,
-            [Types::SIMPLE_ARRAY, self::JSON_ARRAY, Types::JSON, Types::ARRAY, self::YAML_ARRAY],
+            [Types::SIMPLE_ARRAY, self::JSON_ARRAY, Types::JSON, self::ARRAY, self::YAML_ARRAY],
             true
         )) {
             return 'array';
         }
 
-        if ($type === Types::OBJECT) {
+        if ($type === self::OBJECT) {
             return 'object';
         }
 

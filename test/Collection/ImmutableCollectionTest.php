@@ -70,7 +70,8 @@ class ImmutableCollectionTest extends TestCase
         self::assertSame($col->slice(2, 2), $imm->slice(2, 2));
         self::assertSame($col->next(), $imm->current());
         self::assertSame($imm->next(), $col->current());
-        self::assertSame($col->add('a'), $cln->add('a'));
+        $col->add('a');
+        self::assertTrue($cln->add('a'));
         self::assertSame($col->remove(0), $cln->remove(0));
         self::assertSame($col->removeElement('a'), $cln->removeElement('a'));
     }
@@ -261,5 +262,27 @@ class ImmutableCollectionTest extends TestCase
 
         // Test that we got a copy and did not change the original collection.
         self::assertEquals($before, $this->immutable_collection->toArray());
+    }
+
+    public function testFindFirst(): void
+    {
+        if (!method_exists(ArrayCollection::class, 'findFirst')) {
+            self::markTestSkipped('findFirst() requires doctrine/collections 2.1 or higher.');
+        }
+
+        self::assertSame(5, $this->immutable_collection->findFirst(static fn ($key, $value) => $value > 3));
+        self::assertNull($this->immutable_collection->findFirst(static fn ($key, $value) => $value > 100));
+    }
+
+    public function testReduce(): void
+    {
+        if (!method_exists(ArrayCollection::class, 'reduce')) {
+            self::markTestSkipped('reduce() requires doctrine/collections 2.1 or higher.');
+        }
+
+        $sum = static fn ($carry, $value) => $carry + $value;
+
+        self::assertSame(33, $this->immutable_collection->reduce($sum, 0));
+        self::assertNull((new ImmutableCollection(new ArrayCollection()))->reduce($sum));
     }
 }

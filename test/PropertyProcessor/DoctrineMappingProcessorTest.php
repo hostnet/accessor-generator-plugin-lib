@@ -48,38 +48,37 @@ class DoctrineMappingProcessorTest extends TestCase
     public function columnProvider(): iterable
     {
         $property = new ReflectionProperty('test');
-        $implicit = new Column(null, 'string');
-        $explicit = new Column(null, 'string');
-        $faulty   = new Column(null, 'string');
+        $implicit = new Column(type: 'string');
+        $explicit = new Column(
+            type: Types::BIGINT,
+            length: 100,
+            precision: 3,
+            scale: 9,
+            unique: true,
+            nullable: true
+        );
+        $faulty   = new Column(type: Types::DECIMAL);
 
         $implicit_info = new PropertyInformation($property);
         $explicit_info = new PropertyInformation($property);
         $faulty_info   = new PropertyInformation($property);
 
         $implicit_info->setType($implicit->type);
-        $explicit_info->setType($explicit->type);
-        $faulty_info->setType($faulty->type);
+        $explicit_info->setType('string');
+        $faulty_info->setType('string');
 
-        $explicit->length = 100;
         $explicit_info->setLength(100);
 
-        $explicit->nullable = 'jumbo_dumbo';
         $explicit_info->setNullable(true);
 
-        $explicit->precision = 3;
         $explicit_info->setPrecision(3);
 
-        $explicit->scale = 9;
         $explicit_info->setScale(9);
 
-        $explicit->type = Types::BIGINT;
         $explicit_info->setType('integer');
         $explicit_info->setIntegerSize(64);
 
-        $explicit->unique = true;
         $explicit_info->setUnique(true);
-
-        $faulty->type = Types::DECIMAL;
 
         return [
             [$implicit, $implicit_info, null],
@@ -153,27 +152,15 @@ class DoctrineMappingProcessorTest extends TestCase
 
     public function associationProvider(): iterable
     {
-        $many_to_many      = new ManyToMany();
-        $many_to_one       = new ManyToOne();
-        $one_to_many       = new OneToMany();
-        $one_to_one        = new OneToOne();
+        $many_to_many      = new ManyToMany(targetEntity: '\\Employee');
+        $many_to_one       = new ManyToOne(targetEntity: 'Employee');
+        $one_to_many       = new OneToMany(targetEntity: '\\Employer');
+        $one_to_one        = new OneToOne(targetEntity: 'Boss');
         $generated_value   = new GeneratedValue();
-        $join_column       = new JoinColumn();
-        $one_to_one_bi     = new OneToOne();
-        $one_to_many_bi    = new OneToMany();
-        $one_to_many_index = new OneToMany();
-
-        $many_to_many->targetEntity      = '\\Employee';
-        $many_to_one->targetEntity       = 'Employee';
-        $one_to_many->targetEntity       = '\\Employer';
-        $one_to_one->targetEntity        = 'Boss';
-        $join_column->name               = 'id';
-        $one_to_one_bi->inversedBy       = 'id';
-        $one_to_one_bi->targetEntity     = 'Employee\\Boss';
-        $one_to_many_bi->mappedBy        = 'id';
-        $one_to_many_bi->targetEntity    = 'LunchLady';
-        $one_to_many_index->indexBy      = 'index';
-        $one_to_many_index->targetEntity = '\\Employee';
+        $join_column       = new JoinColumn(name: 'id');
+        $one_to_one_bi     = new OneToOne(targetEntity: 'Employee\\Boss', inversedBy: 'id');
+        $one_to_many_bi    = new OneToMany(targetEntity: 'LunchLady', mappedBy: 'id');
+        $one_to_many_index = new OneToMany(targetEntity: '\\Employee', indexBy: 'index');
 
         return [
             [$many_to_many],
@@ -298,12 +285,9 @@ class DoctrineMappingProcessorTest extends TestCase
             && $doctrine_type
             && (ctype_upper($doctrine_type[0]) || $doctrine_type[0] === '\\')
         ) {
-            $attribute               = new ManyToOne();
-            $attribute->targetEntity = $doctrine_type;
+            $attribute = new ManyToOne(targetEntity: $doctrine_type);
         } else {
-            $attribute        = new Column();
-            $attribute->type  = $doctrine_type;
-            $attribute->scale = 1;
+            $attribute = new Column(type: $doctrine_type, scale: 1);
         }
 
         $this->processor->apply($attribute, $this->information);
